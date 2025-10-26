@@ -62,7 +62,7 @@ SMODS.Shader({
     path = 'new_background.fs'
 })
 
-if (SMODS.Mods['malverk'] or {}).can_load then
+if (SMODS.Mods['malverk'] or {}).can_load and false then -- YOU MAY NOT LOAD
     AltTextures_Utils.default_atlas['ortalab_zodiac'] = 'ortalab_zodiac_cards'
     AltTextures_Utils.loc_keys['ortalab_zodiac'] = 'b_ortalab_zodiac_cards'
     AltTexture({
