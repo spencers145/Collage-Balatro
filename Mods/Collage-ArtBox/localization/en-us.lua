@@ -19,7 +19,8 @@ return {
             artb_menu = "Toggle Custom Menu",
             artb_fill= "Fill!",
             artb_empty= "Empty",
-            artb_fired= "Fired!"
+            artb_fired= "Fired!",
+            artb_wood = "Chipped!"
         },
         labels = {
             artb_ouroboros_seal = "Ouroboros Seal",
