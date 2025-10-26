@@ -1,0 +1,277 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.GAME.blind:set_blind(G.GAME.round_resets.blind)"
+position = "after"
+payload = '''
+flc_trigger_back_setting_blind_effect(G.GAME.round_resets.blind)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+G.FUNCS.draw_from_play_to_discard()
+'''
+position = "at"
+payload = '''
+
+local dontdraw = false
+
+local destroyed_cards = {}
+
+if G.GAME.blind.config.blind.after_hand then
+    local ii = 0
+    for k, v in pairs(G.play.cards) do
+        if G.GAME.blind.config.blind:after_hand(v, ii) then
+            destroyed_cards[#destroyed_cards+1] = v
+            dontdraw = true
+            if #destroyed_cards == 1 then
+                G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.0,
+                func = (function()
+                    SMODS.juice_up_blind() 
+                    return true
+                end)}))
+            end
+            G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.0,
+            func = (function()
+                v:remove()
+                return true
+            end)}))
+        end
+        ii = ii + 1
+    end
+    G.GAME.blind.triggered = true
+    for i = 1, #G.jokers.cards do
+        G.jokers.cards[i]:calculate_joker({remove_playing_cards = true, removed = destroyed_cards})
+    end
+end
+
+
+if not dontdraw then
+    -- fix for incompat with CCC virus deck
+    for i=1, #G.play.cards do
+        G.play.cards[i].ability.played_this_ante = true
+    end
+    G.FUNCS.draw_from_play_to_discard()
+else 
+    G.E_MANAGER:add_event(Event({
+    trigger = 'before',
+    delay = 0.0,
+    func = (function()
+        G.FUNCS.draw_from_play_to_discard()
+        return true
+    end)}))
+end
+
+'''
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+local removed = false
+'''
+position = "after"
+payload = '''
+    local result = G.GAME.blind.config.blind.after_discard and G.GAME.blind.config.blind:after_discard(G.hand.highlighted[i])
+    if result then 
+        G.GAME.blind.triggered = true
+        removed = true 
+    end
+'''
+match_indent = true
+
+#[[patches]]
+#[patches.pattern]
+#target = "game.lua"
+#pattern = '''
+#                card_protos[#card_protos+1] = v
+#            end
+#        end
+#'''
+#position = "after"
+#payload = '''
+#if G.GAME.starting_params.flc_slatedeck then
+#    pseudoshuffle(card_protos, pseudoseed('flc_slate_shuffle'))
+#
+#    for i=1, 15 do
+#        if card_protos[i] then card_protos[i].e = 'm_stone' end
+#    end
+#end
+#'''
+#match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "(self.ability.set == 'Voucher' and {G.C.SECONDARY_SET.Voucher, G.C.CLEAR}) or "
+position = "after"
+payload = '''
+(self.ability.set == 'm_femtoLabsCollection_twilight' and {HEX('A591A6'), G.C.CLEAR}) or 
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = 'G[select_to]:emplace(card)'
+position = 'before'
+match_indent = true
+payload = 'card:add_to_deck()'
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+if G.GAME.chips - G.GAME.blind.chips >= 0 or G.GAME.current_round.hands_left < 1 then
+    G.STATE = G.STATES.NEW_ROUND
+else
+    G.STATE = G.STATES.DRAW_TO_HAND
+end
+'''
+position = 'after'
+match_indent = true
+payload = '''
+if next(SMODS.find_card('j_femtoLabsCollection_hostage')) then
+    if G.GAME.current_round.hands_left >= 1 and not (#G.hand.cards < 1 and #G.deck.cards < 1 and #G.play.cards < 1) and G.STATE == G.STATES.NEW_ROUND then
+        G.STATE = G.STATES.DRAW_TO_HAND
+    end
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+            G.GAME.current_round.discards_used = G.GAME.current_round.discards_used + 1
+            G.STATE = G.STATES.DRAW_TO_HAND
+'''
+position = 'after'
+match_indent = true
+payload = '''
+if next(SMODS.find_card('j_femtoLabsCollection_hostage')) then
+    if G.GAME.chips - G.GAME.blind.chips >= 0 or G.GAME.current_round.hands_left < 1 then
+        G.STATE = G.STATES.NEW_ROUND
+    end
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+                game_over = false
+'''
+position = 'before'
+match_indent = true
+payload = '''
+if next(SMODS.find_card('j_femtoLabsCollection_hostage')) and (#G.hand.cards < 1 and #G.deck.cards < 1 and #G.play.cards < 1) then
+    G.STATE_COMPLETE = true
+end
+'''
+
+#[[patches]]
+#[patches.pattern]
+#target = "game.lua"
+#pattern = "self.consumeables = CardArea("
+#position = "before"
+#payload = '''
+#self.flc_soldarea = femtoLabsCollection.SoldArea(
+#    0, 0,
+#    CAI.discard_W*1.5, CAI.discard_W, -- square
+#    {card_limit = 500, type = 'soldarea'})
+#'''
+#match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+        base_reroll_cost = 5,
+'''
+position = "after"
+payload = '''
+flc_first_hand_of_ante_played = false,
+'''
+match_indent = true
+
+
+# CRYPTID CONSUMABLE PLAYING CARD PATCHES
+
+
+# Aura use conditions
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if G.hand and (#G.hand.highlighted == 1) and G.hand.highlighted[1] and (not G.hand.highlighted[1].edition) then return true end"
+position = "at"
+payload = '''
+if self.area ~= G.hand then
+    return G.hand and (#G.hand.highlighted == 1) and G.hand.highlighted[1] and (not G.hand.highlighted[1].edition)
+else
+    local idx = 1
+    if G.hand.highlighted[1] == self then
+        local idx = 2
+    end
+    return (#G.hand.highlighted == 2) and (not G.hand.highlighted[idx].edition)
+end
+'''
+match_indent = true
+
+# Prevent counting CCD consumables for pack uses
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "if area == G.consumeables then"
+position = "at"
+payload = "if area == G.consumeables or area == G.hand then"
+match_indent = true
+
+# Fix bugs from removing CCD
+# This really shouldn't be in the card drawing code, but it doesn't really matter since that's where it crashes anyway lol
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if not self.config.center.discovered and (self.ability.consumeable or self.config.center.unlocked) and not self.config.center.demo and not self.bypass_discovery_center then"
+position = "before"
+payload = "if self.ability.set == 'Enhanced' then self.ability.consumeable = nil end"
+match_indent = true
+
+# define last used twilight or spectral card i love stealing from vit
+#[[patches]]
+#[patches.pattern]
+#target = "card.lua"
+#pattern = "if not copier then set_consumeable_usage(self) end"
+#position = "after"
+#payload = '''
+#if self.config.center.set == 'm_femtoLabsCollection_twilight' or self.config.center.set == 'Spectral' then
+#    G.E_MANAGER:add_event(Event({
+#        trigger = 'immediate',
+#        func = function()
+#            G.E_MANAGER:add_event(Event({
+#                trigger = 'immediate',
+#                func = function()
+#                    G.GAME.flc_last_twilight_spectral = self.config.center.key
+#                    return true
+#                end
+#            }))
+#            return true
+#        end
+#    }))
+#end
+#'''
+#match_indent = true

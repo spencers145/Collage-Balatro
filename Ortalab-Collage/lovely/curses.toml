@@ -1,0 +1,209 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+# Load/save curses on cards
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''seal = self.seal,'''
+position = 'before'
+match_indent = true
+payload = '''
+--curse = self.curse,
+'''
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''self.seal = cardTable.seal'''
+position = 'before'
+match_indent = true
+payload = '''
+--self.curse = cardTable.curse
+'''
+
+## Curse tooltips and badges
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#pattern = '''local seal = G.P_SEALS[v] or G.P_SEALS[SMODS.Seal.badge_to_key[v] or '']'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#local curse = Ortalab.Curses[v] or Ortalab.Curse.badge_to_key[v] and Ortalab.Curses[Ortalab.Curse.badge_to_key[v]]
+#if curse and curse.generate_ui ~= 0 then
+#    local t = { key = v, set = 'Curse' }
+#    info_queue[#info_queue+1] = t
+#    if curse.loc_vars and type(curse.loc_vars) == 'function' then
+#        local res = curse:loc_vars(info_queue, card) or {}
+#        t.vars = res.vars
+#        t.key = res.key or t.key
+#    end
+#end
+#'''
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#pattern = '''elseif _c.set == 'Joker' then'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#elseif _c.set == 'Curse' then
+#    localize{type = 'descriptions', set = 'Curse', key = _c.key, nodes = desc_nodes, vars = specific_vars or _c.vars}
+#'''
+#[[patches]]
+#[patches.pattern]
+#target = 'card.lua'
+#pattern = '''if self.seal then badges[#badges + 1] = string.lower(self.seal)..'_seal' end'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#if self.curse then badges[#badges + 1] = string.lower(self.curse) end
+#'''
+## get_badge_colour()
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/UI_definitions.lua'
+#pattern = 'return G.BADGE_COL[key] or {1, 0, 0, 1}'
+#position = 'before'
+#match_indent = true
+#payload = '''
+#for k, v in pairs(Ortalab.Curses) do
+#    G.BADGE_COL[k:lower()] = v.badge_colour
+#end'''
+#
+## copy_card()
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#pattern = 'new_card:set_seal(other.seal, true)'
+#position = 'before'
+#match_indent = true
+#payload = '''
+#new_card:set_curse(other.curse, true, true)
+#if other.curse then
+#    for k, v in pairs(other.ability.curse or {}) do
+#        if type(v) == 'table' then
+#            new_card.ability.curse[k] = copy_table(v)
+#        else
+#            new_card.ability.curse[k] = v
+#        end
+#    end
+#end
+#'''
+#
+### Curse calculation on playing cards
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#pattern = '''if card.seal then'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#if card.curse and not card.curse_removed then
+#    local curses = card:calculate_curse(context)
+#    if curses then
+#        ret.curses = curses
+#    end
+#end
+#'''
+#
+## Add curse calculation to calc keys
+#[[patches]]
+#[patches.pattern]
+#target = '=[SMODS _ "src/utils.lua"]'
+#match_indent = true
+#position = 'before'
+#pattern = '''
+#for _, k in ipairs(SMODS.Sticker.obj_buffer) do
+#'''
+#payload = '''
+#SMODS.calculate_effect_table_key(effect_table, 'curses', card, ret)
+#'''
+#
+#
+#
+## Possessed
+#[[patches]]
+#[patches.pattern]
+#target = 'cardarea.lua'
+#pattern = '''if (not force) and  card and card.ability.forced_selection and self == G.hand then return end'''
+#position = 'after'
+#match_indent = true
+#payload = '''
+#if (not force) and card and card.curse == 'ortalab_possessed' and self == G.hand then return end
+#'''
+#[[patches]]
+#[patches.pattern]
+#target = 'cardarea.lua'
+#pattern = '''if self.highlighted[i].ability.forced_selection and self == G.hand then'''
+#position = 'after'
+#match_indent = true
+#payload = '''
+#elseif self.highlighted[i] and self.highlighted[i].curse == 'ortalab_possessed' and self == G.hand then
+#'''
+#[[patches]]
+#[patches.pattern]
+#target = 'cardarea.lua'
+#pattern = '''if v.ability.forced_selection and not self.highlighted[1] then '''
+#position = 'at'
+#match_indent = true
+#payload = '''
+#if #self.highlighted < self.config.highlighted_limit and (v.ability.forced_selection or v.curse == 'ortalab_possessed') and not v.highlighted then
+#'''
+#[[patches]]
+#[patches.pattern]
+#target = 'cardarea.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#self:add_to_highlighted(v)
+#'''
+#payload = '''
+#self:parse_highlighted()
+#'''
+#
+#
+## Infected
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#pattern = '''if not G.GAME.blind:debuff_hand(G.play.cards, poker_hands, text) then'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#for _, card in ipairs(scoring_hand) do
+#    if card.curse == 'ortalab_infected' and not card.cured then
+#        G.E_MANAGER:add_event(Event({func = function() card.ability.no_score = true; card.ability.no_score_shader = true; return true; end}))
+#        SMODS.calculate_effect({message = localize({set = 'Curse', type = 'name_text', key = 'ortalab_infected'})..'!', colour = Ortalab.Curses.ortalab_infected.badge_colour}, card)
+#    end
+#end
+#'''
+#
+## Possessed on jokers
+#[[patches]]
+#[patches.pattern]
+#target = 'cardarea.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#table.sort(self.cards, function (a, b) return a.T.x + a.T.w/2 - 100*((a.pinned and not a.ignore_pinned) and a.sort_id or 0) < b.T.x + b.T.w/2 - 100*((b.pinned and not b.ignore_pinned) and b.sort_id or 0) end)
+#'''
+#payload = '''
+#for i, card in ipairs(G.jokers and G.jokers.cards or {}) do if card.ability.curse and card.ability.curse.extra.possessed then table.remove(G.jokers.cards, i); table.insert(G.jokers.cards, math.min(card.ability.curse.extra.possessed, #G.jokers.cards+1), card) end end
+#'''
+#
+## Stop possessed cards being double highlighted
+#[[patches]]
+#[patches.pattern]
+#target = 'card.lua'
+#match_indent = true
+#position = 'before'
+#pattern = '''
+#self.highlighted = is_higlighted
+#'''
+#payload = '''
+#if self.base.name and self.curse and self.curse == 'ortalab_possessed' and self.area == G.hand and #G.hand.highlighted < G.hand.config.highlighted_limit then is_higlighted = true end
+#'''
+#

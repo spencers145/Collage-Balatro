@@ -1,0 +1,15 @@
+{
+	"id": "sarcpot",
+	"name": "Sarcpot",
+	"display_name": "Sarcpot",
+	"author": [
+		"SarcasticPotato"
+	],
+	"description": "A mocca mod with content for the Girls, Gays and Indie Game Fans! Main Mod by SarcasticPotato, Additional code and VFX by base4",
+	"prefix": "sarc",
+	"main_file": "sarcpot_main.lua",
+	"priority": 0,
+	"badge_colour": "eb913c",
+	"version": "1.2.0",
+	"dependencies": []
+}

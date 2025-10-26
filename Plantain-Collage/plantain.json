@@ -1,0 +1,14 @@
+{
+    "id": "plantain",
+    "name": "Plantain",
+    "author": ["TeamToaster"],
+    "description": "Introduces a handful of aggressively vanilla-style jokers and consumables.",
+    "prefix": "pl",
+    "main_file": "src/pl_main.lua",
+    "priority": 0,
+    "badge_colour": "9DC157",
+    "dependencies": [
+        "Steamodded (>=1.0.0~BETA-0509c)"
+    ],
+    "version": "1.1.0"
+}

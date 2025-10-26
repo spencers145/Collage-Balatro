@@ -1,0 +1,16 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "self.sell_cost = * + (self.ability.extra_value or 0)"
+position = "after"
+match_indent = true
+payload = '''
+if self.ability.paperback_forced_base_sell_cost then
+    self.sell_cost = self.ability.paperback_forced_base_sell_cost + (self.ability.extra_value or 0)
+end
+'''

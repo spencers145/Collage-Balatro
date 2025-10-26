@@ -1,0 +1,62 @@
+SMODS.Joker {
+    key = "welch",
+    config = {
+        extra = {
+            mult = 2
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.mult}
+            }
+    end,
+    rarity = 1,
+    pos = {
+        x = 1,
+        y = 6
+    },
+    atlas = 'sarcpot_atlas',
+    cost = 6,
+    unlocked = true,
+    discovered = false,
+    blueprint_compat = true,
+    eternal_compat = true,
+    soul_pos = nil,
+
+    in_pool = function(self, args)
+        return true
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+            local enhanced_number = 0
+            local unenhanced_number = 0
+            if SMODS.has_enhancement(context.other_card, 'c_base') then
+                for _, v in pairs(context.scoring_hand) do
+                    if not SMODS.has_enhancement(v, 'c_base') then
+                        enhanced_number = enhanced_number + 1
+                    end
+                end
+                if enhanced_number > 0 then
+                    return {
+                        mult = card.ability.extra.mult * enhanced_number,
+                        card = card
+                    }
+                end
+            else
+                for _, v in pairs(context.scoring_hand) do
+                    if SMODS.has_enhancement(v, 'c_base') then
+                        unenhanced_number = unenhanced_number + 1
+                    end
+                end
+                if unenhanced_number > 0 then
+                    return {
+                        mult = card.ability.extra.mult * unenhanced_number,
+                        card = card
+                    }
+                end
+            end
+        end
+    end
+}
+

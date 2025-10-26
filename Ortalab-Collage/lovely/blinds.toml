@@ -1,0 +1,269 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 3
+
+## Custom Small/Big Blinds
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''G.GAME.round_resets.blind_choices.Boss = get_new_boss()'''
+position = 'before'
+match_indent = true
+payload = '''
+-- see ccc
+--G.GAME.round_resets.blind_choices.Small = get_new_small()
+--G.GAME.round_resets.blind_choices.Big = get_new_big()
+if G.GAME.ortalab.alt_boss then G.GAME.ortalab.alt_boss = get_new_boss() end
+if G.GAME.ortalab.double_blind then
+    G.GAME.ortalab.alt_small = get_new_small(G.GAME.round_resets.blind_choices.Small)
+    G.GAME.ortalab.alt_big = get_new_big(G.GAME.round_resets.blind_choices.Big)
+end
+'''
+
+# Add Custom Small/Big Blinds
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+self.GAME.round_resets.blind_choices.Boss = get_new_boss()
+'''
+payload = '''
+self.GAME.round_resets.blind_choices.Small = get_new_small()
+self.GAME.round_resets.blind_choices.Big = get_new_big()
+if G.GAME.ortalab.alt_boss then G.GAME.ortalab.alt_boss = get_new_boss() end
+if G.GAME.ortalab.double_blind then
+    G.GAME.ortalab.alt_small = get_new_small(self.GAME.round_resets.blind_choices.Small)
+    G.GAME.ortalab.alt_big = get_new_big(self.GAME.round_resets.blind_choices.Big)
+end
+'''
+
+# Handle setting new blinds
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+self.name = blind and blind.name or ''
+'''
+payload = '''
+self.small = blind and not not blind.small
+self.big = blind and not not blind.big
+'''
+# Handle 'Defeated' tagging
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+if G.GAME.round_resets.blind == G.P_BLINDS.bl_small then
+'''
+payload = '''
+if G.GAME.round_resets.blind_states.Small == 'Current' then
+'''
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+elseif G.GAME.round_resets.blind == G.P_BLINDS.bl_big then
+'''
+payload = '''
+elseif G.GAME.round_resets.blind_states.Big == 'Current' then
+'''
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/card_draw.lua"]'
+pattern = '''
+if self.debuff then
+'''
+position = "at"
+payload = '''
+if self.debuff and not self.celadon then
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''card.T.y = self.T.y + self.T.h/2 - card.T.h/2 - highlight_height + (G.SETTINGS.reduced_motion and 0 or 1)*0.03*math.sin(0.666*G.TIMERS.REAL+card.T.x) + math.abs(0.5*(-#self.cards/2 + k-0.5)/(#self.cards))-0.2'''
+position = "before"
+payload = '''
+if card.celadon_disabled then
+    highlight_height = G.HIGHLIGHT_H * -0.3
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''{n=G.UIT.O, config={object = DynaText({scale = 0.7, string = localize('ph_unscored_hand'), maxw = 9, colours = {G.C.WHITE},float = true, shadow = true, silent = true, pop_in = 0, pop_in_rate = 6})}},'''
+position = "at"
+payload = '''
+{n=G.UIT.O, config={object = DynaText({scale = 0.7, string = localize(G.GAME.blind.config.blind.key == 'bl_ortalab_spike' and 'ortalab_spike_debuff' or G.GAME.blind.config.blind.key == 'bl_ortalab_fork' and 'ortalab_fork_cap' or 'ph_unscored_hand'), maxw = 9, colours = {G.C.WHITE},float = true, shadow = true, silent = true, pop_in = 0, pop_in_rate = 6})}},
+'''
+match_indent = true
+
+# The Steel
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''local nu_chip, nu_mult = G.GAME.selected_back:trigger_effect{context = 'final_scoring_step', chips = hand_chips, mult = mult}'''
+position = "before"
+payload = '''
+if G.GAME.blind.config.blind.key == 'bl_ortalab_steel' and not G.GAME.blind.disabled then
+    local min_value = G.GAME.blind.config.blind:update_score({chips = hand_chips, mult = mult})
+    mult = mod_mult(min_value)
+    hand_chips = mod_chips(min_value)
+end
+'''
+match_indent = true
+
+# blind ingame UI
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''if obj.loc_vars and type(obj.loc_vars) == 'function' then'''
+position = "before"
+payload = '''
+local loc_key = obj.key
+'''
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''local res = obj:loc_vars() or {}'''
+position = "after"
+payload = '''
+loc_key = res.key or obj.key
+'''
+match_indent = true
+
+# MISSING
+# [[patches]]
+# [patches.pattern]
+# target = "blind.lua"
+# pattern = '''local loc_target = localize{type = 'raw_descriptions', key = self.config.blind.key, set = 'Blind', vars = loc_vars or self.config.blind.vars}'''
+# position = "at"
+# payload = '''
+# local loc_target = localize{type = 'raw_descriptions', key = loc_key, set = 'Blind', vars = loc_vars or vars or self.config.vars}
+# '''
+# match_indent = true
+
+# blind select UI
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''if obj.loc_vars and _G['type'](obj.loc_vars) == 'function' then'''
+position = "before"
+payload = '''
+local loc_key = obj.key
+'''
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''local res = obj:loc_vars() or {}'''
+position = "after"
+payload = '''
+loc_key = res.key or obj.key
+'''
+match_indent = true
+
+# MISSING
+# [[patches]]
+# [patches.pattern]
+# target = "functions/UI_definitions.lua"
+# pattern = '''local loc_target = localize{type = 'raw_descriptions', key = blind_choice.config.key, set = 'Blind', vars = loc_vars or blind_choice.config.vars}'''
+# position = "at"
+# payload = '''
+# local loc_target = localize{type = 'raw_descriptions', key = loc_key, set = 'Blind', vars = loc_vars or vars or blind_choice.config.vars}
+# '''
+# match_indent = true
+# blind collection UI
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''if blind.collection_loc_vars and type(blind.collection_loc_vars) == 'function' then'''
+position = "before"
+payload = '''
+local loc_key = blind.key
+'''
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''local res = blind:collection_loc_vars() or {}'''
+position = "after"
+payload = '''
+loc_key = res.key or blind.key
+'''
+match_indent = true
+# MISSING
+# [[patches]]
+# [patches.pattern]
+# target = "functions/UI_definitions.lua"
+# pattern = '''local loc_target = localize{type = 'raw_descriptions', key = blind.key, set = 'Blind', vars = loc_vars or vars or blind.vars}'''
+# position = "at"
+# payload = '''
+# local loc_target = localize{type = 'raw_descriptions', key = loc_key, set = 'Blind', vars = loc_vars or vars or blind.vars}
+# '''
+# match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''if (G.GAME.blind.name == 'The Serpent' or G.GAME.ccc_bonus_blind.name == 'The Serpent') and'''
+position = "before"
+payload = '''
+if G.GAME.blind.config.blind.key == 'bl_ortalab_ladder' and not G.GAME.blind.disabled then
+    G.GAME.blind.config.blind.config.extra.action_count = G.GAME.blind.config.blind.config.extra.action_count + 1
+    if G.GAME.blind.config.blind.config.extra.action_count < 2 then hand_space = 0 else G.GAME.blind.config.blind.config.extra.action_count = 0 end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''if v.boss.showdown then '''
+position = "at"
+payload = '''if v.boss and v.boss.showdown then '''
+match_indent = true
+
+## Discard to deck
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#pattern = '''draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])'''
+#position = 'at'
+#match_indent = true
+#payload = '''
+#if G.hand.highlighted[i].curse == 'ortalab_infected' then
+#    G.E_MANAGER:add_event(Event({func = function()
+#        local uncursed_hand_cards = {}
+#        for _, card in ipairs(G.hand.cards) do
+#            if not card.ability.curse then uncursed_hand_cards[#uncursed_hand_cards + 1] = card end
+#        end
+#        if #uncursed_hand_cards == 0 then return true end
+#        local card_to_spread = pseudorandom_element(uncursed_hand_cards, pseudoseed('ortalab_infected_spread'))
+#        card_to_spread:set_curse('ortalab_infected', nil, nil, true)
+#        return true
+#    end}))
+#    G.hand.highlighted[i]:set_curse()
+#end
+#
+#if G.hand.highlighted[i].corroded_discard then
+#    draw_card(G.hand, G.deck, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])
+#    G.deck:shuffle()
+#else
+#    draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])
+#end
+#'''

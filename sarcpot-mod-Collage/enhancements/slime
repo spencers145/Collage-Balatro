@@ -1,0 +1,103 @@
+SMODS.Sound({
+    key = "make_plort",
+    path = "slime_plort.wav"
+})
+
+
+SMODS.Enhancement({
+    key = "slime",
+    atlas = "enhancements",
+    pos = {x=2,y=0},
+    discovered = false,
+    config = { extra = {odds = 2, exhausted = false, just_exhausted = false}},
+    in_pool = function (self, args)
+        return false
+    end,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS['c_sarc_plort']
+        if card.ability.extra.exhausted then info_queue[#info_queue + 1] = {key = 'collage_slime_info', set = 'Other'} end
+        local n,d = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'sarc_slime')
+        return {vars = {n,d}}
+    end,
+
+    update = function(self, card, dt)
+        if not card.ability then
+            card.ability = {}
+        end
+
+        if card.ability.extra and card.ability.extra.exhausted then
+            card.children.center:set_sprite_pos({x = 3, y = 1})
+        else
+            card.children.center:set_sprite_pos({x = 2, y = 0})
+        end
+    end,
+    calculate = function(self, card, context)
+        if not card.ability.extra then
+            card.ability.extra = { odds = 2, exhausted = false, just_exhausted = false }
+        end
+        --[[if context.cardarea == G.play and context.main_scoring then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    if #G.consumeables.cards < G.consumeables.config.card_limit then
+                        local consumable = create_card('travel', G.consumeables, nil, nil, true, nil, 'c_sarc_plort')
+                        consumable:add_to_deck()
+                        G.consumeables:emplace(consumable)
+                        G.GAME.consumeable_buffer = 0
+                        card:juice_up()
+                        play_sound("card1")
+                        return true
+                    end
+                    return true
+                end
+            }))
+        end]]
+
+        if context.cardarea == G.hand and context.main_scoring and not card.ability.extra.exhausted then
+            if SMODS.pseudorandom_probability(card, pseudoseed('sarc_slime'), 1, card.ability.extra.odds, 'sarc_slime')
+            and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                --card.ability.extra.just_exhausted = true
+
+                return {
+                    message = "Fed!",
+                    func = function()
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            --delay = 1,
+                            func = function()
+                                local consumable = create_card('travel', G.consumeables, nil, nil, true, nil, 'c_sarc_plort')
+                                consumable:add_to_deck()
+                                G.consumeables:emplace(consumable)
+                                G.GAME.consumeable_buffer = 0
+                                --card:juice_up(0.5, 0.5)
+                                play_sound("sarc_make_plort", 0.9 + 0.2*math.random(), 0.75)
+                                --play_sound("tarot1", 0.9 + 0.2*math.random(), 1)
+                                --delay(1.2)
+                                card.ability.extra.exhausted = true
+                                return true
+                            end
+                        }))
+                    end
+                }
+            end
+        end
+
+        --[[if context.after and context.cardarea == G.hand and card.ability.extra.just_exhausted then
+            card.ability.extra.just_exhausted = false
+            return {
+                message = "Fed!",
+                func = function ()
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                        
+                        --card:juice_up(0.5, 0.5)
+                        play_sound('button')
+                        return true
+                    end}))
+                end
+            }
+        end]]
+    end
+})

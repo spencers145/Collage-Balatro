@@ -1,0 +1,16 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = -11
+
+[[patches]]  
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+reset_ancient_card()
+'''
+position = 'after'
+match_indent = true
+payload = '''
+reset_bleached_cards()
+'''

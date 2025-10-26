@@ -1,0 +1,99 @@
+SMODS.Joker {
+
+    discovered = false,
+    key = 'garlic_bread',
+
+    config = {
+        extra = {
+            n = 1,
+            d = 6
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        local n, d = SMODS.get_probability_vars(card, card.ability.extra.n,  card.ability.extra.d, 'garlic_bread')
+        return {
+            vars = {n, d}
+        }
+    end,
+    rarity = 2,
+    atlas = 'sarcpot_atlas',
+    pos = {
+        x = 0,
+        y = 0
+    },
+    cost = 5,
+    eternal_compat = false,
+    pools = {
+        Food = true
+    },
+
+    calculate = function(self, card, context)
+
+
+		if context.setting_blind then
+			local eval = function()
+				return G.GAME.current_round.hands_played == 0
+			end
+			juice_card_until(card, eval, true)
+		end
+
+        if context.after and #context.full_hand == 1 and not context.blueprint and
+            G.GAME.current_round.hands_played == 0 then
+
+            local other_card = context.full_hand[1]
+
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.4,
+                blocking = true,
+                func = function()
+                    play_sound('tarot1')
+                    other_card:juice_up()
+                    SMODS.change_base(other_card, nil, 'Ace')
+                    delay(0.5)
+                    return true
+                end
+            }))
+
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                blocking = true,
+                func = function()
+                    
+                    return true
+                end
+            }))
+        end
+        if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
+
+           if SMODS.pseudorandom_probability(card, 'garlic_bread', card.ability.extra.n, card.ability.extra.d, 'garlic_bread') then
+
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.7,
+                    func = function()
+                        play_sound('tarot1')
+                        card.T.r = -0.2
+                        card:juice_up(0.3, 0.4)
+                        card.states.drag.is = true
+                        card.children.center.pinch.x = true
+                        card:start_dissolve()
+                        card = nil
+                        return true
+                    end
+                }))
+                return {
+                    message = localize('k_eaten_ex')
+
+                }
+            else
+                return {
+                    card = card,
+                    message = localize('k_safe_ex')
+
+                }
+            end
+        end
+    end
+}

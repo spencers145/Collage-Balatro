@@ -1,0 +1,431 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 2
+
+## Chameleon tooltip
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start, main_end, self)'''
+position = 'before'
+match_indent = true
+payload = '''if value == 'ortalab_chameleon' then return loc_vars end'''
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.name == 'Invisible Joker' and (self.config.center.discovered or self.bypass_discovery_center) then'''
+position = 'before'
+match_indent = true
+payload = '''if self.config.center_key == 'j_ortalab_chameleon' then
+    if self.ability.extra.copied_joker then
+        if self.children.front then self.children.front:draw_shader('dissolve') end
+        self.children.center:draw_shader('ortalab_chameleon', nil, self.ARGS.send_to_shader)
+    else
+        self.children.center:draw_shader('dissolve')
+    end
+end'''
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''function Card:generate_UIBox_ability_table(vars_only)'''
+position = 'at'
+match_indent = true
+payload = '''function Card:generate_UIBox_ability_table(vars_only, value)'''
+
+# Black Friday discount
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''G.GAME.discount_percent = center_table.extra'''
+position = "after"
+match_indent = true
+payload = '''
+--Ortalab/Jokers/Black Friday
+local results = SMODS.find_card('j_ortalab_black_friday')
+for _, card in ipairs(results) do
+    G.GAME.discount_percent = G.GAME.discount_percent + card.ability.extra.money_off
+    sendDebugMessage('test')
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''G.FUNCS.evaluate_play()'''
+position = "at"
+payload = '''
+G.GAME.Ortalab_Scoring_Active = true
+G.FUNCS.evaluate_play()
+G.GAME.Ortalab_Scoring_Active = false
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''if first_pass and not (_c.set == 'Edition') and badges then'''
+position = "before"
+payload = '''
+if specific_vars and specific_vars.shinku then
+    info_queue[#info_queue + 1] = {set = 'Other', key = 'ortalab_shinku'}
+end
+if card and card.ability and card.ability.kopi then
+    info_queue[#info_queue + 1] = {set = 'Other', key = 'ortalab_kopi'}
+end
+if card and card.ability and card.ability.temporary then
+    info_queue[#info_queue + 1] = {set = 'Other', key = 'ortalab_temporary', vars = {card.ability.temporary}}
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start, main_end, self)'''
+position = "before"
+payload = '''
+if self.ability.shinku then 
+    if loc_vars then
+        loc_vars.shinku = true
+    else
+        loc_vars = {shinku = true}
+    end
+end'''
+match_indent = true
+
+# G.FUNCS.use_card()
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "if card.area and (not nc or card.area == G.pack_cards) then card.area:remove_card(card) end"
+match_indent = true
+position = 'before'
+payload = '''
+if G.STATE == G.STATES.SMODS_BOOSTER_OPENED and card.area == G.pack_cards then
+    local blue_cards = SMODS.find_card('j_ortalab_blue_card')
+    for _, card in pairs(blue_cards) do
+        SMODS.scale_card(card, {
+            ref_table = card.ability.extra,
+            ref_value = "chips",
+            scalar_value = "gain",
+        })
+    end
+end'''
+
+
+# Miracle Cure
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "card:flip()"
+match_indent = true
+position = 'at'
+payload = '''
+if not card.cured then
+    card:flip()
+end
+'''
+
+
+
+# Negative sell cost
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = "{n=G.UIT.T, config={text = localize('$'),colour = G.C.WHITE, scale = 0.4, shadow = true}},"
+match_indent = true
+position = 'before'
+payload = '''
+(card and to_big(card.sell_cost) or to_big(args.card.sell_cost)) < to_big(0) and {n=G.UIT.T, config={text = '-',colour = G.C.WHITE, scale = 0.4, shadow = true}} or {n=G.UIT.R},
+'''
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "self.sell_cost_label = self.facing == 'back' and '?' or self.sell_cost"
+match_indent = true
+position = 'after'
+payload = '''
+if to_big(self.sell_cost) < to_big(0) and self.facing ~= 'back' then self.sell_cost_label = self.sell_cost_label * -1 end
+'''
+
+## Polydactyly
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#match_indent = true
+#position = 'before'
+#pattern = '''
+#-- TARGET: adding to hand effects
+#'''
+#payload = '''
+#local ortalab_poly_jokers = SMODS.find_card('j_ortalab_polydactyly')
+#if next(ortalab_poly_jokers) and (next(poker_hands['Straight']) or next(poker_hands['Flush'])) then
+#    for i=1, ortalab_poly_jokers[1].ability.extra.cards do
+#        table.insert(final_scoring_hand, G.hand.cards[i])
+#        table.insert(Ortalab.polydactyly.cards, G.hand.cards[i])
+#    end
+#    SMODS.calculate_effect({message = localize('ortalab_polydactyly')}, ortalab_poly_jokers[1])
+#end
+#'''
+
+# Wallet - scored cards act as in hand
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+match_indent = true
+position = 'after'
+pattern = '''
+card.lucky_trigger = nil
+'''
+payload = '''
+local wallets = SMODS.find_card('j_ortalab_wallet')
+if next(wallets) and context.cardarea == G.play then
+    context.cardarea = G.hand
+    card.wallet = wallets[1]
+    SMODS.score_card(card, context)
+    context.cardarea = G.play
+end
+'''
+# Wallet - scored cards trigger end of round in hand effects
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+hand_chips = mod_chips(nu_chip or hand_chips)
+'''
+payload = '''
+local wallets = SMODS.find_card('j_ortalab_wallet')
+if next(wallets) then
+    Ortalab.wallet_end_of_round({cardarea = G.hand, end_of_round = true, beat_boss = G.GAME.blind.boss }, G.play.cards, wallets[1])
+end
+'''
+
+
+# Wallet/Raised Fist compat
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+if raised_card == context.other_card then 
+'''
+payload = '''
+if next(SMODS.find_card('j_ortalab_wallet')) then
+    for i=1, #G.play.cards do
+        if temp_ID >= G.play.cards[i].base.id and not SMODS.has_no_rank(G.play.cards[i]) then 
+            temp_Mult = G.play.cards[i].base.nominal
+            temp_ID = G.play.cards[i].base.id
+            raised_card = G.play.cards[i]
+        end
+    end
+end
+'''
+
+
+# Proletaire
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+if card.facing == 'back' and self.config.type ~= 'discard' and self.config.type ~= 'deck' and not stay_flipped then
+'''
+payload = '''
+if SMODS.find_card('j_ortalab_proletaire') and self == G.play then card.ability.was_flipped = true end
+'''
+
+# Pinkprint tooltip
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''elseif _c.set == 'Joker' then'''
+position = 'before'
+match_indent = true
+payload = '''
+elseif _c.pinkprint then
+    localize{type = 'descriptions', set = 'Joker', key = _c.key, nodes = desc_nodes, vars = specific_vars or _c.vars, specific_vars = {is_info_queue = true}, AUT = full_UI_table}
+'''
+# # Pinkprint calculation - MISSES
+# [[patches]]
+# [patches.pattern]
+# target = "card.lua"
+# pattern = '''if self.ability.set == "Joker" and self:can_calculate() then'''
+# position = "at"
+# match_indent = true
+# payload = '''if self.ability.set == "Joker" and Card.can_calculate(self) then'''
+
+# Scenic Route
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+match_indent = true
+position = 'before'
+pattern = '''
+local function next_ranks(key, start)
+'''
+payload = '''
+local pairs_count = 0
+if next(SMODS.find_card('j_ortalab_scenic')) then
+    for _, v in pairs(ranks) do
+        if #v > 1 then pairs_count = pairs_count + (#v - 1) end
+    end
+end
+'''
+# Scenic Route
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+match_indent = true
+position = 'at'
+pattern = '''
+if i > min_length and not any_tuple then
+'''
+payload = '''
+if i > min_length - pairs_count and not any_tuple then
+'''
+
+# Kopi disable sell
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+elseif card.area and card.area == G.pack_cards then
+    return {
+      n=G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes={
+        {n=G.UIT.R, config={ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5*card.T.w - 0.15, maxw = 0.9*card.T.w - 0.15, minh = 0.3*card.T.h, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_select_card'}, nodes={
+          {n=G.UIT.T, config={text = localize('b_select'),colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true}}
+        }},
+    }}
+  end
+'''
+payload = '''
+if card.ability.kopi or card.ability.shinku then
+    sell = nil
+end
+'''
+
+# Kopi/Shinku set cost to 0
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+if self.area and self.ability.couponed and (self.area == G.shop_jokers or self.area == G.shop_booster) then self.cost = 0 end
+'''
+payload = '''
+if self.ability.shinku or self.ability.kopi then self.cost = 0; self.sell_cost = 0 end
+'''
+
+# Shinku/Kopi jokers can't receive editions
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+if v.ability.set == 'Joker' and (not v.edition) then
+'''
+payload = '''
+if v.ability.set == 'Joker' and (not v.edition) and not v.ability.kopi and not v.ability.shinku then
+'''
+# Patch SMODS util function
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/game_object.lua"]'
+match_indent = true
+position = 'at'
+pattern = '''
+if (not v.edition and edition) or (v.edition and not edition) then
+'''
+payload = '''
+if (not v.edition and not v.ability.kopi and not v.ability.shinku and edition) or (v.edition and not edition) then
+'''
+
+
+
+# Pinkprint calc_dollar_bonus implementation
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+if not self:can_calculate() then return end
+'''
+payload = '''
+if self.can_calculate and not self:can_calculate() then return end
+'''
+
+# Black Cat
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+match_indent = true
+position = 'after'
+pattern = '''
+-- Playing cards in scoring
+'''
+payload = '''
+local current_chips = hand_chips
+'''
+# Black Cat pt2
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+match_indent = true
+position = 'before'
+pattern = '''
+-- Jokers
+'''
+payload = '''
+if card and card.ability and (card.ability.set == 'Default' or card.ability.set == 'Enhanced') and hand_chips and to_big(hand_chips) > to_big(current_chips) and next(SMODS.find_card('j_ortalab_black_cat')) then
+    SMODS.calculate_context({ortalab_black_cat_scale = hand_chips - current_chips, other_card = card})
+end
+'''
+
+# Allow Blackboard(vanilla) to work with prismatic effects
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+if v:is_suit('Clubs', nil, true) or v:is_suit('Spades', nil, true) then
+'''
+payload = '''
+if v:is_suit('Clubs', true) or v:is_suit('Spades', true) then
+'''
+
+# Patch Perkeo copying jokers
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+if G.consumeables.cards[1] then
+'''
+payload = '''
+if next(Ortalab.consumables_in_area(G.consumeables)) then
+'''
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+local card = copy_card(pseudorandom_element(G.consumeables.cards, pseudoseed('perkeo')), nil)
+'''
+payload = '''
+local card = copy_card(pseudorandom_element(Ortalab.consumables_in_area(G.consumeables), pseudoseed('perkeo')), nil)
+'''

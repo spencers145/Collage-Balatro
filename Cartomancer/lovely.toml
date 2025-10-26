@@ -1,0 +1,25 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 11
+
+[[patches]]
+[patches.module]
+source = "libs/nativefs.lua"
+before = "main.lua"
+name = "cartomancer.nfs"
+
+[[patches]]
+[patches.module]
+source = "internal/init.lua"
+before = "main.lua"
+name = "cartomancer.init"
+
+# Add core functionality
+[[patches]]
+[patches.copy]
+target = "main.lua"
+position = "append"
+sources = [
+    "cartomancer.lua",
+]

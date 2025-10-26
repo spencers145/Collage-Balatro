@@ -1,0 +1,44 @@
+---- SMODS.Joker {
+----   key = 'kudzu',
+----   name = 'Kudzu',
+----   atlas = 'Jokers',
+----   rarity = 2,
+----   cost = 7,
+----   unlocked = true, 
+----   discovered = true,
+----   blueprint_compat = true,
+----   eternal_compat = true,
+----   perishable_compat = true,    
+----   pos = GetJokersAtlasTable('kudzu'), 
+----   config = {
+----     extra = {
+----       border_hand = 'Three of a Kind',
+----       mult_bonus = 2
+----     }
+----   },
+  
+----   loc_vars = function(self, info_queue, card)
+----     return {
+----       vars = {
+----         localize(card.ability.extra.border_hand, 'poker_hands'),
+----         card.ability.extra.mult_bonus
+----       }
+----     }
+----   end,
+
+----   calculate = function(self, card, context)
+----     if context.hand_upgrade_additions then
+----       local table = {}
+----       for key, value in ipairs(G.handlist) do
+----         table[#table + 1] = value
+----         if value == card.ability.extra.border_hand then
+----           break
+----         end
+----       end
+----       return {
+----         hands = table,
+----         mult_bonus = card.ability.extra.mult_bonus
+----       }
+----     end
+----   end
+---- }

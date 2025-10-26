@@ -1,0 +1,97 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 69
+
+# Make all drawn cards visible
+
+[[patches]] 
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "local stay_flipped = G.GAME and G.GAME.blind and G.GAME.blind:stay_flipped(self, card*)"
+position = "before"
+payload = '''
+if self == G.hand and not card.states.visible then
+    card.states.visible = true
+end'''
+match_indent = true
+
+# Fix drawing specific card staying invisible
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if card then drawn = true end"
+position = "after"
+payload = '''
+if card and to == G.hand and not card.states.visible then
+    card.states.visible = true
+end'''
+match_indent = true
+
+# Fix drawing specific card staying invisible
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "(self.config.type == 'deck' and self ~= G.deck) or"
+position = "at"
+payload = '''
+(self.config.type == 'deck' and self ~= G.deck and not self.draw_uibox) or'''
+match_indent = true
+
+# Replace drawing deck pile
+[[patches]] 
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''
+            local deck_height = (self.config.deck_height or 0.15)/52
+            for k, card in ipairs(self.cards) do
+                if card.facing == 'front' then card:flip() end
+
+                if not card.states.drag.is then
+                    card.T.x = self.T.x + 0.5*(self.T.w - card.T.w) + self.shadow_parrallax.x*deck_height*(#self.cards/(self == G.deck and 1 or 2) - k) + 0.9*self.shuffle_amt*(1 - k*0.01)*(k%2 == 1 and 1 or -0)
+                    card.T.y = self.T.y + 0.5*(self.T.h - card.T.h) + self.shadow_parrallax.y*deck_height*(#self.cards/(self == G.deck and 1 or 2) - k)
+                    card.T.r = 0 + 0.3*self.shuffle_amt*(1 + k*0.05)*(k%2 == 1 and 1 or -0)
+                    card.T.x = card.T.x + card.shadow_parrallax.x/30
+                end
+            end'''
+position = "at"
+payload = '''
+            local display_limit
+            if not Cartomancer.SETTINGS.compact_deck_enabled then
+                display_limit = 999999
+            else
+                display_limit = Cartomancer.SETTINGS.compact_deck_visible_cards
+            end
+
+            local deck_height = (self.config.deck_height or 0.15)/52
+            local total_cards = #self.cards <= display_limit and #self.cards or display_limit -- limit height
+            local fixedX, fixedY, fixedR = nil, nil, nil
+
+            local height_multiplier = total_cards/((self == G.deck or self.draw_uibox) and 1 or 2)
+
+            for k, card in ipairs(self.cards) do
+                if card.facing == 'front' then card:flip() end
+
+                if not card.states.drag.is then
+                    if fixedX then
+                        card.T.x = fixedX
+                        card.T.y = fixedY
+                        card.T.r = fixedR -- rotation
+                        card.states.visible = false
+                    else
+                        card.T.x = self.T.x + 0.5*(self.T.w - card.T.w) + self.shadow_parrallax.x*deck_height*(height_multiplier - k) + 0.9*self.shuffle_amt*(1 - k*0.01)*(k%2 == 1 and 1 or -0)
+                        card.T.y = self.T.y + 0.5*(self.T.h - card.T.h) + self.shadow_parrallax.y*deck_height*(height_multiplier - k)
+                        card.T.r = 0 + 0.3*self.shuffle_amt*(1 + k*0.05)*(k%2 == 1 and 1 or -0)
+                        card.T.x = card.T.x + card.shadow_parrallax.x/30
+                        card.states.visible = true
+
+                        if k >= display_limit then
+                            fixedX = card.T.x
+                            fixedY = card.T.y
+                            fixedR = card.T.r
+                        end
+                    end
+                end
+            end'''
+match_indent = true
+

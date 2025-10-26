@@ -1,0 +1,84 @@
+SMODS.Consumable({
+    key = 'undertale',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = {
+        x = 1,
+        y = 4
+    },
+    discovered = false,
+    config = {
+        count_mod = 2
+    },
+    keep_on_use = function(self, card)
+        return false
+    end,
+    loc_vars = function(self, info_queue)
+        return {
+            vars = {G.GAME.undertale_count, self.config.count_mod, G.GAME.undertale_limit + 1}
+        }
+    end,
+    cost = 3,
+    can_use = function(self, card)
+        return true
+    end,
+    use = function(self, card, area, copier)
+        if G.GAME.undertale_count >= G.GAME.undertale_limit then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.4,
+                blocking = true
+            }))
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.4,
+                blocking = true,
+                func = function()
+                    card:juice_up(0.3, 0.5)
+                    play_sound('tarot1')
+                    return true
+                end
+            }))
+            ease_ante(-1)
+            unlock_card(G.P_CENTERS.b_sarc_travelling)
+            SMODS.calculate_effect({
+                message = localize('sarc_minus_ante'),
+                colour = G.C.PURPLE
+            }, card)
+
+            G.GAME.undertale_count = 0
+            G.GAME.undertale_limit = G.GAME.undertale_limit + self.config.count_mod
+        else
+
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.4,
+                blocking = true,
+                func = function()
+                    card:juice_up()
+                    play_sound('tarot1')
+                    return true
+                end
+            }))
+            SMODS.calculate_effect({
+                message = localize {
+                    type = 'variable',
+                    key = 'sarc_progress',
+                    vars = {G.GAME.undertale_count + 1, G.GAME.undertale_limit + 1}
+                }
+            }, card)
+            G.GAME.undertale_count = G.GAME.undertale_count + 1
+
+        end
+
+    end,
+    set_ability = function(self, card, initial, delay_sprites)
+        if G.GAME.undertale_count >= G.GAME.undertale_limit then
+            local eval = function()
+                return not card.REMOVED
+            end
+            juice_card_until(card, eval, true)
+        end
+    end
+})
+

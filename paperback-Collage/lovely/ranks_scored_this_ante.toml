@@ -1,0 +1,26 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "--Highlight all the cards used in scoring and play a sound indicating highlight"
+position = "before"
+match_indent = true
+payload = '''
+if not SMODS.has_no_rank(scoring_hand[i]) then
+  G.GAME.paperback.ranks_scored_this_ante[scoring_hand[i]:get_id()] = true
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.GAME.round_resets.blind_states.Boss = 'Defeated'"
+position = "after"
+match_indent = true
+payload = '''
+G.GAME.paperback.ranks_scored_this_ante = {}
+'''

@@ -1,0 +1,112 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+
+# injecting pointless machines into generate_uibox so i can copy misprint code without thinking too much (lmao...)
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "BLOCKER_STRING_CCCelseif self.ability.name == 'Banner' then loc_vars = {self.ability.extra}"
+position = "after"
+payload = '''
+elseif self.ability.name == 'ccc_Pointless Machines' then
+	local r_strings = {}
+	local r_colours = {}
+	
+	local r_hearts_keymash = {"R<3EAST<3<H!", "ttt^a^reh.SS", "tera&*Ste&#raHH", "serT((H)).aa;"}
+	local r_spades_keymash = {"Spac:::SE>>D", "!a@spes&&Dd", "deesS*DAPD((AP", "ES.ad##PSP#"}
+	local r_diamonds_keymash = {"di##MDOsn", "osdDIA.N&M!!", "M*MaM,dins!^O", "NE%%id%OO^aMD"}
+	local r_clubs_keymash = {"CUL&SL*BB", "sbluc!!((*@!)", "UC@bsLL]L", "PL!!)C**UBUBS"}
+	local r_clear_keymash = {"<<.PLAY)", "&@!PLAY;;", "]PLAY/@&", "__PLAY.@>#"}
+	
+	local r_red_keymash = {"dsg x3c!!!O!]", "?d[{j,>.<fsA.Gg.<", "lAgsx,k##rf", "::R^E*AL**GL]", "es12_21sDLç", "++UPp:-", "O-We woul}}:1[", "10 Th!*e4", "W28Wne**er"}
+	
+	local sequence_progress = 1
+	r_strings[#r_strings+1] = pseudorandom_element(r_clear_keymash, pseudoseed('4starorderbytheway'))
+	r_colours[#r_colours+1] = darken(G.C.GREEN, 0.4)
+	local last_used_element = r_strings[#r_strings]
+	local non_herring_chance = 0.55
+	while sequence_progress < 6 do
+		if pseudorandom(pseudoseed('randomthing'), 0, 1) > non_herring_chance then 
+			r_strings[#r_strings+1] = pseudorandom_element(r_red_keymash, pseudoseed('redherring'))
+			non_herring_chance = non_herring_chance + 0.25
+			if r_strings[#r_strings] ~= last_used_element then
+				r_colours[#r_colours+1] = G.C.BLACK
+			else
+				r_strings[#r_strings] = nil
+			end
+		else
+			if self.ability.extra.suits[sequence_progress] == 'Hearts' then
+				r_strings[#r_strings+1] = pseudorandom_element(r_hearts_keymash, pseudoseed('hertas<3'))
+			elseif self.ability.extra.suits[sequence_progress] == 'Spades' then
+				r_strings[#r_strings+1] = pseudorandom_element(r_spades_keymash, pseudoseed('spdkagdeds'))
+			elseif self.ability.extra.suits[sequence_progress] == 'Diamonds' then
+				r_strings[#r_strings+1] = pseudorandom_element(r_diamonds_keymash, pseudoseed('dimaons'))
+			elseif self.ability.extra.suits[sequence_progress] == 'Clubs' then
+				r_strings[#r_strings+1] = pseudorandom_element(r_clubs_keymash, pseudoseed('lcusdbes'))
+			end
+			non_herring_chance = 0.55
+			if r_strings[#r_strings] ~= last_used_element then
+				r_colours[#r_colours+1] = G.C.SUITS[self.ability.extra.suits[sequence_progress]]
+				sequence_progress = sequence_progress + 1
+			else
+				r_strings[#r_strings] = nil
+			end
+		end
+		last_used_element = r_strings[#r_strings]
+	end
+	for i = 1, 1 do
+		r_strings[#r_strings+1] = r_strings[1]
+		r_colours[#r_colours+1] = darken(G.C.GREEN, 0.4)
+	end
+	local spc_list = {}
+	for i = 1, #r_strings do
+		spc_list[#spc_list+1] = {string = r_strings[i], colour = lighten(r_colours[i], 0.4)}
+	end
+	main_start = {
+		{n=G.UIT.O, config={object = DynaText({string = spc_list, colours = {lighten(G.C.BLACK, 0.4)},pop_in_rate = 9999999, silent = true, random_element = false, pop_delay = 0.9, scale = 0.33, min_cycle_time = 0})}}
+	}
+'''
+match_indent = true
+
+# reroll starting seed to ensure the first pointless machines generates a heart that is not gold staked
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''BLOCKER_STRING_CCCif r_tally > 0 and g_tally > 0 then'''
+position = "at"
+payload = '''
+local ccc_r_sec, ccc_r_tally = {}, 0
+local ccc_g_sec, ccc_g_tally = {}, 0
+for k, v in pairs(G.P_JOKER_RARITY_POOLS['ccc_secret']) do
+	local win_ante = get_joker_win_sticker(v, true)
+	if win_ante and (win_ante >= 8) then
+		ccc_g_sec[ccc_heartmatch(v.name)] = true
+		ccc_g_tally = ccc_g_tally + 1
+	else
+		ccc_r_sec[ccc_heartmatch(v.name)] = true
+		ccc_r_tally = ccc_r_tally + 1
+	end
+end
+
+if true then	-- overwrite
+'''
+match_indent = true
+
+# reroll starting seed to ensure the first pointless machines generates a heart that is not gold staked
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''BLOCKER_STRING_CCCif not r_leg[get_first_legendary(seed_found)] then seed_found = nil end'''
+position = "at"
+payload = '''
+if r_tally > 0 and g_tally > 0 then
+	if not r_leg[get_first_legendary(seed_found)] then seed_found = nil end
+end
+if ccc_r_tally > 0 and ccc_g_tally > 0 then
+	if not ccc_r_sec[ccc_getfirstheart(seed_found)] then seed_found = nil end
+end
+'''
+match_indent = true

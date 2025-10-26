@@ -1,0 +1,65 @@
+[manifest]
+version = '1.0.0'
+dump_lua = true
+priority = 0
+
+# background shader
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+shader = 'splash',
+'''
+payload = '''
+shader = Ortalab.config.menu_toggle and 'ortalab_background' or 'splash',
+'''
+
+
+# main menu background
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+{name = 'colour_1', ref_table = G.C, ref_value = 'RED'},
+{name = 'colour_2', ref_table = G.C, ref_value = 'BLUE'},
+'''
+payload = '''
+{name = 'colour_1', ref_table = Ortalab.config.menu_toggle and G.ARGS.LOC_COLOURS or G.C, ref_value = Ortalab.config.menu_toggle and 'Ort_menu_colourA' or 'RED'},
+{name = 'colour_2', ref_table = Ortalab.config.menu_toggle and G.ARGS.LOC_COLOURS or G.C, ref_value = Ortalab.config.menu_toggle and 'Ort_menu_colourB' or 'BLUE'},
+'''
+
+# main menu logo
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+G.SPLASH_LOGO = Sprite(0, 0, 
+        13*SC_scale, 
+        13*SC_scale*(G.ASSET_ATLAS["balatro"].py/G.ASSET_ATLAS["balatro"].px),
+        G.ASSET_ATLAS["balatro"], {x=0,y=0})
+'''
+payload = '''
+G.SPLASH_LOGO = Sprite(0, 0, 
+    13*SC_scale, 
+    13*SC_scale*(G.ASSET_ATLAS[Ortalab.config.menu_toggle and 'ortalab_logo' or "balatro"].py/G.ASSET_ATLAS[Ortalab.config.menu_toggle and 'ortalab_logo' or "balatro"].px),
+    G.ASSET_ATLAS[Ortalab.config.menu_toggle and 'ortalab_logo' or "balatro"], {x=0,y=0})
+'''
+
+# main menu card
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+self.title_top:emplace(replace_card)
+'''
+payload = '''
+replace_card:set_edition(Ortalab.config.menu_toggle and 'e_negative' or nil, true, true)
+'''

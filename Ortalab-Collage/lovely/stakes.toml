@@ -1,0 +1,218 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+## Pool Modifications - Ortalab Only
+## Remove non ortalab objects from the pool
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''if add and not G.GAME.banned_keys[v.key] then'''
+position = 'before'
+match_indent = true
+payload = '''--[[if G.GAME.modifiers.ortalab_only then
+    if _type == 'Spectral' and G.GAME.selected_back.effect.center.key == 'b_ghost' then
+    elseif _append == '8ba' then
+    elseif (not v.mod or v.mod.id ~= 'ortalab') and not table.contains(Ortalab.ortalab_only_inclusion, v.key) then
+        add = false
+    end 
+end]]
+'''
+#
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#pattern = '''local min_use = 100'''
+#position = 'before'
+#match_indent = true
+#payload = '''if G.GAME.modifiers.ortalab_only then
+#    for k, v in pairs(eligible_bosses) do
+#        if eligible_bosses[k] and not G.P_BLINDS[k].mod or G.P_BLINDS[k].mod.id ~= 'ortalab' then
+#            eligible_bosses[k] = nil
+#        end
+#    end
+#end
+#'''
+#
+### Pool Modifications - Ortalab Only
+### Replace empty pools
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#pattern = '''if _pool_size == 0 then'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#if _pool_size == 0 then
+#    local new_pool = {}
+#    if G.GAME.modifiers.ortalab_only then
+#        if SMODS.ConsumableTypes[_type] and SMODS.ConsumableTypes[_type].default and G.P_CENTERS[SMODS.ConsumableTypes[_type].default] then
+#            new_pool[#new_pool+1] = Ortalab.Pool_Utils.get_consumeable_key(Ortalab.Pool_Utils.get_consumeable_type())
+#        elseif _type == 'Tarot' or _type == 'Tarot_Planet' then new_pool[#new_pool + 1] = Ortalab.Pool_Utils.get_consumeable_key('ortalab_loteria')
+#        elseif _type == 'Planet' then new_pool[#new_pool + 1] = Ortalab.Pool_Utils.get_consumeable_key('ortalab_zodiac')
+#        elseif _type == 'Spectral' then new_pool[#_pool + 1] = 'c_incantation'
+#        elseif _type == 'Voucher' then new_pool[#new_pool + 1] = "v_blank"
+#        elseif _type == 'Tag' then new_pool[#new_pool + 1] = "tag_ortalab_rewind"
+#        else new_pool[#new_pool + 1] = "j_ortalab_jester"
+#        end
+#        _pool = new_pool
+#        _pool_size = 1
+#    end
+#end
+#'''
+#
+## Pool Modifications - Ortalab Only
+## Booster Packs
+#[[patches]]
+#[patches.pattern]
+#target = '=[SMODS _ "src/overrides.lua"]'
+#match_indent = true
+#position = 'before'
+#pattern = '''
+#if add and not G.GAME.banned_keys[v.key] then cume = cume + (v.current_weight or 1); temp_in_pool[v.key] = true end
+#'''
+#payload = '''
+#if v.kind ~= 'Buffoon' and v.kind ~= 'Standard' and G.GAME.modifiers.ortalab_only then
+#    if not v.mod or v.mod.id ~= 'ortalab' then add = false end
+#end
+#'''
+#
+#
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/UI_definitions.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#{n=G.UIT.R, config={id = 'tag_'..blind_choice, align = "cm", r = 0.1, padding = 0.1, minw = 1, can_collide = true, ref_table = _tag_sprite}, nodes={
+#    {n=G.UIT.C, config={id = 'tag_desc', align = "cm", minh = 1}, nodes={
+#        _tag_ui
+#    }},
+#    not run_info and {n=G.UIT.C, config={align = "cm", colour = G.C.UI.BACKGROUND_INACTIVE, minh = 0.6, minw = 2, maxw = 2, padding = 0.07, r = 0.1, shadow = true, hover = true, one_press = true, button = 'skip_blind', func = 'hover_tag_proxy', ref_table = _tag}, nodes={
+#        {n=G.UIT.T, config={text = localize('b_skip_blind'), scale = 0.4, colour = G.C.UI.TEXT_INACTIVE}}
+#    }} or {n=G.UIT.C, config={align = "cm", padding = 0.1, emboss = 0.05, colour = mix_colours(G.C.BLUE, G.C.BLACK, 0.4), r = 0.1, maxw = 2}, nodes={
+#        {n=G.UIT.T, config={text = localize('b_skip_reward'), scale = 0.35, colour = G.C.WHITE}},
+#    }},
+#}}
+#'''
+#payload = ''',
+#G.GAME.ortalab.skips_required and not run_info and G.GAME.round_resets.ante > 1 and G.GAME.ortalab.skips > 0 and (G.GAME.round_resets.blind_states[blind_choice] == "Upcoming" or G.GAME.round_resets.blind_states[blind_choice] == "Select") and {n=G.UIT.R, config={align='cm', minh=0.5}, nodes = {
+#    {n=G.UIT.C, config={align='cm'}, nodes = {{n=G.UIT.T, config={text = localize('ortalab_stake_skips'), scale = 0.3, colour = G.C.WHITE, shadow = true}}}},
+#    {n=G.UIT.C, config={align='cm'}, nodes = {{n=G.UIT.O, config={object = DynaText({string = {{ref_table = G.GAME.ortalab, ref_value = 'skips'}}, colours = {G.C.RED}, shadow = true, float = false, y_offset = -4, scale = 0.4})}}}}
+#}} or nil,
+#'''
+#
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/button_callbacks.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#G.GAME.skips = (G.GAME.skips or 0) + 1
+#'''
+#payload = '''
+#if G.GAME.ortalab.skips and G.GAME.round_resets.ante > 1 then G.GAME.ortalab.skips = math.max(0, G.GAME.ortalab.skips - 1) end
+#'''
+#
+## Stake 6 - apply curse to shop jokers
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/UI_definitions.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#local card = create_card(v.type, area, nil, nil, nil, nil, nil, 'sho')
+#'''
+#payload = '''
+#if G.GAME.ortalab.shop_curses and v.type == 'Joker' then
+#    if pseudorandom('ortalab_stake_curse') < 0.47 then
+#        local curse = pseudorandom_element(Ortalab.Curses, pseudoseed('ortalab_stake_curse_gen'))
+#        card:set_curse(curse.key, true, true)
+#    end
+#end
+#'''
+#
+## Stake 7 - allow showdown to spawn on Ante 5
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#match_indent = true
+#position = 'at'
+#pattern = '''
+#elseif not v.boss.showdown and (v.boss.min <= math.max(1, G.GAME.round_resets.ante) and ((math.max(1, G.GAME.round_resets.ante))%G.GAME.win_ante ~= 0 or G.GAME.round_resets.ante < 2)) then
+#    eligible_bosses[k] = true
+#elseif v.boss.showdown and (G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2 then
+#    eligible_bosses[k] = true
+#end
+#'''
+#payload = '''
+#elseif not v.boss.showdown and not (G.GAME.ortalab.ante_showdown and G.GAME.round_resets.ante == 5) and (v.boss.min <= math.max(1, G.GAME.round_resets.ante) and ((math.max(1, G.GAME.round_resets.ante))%G.GAME.win_ante ~= 0 or G.GAME.round_resets.ante < 2)) then
+#    eligible_bosses[k] = true
+#elseif v.boss.showdown and ((G.GAME.round_resets.ante)%G.GAME.win_ante == 0 or (G.GAME.ortalab.ante_showdown and G.GAME.round_resets.ante == 5)) and G.GAME.round_resets.ante >= 2 then
+#    eligible_bosses[k] = true
+#end
+#'''
+## Stake 7 - showdowns respect in_pool
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#match_indent = true
+#position = 'at'
+#pattern = '''
+#((G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2) ==
+#'''
+#payload = '''
+#(((G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2) or (G.GAME.ortalab.ante_showdown and G.GAME.round_resets.ante == 5) or false) ==
+#'''
+#
+## Stake 8 - don't win after first blind
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#match_indent = true
+#position = 'at'
+#pattern = '''
+#if G.GAME.round_resets.ante == G.GAME.win_ante and G.GAME.blind:get_type() == 'Boss' then
+#'''
+#payload = '''
+#if G.GAME.round_resets.ante == G.GAME.win_ante and G.GAME.blind:get_type() == 'Boss' and G.GAME.round_resets.blind_states.Boss == 'Current' then
+#'''
+#
+## Don't increase ante after first blind
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#match_indent = true
+#position = 'at'
+#pattern = '''
+#if G.GAME.blind:get_type() == 'Boss' then
+#'''
+#payload = '''
+#if G.GAME.blind:get_type() == 'Boss' and G.GAME.round_resets.blind_states.Boss == 'Current' then
+#'''
+#
+## Stop duplicate boss blinds in final ante
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#match_indent = true
+#position = 'at'
+#pattern = '''
+#function get_new_boss()
+#'''
+#payload = '''
+#function get_new_boss(current)
+#'''
+## pt 2
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#if not v.boss then
+#'''
+#payload = '''
+#elseif v == current then
+#'''

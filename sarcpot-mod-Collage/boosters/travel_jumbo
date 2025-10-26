@@ -1,0 +1,61 @@
+SMODS.Booster {
+
+    atlas = 'boosters',
+    pos = {
+        x = 0,
+        y = 1
+    },
+    key = 'travel_jumbo',
+    order = 2,
+    discovered = false,
+    group_key = "sarc_travel_pack",
+    kind = "travel",
+
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.choose, card.ability.extra}
+        }
+    end,
+    config = {
+        extra = 5,
+        choose = 1
+    },
+
+    create_card = function(self, card)
+        local card = create_card('travel', G.consumeables, false, nil, true, true, nil, 'travel')
+        return card
+    end,
+
+    draw_hand = true,
+
+    particles = function(self)
+        G.booster_pack_sparkles = Particles(1, 1, 0, 0, {
+            timer = 0.020,
+            scale = 0.1,
+            initialize = true,
+            lifespan = 2,
+            speed = 0.1,
+            padding = -1,
+            attach = G.ROOM_ATTACH,
+            colours = {G.SP.C.travel_1, lighten(G.SP.C.travel_1, 0.4), lighten(G.SP.C.travel_2, 0.2)},
+            fill = true
+        })
+    end,
+    ease_background_colour = function(self)
+        ease_colour(G.C.DYN_UI.MAIN, G.SP.C.navy)
+        ease_background_colour {
+            new_colour = G.SP.C.light_navy,
+            special_colour = G.SP.C.navy,
+            contrast = 2
+        }
+    end,
+
+    weight = 1.1,
+
+    cost = 6,
+
+    in_pool = function()
+        return true
+    end
+}
+

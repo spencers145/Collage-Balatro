@@ -1,0 +1,622 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = -11
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "local text,disp_text,poker_hands = G.FUNCS.get_poker_hand_info(self.highlighted)"
+position = 'before'
+match_indent = true
+payload = '''
+--local start = os.clock()
+'''
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "local text,disp_text,poker_hands = G.FUNCS.get_poker_hand_info(self.highlighted)"
+position = 'after'
+match_indent = true
+payload = '''
+--print("hand check duration")
+--print(os.clock() - start)
+'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if self.area and self.area:can_highlight(self) then"
+position = 'before'
+match_indent = true
+payload = '''
+--local start = os.clock()
+'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if self.area and self.area == G.deck and self.area.cards[1] == self then"
+position = 'before'
+match_indent = true
+payload = '''
+--print("total highlight duration")
+--print(os.clock() - start)
+'''
+
+
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''        if self == G.hand and G.STATE == G.STATES.SELECTING_HAND then
+            self:parse_highlighted()'''
+position = 'before'
+match_indent = true
+payload = '''
+--local start = os.clock()
+'''
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''            self:parse_highlighted()
+        end'''
+position = 'after'
+match_indent = true
+payload = '''
+--print("total parse duration")
+--print(os.clock() - start)
+'''
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''                update_hand_text({immediate = true, nopulse = nil, delay = 0}, {handname=disp_text, level=G.GAME.hands[text].level, mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})'''
+position = 'before'
+match_indent = true
+payload = '''
+--local start = os.clock()
+'''
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''                update_hand_text({immediate = true, nopulse = nil, delay = 0}, {handname=disp_text, level=G.GAME.hands[text].level, mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})'''
+position = 'after'
+match_indent = true
+payload = '''
+--print("text parse duration")
+--print(os.clock() - start)
+'''
+
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+G.FUNCS.play_cards_from_highlighted = function(e)
+'''
+position = 'after'
+payload = '''
+local start = os.clock()
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+if G.SCORING_COROUTINE then return false end 
+                        G.STATE_COMPLETE = false
+                        return true
+                    end
+                }))
+                return true
+            end)
+        }))
+'''
+position = 'after'
+payload = '''
+print("scoring rountine time:")
+print(os.clock() - start)
+'''
+match_indent = true
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+G.FUNCS.evaluate_play()
+'''
+position = 'before'
+payload = '''
+local starteval = os.clock()
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+G.FUNCS.evaluate_play()
+'''
+position = 'after'
+payload = '''
+--print("evaluate_play runtime:")
+--print(os.clock() - starteval)
+'''
+match_indent = true
+
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+-- TARGET: effects before scoring starts
+'''
+position = 'before'
+payload = '''
+local starteval = os.clock()
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+for _, v in ipairs(SMODS.get_card_areas('playing_cards')) do
+'''
+position = 'before'
+payload = '''
+print("BEFORE runtime:")
+print(os.clock() - starteval)
+'''
+match_indent = true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+        for ra_philo_stone_repeats=0, ((G.deck.config.ra_philo_stone or 0)) do
+        delay(0.3)
+'''
+position = 'before'
+payload = '''
+local starteval = os.clock()
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+for _, v in ipairs(SMODS.get_card_areas('playing_cards')) do
+SMODS.calculate_main_scoring({cardarea = v, full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands}, v == G.play and scoring_hand or nil)
+delay(0.3)
+end
+'''
+position = 'after'
+payload = '''
+print("MAIN runtime:")
+print(os.clock() - starteval)
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+position = 'at'
+pattern = '''
+G.GAME.current_round.idol_card.id ))
+'''
+payload = '''
+G.GAME.current_round.idol_card.id )
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+position = 'at'
+pattern = '''
+ease_dollars(-G.GAME.rental_rate)
+'''
+payload = '''
+local rate = 3
+if self.config.center.rarity == 1 then
+  rate = 2
+elseif self.config.center.rarity == 2 then
+  rate = 3
+elseif self.config.center.rarity == 3 then
+  rate = 4
+elseif self.config.center.rarity == 4 then
+  rate = 4
+end
+ease_dollars(-rate)
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+position = 'at'
+pattern = '''
+card_eval_status_text(self, 'dollars', -G.GAME.rental_rate)
+'''
+payload = '''
+card_eval_status_text(self, 'dollars', -rate)
+'''
+match_indent = true
+
+
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = '''src/game_object.lua'''
+position = 'at'
+pattern = '''return {vars = {G.GAME.rental_rate or 1}}'''
+payload = '''
+            local rate = 3
+            if card and card.ability and card.ability.set == "Joker" then
+                if card.config.center.rarity == 1 then
+                    rate = 2
+                elseif card.config.center.rarity == 2 then
+                    rate = 3
+                elseif card.config.center.rarity == 3 then
+                    rate = 4
+                elseif card.config.center.rarity == 4 then
+                    rate = 4
+                end
+                return {vars = {rate}}
+            else
+                return {vars = {"2-$4"}}
+            end
+'''
+match_indent = true
+
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "function Card:explode(dissolve_colours, explode_time_fac)"
+position = 'at'
+match_indent = true
+payload = '''function Card:explode(dissolve_colours, explode_time_fac, alt_sounds)'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "play_sound('explosion_buildup1')"
+position = 'at'
+match_indent = true
+payload = '''if not alt_sounds then play_sound('explosion_buildup1') end'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "play_sound('explosion_release1')"
+position = 'at'
+match_indent = true
+payload = '''if alt_sounds then play_sound('tarot1', 1.15, 1.7) else play_sound('explosion_release1') end'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if self.cost > 0 then"
+position = "after"
+payload = '''
+-- checking area doenst work since it has already left its cardarea by this point
+--if self.area == G.shop_booster then
+    G.GAME.collage_boosters_purchased_this_shop = (G.GAME.collage_boosters_purchased_this_shop or 0) + 1
+    if not G.GAME.used_vouchers['v_ortalab_catalog'] and G.GAME.collage_boosters_purchased_this_shop >= 2 then
+        for _, v in pairs(G.shop_booster.cards) do
+            if not v.opening and v.cost > 0 then
+                v:set_debuff(true)
+            end
+        end
+    end
+--end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if self.ability.set == "Voucher" then'''
+position = "after"
+payload = '''
+  if not G.GAME.used_vouchers['v_ortalab_ad_campaign'] and self.config.center_key ~= 'v_ortalab_ad_campaign' and self.shop_voucher then
+    for k, v in pairs(G.GAME.current_round.voucher.spawn) do
+        G.GAME.current_round.voucher.spawn[k] = false
+    end
+    for _, card in pairs(G.shop_vouchers.cards) do
+        if card.shop_voucher and self.config.center_key ~= card.config.center_key then
+            card:set_debuff(true)
+            --[[G.E_MANAGER:add_event(
+                Event({
+                    trigger = 'before',
+                    delay = 0,
+                    func = function()
+                        card:juice_up()
+                        card:start_dissolve()
+                        delay(0.3)
+                        return true
+                    end
+                })
+            )]]
+        end
+    end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "if _c.set == 'Other' then"
+position = 'before'
+match_indent = true
+payload = '''
+if card and card.ability and card.ability.set == "Booster" and card.area == G.shop_booster and not G.GAME.used_vouchers['v_ortalab_catalog'] then
+    info_queue[#info_queue+1] = { key = "collage_pack_notifier", set = "Other", specific_vars = {(2 - (G.GAME.collage_boosters_purchased_this_shop or 0))} }
+end
+if card and card.ability and card.ability.set == "Voucher" and card.shop_voucher and not G.GAME.used_vouchers['v_ortalab_ad_campaign'] then
+    info_queue[#info_queue+1] = { key = "collage_voucher_notifier", set = "Other", specific_vars = {G.GAME.round_resets.ante} }
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''G.FUNCS.can_open = function(e)'''
+position = 'after'
+match_indent = true
+payload = '''
+if e.config.ref_table.debuff then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+    return
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''G.FUNCS.can_redeem = function(e)'''
+position = 'after'
+match_indent = true
+payload = '''
+if e.config.ref_table.debuff then
+    e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+    return
+end
+'''
+
+# e.config.ref_table.debuff
+
+#specific_vars.bonus_chips * (((card:is_suit('bunc_Fleurons') or card:is_suit('bunc_Halberds')) and (card.base.suit == 'bunc_Fleurons' or card.base.suit == "bunc_Halberds")) and 2 or 1)
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "localize{type = 'other', key = 'card_chips', nodes = desc_nodes, vars = {specific_vars.nominal_chips}}"
+position = 'at'
+match_indent = true
+payload = '''if card then
+    localize{type = 'other', key = 'card_chips', nodes = desc_nodes, vars = {specific_vars.nominal_chips + ((card and (card:is_suit('bunc_Fleurons') or card:is_suit('bunc_Halberds')) and (card.base.suit == 'bunc_Fleurons' or card.base.suit == "bunc_Halberds")) and 10 or 0)}}
+else
+    localize{type = 'other', key = 'card_chips', nodes = desc_nodes, vars = {specific_vars.nominal_chips}}
+end'''
+
+#[[patches]]
+#[patches.pattern]
+#target = "functions/common_events.lua"
+#pattern = "localize{type = 'other', key = 'card_extra_chips', nodes = desc_nodes, vars = {SMODS.signed(specific_vars.bonus_chips)}}"
+#position = 'at'
+#match_indent = true
+#payload = '''if card then
+#    localize{type = 'other', key = 'card_extra_chips', nodes = desc_nodes, vars = {SMODS.signed(specific_vars.bonus_chips * ((card and (card:is_suit('bunc_Fleurons') or card:is_suit('bunc_Halberds')) and (card.base.suit == 'bunc_Fleurons' or card.base.suit == "bunc_Halberds")) and 2 or 1))}}
+#else
+#    localize{type = 'other', key = 'card_extra_chips', nodes = desc_nodes, vars = {SMODS.signed(specific_vars.bonus_chips)}}
+#end'''
+
+
+#localize{type = 'other', key = 'card_extra_chips', nodes = desc_nodes, vars = {SMODS.signed((specific_vars and specific_vars.bonus_chips) or cfg.bonus)}}
+
+#[[patches]]
+#[patches.pattern]
+#target = "functions/common_events.lua"
+#pattern = "localize{type = 'other', key = 'card_extra_chips', nodes = desc_nodes, vars = {SMODS.signed((specific_vars and specific_vars.bonus_chips) or cfg.bonus)}}"
+#position = 'at'
+#match_indent = true
+#payload = '''if
+#    localize{type = 'other', key = 'card_extra_chips', nodes = desc_nodes, vars = {SMODS.signed(((specific_vars and specific_vars.bonus_chips) or cfg.bonus) * ((card and (card:is_suit('bunc_Fleurons') or card:is_suit('bunc_Halberds')) and (card.base.suit == 'bunc_Fleurons' or card.base.suit == "bunc_Halberds")) and 2 or 1))}}
+#else
+#    localize{type = 'other', key = 'card_extra_chips', nodes = desc_nodes, vars = {SMODS.signed((specific_vars and specific_vars.bonus_chips) or cfg.bonus)}}
+#end'''
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+position = 'at'
+pattern = '''
+        p_arcana_jumbo_1 =          {order = 5,  discovered = false, name = "Jumbo Arcana Pack", weight = 1, kind = 'Arcana', cost = 6, pos = {x=0,y=2}, atlas = 'Booster', set = 'Booster', config = {extra = 5, choose = 1}},
+        p_arcana_jumbo_2 =          {order = 6,  discovered = false, name = "Jumbo Arcana Pack", weight = 1, kind = 'Arcana', cost = 6, pos = {x=1,y=2}, atlas = 'Booster', set = 'Booster', config = {extra = 5, choose = 1}},
+        p_arcana_mega_1 =           {order = 7,  discovered = false, name = "Mega Arcana Pack", weight = 0.25, kind = 'Arcana', cost = 8, pos = {x=2,y=2}, atlas = 'Booster', set = 'Booster', config = {extra = 5, choose = 2}},
+        p_arcana_mega_2 =           {order = 8,  discovered = false, name = "Mega Arcana Pack", weight = 0.25, kind = 'Arcana', cost = 8, pos = {x=3,y=2}, atlas = 'Booster', set = 'Booster', config = {extra = 5, choose = 2}},
+'''
+payload = '''
+        p_arcana_jumbo_1 =          {order = 5,  discovered = false, name = "Jumbo Arcana Pack", weight = 1, kind = 'Arcana', cost = 6, pos = {x=0,y=2}, atlas = 'Booster', set = 'Booster', config = {extra = 6, choose = 1}},
+        p_arcana_jumbo_2 =          {order = 6,  discovered = false, name = "Jumbo Arcana Pack", weight = 1, kind = 'Arcana', cost = 6, pos = {x=1,y=2}, atlas = 'Booster', set = 'Booster', config = {extra = 6, choose = 1}},
+        p_arcana_mega_1 =           {order = 7,  discovered = false, name = "Mega Arcana Pack", weight = 0.25, kind = 'Arcana', cost = 8, pos = {x=2,y=2}, atlas = 'Booster', set = 'Booster', config = {extra = 6, choose = 2}},
+        p_arcana_mega_2 =           {order = 8,  discovered = false, name = "Mega Arcana Pack", weight = 0.25, kind = 'Arcana', cost = 8, pos = {x=3,y=2}, atlas = 'Booster', set = 'Booster', config = {extra = 6, choose = 2}},
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+position = 'at'
+pattern = '''func = (function() if G.OVERLAY_MENU and G.OVERLAY_MENU.joker_unlock_table == card.ID then locked_card:juice_up(0.3, 0.2); play_sound('cancel', 0.8) end; return true end) }))'''
+payload = '''--func = (function() if G.OVERLAY_MENU and G.OVERLAY_MENU.joker_unlock_table == card.ID then locked_card:juice_up(0.3, 0.2); play_sound('cancel', 0.8) end; return true end) }))'''
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+position = 'at'
+pattern = '''func = (function() if G.OVERLAY_MENU and G.OVERLAY_MENU.joker_unlock_table == card.ID then locked_card:juice_up(0.45, 0.3); play_sound('cancel', 0.92) end; return true end) }))'''
+payload = '''--func = (function() if G.OVERLAY_MENU and G.OVERLAY_MENU.joker_unlock_table == card.ID then locked_card:juice_up(0.45, 0.3); play_sound('cancel', 0.92) end; return true end) }))'''
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+position = 'at'
+pattern = '''func = (function() if G.OVERLAY_MENU and G.OVERLAY_MENU.joker_unlock_table == card.ID then locked_card:juice_up(0.6, 0.4); play_sound('cancel', 1.03) end; return true end) }))'''
+payload = '''--func = (function() if G.OVERLAY_MENU and G.OVERLAY_MENU.joker_unlock_table == card.ID then locked_card:juice_up(0.6, 0.4); play_sound('cancel', 1.03) end; return true end) }))'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+position = 'at'
+pattern = '''G.E_MANAGER:add_event(Event({timer = 'REAL',blockable = false,blocking = false, trigger = 'after', delay = 0.6,'''
+payload = '''--G.E_MANAGER:add_event(Event({timer = 'REAL',blockable = false,blocking = false, trigger = 'after', delay = 0.6,'''
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+position = 'at'
+pattern = '''G.E_MANAGER:add_event(Event({timer = 'REAL',blockable = false,blocking = false, trigger = 'after', delay = 1.15,'''
+payload = '''--G.E_MANAGER:add_event(Event({timer = 'REAL',blockable = false,blocking = false, trigger = 'after', delay = 1.15,'''
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+position = 'at'
+pattern = '''G.E_MANAGER:add_event(Event({timer = 'REAL',blockable = false,blocking = false, trigger = 'after', delay = 1.8,'''
+payload = '''--G.E_MANAGER:add_event(Event({timer = 'REAL',blockable = false,blocking = false, trigger = 'after', delay = 1.8,'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+position = 'at'
+pattern = '''delay = 2.3,'''
+payload = '''delay = 0,'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+position = 'at'
+pattern = '''delay = 2.7,'''
+payload = '''delay = 0.4,'''
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+position = 'at'
+pattern = '''G.E_MANAGER:add_event(Event({timer = 'REAL',blockable = false,blocking = false, trigger = 'after', delay = 2.78,'''
+payload = '''G.E_MANAGER:add_event(Event({timer = 'REAL',blockable = false,blocking = false, trigger = 'after', delay = 0.48,'''
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+position = 'at'
+pattern = '''G.E_MANAGER:add_event(Event({timer = 'REAL',blockable = false,blocking = false, trigger = 'after', delay = 2.95,'''
+payload = '''G.E_MANAGER:add_event(Event({timer = 'REAL',blockable = false,blocking = false, trigger = 'after', delay = 0.65,'''
+match_indent = true
+
+
+
+
+# create the jokers buy
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "c_cards_sold = 0,"
+position = "after"
+payload = "c_collage_wins = 0,"
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "inc_career_stat('c_wins', 1)"
+position = "after"
+match_indent = true
+payload = '''inc_career_stat('c_collage_wins', 1)'''
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''add_round_eval_row({dollars = G.GAME.blind.dollars, name='blind1', pitch = pitch})'''
+position = 'after'
+match_indent = true
+payload = '''
+if G.GAME.blind.boss and (G.GAME.selected_back.effect.center.key == 'b_black' or G.GAME.selected_sleeve == 'sleeve_casl_black') then
+    add_round_eval_row({dollars = G.jokers.config.card_limits.card_limit - #G.jokers.cards, bonus='true', name='joker_frozen_deck', card={config={center={set='Back', key='b_black'}}, juice_up=function(self) end}, pitch = pitch})
+end
+'''
+
+
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''if (not v.config.softlock or G.GAME.hands[v.config.hand_type].played > 0) then'''
+position = 'at'
+match_indent = true
+payload = '''if (not v.config.softlock or G.GAME.hands[v.config.hand_type].played > 0 or G.GAME.hands[v.config.hand_type].visible) then'''

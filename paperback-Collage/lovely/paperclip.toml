@@ -1,0 +1,52 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# We add the mod badge to our Paperclips
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "badges.mod_set = nil"
+position = "before"
+match_indent = true
+payload = '''
+if PB_UTIL and card and card.ability then
+  local key = PB_UTIL.has_paperclip(card)
+  if key then
+    SMODS.create_mod_badges(SMODS.Stickers[key], badges)
+  end
+end
+'''
+
+# We allow an option to set the colour of the badge text for our Paperclips
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = 'badges[#badges + 1] = create_badge(localize(v, "labels"), get_badge_colour(v))'
+position = "before"
+match_indent = true
+payload = '''
+local pb_key = PB_UTIL.has_paperclip(card)
+if pb_key and v == pb_key then
+  badges[#badges + 1] = create_badge(localize(v, "labels"), get_badge_colour(v), SMODS.Stickers[pb_key].badge_text_colour)
+else
+'''
+
+# Close the if statement started above
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = 'badges[#badges + 1] = create_badge(localize(v, "labels"), get_badge_colour(v))'
+position = "after"
+match_indent = true
+payload = "end"
+
+# 
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = 'new_card:set_base(other.config.card)'
+position = "after"
+match_indent = true
+payload = "PB_UTIL.remove_paperclip(new_card)"

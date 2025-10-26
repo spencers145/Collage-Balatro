@@ -1,0 +1,55 @@
+SMODS.Joker {
+    key = "phase_shift",
+    config = {
+        extra = {
+            suits = {"Diamonds", "Clubs"},
+            percent = 5
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+
+        return {
+            vars = {
+                card.ability.extra.suits[1],
+                card.ability.extra.suits[2],
+                card.ability.extra.percent,
+                colours = {G.C.SUITS.Diamonds, G.C.SUITS.Clubs}
+            }
+        }
+    end,
+    rarity = 3,
+    pos = {
+        x = 3,
+        y = 6
+    },
+    atlas = 'sarcpot_atlas',
+    cost = 7,
+    discovered = false,
+    blueprint_compat = true,
+    eternal_compat = true,
+    soul_pos = nil,
+    in_pool = function(self, args)
+        if G.GAME then
+            if G.GAME.selected_back.effect.center.key ~= 'b_plasma' then
+                return true
+            end
+        end
+        return false
+    end,
+    calculate = function(self, card, context)
+
+        if context.individual and context.cardarea == G.play then
+            for _, v in pairs(card.ability.extra.suits) do
+                if context.other_card:is_suit(v) then
+
+                    return {
+                        SARC.balance_percent(context.other_card, (card.ability.extra.percent * 0.01)),
+                        card = card
+                    }
+                end
+            end
+        end
+    end
+
+}
+

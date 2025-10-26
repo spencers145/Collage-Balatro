@@ -1,0 +1,78 @@
+SMODS.Consumable({
+    key = 'brittle_hollow',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = {x=0, y=0},
+    discovered = false,
+    config = {count = 2, level_up_triggers = 2},
+    keep_on_use = function(self, card)
+        return false
+    end,
+    loc_vars = function(self, info_queue)
+        info_queue[#info_queue + 1] = { key = "sarc_collapse_tip", set = "Other" }
+        info_queue[#info_queue + 1] = G.P_CENTERS.c_black_hole
+        return { vars = {self.config.level_up_triggers, G.GAME.brittle_hollow_count, self.config.count+1} }
+	end,
+    cost = 3,
+    can_use = function(self, card)
+		return true
+	end,
+    use = function(self, card, area, copier)
+        if G.GAME.brittle_hollow_count >= self.config.count then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.4,
+                blocking = true
+            }))
+            SMODS.calculate_effect({ message = localize('sarc_collapse'), colour = G.C.PURPLE}, card)
+            
+            G.E_MANAGER:add_event(Event({
+                blockable = true,
+                trigger = 'after',
+                delay = 0.5,
+                func = function()
+                    play_sound('tarot1')
+                    card.T.r = -0.2
+                    card:juice_up(0.3, 0.4)
+                    card.states.drag.is = true
+                    card.children.center.pinch.x = true
+                    card:start_dissolve()
+                    card = nil
+                    
+                    local consumable = create_card('Spectral',G.consumeables, nil, nil, false, nil, 'c_black_hole')
+            consumable:add_to_deck()
+            G.consumeables:emplace(consumable)
+            return true
+                end
+                }))
+                G.GAME.brittle_hollow_count = 0
+        else
+    
+        local _poker_hands = {}
+        local random_hands = {}
+		for _, k in ipairs(G.handlist) do
+            local v = G.GAME.hands[k]
+			if v.visible then _poker_hands[#_poker_hands+1] = k end
+		end
+        for i=1, self.config.level_up_triggers do
+            local random_hand = pseudorandom_element(_poker_hands, pseudoseed('brittle')) or "High Card"
+            table.insert(random_hands,random_hand)
+            for i = #_poker_hands, 1, -1 do  
+                if _poker_hands[i] == random_hand then
+                  table.remove(_poker_hands, i)
+                end
+              end
+        end
+        SARC.level_up_multiple(card,random_hands,localize('sarc_2_random_hands'))
+        G.GAME.brittle_hollow_count = G.GAME.brittle_hollow_count + 1
+    end
+    
+    end,
+    set_ability = function(self, card, initial, delay_sprites)
+        if G.GAME.brittle_hollow_count == self.config.count then
+            local eval = function() return not card.REMOVED end
+            juice_card_until(card, eval, true)
+        end
+    end
+})
+

@@ -1,0 +1,116 @@
+[manifest]
+version = "1.0.2e"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''-- context.final_scoring_step calculations'''
+position = "before"
+payload = '''
+
+        if G.GAME.selected_partner_card and G.GAME.selected_partner_card.ability then
+            local ret = G.GAME.selected_partner_card:calculate_partner({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, joker_main = true})
+            if ret and ret.duplication then
+                for k, v in ipairs(ret) do
+                    SMODS.trigger_effects({{individual = v}}, G.GAME.selected_partner_card)
+                end
+            elseif ret then
+                SMODS.trigger_effects({{individual = ret}}, G.GAME.selected_partner_card)
+            end
+        end
+
+'''
+match_indent = false
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''local i = 0'''
+position = "before"
+payload = '''
+    if G.GAME.selected_partner_card and G.GAME.selected_partner_card.ability then
+        local ret = G.GAME.selected_partner_card:calculate_partner_cash()
+        if ret then
+            add_round_eval_row({dollars = ret, bonus = true, name = "partner", pitch = pitch, card = G.GAME.selected_partner_card})
+            pitch = pitch + 0.06
+            dollars = dollars + ret
+        end
+    end
+'''
+match_indent = false
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''elseif config.name == 'custom' then'''
+position = "before"
+payload = '''
+                elseif string.find(config.name, "partner") then
+                    table.insert(left_text, {n=G.UIT.O, config={object = DynaText({string = localize{type = "name_text", set = config.card.config.center.set, key = config.card.config.center.key}, colours = {G.C.FILTER}, shadow = true, pop_in = 0, scale = 0.6*scale, silent = true})}})
+'''
+match_indent = false
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''-- Calculate context.other_joker effects'''
+position = "before"
+payload = '''
+
+            if G.GAME.selected_partner_card and G.GAME.selected_partner_card.ability then
+                local other_key = "other_unknown"
+                if _card.ability.set == "Joker" then other_key = "other_joker" end
+                if _card.ability.consumeable then other_key = "other_consumeable" end
+                if _card.ability.set == "Voucher" then other_key = "other_voucher" end
+                local ret = G.GAME.selected_partner_card:calculate_partner({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, [other_key] = _card, other_main = _card})
+                if ret and ret.duplication then
+                    for k, v in ipairs(ret) do
+                        table.insert(effects, {individual = v})
+                    end
+                elseif ret then
+                    table.insert(effects, {individual = ret})
+                end
+            end
+
+'''
+match_indent = false
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''elseif part.control.X or part.control.B then'''
+position = "before"
+payload = '''
+        elseif part.control.T and part.control.T == "memory_negative" then
+          final_line[#final_line+1] = {n=G.UIT.T, config={
+          detailed_tooltip = {key = part.control.T, set = "Other", vars = {1}} or nil,
+          text = assembled_string,
+          shadow = args.shadow,
+          colour = part.control.V and args.vars.colours[tonumber(part.control.V)] or not part.control.C and args.text_colour or loc_colour(part.control.C or nil, args.default_col),
+          scale = 0.32*(part.control.s and tonumber(part.control.s) or args.scale  or 1)*desc_scale},}
+'''
+match_indent = false
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''if v.set and ((v.set == 'Joker') or v.consumeable or (v.set == 'Edition') or (v.set == 'Voucher') or (v.set == 'Back') or (v.set == 'Booster')) then'''
+position = "before"
+payload = '''
+      if v.set and v.set == "Partner" then
+        G.DISCOVER_TALLIES.total.of = G.DISCOVER_TALLIES.total.of + 1
+        if v.unlocked then
+          G.DISCOVER_TALLIES.total.tally = G.DISCOVER_TALLIES.total.tally + 1
+        end
+      end
+'''
+match_indent = false
+overwrite = false
+

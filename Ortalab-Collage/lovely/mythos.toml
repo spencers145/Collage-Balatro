@@ -1,0 +1,71 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+## Mythos Draw Shader
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if (self.ability.set == 'Voucher' or self.config.center.demo) and (self.ability.name ~= 'Antimatter' or not (self.config.center.discovered or self.bypass_discovery_center)) then'''
+position = 'before'
+match_indent = true
+payload = '''
+if self.ability.set == 'ortalab_mythos' or self.config.center.group_key == 'ortalab_mythos_pack' then
+    self.children.center:draw_shader('ortalab_mythos', nil, self.ARGS.send_to_shader)
+end
+'''
+
+# Stop standard shader for boosters
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/card_draw.lua"]'
+match_indent = true
+position = 'at'
+pattern = '''
+if (self.ability.set == 'Booster' or self.ability.set == 'Spectral') and self:should_draw_base_shader() then
+'''
+payload = '''
+if ((self.ability.set == 'Booster' and self.config.center.group_key ~= 'ortalab_mythos_pack') or self.ability.set == 'Spectral') and self:should_draw_base_shader() then
+'''
+
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod)'''
+position = 'after'
+match_indent = true
+payload = '''
+if self.ability.set == 'ortalab_mythos' then
+    self.children.floating_sprite:draw_shader('ortalab_mythos', nil, nil, nil, self.children.center, scale_mod, rotate_mod)
+end
+'''
+
+# Stop buy_and_use button
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+local buy_and_use = nil
+if card.ability.consumeable then 
+'''
+payload = '''
+local buy_and_use = nil
+if card.ability.consumeable and not SMODS.ConsumableType[card.ability.set].no_buy_and_use then 
+'''
+
+# Discovered granted cards
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+discover_card(self.config.center)
+'''
+payload = '''
+self:set_sprites(self.config.center)
+'''

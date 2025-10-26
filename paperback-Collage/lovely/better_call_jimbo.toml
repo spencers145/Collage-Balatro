@@ -1,0 +1,11 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 10
+
+[[patches]]
+[patches.regex]
+target = "functions/state_events.lua"
+pattern = 'and not G\.GAME\.modifiers\.no_interest'
+position = "after"
+payload = " and not next(SMODS.find_card('j_paperback_better_call_jimbo', false)) "

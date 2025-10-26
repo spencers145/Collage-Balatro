@@ -1,0 +1,16 @@
+{
+	"id": "extracredit",
+	"name": "ExtraCredit",
+	"display_name": "Extra Credit",
+	"author": ["CampfireCollective"],
+	"description": "A small-scale vanilla-style content mod for Balatro University! Check out the Interns tab!",
+	"prefix": "ExtraCredit",
+	"main_file": "src/essay.lua",
+	"priority": 1,
+	"badge_colour": "006A00",
+	"badge_text_colour": "FBA105",
+	"version": "1.3.0",
+	"dependencies": [
+		"Steamodded (>=1.0.0~BETA-0404a)" 
+	]
+}

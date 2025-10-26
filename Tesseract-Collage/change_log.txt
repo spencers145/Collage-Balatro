@@ -1,0 +1,31 @@
+General changes:
+- Put each joker in a seperate file, allowing easier future contributions.
+- Added localization support. Right now, only en-us is supported.
+- Jokers have their text brought more in-line with Vanilla Balatro.
+- Integrated an earlier pull request by nixbird, allowing support for JokerDisplay.
+- Lots of Joker text has changed to match Vanilla Jokers.
+- Added suppression of Jokers from other mod packs with similar functionality (Can be modified in config).
+ - Plushie from ExtraCredit
+ - Apple Pie from Plantain
+
+Balance changes:
+- Letter Blocks's gain from lettered cards: +2 mult -> +1 mult. Original balancing can be restored in config.
+
+Bug fixes:
+- Fixed a bug for Impossibility where playing a 2 or 8 but not both caused Impossibility to trigger if you played the other in a later hand.
+- Mint Condition has its timing issue addressed: Now pays out money first.
+- Chromatic Aberration's timing issues adressed. (Visual effect only).
+- Jimbette now has her upgrade message in the right location.
+- Letter Blocks now has only one upgrade message per hand played and it is in the right location.
+- Penrose's transformation timing is now clearly after scoring.
+- Waterfall's chip scoring message now only triggers once.
+
+Minor functional changes:
+- Bismuth and Chromatic Aberration now only appear if you have at least one Wild Card in your deck.
+- Conduit now only appears if you have at least one Bonus or Mult Card in your deck.
+- nixbird: Blue Java, Mint, Pineapple and Apple Pie are marked as food.
+
+Visual changes:
+- Bismuth, Chromatic Aberration and Conduit each now display the relevant info boxes.
+- Apple Pie and Pineapple's secondary effects are clarified to happen at end of round.
+- Mahjong Tile and Reserve Leaflet now have a hitbox matching their sprites

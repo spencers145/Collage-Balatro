@@ -1,0 +1,292 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 12
+
+# Burnt card extra card draw
+[[patches]]
+[patches.pattern]
+target = '''functions/state_events.lua'''
+pattern = "for i=1, hand_space do*"
+position = "before"
+payload = '''
+hand_space = hand_space + (G.GAME.prism_extra_draw or 0)
+G.GAME.prism_extra_draw = 0
+'''
+match_indent = true
+
+#ice cards card count
+[[patches]]
+[patches.pattern]
+target = '''functions/state_events.lua'''
+pattern = "G.GAME.round_scores.cards_played.amt = G.GAME.round_scores.cards_played.amt + 1"
+position = "before"
+payload = '''
+G.GAME.prism_cards_played = (G.GAME.prism_cards_played or 0) + 1
+'''
+match_indent = true
+
+#in case reset_game:globals doesn't work for some reason
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+-- TARGET: main end_of_round evaluation
+'''
+position = "after"
+payload = '''
+G.GAME.prism_cards_played = 0
+G.GAME.prism_extra_draw = 0
+for k,v in pairs(G.playing_cards or {}) do
+	if v.ability.greened then v.ability.greened = nil end
+end
+'''
+match_indent = true
+
+#bonus packs
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''G.GAME.pack_choices = self.ability.choose*'''
+position = 'after'
+payload = '''
+if G.GAME.used_vouchers.v_prism_bonus_packs then G.GAME.pack_choices = G.GAME.pack_choices + 1 end
+'''
+match_indent = true
+
+#legacy green seal
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.deck:shuffle('nr'..G.GAME.round_resets.ante)"
+position = "after"
+payload = '''
+local cards = {}
+for i=1, #G.deck.cards - 1 do
+    while i <= #G.deck.cards and G.deck.cards[i].seal == "prism_green_old" do
+        table.insert(cards, G.deck.cards[i])
+        table.remove(G.deck.cards,i)
+    end
+end
+for _, card in pairs(cards) do
+    local pos = (pseudorandom('green') < 0.5 and #G.deck.cards) or pseudorandom('green_pos', 1, #G.deck.cards + 1)
+    table.insert(G.deck.cards,pos,card)
+end
+'''
+match_indent = true
+
+#ban djinn from jokerless challenge
+[[patches]]
+[patches.pattern]
+target = "challenges.lua"
+pattern = "{id = 'c_soul'},"
+position = "after"
+payload = '''
+{id = 'c_prism_spectral_djinn'},
+'''
+match_indent = true
+
+#ban enhancers from fragile challenge
+[[patches]]
+[patches.pattern]
+target = "challenges.lua"
+pattern = "{id = 'c_lovers'},"
+position = "after"
+payload = '''
+{id = 'c_prism_myth_dwarf'},
+{id = 'c_prism_myth_dragon'},
+{id = 'c_prism_myth_twin'},
+{id = 'c_prism_myth_siren'},
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "challenges.lua"
+pattern = "{id = 'j_marble'},"
+position = "after"
+payload = '''
+{id = 'j_prism_medusa'},
+'''
+match_indent = true
+
+#Allows to play more than 5 cards
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = """if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > 5 then"""
+position = 'at'
+payload = """
+if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > G.hand.config.highlighted_limit then
+"""
+match_indent = true
+
+#platinum stake
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = """self.extra_cost = 0 + G.GAME.inflation"""
+position = 'after'
+payload = """ 
+if G.GAME.modifiers.price_scaling then self.extra_cost = self.extra_cost + G.GAME.price_scaling end
+"""
+match_indent = true
+
+#hit record and green seal
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "draw_card(G.play,G.discard, it*100/play_count,'down', false, v)"
+position = "before"
+payload = '''
+if v.seal == "prism_green" and not v.ability.greened then
+    v.ability.greened = true
+	draw_card(G.play,G.hand, it*100/play_count,'up', true, v)
+elseif v.config.cycling then
+    v.config.cycling = false
+	draw_card(G.play,G.deck, it*100/play_count,'down', false, v)
+	G.deck:shuffle('hitr'..G.GAME.round_resets.ante)
+else
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "draw_card(G.play,G.discard, it*100/play_count,'down', false, v)"
+position = "after"
+payload = '''
+end
+'''
+match_indent = true
+
+#emult
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "local extrafunc = nil"
+position = "after"
+payload = '''
+if not G.PRISM.compat.talisman and not G.PRISM.compat.buffoonery then
+	if eval_type == 'e_mult' then 
+		sound = 'prism_emult'
+		amt = amt
+		text = '^' .. amt .. ' Mult'
+		colour = G.C.MULT
+		config.type = 'fade'
+		config.scale = 0.7
+	end
+end
+'''
+match_indent = true
+
+#retriggers
+#[[patches]]
+#[patches.pattern]
+#target = '=[SMODS _ "src/utils.lua"]'
+#pattern = "context.retrigger_joker = true"
+#position = "after"
+#payload = '''
+#local old_blue = context.blueprint
+#local edition = _card and _card.edition or card and card.edition
+#if edition and edition.key == "e_prism_gold_foil" then context.blueprint = (context.blueprint and (context.blueprint + 1)) or 1 end
+#'''
+#match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = "context.retrigger_joker = nil"
+position = "after"
+payload = '''
+context.blueprint = old_blue
+'''
+match_indent = true
+
+#overwrite cryptids jolly_joker, because prisms are cooler
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_jolly'],{bypass_discovery_center = true, bypass_discovery_ui = true})"
+position = "after"
+payload = '''
+SC = Card(G.ROOM.T.w/2 - SC_scale*G.CARD_W/2, 10. + G.ROOM.T.h/2 - SC_scale*G.CARD_H/2, SC_scale*G.CARD_W, SC_scale*G.CARD_H, G.P_CARDS.empty, G.P_CENTERS['j_prism_prism'],{bypass_discovery_center = true, bypass_discovery_ui = true})
+'''
+match_indent = true
+
+#romantic warrior
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "if card.config.center.set == 'Tarot' or card.config.center.set == 'Planet' then "
+position = "before"
+payload = '''
+if card.config.center.set == 'Myth' then 
+	G.E_MANAGER:add_event(Event({
+		trigger = 'immediate',
+		func = function()
+		G.E_MANAGER:add_event(Event({
+			trigger = 'immediate',
+			func = function()
+			G.GAME.last_myth = card.config.center_key
+				return true
+			end
+		}))
+			return true
+		end
+	}))
+end
+'''
+match_indent = true
+
+
+
+#gold foil copy reminder
+#[[patches]]
+#[patches.pattern]
+#target = "functions/common_events.lua"
+#pattern = "if (v.edition and v.edition.negative) and (G.localization.descriptions.Other.remove_negative)then "
+#position = "at"
+#payload = '''if (v.edition and (v.edition.negative or v.edition.key == "e_prism_gold_foil")) and (G.localization.descriptions.Other.remove_negative) then
+#'''
+#match_indent = true
+
+#gold foil strip
+#[[patches]]
+#[patches.pattern]
+#target = 'card.lua'
+#pattern = '''local card = copy_card(chosen_joker, nil, nil, nil, chosen_joker.edition and chosen_joker.edition.negative)'''
+#position = 'at'
+#payload = '''
+#local card = copy_card(chosen_joker, nil, nil, nil, chosen_joker.edition and (chosen_joker.edition.negative or chosen_joker.edition.key == "e_prism_gold_foil"))
+#'''
+#match_indent = true
+
+#savings tag sprite in cashout screen
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "local blind_sprite = Sprite(0, 0, 0.7,0.7, G.ASSET_ATLAS['tags'], copy_table(config.pos))"
+position = "at"
+payload = '''local blind_sprite = Sprite(0, 0, 0.7,0.7, G.ASSET_ATLAS[config.tag.atlas or 'tags'], copy_table(config.pos))
+'''
+match_indent = true
+
+# copy_card edition shork compat
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+position = 'before'
+pattern = 'new_card:set_edition(other.edition or {}, nil, true)'
+payload = '''G.GAME.prism_shork_copy = true
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+position = 'after'
+pattern = 'new_card:set_edition(other.edition or {}, nil, true)'
+payload = '''G.GAME.prism_shork_copy = nil
+'''
+match_indent = true

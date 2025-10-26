@@ -1,0 +1,46 @@
+SMODS.Consumable({
+    key = 'brutal_orchestra',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = {
+        x = 0,
+        y = 3
+    },
+    discovered = false,
+    config = {max_highlighted = 1},
+    keep_on_use = function(self, card)
+        return false
+    end,
+    loc_vars = function(self, info_queue)
+        --info_queue[#info_queue + 1] = {set = 'Other', key = 'red_seal'}
+        --info_queue[#info_queue + 1] = {set = 'Other', key = 'blue_seal'}
+        --info_queue[#info_queue + 1] = {set = 'Other', key = 'purple_seal'}
+        --info_queue[#info_queue + 1] = {set = 'Other', key = 'gold_seal'}
+        info_queue[#info_queue+1] = {set = 'Tag', key = 'tag_standard'}
+        --return {
+        --    vars = {self.config.max_highlighted}
+        --}
+    end,
+    cost = 3,
+    can_use = function(self, card)
+        return true
+    end,
+
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                --[[play_sound('tarot1')
+                local random_seal = SMODS.poll_seal({guaranteed = true, options = {'Red','Blue','Gold','Purple'}})
+                G.hand.highlighted[i]:set_seal(random_seal,false, true)
+                delay(0.5)]]
+                play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+                play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+                card:juice_up(0.3, 0.5)
+                add_tag(Tag('tag_standard'))
+                return true
+            end
+        }))
+    end
+})

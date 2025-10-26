@@ -1,0 +1,42 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "for i=1, #G.play.cards do"
+position = "after"
+match_indent = true
+payload = '''
+  local rank = not SMODS.has_no_rank(G.play.cards[i]) and G.play.cards[i]:get_id()
+  if rank and not G.GAME.paperback.domino_ranks[rank] then
+    G.GAME.paperback.domino_ranks[rank] = G.play.cards[i].base.value
+  end
+'''
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "table.insert(cards, G.hand.highlighted[i])"
+position = "after"
+match_indent = true
+payload = '''
+        local rank = not SMODS.has_no_rank(cards[i]) and cards[i]:get_id()
+        if rank and not G.GAME.paperback.domino_ranks[rank] then
+          G.GAME.paperback.domino_ranks[rank] = cards[i].base.value
+        end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.GAME.selected_back:trigger_effect({context = 'eval'})"
+position = "after"
+match_indent = true
+payload = '''
+G.GAME.paperback.domino_ranks = {}
+'''

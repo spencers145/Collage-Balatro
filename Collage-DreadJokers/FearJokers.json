@@ -1,0 +1,33 @@
+{
+	"id": "FearJokers",
+	"name": "Dread Jokers",
+	"author": ["LunaAstraCassiopeia", "AnneBean"],
+	"description": "Adds 30 new Jokers and a new consumeable type inspired by the Magnus Archives Podcast.",
+	"prefix": "tma",
+	"main_file": "FearJokers.lua",
+	"priority": 0,
+	"badge_colour": "56A786",
+	"badge_text_colour": "FFFFFF",
+	"display_name": "Dread",
+	"version": "1.2.4",
+	"dependencies": [
+		{
+			"id": "Steamodded"
+		}, 
+		{
+			"id": "Talisman",
+			"min_version": "2.0.0-beta5"
+		}
+	],
+	"conflicts": [
+		{
+			"id": "Talisman",
+			"min_version": "1.1.0",
+			"max_version": "2.0.0~"
+		},
+		{
+			"id": "Grim"
+		}
+
+	]
+}

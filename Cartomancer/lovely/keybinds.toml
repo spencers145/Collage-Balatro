@@ -1,0 +1,20 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 69
+
+
+[[patches]]
+[patches.pattern]
+target = 'engine/controller.lua'
+pattern = "function Controller:key_press_update(key, dt)"
+position = "after"
+payload = '''
+    if key == "escape" and Cartomancer.INTERNAL_in_config then
+        Cartomancer.INTERNAL_in_config = false
+        if not Cartomancer.use_smods() then
+            Cartomancer.save_config()
+        end
+    end
+'''
+match_indent = true

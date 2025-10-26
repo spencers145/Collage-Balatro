@@ -1,0 +1,14 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "G.GAME.current_round.hands_left = G.GAME.current_round.hands_left + mod"
+position = "after"
+match_indent = true
+payload = '''
+SMODS.calculate_context({ hands_updated = true, hands_mod = mod})
+'''

@@ -1,0 +1,169 @@
+---- SMODS.Joker({
+----     key = "pinkprint",
+----     atlas = "jokers",
+----     pos = {x = 7, y = 7},
+----     rarity = 1,
+----     cost = 1,
+----     unlocked = true,
+----     discovered = false,
+----     blueprint_compat = false,
+----     eternal_compat = true,
+----     perishable_compat = true,
+----     config = {extra = {}},
+----     artist_credits = {'crimson'},
+----     loc_vars = function(self, info_queue, card)
+----         if card.ability.pinkprint then
+----             local vars = {}
+----             if card.ability.pinkprint.config.center.loc_vars then
+----                 vars = card.ability.pinkprint.config.center:loc_vars({}, card.ability.pinkprint).vars
+----             else
+----                 vars = Card.generate_UIBox_ability_table({ability = card.ability.pinkprint.ability, config = card.ability.pinkprint.config, bypass_lock = true}, true)
+----             end
+----             info_queue[#info_queue+1] = {pinkprint = true, set = 'Joker', key = card.ability.pinkprint.key, vars = vars}
+----         end
+----         return {vars = {card.ability.pinkprint and localize({type = 'name_text', set = 'Joker', key = card.ability.pinkprint.key}) or localize('ortalab_none')}}
+----     end,
+----     calculate = function(self, card, context)
+----         if context.selling_card and context.card.ability.set == 'Joker' and not table.contains(self.ban_list, context.card.config.center_key) then
+----             if card.ability.pinkprint then
+----                 Card.remove_from_deck(card.ability.pinkprint)
+----             end
+----             local stickers = {card_limit = card.ability.card_limit, extra_slots_used = card.ability.extra_slots_used}
+----             for sticker, _ in pairs(SMODS.Stickers) do
+----                 stickers[sticker] = not not card.ability[sticker]
+----             end
+----             card.ability = copy_table(context.card.ability)
+----             for key, value in pairs(stickers) do
+----                 card.ability[key] = value
+----             end
+----             card.ability.extra = card.ability.extra or {}
+----             card.ability.pinkprint = Pinkprint({
+----                 fake_card = true,
+----                 pinkprint = card,
+----                 key = context.card.config.center_key,
+----                 ability = copy_table(context.card.ability),
+----                 config = {
+----                     center = G.P_CENTERS[context.card.config.center_key]
+----                 },
+----             })
+----             return {
+----                 func = function()
+----                     G.E_MANAGER:add_event(Event({
+----                         trigger = 'after',
+----                         delay = 0.7,
+----                         func = function()
+----                             Card.add_to_deck(card.ability.pinkprint)
+----                             card:set_cost()        
+----                             return true
+----                         end
+----                     }))
+----                 end,
+----                 message = localize('ortalab_copied'),
+----                 colour = G.C.PALE_GREEN
+----             }
+----         end
+----         if card.ability.pinkprint then
+----             local ret, trig = Card.calculate_joker(card.ability.pinkprint, context)
+----             if ret and ret.card and ret.card == card.ability.pinkprint then
+----                 ret.card = card
+----             end
+----             return ret, trig
+----         end
+----     end,
+----     calc_dollar_bonus = function(self, card)
+----         if card.ability.pinkprint then
+----             return Card.calculate_dollar_bonus(card.ability.pinkprint)
+----         end
+---- 	end,
+----     load = function(self, card, table, other)
+----         if table.pinkprint then 
+----             local args = table.pinkprint
+----             args.pinkprint = card
+----             args.config.center = G.P_CENTERS[args.config.center]
+----             table.ability.pinkprint = Pinkprint(args)
+----         end
+----     end,
+----     remove_from_deck = function(self, card, from_debuff)
+----         if card.ability.pinkprint then
+----             Card.remove_from_deck(card.ability.pinkprint)
+----         end
+----     end,
+----     ban_list = {
+----         'j_ortalab_pinkprint',
+----         'j_ortalab_chameleon'
+----     }
+---- })
+
+---- local ortalab_find_card = SMODS.find_card
+---- function SMODS.find_card(key, count_debuffed)
+----     local results = ortalab_find_card(key, count_debuffed)
+----     if not G.jokers or not G.jokers.cards then return {} end
+----     for _, area in ipairs(SMODS.get_card_areas('jokers')) do
+----         if area.cards then
+----             for _, v in pairs(area.cards) do
+----                 if v and type(v) == 'table' and v.ability and v.ability.pinkprint and v.ability.pinkprint.key == key and (count_debuffed or not v.debuff) then
+----                     table.insert(results, v)
+----                 end
+----             end
+----         end
+----     end
+----     return results
+---- end
+
+
+---- Pinkprint = Card:extend()
+
+---- for key, func in pairs(Card) do
+----     if type(func) == 'function' then
+----         Pinkprint[key] = function(self, ...)
+----             return Card[key](self.pinkprint, ...)
+----         end
+----     end
+---- end
+
+---- function Pinkprint:init(args)
+    
+----     self.base_cost = args.base_cost or 0
+----     self.extra_cost = args.extra_cost or 0
+----     self.cost = args.cost or 0
+----     self.sell_cost = args.sell_cost or 0
+----     self.sell_cost_label = args.sell_cost_label or 0
+----     self.area = args.pinkprint.area
+----     self.base = {}
+
+----     self.key = args.key
+----     self.fake_card = true
+----     self.pinkprint = args.pinkprint
+----     self.ability = args.ability
+----     self.config = args.config
+---- end
+
+---- function Pinkprint:save()
+----     local cardTable = {
+----         base_cost = self.base_cost,
+----         extra_cost = self.extra_cost,
+----         cost = self.cost,
+----         sell_cost = self.sell_cost,
+----         ability = self.ability,
+----         fake_card = true,
+----         config = {
+----             center = self.config.center.key
+----         },
+----     }
+----     return cardTable
+---- end
+
+---- local ortalab_card_save = Card.save
+---- function Card:save()
+----     local cardTable = ortalab_card_save(self)
+----     if self.ability.pinkprint and type(self.ability.pinkprint) ~= 'string' then
+----         cardTable.pinkprint = Pinkprint.save(self.ability.pinkprint)
+----     end
+----     return cardTable
+---- end
+
+---- local ortalab_card_eval_status_text = card_eval_status_text
+---- function card_eval_status_text(card, eval_type, amt, percent, dir, extra)
+----     if card.pinkprint then card = card.pinkprint end
+----     ortalab_card_eval_status_text(card, eval_type, amt, percent, dir, extra)
+---- end

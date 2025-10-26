@@ -1,0 +1,77 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+#new black hole code
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+match_indent = true
+pattern = '''update_hand_text({sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3}, {handname=localize('k_all_hands'),chips = '...', mult = '...', level=''})
+        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2, func = function()
+            play_sound('tarot1')
+            self:juice_up(0.8, 0.5)
+            G.TAROT_INTERRUPT_PULSE = true
+            return true end }))
+        update_hand_text({delay = 0}, {mult = '+', StatusText = true})
+        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.9, func = function()
+            play_sound('tarot1')
+            self:juice_up(0.8, 0.5)
+            return true end }))
+        update_hand_text({delay = 0}, {chips = '+', StatusText = true})
+        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.9, func = function()
+            play_sound('tarot1')
+            self:juice_up(0.8, 0.5)
+            G.TAROT_INTERRUPT_PULSE = nil
+            return true end }))
+        update_hand_text({sound = 'button', volume = 0.7, pitch = 0.9, delay = 0}, {level='+1'})
+        delay(1.3)
+        for k, v in pairs(G.GAME.hands) do
+            level_up_hand(self, k, true)
+        end
+        update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})'''
+position = "at"
+payload = '''
+local table = {}
+for key, value in ipairs(G.handlist) do
+  table[#table + 1] = value
+end
+level_up_table_tailends(self, table, localize('k_all_hands'), false, 1)'''
+
+
+
+#solve small visual bugs
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+match_indent = true
+pattern = '''if type(vals.chips) == 'string' then delta = vals.chips end'''
+position = "after"
+payload = '''if type(delta) == 'string' and string.sub(delta, 1, 1) == '-' then col = G.C.RED end'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+match_indent = true
+pattern = '''if type(vals.mult) == 'string' then delta = vals.mult end'''
+position = "after"
+payload = '''if type(delta) == 'string' and string.sub(delta, 1, 1) == '-' then col = G.C.RED end'''
+
+
+
+#game info money bar
+#[[patches]]
+#[patches.pattern]
+#target = "functions/UI_definitions.lua"
+#match_indent = true
+#pattern = '''{n=G.UIT.C, config={align = "cm"}, nodes={
+#          {n=G.UIT.T, config={text = '  #', scale = 0.45, colour = G.C.UI.TEXT_LIGHT, shadow = true}}
+#        }},'''
+#position = "before"
+#payload = '''      
+#G.GAME.money_bonus_given and ({n=G.UIT.C, config={align = "cm", padding = 0.05, colour = G.C.L_BLACK, r = 0.1, minw = 0.9}, nodes={
+#  {n=G.UIT.T, config={text = (G.GAME.hands[handname].money and G.GAME.hands[handname].money < 0) and  ('-' .. localize('$') .. math.abs(G.GAME.hands[handname].money)) or (localize('$') .. (G.GAME.hands[handname].money or 0)), scale = 0.45, colour = G.C.MONEY, shadow = true}},
+#}}) or nil,'''
+
+

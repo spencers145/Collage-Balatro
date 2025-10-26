@@ -1,0 +1,41 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# calculate shriek
+# hardcoded but maybe i want to unhardcode it at some point
+# who knows
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "-- TARGET: effects after hand evaluation"
+position = "after"
+payload = '''
+local blindlist = {
+	'blind',
+	'ccc_bonus_blind',
+}
+
+for _, v in ipairs(blindlist) do
+	if not G.GAME[v].disabled and G.GAME[v].name == 'ccc_The Shriek' then
+		delay(0.3)
+		G.E_MANAGER:add_event(Event({
+        		trigger = 'immediate',
+        		func = (function()
+				for i = 1, #G.hand.cards do
+					G.hand.cards[i].ability.ccc_shriek = true
+					G.GAME[v]:debuff_card(G.hand.cards[i], true)
+				end
+				SMODS.juice_up_blind(v)
+        			G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.06*G.SETTINGS.GAMESPEED, blockable = false, blocking = false, func = function()
+        				play_sound('tarot2', 0.76, 0.4);return true end}))
+        			play_sound('tarot2', 1, 0.4)
+        			return true
+        		end)
+        	}))
+		delay(0.3)
+	end
+end
+'''
+match_indent = true

@@ -1,0 +1,27 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''-- TARGET: main end_of_round evaluation'''
+position = "after"
+match_indent = true
+payload = '''
+for _, value in pairs(G.playing_cards or {}) do
+    if value.config.center == G.P_CENTERS.m_sarc_strawberry then
+        if value.ability.extra and value.ability.extra.played == false then
+           
+            value.ability.extra.active = true
+            value.children.center:set_sprite_pos({x = 0, y = 0})
+        end
+        if value.ability.extra then value.ability.extra.played = false end
+    elseif value.config.center == G.P_CENTERS.m_sarc_slime then
+        value.ability.extra.exhausted = false
+        value.children.center:set_sprite_pos({x = 2, y = 0})
+    end
+end
+'''
+

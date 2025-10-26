@@ -1,0 +1,16 @@
+{
+	"id": "Roffle",
+	"author": ["AlrexX", "Maxx", "canicao", "garb", "UHadMeAtFood"],
+	"description": "A Vanilla Friendly mod based on the streamer Roffle (Lite)",
+	"prefix": "roff",
+	"main_file": "main.lua",
+	"priority": 0,
+	"badge_colour": "44a2e2",
+	"badge_text_colour": "ffedab",
+	"display_name": "Rofflatro",
+	"version": "1.2.0a",
+	"name":"Rofflatro",
+	"dependencies": [
+                "Steamodded (>=1.0.0~BETA-0530b)"
+        ]
+}

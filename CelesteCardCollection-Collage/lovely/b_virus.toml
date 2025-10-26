@@ -1,0 +1,28 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 10
+
+# too early
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.hand.highlighted[i].ability.played_this_ante = true"
+position = "at"
+payload = '''
+-- G.hand.highlighted[i].ability.played_this_ante = true (too early)
+'''
+match_indent = true
+
+# there you go
+#[[patches]]
+#[patches.pattern]
+#target = "functions/state_events.lua"
+#pattern = "G.FUNCS.draw_from_play_to_discard()"
+#position = "before"
+#payload = '''
+#for i=1, #G.play.cards do
+#	G.play.cards[i].ability.played_this_ante = true
+#end
+#'''
+#match_indent = true

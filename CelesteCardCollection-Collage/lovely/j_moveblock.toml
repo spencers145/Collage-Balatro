@@ -1,0 +1,18 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# idk if this does anything tbh, attempt to allow sprites to be garbage collected
+# they probably already are?
+[[patches]]
+[patches.pattern]
+target = "engine/sprite.lua"
+pattern = "self.sprite = love.graphics.newQuad("
+position = "before"
+payload = '''
+if self.sprite then
+	self.sprite = nil
+end
+'''
+match_indent = true

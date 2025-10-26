@@ -1,0 +1,39 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# makes it so that if the four fingers challenge from my mod is active, you can only select up to 4 cards
+
+[[patches]]
+[patches.regex]
+target = 'cardarea.lua'
+pattern = 'self.config.highlighted_limit = config.highlight_limit or 5'
+position = 'after'
+payload = '''
+
+if (G.GAME.modifiers.znm_fourfingers) then
+self.config.highlighted_limit = 4
+end
+
+'''
+match_indent = true
+# selling a card with tuna salad on costs 10 dollars
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "function Card:sell_card()"
+position = 'after'
+payload = '''
+
+if (G.GAME.modifiers.znm_tunasalad) then
+ ease_dollars(-10)
+			
+	
+end
+
+'''
+match_indent = true
+
+
+

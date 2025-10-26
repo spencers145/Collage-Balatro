@@ -1,0 +1,27 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+
+# focused
+[[patches]]
+[patches.pattern]
+target = "BLOCKER_STRING_CCCfunctions/common_events.lua"
+pattern = "if _c.set == 'Other' then"
+position = "before"
+payload = '''
+if _c.name == 'Grim' then 
+	if G.jokers then
+		for i = 1, #G.jokers.cards do
+			if ccc_heartmatch(G.jokers.cards[i].ability.name) then
+				main_end = {}
+				localize{type = 'other', key = 'ccc_focused', nodes = main_end, vars = {G.localization.descriptions.Joker[G.jokers.cards[i].config.center.key].name}}
+				main_end = main_end[1]
+				break
+			end
+		end
+	end
+end
+'''
+match_indent = true

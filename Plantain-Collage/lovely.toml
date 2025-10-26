@@ -1,0 +1,145 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+#cash out context for apple pie
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+match_indent = true
+pattern = '''G.deck:shuffle('cashout'..G.GAME.round_resets.ante)'''
+position = "after"
+payload = '''
+for i=1, #G.jokers.cards do
+    eval_card(G.jokers.cards[i], {pl_cash_out = true})
+end
+'''
+
+#lavender seal
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+match_indent = true
+pattern = '''ease_discard(-1)'''
+position = "at"
+payload = '''
+local should_ease_discard = true
+for i=1, #cards do
+  if cards[i].seal == 'pl_lavender' and not cards[i].debuff then
+    should_ease_discard = false
+  end
+end
+if should_ease_discard then ease_discard(-1) end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+match_indent = true
+pattern = '''func = (function() check_for_unlock{type = 'upgrade_hand', hand = hand, level = G.GAME.hands[hand].level} return true end)
+    }))'''
+position = "after"
+payload = '''
+if G.jokers and G.jokers.cards and card and card.ability and card.ability.name ~= 'Black Hole' and not G.GAME.pl_croissant_disallowed then
+  G.GAME.pl_lvl_hand = hand
+  G.GAME.pl_lvl_card = card
+  G.GAME.pl_lvl_instant = instant
+  G.GAME.pl_lvl_amount = amount
+  for i=1, #G.jokers.cards do
+    eval_card(G.jokers.cards[i], {pl_croissant_upgrade = true})
+  end
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+match_indent = true
+pattern = '''for k, v in pairs(G.GAME.hands) do
+            level_up_hand(self, k, true)
+        end
+        update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})'''
+position = "after"
+payload = '''
+if G.jokers and G.jokers.cards and not G.GAME.pl_croissant_disallowed then
+  G.GAME.pl_lvl_card = self
+  G.GAME.pl_lvl_instant = true
+  for i=1, #G.jokers.cards do
+    eval_card(G.jokers.cards[i], {pl_croissant_upgrade = true})
+  end
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+match_indent = true
+pattern = '''add_tag(_tag.config.ref_table)'''
+position = "after"
+payload = '''
+if G.jokers and G.jokers.cards then
+    for i=1, #G.jokers.cards do
+        if G.jokers.cards[i].config.center.key == "j_pl_grape_soda" then
+        G.E_MANAGER:add_event(Event({
+        trigger = 'immediate',
+        func = function()
+          delay(0.3)
+          SMODS.calculate_context({skip_blind = true})
+          for i = 1, #G.GAME.tags do
+            G.GAME.tags[i]:apply_to_run({type = 'immediate'})
+          end
+          for i = 1, #G.GAME.tags do
+            if G.GAME.tags[i]:apply_to_run({type = 'new_blind_choice'}) then break end
+          end
+          return true
+        end
+      }))
+      _tag.children[2] = nil
+      _tag.children[1] = nil
+        return 
+        end
+    end
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+match_indent = true
+pattern = '''elseif e.config.id ~= G.GAME.blind_on_deck then'''
+position = "before"
+payload = '''
+if G.GAME.pl_grape_used == G.GAME.blind_on_deck then
+  _tag_container.children[2] = nil
+  _tag_container.children[1] = nil
+else
+  G.GAME.pl_grape_used = nil
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+match_indent = true
+pattern = '''G.CONTROLLER.locks.selling_card = true'''
+position = "after"
+payload = '''
+for i=1, #G.jokers.cards do
+  if self.ability.set == 'Joker' then
+    eval_card(G.jokers.cards[i], {pl_selling_joker = true})
+  end
+end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+match_indent = true
+pattern = '''enhanced = G.C.SECONDARY_SET.Enhanced'''
+position = "after"
+payload = ''',
+lavender = HEX('C1A1DF')
+'''

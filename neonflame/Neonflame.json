@@ -1,0 +1,16 @@
+{
+    "id": "nflame",
+    "name": "neonflames",
+    "author": ["candycanearter"],
+    "description": "cards singed by the raging inferno",
+    "prefix": "nflame",
+    "main_file": "main.lua",
+    "priority": "99",
+    "badge_color": "c82828",
+    "badge_text_color": "f5f779",
+    "display_name": "neonflame",
+    "version": "1.0.0",
+    "dependecies": [
+	"Steamodded (>=1.*)"
+    ]
+}

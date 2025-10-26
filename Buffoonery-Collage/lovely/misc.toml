@@ -1,0 +1,17 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# Add buffoonery's special pink and emult/echip gradient colors to G.C
+[[patches]]
+[patches.pattern]
+target = "globals.lua"
+pattern = "FILTER = HEX('ff9a00'),"
+position = "after"
+payload = '''
+BUF_SPC = HEX('ee8f8d'),
+EMULT = HEX('fd8d55'),
+ECHIP = HEX('00c1d6'),
+'''
+match_indent = true

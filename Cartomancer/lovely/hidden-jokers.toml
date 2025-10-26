@@ -1,0 +1,28 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 69
+
+[[patches]] 
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "self.children.area_uibox:draw()"
+position = "after"
+payload = '''
+if self == G.jokers then
+    Cartomancer.add_visibility_controls()
+end
+'''
+match_indent = true
+
+[[patches]] 
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "function CardArea:emplace(card, location, stay_flipped)"
+position = "after"
+payload = '''
+if self == G.jokers then
+    Cartomancer.handle_joker_added(card)
+end
+'''
+match_indent = true

@@ -1,0 +1,330 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 2
+
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''G.GAME.current_round.hands_left = G.GAME.round_resets.hands'''
+position = 'after'
+match_indent = true
+payload = '''
+--#G.zodiacs = {}
+'''
+
+## Zodiac Loading/Saving
+#[[patches]]
+#[patches.pattern]
+#target = 'game.lua'
+#pattern = '''if self.HUD_tags then'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#if self.HUD_zodiacs then
+#    for k, v in pairs(self.HUD_zodiacs) do
+#        v:remove()
+#    end
+#    self.HUD_zodiacs = nil
+#end
+#'''
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/misc_functions.lua'
+#pattern = '''G.culled_table =  recursive_table_cull{'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#local zodiacs = {}
+#if G.zodiacs then
+#    for k, v in pairs(G.zodiacs) do
+#        if (type(v) == "table") and v.is and v:is(Zodiac) then 
+#            local zodiacSer = v:save()
+#            if zodiacSer then zodiacs[k] = zodiacSer end
+#        end
+#    end
+#end
+#'''
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/misc_functions.lua'
+#pattern = '''tags = tags,'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#zodiacs = zodiacs,
+#'''
+#[[patches]]
+#[patches.pattern]
+#target = 'game.lua'
+#pattern = '''check_and_set_high_score('most_money', G.GAME.dollars)'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#if saveTable then 
+#    self.zodiacs = {}
+#    self.HUD_zodiac = {}
+#    local zodiacs = saveTable.zodiacs or {}
+#    for k, v in pairs(zodiacs) do
+#        local _zodiac = Zodiac('zodiac_ortalab_scorpio')
+#        _zodiac:load(v)
+#        add_zodiac(_zodiac, true, true)
+#    end
+#end
+#'''
+#
+#
+## Prep temporary levels
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#pattern = '''hand_chips = mod_chips(G.GAME.hands[text].chips)'''
+#position = 'after'
+#match_indent = true
+#payload = '''
+#mult = mod_mult(math.max(1, mult+(G.GAME.ortalab.temp_levels * G.GAME.hands[text].l_mult)))
+#hand_chips = mod_chips(math.max(0, hand_chips+(G.GAME.ortalab.temp_levels * G.GAME.hands[text].l_chips)))
+#update_hand_text({delay = 0}, {chips = hand_chips, mult = mult})
+#'''
+## stop weird reset
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#match_indent = true
+#position = 'at'
+#pattern = '''
+#delay = G.GAME.current_round.current_hand.handname ~= disp_text and 0.4 or 0}, {handname=disp_text, level=G.GAME.hands[text].level, mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})
+#'''
+#payload = '''
+#delay = G.GAME.current_round.current_hand.handname ~= disp_text and 0.4 or 0}, {handname=disp_text, level=G.GAME.hands[text].level, mult = G.GAME.hands[text].mult+(G.GAME.ortalab.temp_levels * G.GAME.hands[text].l_mult), chips = G.GAME.hands[text].chips+(G.GAME.ortalab.temp_levels * G.GAME.hands[text].l_chips)})
+#'''
+#
+#
+## Zodiac effects
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#pattern = '''mult, hand_chips, modded = G.GAME.blind:modify_hand(G.play.cards, poker_hands, text, mult, hand_chips, scoring_hand)'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#-- Activate zodiacs
+#if G.zodiacs then
+#    zodiac_effect = nil
+#    zodiac_current = nil
+#    local ophiuchus_active = false
+#
+#    if G.zodiacs['zodiac_ortalab_ophiuchus'] then
+#        zodiac_current = G.zodiacs['zodiac_ortalab_ophiuchus']
+#        zodiac_effect = G.ZODIACS['zodiac_ortalab_ophiuchus']
+#        G.GAME.ortalab.zodiacs.activated[zodiac_current.key] = true
+#
+#        -- Update Stargazing Jokers
+#        local stargazings = SMODS.find_card('j_ortalab_stargazing')
+#        for _, stargazing_card in pairs(stargazings) do
+#            stargazing_card.ability.extra.xmult = stargazing_card.ability.extra.xmult + stargazing_card.ability.extra.gain
+#            SMODS.calculate_effect({message = localize{type='variable',key='a_xmult',vars={stargazing_card.ability.extra.gain}}, colour = G.C.RED}, stargazing_card)
+#        end
+#
+#        ophiuchus_active = true
+#    end
+#
+#    -- Check to see if Zodiac is present
+#    local zodiac_key = G.P_CENTERS[zodiac_from_hand(text)] and G.P_CENTERS[zodiac_from_hand(text)].config.extra.zodiac
+#    if G.zodiacs[zodiac_key] then
+#        zodiac_current = G.zodiacs[zodiac_key]
+#        zodiac_effect = G.ZODIACS[zodiac_key]
+#    
+#        G.GAME.ortalab.zodiacs.activated[zodiac_current.key] = true
+#
+#        if G.GAME.selected_back.effect.center.key == 'b_ortalab_eclipse' then
+#            SMODS.calculate_effect({level_up = true}, G.deck.cards[1])
+#        end
+#
+#        -- Update Stargazing Jokers
+#        local stargazings = SMODS.find_card('j_ortalab_stargazing')
+#        for _, stargazing_card in pairs(stargazings) do
+#            SMODS.scale_card(stargazing_card, {
+#                ref_table = stargazing_card.ability.extra,
+#                ref_value = "xmult",
+#                scalar_value = "gain",
+#                message_key = 'a_xmult'
+#            })
+#        end
+#
+#        -- Display activated text
+#        zodiac_text(localize({set='Tag',key=zodiac_current.key,type='name_text'})..localize('ortalab_zodiac_active'), zodiac_current.key, nil, ophiuchus_active)       
+#    elseif G.zodiacs['zodiac_ortalab_ophiuchus'] then
+#        zodiac_text(localize({set='Tag',key=zodiac_current.key,type='name_text'})..localize('ortalab_zodiac_active'), zodiac_current.key)       
+#    end
+#end
+#
+#-- Trigger zodiac effects
+#if zodiac_current and not next(SMODS.find_card('j_ortalab_astrologist')) then
+#    local zodiacs = {zodiac_effect}
+#    if G.zodiacs['zodiac_ortalab_ophiuchus'] and zodiac_current.key ~= 'zodiac_ortalab_ophiuchus' then
+#        table.insert(zodiacs, 1, G.ZODIACS['zodiac_ortalab_ophiuchus'])
+#    end
+#    for _, zodiac in ipairs(zodiacs) do
+#        if zodiac.pre_trigger and type(zodiac.pre_trigger) == 'function' then
+#            local triggered = false
+#            mult, hand_chips, modded, triggered = zodiac:pre_trigger(G.zodiacs[zodiac.key], {full_hand = G.play.cards, scoring_hand = scoring_hand, poker_hands = poker_hands, handname = text, mult = mult, chips = hand_chips})
+#            if modded then update_hand_text({sound = 'chips2', modded = modded}, {chips = hand_chips, mult = mult}) end
+#            
+#            for i=1, #G.play.cards do
+#                if G.play.cards[i].add_to_scoring then
+#                    G.play.cards[i]:add_to_scoring()
+#                    table.insert(scoring_hand, G.play.cards[i])
+#                end
+#            end
+#
+#            for i=1, #scoring_hand do
+#                highlight_card(scoring_hand[i],(i-0.999)/5,'up')
+#            end            
+#        end
+#    end
+#end
+#'''
+#
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#pattern = '''local cards_destroyed = {}'''
+#position = 'after'
+#match_indent = true
+#payload = '''
+#if zodiac_effect and zodiac_effect.destroy and type(zodiac_effect.destroy) == 'function' and not next(SMODS.find_card('j_ortalab_astrologist')) then
+#    for i=1, #G.hand.cards do
+#        local destroyed = zodiac_effect:destroy(zodiac_current, {full_hand = G.play.cards, scoring_hand = scoring_hand, poker_hands = poker_hands, handname = text, other_card = G.hand.cards[i]})
+#        if destroyed then
+#            if G.hand.cards[i].ability.name == 'Glass Card' then 
+#                G.hand.cards[i].shattered = true
+#            else 
+#                G.hand.cards[i].destroyed = true
+#            end 
+#            cards_destroyed[#cards_destroyed+1] = G.hand.cards[i]
+#        end
+#    end
+#end
+#'''
+#
+## Display zodiac preview when selecting hand
+#[[patches]]
+#[patches.pattern]
+#target = 'cardarea.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#update_hand_text({immediate = true, nopulse = nil, delay = 0}, {handname=disp_text, level=G.GAME.hands[text].level, mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})
+#'''
+#payload = '''
+#local zodiac_key = G.P_CENTERS[zodiac_from_hand(text)] and G.P_CENTERS[zodiac_from_hand(text)].config.extra.zodiac
+#G.GAME.ortalab.temp_levels = 0
+#if G.zodiacs[zodiac_key] or G.zodiacs['zodiac_ortalab_ophiuchus'] then
+#    Ortalab.old_colours = Ortalab.old_colours or {
+#        special_colour = copy_table(G.C.BACKGROUND.C),
+#        tertiary_colour = copy_table(G.C.BACKGROUND.D),
+#        new_colour = copy_table(G.C.BACKGROUND.L),
+#    }
+#    local preview = false
+#    if G.zodiacs[zodiac_key] then
+#        G.GAME.ortalab.temp_levels = G.GAME.ortalab.temp_levels + G.zodiacs[zodiac_key].config.extra.temp_level
+#        update_hand_text({immediate = true, nopulse = true, delay = 0}, {mult = G.GAME.hands[text].mult + (G.zodiacs[zodiac_key].config.extra.temp_level * G.GAME.hands[text].l_mult), chips = G.GAME.hands[text].chips + (G.zodiacs[zodiac_key].config.extra.temp_level * G.GAME.hands[text].l_chips), temp_level = G.GAME.ortalab.temp_levels, temp_colour = G.ZODIACS[zodiac_key].colour})
+#        preview = true
+#        G.zodiac_sprite = Sprite(0, 0, 100, 100, G.ASSET_ATLAS['ortalab_zodiac_constellations'], G.ZODIACS[zodiac_key].pos)
+#        ease_background_colour{special_colour = darken(G.ARGS.LOC_COLOURS['ortalab_zodiac'], 0.5), new_colour = G.ZODIACS[zodiac_key].colour, tertiary_colour = G.ARGS.LOC_COLOURS.ortalab_zodiac, contrast = 1}
+#    end
+#    local ophiuchus = false
+#    if G.zodiacs['zodiac_ortalab_ophiuchus'] then
+#        ophiuchus = true
+#        G.ophiuchus_sprite = Sprite(0, 0, 100, 100, G.ASSET_ATLAS['ortalab_zodiac_constellations'], G.ZODIACS['zodiac_ortalab_ophiuchus'].pos)
+#        G.GAME.ortalab.temp_levels = G.GAME.ortalab.temp_levels + G.zodiacs['zodiac_ortalab_ophiuchus'].config.extra.temp_level
+#        update_hand_text({immediate = true, nopulse = true, delay = 0}, {mult = G.GAME.hands[text].mult + (G.zodiacs['zodiac_ortalab_ophiuchus'].config.extra.temp_level * G.GAME.hands[text].l_mult), chips = G.GAME.hands[text].chips + (G.zodiacs['zodiac_ortalab_ophiuchus'].config.extra.temp_level * G.GAME.hands[text].l_chips), temp_level = G.GAME.ortalab.temp_levels, temp_colour = G.ZODIACS[preview and zodiac_key or 'zodiac_ortalab_ophiuchus'].colour})
+#        if not preview then
+#            ease_background_colour{special_colour = darken(G.ARGS.LOC_COLOURS['ortalab_zodiac'], 0.5), new_colour = G.ZODIACS['zodiac_ortalab_ophiuchus'].colour, tertiary_colour = G.ARGS.LOC_COLOURS.ortalab_zodiac, contrast = 1}
+#        end
+#    end
+#    G.zodiac_UI = UIBox{
+#        definition = {n=G.UIT.ROOT, config = {align='cm', colour = G.C.CLEAR, minw = 3.4, minh = 3.4}, nodes = {
+#            {n=G.UIT.R, config = {padding = 0.2}, nodes = {
+#                preview and {n=G.UIT.O, config = {object = G.zodiac_sprite, w = 3.4, h = 3.4}} or nil,
+#                ophiuchus and {n=G.UIT.O, config = {object = G.ophiuchus_sprite, w = 3.4, h = 3.4}} or nil
+#            }}
+#        }},
+#        config = {instance_type = 'UIBOX', major = G.play, align = 'cm', offset = {x=0, y=-2.4}}
+#    }
+#    
+#end
+#'''
+#
+## Remove old zodiac preview
+#[[patches]]
+#[patches.pattern]
+#target = 'cardarea.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#local text,disp_text,poker_hands = G.FUNCS.get_poker_hand_info(self.highlighted)
+#'''
+#payload = '''
+#if G.zodiac_sprite or G.ophiuchus_sprite then
+#    if G.zodiac_sprite then G.zodiac_sprite:remove() end
+#    G.zodiac_UI:remove()
+#    if G.ophiuchus_sprite then G.ophiuchus_sprite:remove() end
+#    if Ortalab.old_colours then ease_background_colour({special_colour = Ortalab.old_colours.special_colour, tertiary_colour = Ortalab.old_colours.tertiary_colour, new_colour = Ortalab.old_colours.new_colour}) end
+#    Ortalab.old_colours = nil
+#    update_hand_text({immediate = true, nopulse = true, delay = 0}, {temp_level = ''})
+#    G.GAME.ortalab.temp_levels = 0
+#end
+#'''
+#
+## Add temporary levels to UI
+#[[patches]]
+#[patches.pattern]
+#target = 'game.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#hand_level = self.HUD:get_UIE_by_ID('hand_level'),
+#'''
+#payload = '''
+#temporary_level = self.HUD:get_UIE_by_ID('temporary_level'),
+#'''
+#
+## Patch update_hand_text to allow temp_levels
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#if vals.chip_total then G.GAME.current_round.current_hand.chip_total = vals.chip_total;G.hand_text_area.chip_total.config.object:pulse(0.5) end
+#'''
+#payload = '''
+#if vals.temp_level and G.GAME.current_round.current_hand.temporary_level ~= (vals.temp_level ~= '' and vals.temp_level > 0 and '+' or '')..tostring(vals.temp_level) then
+#    if vals.temp_level == '' then
+#        G.GAME.current_round.current_hand.temporary_level = vals.temp_level
+#    else
+#        G.GAME.current_round.current_hand.temporary_level = (vals.temp_level > 0 and '+' or '')..tostring(vals.temp_level)
+#        if vals.temp_level < 0 then G.hand_text_area.temporary_level.config.colour = G.C.RED
+#        elseif vals.temp_colour then G.hand_text_area.temporary_level.config.colour = vals.temp_colour
+#        else G.hand_text_area.temporary_level.config.colour = G.C.UI.TEXT_LIGHT end
+#        G.hand_text_area.temporary_level:juice_up()
+#    end
+#end
+#'''
+#
+## Reset temporary level
+#[[patches]]
+#[patches.pattern]
+#target = 'cardarea.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#update_hand_text({immediate = true, nopulse = true, delay = 0}, {mult = 0, chips = 0, level = '', handname = ''})
+#'''
+#payload = '''
+#update_hand_text({immediate = true, nopulse = true, delay = 0}, {temp_level = ''})
+#'''
+#

@@ -1,0 +1,119 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# Prevent Laidback Joker being bought with only 1 space left
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "G.FUNCS.check_for_buy_space = function(card)"
+position = "after"
+payload = '''
+if card.ability.name == 'Laidback Joker' and not (#G.jokers.cards < (G.jokers.config.card_limit - 1) + ((card.edition and card.edition.negative) and 1 or 0)) then
+  alert_no_space(card, card.ability.consumeable and G.consumeables or G.jokers)
+  return false
+end
+'''
+match_indent = true
+
+#Prevent Laidback from being added in packs with only 1 space left (Thanks, Flowire!)
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "G.FUNCS.can_select_card = function(e)"
+position = "after"
+payload = '''
+if e.config.ref_table.ability.set == 'Joker' and e.config.ref_table.ability.name == 'Laidback Joker' and not (#G.jokers.cards < G.jokers.config.card_limit - 1) then
+	e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+    e.config.button = nil
+    return
+end
+'''
+match_indent = true
+
+# Adoring Fan/Bitter Ex-Fan negative cost and Echo of The Abyss no sell gain
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'if self.area and self.ability.couponed and (self.area == G.shop_jokers or self.area == G.shop_booster) then self.cost = 0 end'
+position = 'after'
+match_indent = true
+payload = '''
+if (self.config.center.key == 'j_buf_afan' or self.config.center.key == 'j_buf_afan_spc') and self.added_to_deck then
+    self.sell_cost = self.ability.extra.cost + (self.ability.extra_value or 0)
+elseif self.config.center.key == 'j_buf_abyssalecho' then
+	self.sell_cost = 0
+end
+'''
+
+# Initialize Clown and Van global variables when booting up the game
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'function Game:start_run(args)'
+position = 'before'
+match_indent = true
+payload = '''
+clown_count = -1
+van_count = 0
+'''
+
+# Reset Clown and Van global variables when starting a new run
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'function Game:start_run(args)'
+position = 'after'
+match_indent = true
+payload = '''
+clown_count = -1
+van_count = 0
+'''
+
+# Restore clown/van previous state when continuing a run
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''
+if saveTable then 
+    check_for_unlock({type = 'continue_game'})
+'''
+position = 'after'
+match_indent = true
+payload = '''
+local savedjokies = saveTable.cardAreas.jokers.cards
+for i = 1, #savedjokies do
+	if savedjokies[i].label == 'Clown' then
+		clown_count = savedjokies[i].ability.extra.jokers
+	elseif savedjokies[i].label == 'Van' then
+		van_count = savedjokies[i].ability.extra.jokers
+	end
+end
+'''
+
+# Scale clown/van when adding jokers
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'if self == G.jokers then'
+position = 'after'
+match_indent = true
+payload = '''
+local check = false
+local vancheck = false
+for i = 1, #G.jokers.cards do
+	if G.jokers.cards[i].config.center.key == "j_buf_clown" then 
+		check = true
+		break
+	elseif G.jokers.cards[i].config.center.key == "j_buf_van" then 
+		vancheck = true
+		break
+	end
+end
+if check then
+	clown_count = clown_count + 1
+elseif vancheck then
+	van_count = van_count + 1
+end
+'''

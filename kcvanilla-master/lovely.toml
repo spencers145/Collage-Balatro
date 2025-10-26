@@ -1,0 +1,79 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+# Luck of the Irish (money effect)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if SMODS.pseudorandom_probability(self, 'lucky_money', 1, 15) then"
+position = 'at'
+match_indent = true
+payload = '''
+if SMODS.pseudorandom_probability(self, 'lucky_money', kcv_get_irish_normal(self), 15) then
+'''
+
+# Luck of the Irish: text
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "elseif _c.effect == 'Lucky Card' then loc_vars = {G.GAME.probabilities.normal, cfg.mult, 5, cfg.p_dollars, 15}"
+position = 'at'
+match_indent = true
+payload = '''
+elseif _c.effect == 'Lucky Card' then loc_vars = {kcv_get_irish_normal(card)*G.GAME.probabilities.normal, cfg.mult, 5, cfg.p_dollars, 15}
+'''
+
+# Five-Day Forecast must rank-up cards *before* context.before runs so other jokers can get updated ranks
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "local hand_text_set = false"
+position = 'after'
+match_indent = true
+payload = '''
+SMODS.calculate_context({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, kcv_forecast_event = true})
+'''
+
+# Five-Day Forecast: use kcv_ranked_up_discreetly
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "self:set_sprites(nil, card)"
+position = 'at'
+match_indent = true
+payload = '''
+if not self.kcv_ranked_up_discreetly then
+    self:set_sprites(nil, card)
+end
+'''
+
+# 5-day forecast: set_base() will re-evaluate debuffs, causing just-played cards to debuff during The Pillar
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if not initial then G.GAME.blind:debuff_card(self) end"
+position = 'at'
+match_indent = true
+payload = '''
+
+if not initial and not self.kcv_ignore_debuff_check then G.GAME.blind:debuff_card(self) end
+
+'''
+
+# Powergrid: increment count when mult card scored
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "if context.cardarea == G.play and context.main_scoring then"
+position = 'after'
+match_indent = true
+payload = '''
+
+    -- KCVanilla check for Power Grid
+    if SMODS.has_enhancement(card, 'm_mult') and not card.debuff then
+        G.GAME.current_round.kcv_mults_scored = (G.GAME.current_round.kcv_mults_scored or 0) + 1
+    end
+
+'''

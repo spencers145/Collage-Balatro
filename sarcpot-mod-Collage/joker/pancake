@@ -1,0 +1,72 @@
+
+SMODS.Joker {
+
+	discovered = false,
+	key = 'pancake',
+
+	
+
+	config = { extra = {current_hands = 0, hands = 3} },
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = G.P_CENTERS.m_wild
+		return { vars = {card.ability.extra.current_hands, card.ability.extra.hands,} }
+	end,
+	rarity = 2,
+	atlas = 'sarcpot_atlas',
+	pos = { x = 2, y = 1 },
+	cost = 6,
+	eternal_compat = false,
+	pools = {
+		Food = true
+	  },
+	
+	calculate = function(self, card, context)		
+
+        if context.after and not context.blueprint then
+          
+            for k, v in ipairs(context.full_hand) do
+                if v.ability.name ~= "Wild Card" then
+                    
+                    G.E_MANAGER:add_event(Event({
+						trigger = 'after',
+						blockable = true,
+						delay = 0.1,
+                        func = function()
+							play_sound('tarot1')
+                            v:juice_up()
+							v:set_ability(G.P_CENTERS.m_wild, nil, true)
+							v:set_ability(G.P_CENTERS.m_wild, nil, false)
+                            return true
+                        end
+                    })) 
+					
+					G.E_MANAGER:add_event(Event({
+                        func = function()
+                            return true
+                        end
+                    })) 
+                end
+            end
+			card.ability.extra.current_hands = card.ability.extra.current_hands+1
+			if card.ability.extra.current_hands>=card.ability.extra.hands then
+				G.E_MANAGER:add_event(Event({
+					trigger = 'after',
+					delay = 0.7,
+					func = function()
+						play_sound('tarot1',(math.random(8,12)/10))
+						card.T.r = -0.2
+						card:juice_up(0.3, 0.4)
+						card.states.drag.is = true
+						card.children.center.pinch.x = true
+						card:start_dissolve()
+						card = nil
+						return true
+				end}))
+				return {
+					message = localize('k_eaten_ex'),
+				
+				}
+			end
+        end
+	end
+}

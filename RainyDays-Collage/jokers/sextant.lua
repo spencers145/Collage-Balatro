@@ -1,0 +1,65 @@
+---- SMODS.Joker {
+----   key = 'sextant',
+----   name = 'Sextant',
+----   atlas = 'Jokers',
+----   rarity = 1,
+----   cost = 5,
+----   unlocked = true, 
+----   discovered = true,
+----   blueprint_compat = true,
+----   eternal_compat = true,
+----   perishable_compat = true,
+----   pos = GetJokersAtlasTable('sextant'),
+----   config = {
+----     extra = {
+----       per_scored = 7,
+----       scored_counter = 0,
+----       create_card = false
+----     }
+----   },
+  
+----   loc_vars = function(self, info_queue, card)
+----     return {
+----       vars = {
+----         card.ability.extra.per_scored,
+----         card.ability.extra.per_scored - card.ability.extra.scored_counter
+----       }
+----     }
+----   end,
+  
+----   calculate = function(self, card, context)
+----     --need to do lots of jiggery-pokery to get this working with blueprint effects
+----     if context.individual and context.cardarea == G.play and context.other_card:is_suit("Spades") then
+----       if context.blueprint then
+----         if GetJokerPosition(context.blueprint_card) < GetJokerPosition(card) then
+----           card.ability.extra.create_card = (card.ability.extra.scored_counter == card.ability.extra.per_scored - 1)
+----         end
+----       else
+----         card.ability.extra.create_card = false
+----         card.ability.extra.scored_counter = card.ability.extra.scored_counter + 1
+----         if card.ability.extra.scored_counter >= card.ability.extra.per_scored then
+----           card.ability.extra.create_card = true
+----           card.ability.extra.scored_counter = card.ability.extra.scored_counter - card.ability.extra.per_scored
+----         end
+----       end
+      
+----       if card.ability.extra.create_card and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+----         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+----         return {
+----           message = localize('rainydays_plus_constellation'),
+----           colour = G.C.SECONDARY_SET.Constellation,
+----           message_card = card,
+----           func = function()
+----             G.E_MANAGER:add_event(Event({
+----               func = function()
+----                 SMODS.add_card({ set = 'Constellation' })
+----                 G.GAME.consumeable_buffer = 0
+----                 return true
+----               end
+----             }))
+----           end
+----         }
+----       end
+----     end
+----   end
+---- }

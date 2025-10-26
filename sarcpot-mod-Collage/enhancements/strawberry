@@ -1,0 +1,73 @@
+SMODS.Enhancement({
+    key = "strawberry",
+    atlas = "enhancements",
+
+    discovered = false,
+    config = { extra = { retriggers = 2, active = true, played = false}},
+    loc_vars = function(self, info_queue, card)
+        if card.ability.extra.active == false then
+            info_queue[#info_queue + 1] = { key = "sarc_strawberry_deactivated", set = "Other" }
+        end
+        return { vars = { card.ability.extra.retriggers, 
+        card.ability.extra.active, 
+        card.ability.extra.played} }
+    end,
+    in_pool = function (self, args)
+        return false
+    end,
+    update = function(self, card, dt)
+        if not card.ability then
+            card.ability = {}
+        end
+
+        if card.ability.extra and not card.ability.extra.active then
+            card.children.center:set_sprite_pos({x = 1, y = 0})
+        else
+            card.children.center:set_sprite_pos({x = 0, y = 0})
+        end
+    end,
+        
+
+    calculate = function(self, card, context)
+        if not card.ability then
+            card.ability = {}
+        end
+        
+        if not card.ability.extra then
+            card.ability.extra = { retriggers = 2, active = true, played = false}
+        end
+
+        if card.ability.extra.active == true and context.repetition and context.scoring_hand then
+            
+            return {
+                message = localize('k_again_ex'),
+                repetitions = card.ability.extra.retriggers,
+                card = card
+            }
+        end
+        if context.after and context.cardarea == G.play and card.config.center == G.P_CENTERS.m_sarc_strawberry then
+            G.E_MANAGER:add_event(Event({
+				trigger = 'after',
+				blockable = true,
+				func = function()
+                    card:juice_up(0.5, 0.5)
+                    play_sound('button')
+                    return true
+                end
+            }))
+            SMODS.calculate_effect({ message = localize('sarc_exhausted'), colour = G.C.BLUE}, card)
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                blocking = true,
+                delay = 0.5,
+                func = function()
+                    if card.config.center == G.P_CENTERS.m_sarc_strawberry  then
+                        card.ability.extra.played = true
+                        card.ability.extra.active = false
+                    end
+            
+                return true
+            end}))  
+        end
+    end
+})

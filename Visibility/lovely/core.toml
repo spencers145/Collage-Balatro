@@ -1,0 +1,26 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "G.GAME.discount_percent = center_table.extra"
+position = "at"
+payload = '''
+local add_percent = center_table.extra
+if add_percent == 50 then add_percent = 25 end
+G.GAME.discount_percent = G.GAME.discount_percent + add_percent
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = "for _, v in ipairs(SMODS.ConsumableType.ctype_buffer) do"
+match_indent = true
+position = 'before'
+payload = '''
+table.insert(rates, { type = "Visibility", val = G.GAME['visibility_rate'] })
+'''

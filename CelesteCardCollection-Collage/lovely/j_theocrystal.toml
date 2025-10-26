@@ -1,0 +1,41 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# HUIGDNOOIYOJDHIVGHIKJOLIKJPSHUGDYVGHUKHBIVG WHY AM I INJECTING BLIND.LUA???? FOR A JOKER???? THIS RUNS EVERY TIME A HAND IS DRAWN?? I HATE THIS
+# ok this isn't that bad
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = "function Blind:drawn_to_hand()"
+position = "after"
+payload = '''
+if next(SMODS.find_card('j_ccc_theocrystal')) then
+	local count = #SMODS.find_card('j_ccc_theocrystal')
+	if self.name == 'Cerulean Bell' and not self.disabled then
+		count = count + 1
+	end
+	local temp_hand = {}
+	
+	G.hand:unhighlight_all()
+	
+	for k, v in ipairs(G.hand.cards) do 
+		if v.ability.forced_selection then
+			count = math.max(0, count - 1)
+		else
+			temp_hand[#temp_hand+1] = v
+		end
+	end
+	table.sort(temp_hand, function (a, b) return not a.playing_card or not b.playing_card or a.playing_card < b.playing_card end)
+	pseudoshuffle(temp_hand, pseudoseed('theocrystal'))
+	
+	local count = math.min(5, math.min(#temp_hand, count))
+	for i = 1, count do
+		local forced_card = table.remove(temp_hand, 1)
+		forced_card.ability.forced_selection = true
+		G.hand:add_to_highlighted(forced_card)
+	end
+end
+'''
+match_indent = true

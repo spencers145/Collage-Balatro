@@ -1,0 +1,15 @@
+{
+	"id": "FemtoLabsCollection",
+	"name": "Femto Labs Collection",
+	"display_name": "FLC",
+	"author": ["sunsetquasar & friends"],
+	"description": 
+		"where did my localization go",
+	"prefix": "femtoLabsCollection",
+	"main_file": "main.lua",
+	"priority": 116,
+	"badge_colour": "A54D75",
+	"badge_text_colour": "F9DDC5",
+	"version": "1.0.2",
+	"dependencies": ["Steamodded (>=1.*)"]
+}

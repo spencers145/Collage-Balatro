@@ -1,0 +1,135 @@
+{
+  "Card's ability table value": {
+    "prefix": "cae",
+    "body": [
+      "card.ability.extra.$0",
+    ],
+    "description": "Shortcut for a variable in a Card's ability table"
+  },
+  "Joker creation table": {
+    "prefix": "jkr",
+    "body": [
+      "SMODS.Joker {",
+      "\tkey = \"$1\",",
+      "\tconfig = {",
+      "\t\textra = {",
+      "\t\t\t$2",
+      "\t\t}",
+      "\t},",
+      "\trarity = ${3|1,2,3,4|},",
+      "\tpos = { x = $4, y = $5 },",
+      "\tatlas = \"jokers_atlas\",",
+      "\tcost = $7,",
+      "\tblueprint_compat = ${10|true,false|},",
+      "\teternal_compat = ${11|true,false|},",
+      "\tperishable_compat = ${12|true,false|},",
+      "\tpaperback = {",
+      "\t\t$13",
+      "\t},",
+      "",
+      "\tloc_vars = function(self, info_queue, card)",
+      "\t\treturn {",
+      "\t\t\tvars = {",
+      "\t\t\t\t$14",
+      "\t\t\t}",
+      "\t\t}",
+      "\tend,",
+      "",
+      "\tcalculate = function(self, card, context)",
+      "\t\t$15",
+      "\tend",
+      "}",
+      "$0",
+    ]
+  },
+  "PB_UTIL shortcut": {
+    "prefix": "pu",
+    "body": [
+      "PB_UTIL.$0",
+    ]
+  },
+  // Joker Display snippets
+  "JokerDisplay Defintion Skeletion": {
+    "prefix": "jd_def",
+    "body": [
+      "joker_display_def = function(JokerDisplay)",
+      "\treturn {",
+      "\t\t$1",
+      "\t}",
+      "end,$0",
+    ]
+  },
+  "JokerDisplay Text Table": {
+    "prefix": "jdtxtt",
+    "body": [
+      "text = {",
+      "\t$1",
+      "},$0",
+    ]
+  },
+  "JokerDisplay Extra Table": {
+    "prefix": "jdext",
+    "body": [
+      "extra = {",
+      "\t{",
+      "\t\t$1",
+      "\t}",
+      "},$0",
+    ],
+  },
+  "JokerDisplay Reminder Text Table": {
+    "prefix": "jdrem",
+    "body": [
+      "reminder_text = {",
+      "\t$1",
+      "},$0",
+    ]
+  },
+  "JokerDisplay text object": {
+    "prefix": "jdtxt",
+    "body": [
+      "{ text = '$1'$2 },$0",
+    ]
+  },
+  "JokerDisply ref_table and ref_value object": {
+    "prefix": "jdrt",
+    "body": [
+      "{ ref_table = '$1', ref_value = '$2'$3 },$0",
+    ]
+  },
+  "JokerDisplay odds display in extra": {
+    "prefix": "jdodds",
+    "body": [
+      "extra = {",
+      "\t{",
+      "\t\t{ text = '(' },",
+      "\t\t{ ref_table = 'card.joker_display_values', ref_value = 'odds' },",
+      "\t\t{ text = ')' },",
+      "\t},",
+      "},",
+      "extra_config = {",
+      "\tcolour = G.C.GREEN,",
+      "\tscale = 0.3,",
+      "},$0",
+    ]
+  },
+  "Numerator and denominators for chance": {
+    "prefix": "cvarsret",
+    "body": [
+      "local numerator, denominator = PB_UTIL.chance_vars(card)",
+      "",
+      "return {",
+      "\tvars = {",
+      "\t\tnumerator,",
+      "\t\tdenominator",
+      "\t}",
+      "}"
+    ]
+  },
+  "Numerator and denominators for chance without return": {
+    "prefix": "cvars",
+    "body": [
+      "local numerator, denominator = PB_UTIL.chance_vars(card)"
+    ]
+  }
+}

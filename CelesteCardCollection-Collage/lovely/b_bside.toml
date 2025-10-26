@@ -1,0 +1,1094 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 2
+
+# copied these patches from cryptid's boss rush challenge
+
+# reset blind choices
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "G.GAME.round_resets.blind_choices.Boss = get_new_boss()"
+position = "before"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 1) then
+    G.GAME.round_resets.blind_choices.Small = get_new_boss()
+    G.GAME.round_resets.blind_choices.Big = get_new_boss()
+else
+	G.GAME.round_resets.blind_choices.Small = get_new_small()
+	G.GAME.round_resets.blind_choices.Big = get_new_big()
+end
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	for _, v in ipairs({'Small', 'Big', 'Boss'}) do
+		G.GAME.round_resets.blind_choices.ccc_bonus[v] = get_new_boss()
+		local i = 0
+		while G.GAME.round_resets.blind_choices.ccc_bonus[v] == G.GAME.round_resets.blind_choices[v] and i < 100 do
+			G.GAME.round_resets.blind_choices.ccc_bonus[v] = get_new_boss()
+			i = i + 1
+		end
+	end
+end
+'''
+match_indent = true
+
+# big blind doesn't increase ante
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if G.GAME.blind:get_type() == 'Boss' then"
+position = "at"
+payload = "if G.GAME.blind_on_deck == 'Boss' then"
+match_indent = true
+
+# smaller showdown blinds don't win
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if G.GAME.round_resets.ante == G.GAME.win_ante and G.GAME.blind:get_type() == 'Boss' then"
+position = "at"
+payload = "if G.GAME.round_resets.ante >= G.GAME.win_ante and G.GAME.blind_on_deck == 'Boss' then"
+match_indent = true
+
+
+# mark small blind as defeated
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if G.GAME.round_resets.blind == G.P_BLINDS.bl_small then"
+position = "at"
+payload = "if G.GAME.blind_on_deck == 'Small' then"
+match_indent = true
+
+# mark big blind as defeated
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "elseif G.GAME.round_resets.blind == G.P_BLINDS.bl_big then"
+position = "at"
+payload = "elseif G.GAME.blind_on_deck == 'Big' then"
+match_indent = true
+
+
+
+
+# skipping costs $4*ante
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "G.FUNCS.skip_blind = function(e)"
+position = "after"
+payload = '''
+if G.GAME and G.GAME.modifiers and (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 1) then
+	local skipcost = 4*(G.GAME.round_resets.ante+1)
+	if -skipcost < 0 then
+		if to_big( (G.GAME.dollars-G.GAME.bankrupt_at) - skipcost ) < to_big(0) then
+			e.disable_button = false
+			return	-- do not skip. scuffed but it has to be done like this rn
+		end
+	end
+	if -skipcost ~= 0 then
+		ease_dollars(-skipcost)
+	end
+end
+'''
+match_indent = true
+
+# show
+# lmao this is so long
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "{n=G.UIT.T, config={text = localize('b_skip_blind'), scale = 0.4, colour = G.C.UI.TEXT_INACTIVE}}"
+position = "at"
+payload = '''
+{n=G.UIT.T, config={text = localize('b_skip_blind')..(
+	G.GAME and G.GAME.modifiers and (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 1) and 
+		((-4*(G.GAME.round_resets.ante+1))<0 and ' (-' or ' (')..localize('$')..math.abs(-4*(G.GAME.round_resets.ante+1))..')' 
+	or ''
+), scale = 0.4, colour = G.C.UI.TEXT_INACTIVE}}
+'''
+match_indent = true
+
+# deal with button
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''_blind_choice.alignment.offset.y = -0.9
+if _tag and _tag_container then'''
+position = "after"
+payload = '''
+if not ( (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 1) and to_big( (G.GAME.dollars-G.GAME.bankrupt_at) - (4*(G.GAME.round_resets.ante+1)) ) < to_big(0) ) then
+'''
+match_indent = true
+
+# back on my bullshit
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "_sprite.config.force_focus = nil"
+position = "after"
+payload = '''
+else
+	_tag.children[2].config.button = 'skip_blind'	-- should be nil but tag colour isn't updating
+	_tag.config.outline_colour = G.C.UI.BACKGROUND_INACTIVE
+	_tag.children[2].config.hover = false
+	_tag.children[2].config.colour = G.C.UI.BACKGROUND_INACTIVE
+	_tag.children[2].children[1].config.colour = G.C.UI.TEXT_INACTIVE
+	local _sprite = _tag.config.ref_table
+	_sprite.config.force_focus = true
+end
+'''
+match_indent = true
+
+# luchador
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss')) then'''
+position = "at"
+payload = '''
+if G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss' or (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 1))) then 
+'''
+match_indent = true
+
+# luchador 2
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''local disableable = G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))'''
+position = "at"
+payload = '''
+local disableable = G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss' or (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 1)))
+'''
+match_indent = true
+
+
+
+
+# ===================================== double boss stuff
+
+
+
+
+# === blind select ui
+
+# another one
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''local blind_choice = {'''
+position = "before"
+payload = '''
+local ccc_bonus = G.GAME.round_resets.blind_choices.ccc_bonus[type] or nil
+local ccc_bonus_blind_choice = {}
+
+if ccc_bonus then
+	ccc_bonus_blind_choice.config = G.P_BLINDS[ccc_bonus]
+	ccc_bonus_blind_choice.animation = AnimatedSprite(0,0, 1.4, 1.4, G.ANIMATION_ATLAS[ccc_bonus_blind_choice.config.atlas] or G.ANIMATION_ATLAS['blind_chips'],  ccc_bonus_blind_choice.config.pos)
+	ccc_bonus_blind_choice.animation:define_draw_steps({
+		{shader = 'dissolve', shadow_height = 0.05},
+		{shader = 'dissolve'}
+	})
+end
+'''
+match_indent = true
+
+# another one
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''{n=G.UIT.O, config={object = blind_choice.animation}},'''
+position = "before"
+payload = '''
+ccc_bonus and {n=G.UIT.O, config={object = ccc_bonus_blind_choice.animation}} or nil,
+'''
+match_indent = true
+
+# show multiname
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''{n=G.UIT.O, config={object = DynaText({string = loc_name, colours = {disabled and G.C.UI.TEXT_INACTIVE or G.C.WHITE}, shadow = not disabled, float = not disabled, y_offset = -4, scale = 0.45, maxw =2.8})}},'''
+position = "at"
+payload = '''
+ccc_bonus and {n=G.UIT.R, config={align = "cm"}, nodes={
+	{n=G.UIT.O, config={object = DynaText({string = ccc_bonus_loc_name..' &', colours = {disabled and G.C.UI.TEXT_INACTIVE or G.C.WHITE}, shadow = not disabled, float = not disabled, y_offset = -4, scale = 0.45, maxw =2.8})}}
+}} or nil,
+ccc_bonus and {n=G.UIT.R, config={align = "cm"}, nodes={
+	{n=G.UIT.O, config={object = DynaText({string = loc_name, colours = {disabled and G.C.UI.TEXT_INACTIVE or G.C.WHITE}, shadow = not disabled, float = not disabled, y_offset = -4, scale = 0.45, maxw =2.8})}}
+}} or nil,
+not ccc_bonus and {n=G.UIT.O, config={object = DynaText({string = loc_name, colours = {disabled and G.C.UI.TEXT_INACTIVE or G.C.WHITE}, shadow = not disabled, float = not disabled, y_offset = -4, scale = 0.45, maxw =2.8})}} or nil,
+'''
+match_indent = true
+
+# show multiname
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''local blind_state = G.GAME.round_resets.blind_states[type]'''
+position = "before"
+payload = '''
+-- double blind loc
+
+local ccc_bonus_target = ccc_bonus and {type = 'raw_descriptions', key = ccc_bonus_blind_choice.config.key, set = 'Blind', vars = {}} or nil
+if ccc_bonus and ccc_bonus_blind_choice.config.name == 'The Ox' then
+	ccc_bonus_target.vars = {localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands')}
+end
+local ccc_obj = ccc_bonus_blind_choice.config or nil
+if ccc_obj and ccc_obj.loc_vars and _G['type'](ccc_obj.loc_vars) == 'function' then
+	local res = ccc_obj:loc_vars() or {}
+	ccc_bonus_target.vars = res.vars or ccc_bonus_target.vars
+	ccc_bonus_target.key = res.key or ccc_bonus_target.key
+end
+local ccc_bonus_loc_target = ccc_bonus and localize(ccc_bonus_target) or nil
+local ccc_bonus_loc_name = ccc_bonus and localize{type = 'name_text', key = ccc_bonus_blind_choice.config.key, set = 'Blind'} or nil
+
+if ccc_bonus then
+	text_table = copy_table(ccc_bonus_loc_target)
+	for i, v in ipairs(loc_target) do
+		table.insert(text_table, v)
+	end
+end
+'''
+match_indent = true
+
+# colour mixing
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''blind = G.GAME.round_resets.blind_choices[blind]'''
+position = "before"
+payload = '''
+ccc_bonus_blind = G.GAME.round_resets.blind_choices.ccc_bonus[blind] or nil
+'''
+match_indent = true
+
+# colour mixing 2
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''return (disabled or not G.P_BLINDS[blind]) and G.C.BLACK or'''
+position = "after"
+payload = '''
+ccc_bonus_blind and mix_colours(G.P_BLINDS[ccc_bonus_blind].boss_colour, G.P_BLINDS[blind].boss_colour, 0.5) or
+'''
+match_indent = true
+
+# reroll both bosses
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''G.GAME.round_resets.blind_choices.Boss = get_new_boss()'''
+position = "after"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	G.GAME.round_resets.blind_choices.ccc_bonus.Boss = get_new_boss()
+	local i = 0
+	while G.GAME.round_resets.blind_choices.ccc_bonus.Boss == G.GAME.round_resets.blind_choices.Boss and i < 100 do
+		G.GAME.round_resets.blind_choices.ccc_bonus.Boss = get_new_boss()
+		i = i + 1
+	end
+end
+'''
+match_indent = true
+
+
+
+# === inblind ui
+
+# text (multipatch)
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''self.loc_name = self.name == '' and self.name or localize{type ='name_text', key = self.config.blind.key, set = 'Blind'}'''
+position = "after"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	self.loc_name = self.name == '' and self.name or localize{type ='name_text', key = G.GAME.ccc_bonus_blind.config.blind.key, set = 'Blind'}..' & '..localize{type ='name_text', key = self.config.blind.key, set = 'Blind'}
+end
+'''
+match_indent = true
+
+# text description
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''for k, v in ipairs(loc_target) do'''
+position = "before"
+payload = '''
+local ccc_bonus = ((G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) and G.GAME.ccc_bonus_blind.config.blind) and G.GAME.ccc_bonus_blind or nil
+
+local ccc_bonus_target = ccc_bonus and {type = 'raw_descriptions', key = ccc_bonus.config.blind.key, set = 'Blind', vars = {}} or nil
+if ccc_bonus and ccc_bonus.name == 'The Ox' then
+	ccc_bonus_target.vars = {localize(G.GAME.current_round.most_played_poker_hand, 'poker_hands')}
+end
+local ccc_obj = ccc_bonus and ccc_bonus.config.blind or nil
+if ccc_obj and ccc_obj.loc_vars and _G['type'](ccc_obj.loc_vars) == 'function' then
+	local res = ccc_obj:loc_vars() or {}
+	ccc_bonus_target.vars = res.vars or ccc_bonus_target.vars
+	ccc_bonus_target.key = res.key or ccc_bonus_target.key
+end
+local ccc_bonus_loc_target = ccc_bonus and localize(ccc_bonus_target) or nil
+local ccc_bonus_loc_name = ccc_bonus and localize{type = 'name_text', key = ccc_bonus.config.blind.key, set = 'Blind'} or nil
+'''
+match_indent = true
+
+# text description
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''
+else
+	self.loc_name = ''; self.loc_debuff_text = ''
+'''
+position = "before"
+payload = '''
+if ccc_bonus_loc_target then
+	local inv = {}
+	for i, v in ipairs(ccc_bonus_loc_target) do
+		table.insert(inv, 1, v)
+	end
+	for i, v in ipairs(inv) do
+		table.insert(self.loc_debuff_lines, 1, v)
+	end
+end
+'''
+match_indent = true
+
+# object
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''{n=G.UIT.O, config={object = G.GAME.blind, draw_layer = 1}},'''
+position = "at"
+payload = '''
+{n=G.UIT.C, nodes = {
+	(G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) and {n=G.UIT.R, nodes = {
+		{n=G.UIT.O, config={object = G.GAME.ccc_bonus_blind, draw_layer = 2}},
+	}} or nil,
+	{n=G.UIT.R, nodes = {
+		{n=G.UIT.O, config={object = G.GAME.blind, draw_layer = 1}},
+	}},
+}},
+'''
+match_indent = true
+
+# dimensions
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''G.GAME.blind:change_dim(1.5,1.5)'''
+position = "after"
+payload = '''
+if not G.GAME.modifiers.ccc_bside then G.GAME.modifiers.ccc_bside = 0 end	-- this is like the perfect place to put this for some reason??? idk man
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	G.GAME.blind:change_dim(1,1)
+	G.GAME.ccc_bonus_blind:change_dim(1,1)
+	scale = 0.24
+end
+'''
+match_indent = true
+
+# visible
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''G.GAME.blind.states.visible = true'''
+position = "after"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	G.GAME.ccc_bonus_blind.states.visible = true
+end
+'''
+match_indent = true
+
+# invisible
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''G.GAME.blind.states.visible = false'''
+position = "after"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	G.GAME.ccc_bonus_blind.states.visible = false
+end
+'''
+match_indent = true
+
+# change height (blind ui)
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''{n=G.UIT.R, config={align = "cm", minh = 0.7, r = 0.1, emboss = 0.05, colour = G.C.DYN_UI.MAIN}, nodes={'''
+position = "at"
+payload = '''
+{n=G.UIT.R, config={align = "cm", minh = (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) and 0.4 or 0.7, r = 0.1, emboss = 0.05, colour = G.C.DYN_UI.MAIN}, nodes={
+'''
+match_indent = true
+
+# change height (attention text)
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''scale = 0.7, text = disp_text, maxw = 12, hold = hold_time, align = 'cm', offset = {x = 0,y = -1},major = G.play'''
+position = "at"
+payload = '''
+scale = 0.7, text = disp_text, maxw = 12, hold = hold_time, align = 'cm', offset = {x = 0,y = (self == G.GAME.ccc_bonus_blind) and -1.8 or -1},major = G.play
+'''
+match_indent = true
+
+# patch smods for wheel debuff text
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/game_object.lua"]'''
+pattern = '''get_loc_debuff_text = function() return G.GAME.blind.loc_debuff_text end,'''
+position = "at"
+payload = '''
+get_loc_debuff_text = function() return (G.GAME.ccc_bonus_blind and G.GAME.ccc_bonus_blind.name == 'The Wheel') and G.GAME.ccc_bonus_blind.loc_debuff_text or G.GAME.blind.loc_debuff_text end,
+'''
+match_indent = true
+
+# no double sound
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''play_sound('cancel', 0.7 + 0.05*i, 0.7)'''
+position = "at"
+payload = '''
+if self ~= G.GAME.ccc_bonus_blind then
+	play_sound('cancel', 0.7 + 0.05*i, 0.7)
+end
+'''
+match_indent = true
+
+# no double sound 2
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''play_sound('whoosh1', 0.55, 0.62)'''
+position = "at"
+payload = '''
+if self ~= G.GAME.ccc_bonus_blind then
+	play_sound('whoosh1', 0.55, 0.62)
+end
+'''
+match_indent = true
+
+# background
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''local blindname = ((blind_override or (G.GAME.blind and G.GAME.blind.name ~= '' and G.GAME.blind.name)) or 'Small Blind')'''
+position = "before"
+payload = '''
+local ccc_blindname = (G.GAME.modifiers and G.GAME.modifiers.ccc_bside and (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2)) and ((blind_override or (G.GAME.ccc_bonus_blind and G.GAME.ccc_bonus_blind.name ~= '' and G.GAME.ccc_bonus_blind.name)) or 'Small Blind') or nil
+'''
+match_indent = true
+
+# background 2
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''local boss_col = G.C.BLACK'''
+position = "before"
+payload = '''
+local ccc_boss_col = G.C.BLACK
+'''
+match_indent = true
+
+# background 3
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''if v.name == blindname then'''
+position = "before"
+payload = '''
+if ccc_blindname and v.name == ccc_blindname then
+	if v.boss.showdown then 
+		ease_background_colour{new_colour = G.C.BLUE, special_colour = G.C.RED, tertiary_colour = darken(G.C.BLACK, 0.4), contrast = 3}
+		return
+	end
+	ccc_boss_col = v.boss_colour or G.C.BLACK
+end
+'''
+match_indent = true
+
+# background 4
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''ease_background_colour{new_colour = lighten(mix_colours(boss_col, G.C.BLACK, 0.3), 0.1), special_colour = boss_col, contrast = 2}'''
+position = "at"
+payload = '''
+ease_background_colour{new_colour = ccc_blindname and boss_col or lighten(mix_colours(boss_col, G.C.BLACK, 0.3), 0.1), special_colour = ccc_blindname and ccc_boss_col or boss_col, contrast = 2}
+'''
+match_indent = true
+
+
+
+
+# === cashout ui
+
+# insert sprite
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''local obj = G.GAME.blind.config.blind'''
+position = "before"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	local obj = G.GAME.ccc_bonus_blind.config.blind	
+	local blind_sprite = AnimatedSprite(0, 0, 1.2, 1.2, G.ANIMATION_ATLAS[obj.atlas] or G.ANIMATION_ATLAS['blind_chips'], copy_table(G.GAME.ccc_bonus_blind.pos))
+	blind_sprite:define_draw_steps({
+		{shader = 'dissolve', shadow_height = 0.05},
+		{shader = 'dissolve'}
+	})
+	table.insert(left_text, {n=G.UIT.O, config={w=1.2,h=1.2 , object = blind_sprite, hover = true, can_collide = false}})
+end
+'''
+match_indent = true
+
+# silent defeat (thanks thunk)
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''G.GAME.blind:defeat()'''
+position = "before"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	G.GAME.ccc_bonus_blind:defeat(true)
+end
+'''
+match_indent = true
+
+# juice
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''G.GAME.blind:juice_up()'''
+position = "before"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	G.GAME.ccc_bonus_blind:juice_up()
+end
+'''
+match_indent = true
+
+
+
+
+# === defeat screen
+
+# the usual
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''local blind_choice = {config = G.GAME.blind.config.blind or G.P_BLINDS.bl_small}'''
+position = "before"
+payload = '''
+local ccc_blind_choice = {config = G.GAME.ccc_bonus_blind.config.blind or G.P_BLINDS.bl_small}
+ccc_blind_choice.animation = AnimatedSprite(0,0, 1.4, 1.4, G.ANIMATION_ATLAS[ccc_blind_choice.config.atlas] or G.ANIMATION_ATLAS['blind_chips'],  ccc_blind_choice.config.pos)
+ccc_blind_choice.animation:define_draw_steps({
+	{shader = 'dissolve', shadow_height = 0.05},
+	{shader = 'dissolve'}
+})
+'''
+match_indent = true
+
+# add the blind
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''{n=G.UIT.O, config={object = blind_choice.animation}}'''
+position = "before"
+payload = '''
+(G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) and {n=G.UIT.O, config={object = ccc_blind_choice.animation}} or nil,
+'''
+match_indent = true
+
+# name
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''{n=G.UIT.O, config={object = DynaText({string = localize{type ='name_text', key = blind_choice.config.key, set = 'Blind'}, colours = {G.C.WHITE},shadow = true, float = true,maxw = 2.2, scale = 0.45})}}'''
+position = "at"
+payload = '''
+((G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2)) and {n=G.UIT.R, config={align = "cm"}, nodes={
+	{n=G.UIT.O, config={object = DynaText({string = localize{type ='name_text', key = ccc_blind_choice.config.key, set = 'Blind'}..' &', colours = {G.C.WHITE},shadow = true, float = true,maxw = 2.2, scale = 0.45})}} 
+}} or nil,
+((G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2)) and {n=G.UIT.R, config={align = "cm"}, nodes={
+	{n=G.UIT.O, config={object = DynaText({string = localize{type ='name_text', key = blind_choice.config.key, set = 'Blind'}, colours = {G.C.WHITE},shadow = true, float = true,maxw = 2.2, scale = 0.45})}} 
+}} or nil,
+not ((G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2)) and {n=G.UIT.O, config={object = DynaText({string = localize{type ='name_text', key = blind_choice.config.key, set = 'Blind'}, colours = {G.C.WHITE},shadow = true, float = true,maxw = 2.2, scale = 0.45})}} or nil,
+'''
+match_indent = true
+
+
+
+
+# === blind exists
+
+# bonus 1
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''G.GAME.blind = Blind(0,0,2, 1)'''
+position = "after"
+payload = '''
+G.GAME.ccc_bonus_blind = Blind(0,0,2, 1)
+'''
+match_indent = true
+
+# bonus 2
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''G.GAME.blind:set_blind(G.GAME.round_resets.blind)'''
+position = "before"
+payload = '''
+if G.GAME.round_resets.ccc_bonus_blind then
+	G.GAME.ccc_bonus_blind:set_blind(G.GAME.round_resets.ccc_bonus_blind)
+end
+'''
+match_indent = true
+
+# actual selection
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''G.GAME.round_resets.blind = e.config.ref_table'''
+position = "after"
+payload = '''
+if e.config.ccc_bonus_ref_table then
+	G.GAME.round_resets.ccc_bonus_blind = e.config.ccc_bonus_ref_table
+end
+'''
+match_indent = true
+
+# man
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''not run_info and {n=G.UIT.R, config={id = 'select_blind_button', align = "cm", ref_table = blind_choice.config, colour = disabled and G.C.UI.BACKGROUND_INACTIVE or G.C.ORANGE, minh = 0.6, minw = 2.7, padding = 0.07, r = 0.1, shadow = true, hover = true, one_press = true, button = 'select_blind'}, nodes={'''
+position = "at"
+payload = '''
+not run_info and {n=G.UIT.R, config={id = 'select_blind_button', align = "cm", ref_table = blind_choice.config, ccc_bonus_ref_table = ccc_bonus and ccc_bonus_blind_choice.config, colour = disabled and G.C.UI.BACKGROUND_INACTIVE or G.C.ORANGE, minh = 0.6, minw = 2.7, padding = 0.07, r = 0.1, shadow = true, hover = true, one_press = true, button = 'select_blind'}, nodes={
+'''
+match_indent = true
+
+# throw hands 1
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''
+        if G.GAME.blind and G.GAME.blind:debuff_hand(self.highlighted, poker_hands, text, true) then
+            G.boss_throw_hand = true
+        else
+            
+        end'''
+position = "at"
+payload = '''
+        if G.GAME.blind and G.GAME.blind:debuff_hand(self.highlighted, poker_hands, text, true) then
+            G.boss_throw_hand = 'blind'
+        elseif (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) and G.GAME.ccc_bonus_blind and G.GAME.ccc_bonus_blind:debuff_hand(self.highlighted, poker_hands, text, true) then
+            G.boss_throw_hand = 'ccc_bonus_blind'
+        end
+'''
+match_indent = true
+
+# throw hands 2
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''G.GAME.blind.children.animatedSprite:juice_up(0.05, 0.02)'''
+position = "at"
+payload = '''
+G.GAME[G.boss_throw_hand].children.animatedSprite:juice_up(0.05, 0.02)
+'''
+match_indent = true
+
+# throw hands 3
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''{n=G.UIT.O, config={object = DynaText({scale = 0.6, string = SMODS.debuff_text or G.GAME.blind:get_loc_debuff_text(), maxw = 9, colours = {G.C.WHITE},float = true, shadow = true, silent = true, pop_in = 0, pop_in_rate = 6})}},'''
+position = "at"
+payload = '''
+{n=G.UIT.O, config={object = DynaText({scale = 0.6, string = SMODS.debuff_text or G.GAME[G.boss_throw_hand]:get_loc_debuff_text(), maxw = 9, colours = {G.C.WHITE},float = true, shadow = true, silent = true, pop_in = 0, pop_in_rate = 6})}},
+'''
+match_indent = true
+
+# deal with eye
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''if not reset and obj.set_blind and type(obj.set_blind) == 'function' then'''
+position = "before"
+payload = '''
+if self.name == 'The Eye' and not reset then
+	obj = G.P_BLINDS['bl_small']	-- nuke obj to avoid smods ownership
+	self.hands = {}
+	for _, v in ipairs(G.handlist) do
+		self.hands[v] = false
+	end
+end
+'''
+match_indent = true
+
+# deal with eye 2
+# nobody's touching this so i might as well reduce clutter
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''
+    elseif self.name == 'The Eye' and not reset then
+        self.hands = {
+            ["Flush Five"] = false,
+            ["Flush House"] = false,
+            ["Five of a Kind"] = false,
+            ["Straight Flush"] = false,
+            ["Four of a Kind"] = false,
+            ["Full House"] = false,
+            ["Flush"] = false,
+            ["Straight"] = false,
+            ["Three of a Kind"] = false,
+            ["Two Pair"] = false,
+            ["Pair"] = false,
+            ["High Card"] = false,
+        }'''
+position = "at"
+payload = '''
+
+'''
+match_indent = true
+
+
+
+
+# === active blind effects
+
+# handle blind chips
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''self.chips = get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling'''
+position = "after"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) and G.GAME.ccc_bonus_blind.mult then
+	local used_mult = 2
+	used_mult = used_mult*(G.GAME.ccc_bonus_blind.mult / 2)
+	used_mult = used_mult*(self.mult / 2)
+	self.chips = get_blind_amount(G.GAME.round_resets.ante)*used_mult*G.GAME.starting_params.ante_scaling
+end
+'''
+match_indent = true
+
+# again but in ui
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''local blind_amt = get_blind_amount(G.GAME.round_resets.blind_ante)*blind_choice.config.mult*G.GAME.starting_params.ante_scaling'''
+position = "after"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) and ccc_bonus_blind_choice.config then
+	local used_mult = 2
+	used_mult = used_mult*(ccc_bonus_blind_choice.config.mult / 2)
+	used_mult = used_mult*(blind_choice.config.mult / 2)
+	blind_amt = get_blind_amount(G.GAME.round_resets.ante)*used_mult*G.GAME.starting_params.ante_scaling
+end
+'''
+match_indent = true
+
+# serpent
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+if G.GAME.blind.name == 'The Serpent' and
+'''
+position = "at"
+payload = '''
+if (G.GAME.blind.name == 'The Serpent' or G.GAME.ccc_bonus_blind.name == 'The Serpent') and
+'''
+match_indent = true
+
+# :press_play
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+if G.GAME.blind:press_play() then
+'''
+position = "before"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) and G.GAME.ccc_bonus_blind:press_play() then
+	G.E_MANAGER:add_event(Event({
+		trigger = 'immediate',
+		func = (function()
+			SMODS.juice_up_blind('ccc_bonus_blind')
+			G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.06*G.SETTINGS.GAMESPEED, blockable = false, blocking = false, func = function()
+				play_sound('tarot2', 0.76, 0.4);return true end}))
+			play_sound('tarot2', 1, 0.4)
+			return true
+		end)
+	}))
+	delay(0.4)
+end
+'''
+match_indent = true
+
+# :debuff_hand
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+if not G.GAME.blind:debuff_hand(G.play.cards, poker_hands, text) then
+'''
+position = "at"
+payload = '''
+if not (
+	G.GAME.blind:debuff_hand(G.play.cards, poker_hands, text) or 
+	((G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) and G.GAME.ccc_bonus_blind:debuff_hand(G.play.cards, poker_hands, text))
+) then
+'''
+match_indent = true
+
+# check debuff hand for juice
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+if SMODS.hand_debuff_source then SMODS.hand_debuff_source:juice_up(0.3,0) else SMODS.juice_up_blind() end
+'''
+position = "at"
+payload = '''
+	if SMODS.hand_debuff_source then SMODS.hand_debuff_source:juice_up(0.3,0) else
+		if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) and G.GAME.ccc_bonus_blind:debuff_hand(G.play.cards, poker_hands, text, true) then
+			SMODS.juice_up_blind('ccc_bonus_blind')
+		end
+		if G.GAME.blind:debuff_hand(G.play.cards, poker_hands, text, true) then
+			SMODS.juice_up_blind()
+		end
+	end
+'''
+match_indent = true
+
+# disable bonus blind
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''
+function Blind:disable()
+'''
+position = "after"
+payload = '''
+if self ~= G.GAME.ccc_bonus_blind and G.GAME.ccc_bonus_blind.config.blind then 
+	G.GAME.ccc_bonus_blind:disable() 
+end
+'''
+match_indent = true
+
+# check bonus blind when debuffing cards (i could hook these tbh)
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''
+function Blind:debuff_card(card, from_blind)
+'''
+position = "after"
+payload = '''
+if self ~= G.GAME.ccc_bonus_blind and G.GAME.ccc_bonus_blind.config.blind then
+	card.debuff = false
+	G.GAME.ccc_bonus_blind:debuff_card(card, from_blind)
+	if card.debuff then return end
+end
+'''
+match_indent = true
+
+# make verdant leaf less janky by introducing more jank
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''
+        if self.ability.set == 'Joker' and G.GAME.blind and G.GAME.blind.name == 'Verdant Leaf' then 
+            G.E_MANAGER:add_event(Event({trigger = 'immediate',func = function()
+                G.GAME.blind:disable()
+                return true
+            end}))
+        end
+'''
+position = "at"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	if self.ability.set == 'Joker' then
+		for i, v in ipairs({'blind', 'ccc_bonus_blind'}) do
+			if G.GAME[v] and G.GAME[v].name == 'Verdant Leaf' then
+				G.E_MANAGER:add_event(Event({trigger = 'immediate',func = function()
+					G.GAME[v]:ccc_verdant_disable()
+					return true
+				end}))
+			end
+		end
+	end
+else
+	if self.ability.set == 'Joker' and G.GAME.blind and G.GAME.blind.name == 'Verdant Leaf' then 
+		G.E_MANAGER:add_event(Event({trigger = 'immediate',func = function()
+			G.GAME.blind:disable()
+			return true
+		end}))
+	end
+end
+'''
+match_indent = true
+
+# juice both blinds since coding something precise would necessitate more spaghetti
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = '''
+func = (function() SMODS.juice_up_blind();return true end)
+'''
+position = "at"
+payload = '''
+func = (function() SMODS.juice_up_blind();SMODS.juice_up_blind('ccc_bonus_blind');return true end)
+'''
+match_indent = true
+
+# wtf smods
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = '''
+if scoring_hand and card.debuff then
+'''
+position = "at"
+payload = '''
+if scoring_hand and card.debuff and SMODS.in_scoring(card, scoring_hand) then
+'''
+match_indent = true
+
+# check bonus blind when flipping cards
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''
+function Blind:stay_flipped(area, card, from_area)
+'''
+position = "after"
+payload = '''
+if self ~= G.GAME.ccc_bonus_blind and G.GAME.ccc_bonus_blind.config.blind then
+	local ret = G.GAME.ccc_bonus_blind:stay_flipped(area, card, from_area)
+	if ret then return ret end
+end
+'''
+match_indent = true
+
+# check bonus blind when drawn to hand
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''
+function Blind:drawn_to_hand()
+'''
+position = "after"
+payload = '''
+if self ~= G.GAME.ccc_bonus_blind and G.GAME.ccc_bonus_blind.config.blind then
+	G.GAME.ccc_bonus_blind:drawn_to_hand()
+end
+'''
+match_indent = true
+
+# modify hand
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+mult, hand_chips, modded = G.GAME.blind:modify_hand(G.play.cards, poker_hands, text, mult, hand_chips, scoring_hand)
+'''
+position = "before"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	local ccc_modded = false
+
+	mult, hand_chips, ccc_modded = G.GAME.ccc_bonus_blind:modify_hand(G.play.cards, poker_hands, text, mult, hand_chips, scoring_hand)
+	mult, hand_chips = mod_mult(mult), mod_chips(hand_chips)
+	if ccc_modded then update_hand_text({sound = 'chips2', modded = 'ccc_bonus_blind'}, {chips = hand_chips, mult = mult}) end
+end
+'''
+match_indent = true
+
+# juice up correct blind
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''
+        if config.modded then 
+            SMODS.juice_up_blind()
+'''
+position = "at"
+payload = '''
+	if config.modded then 
+		SMODS.juice_up_blind(config.modded)
+'''
+match_indent = true
+
+# crimson heart doesn't juice face down jokers
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''_card:juice_up()'''
+position = "at"
+payload = '''
+if _card.facing == "front" then
+	_card:juice_up()
+end
+'''
+match_indent = true
+
+
+
+
+# === saving + loading
+
+# save
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = '''
+BLIND = G.GAME.blind:save(),
+'''
+position = "before"
+payload = '''
+CCC_BONUS_BLIND = G.GAME.ccc_bonus_blind:save(),
+'''
+match_indent = true
+
+# load
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+G.GAME.blind:load(saveTable.BLIND)
+'''
+position = "before"
+payload = '''
+if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 2) then
+	G.GAME.ccc_bonus_blind:load(saveTable.CCC_BONUS_BLIND)
+end
+'''
+match_indent = true
+
+# fix bug or something
+# i frankly don't know why it broke and i frankly don't know why this fixes it
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = '''
+if self.dollars > 0 then
+'''
+position = "at"
+payload = '''
+if self.dollars and (self.dollars > 0) then
+'''
+match_indent = true

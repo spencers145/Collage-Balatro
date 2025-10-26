@@ -1,0 +1,11 @@
+{
+	"id": "collagexvis",
+	"name": "Collage x Visibility",
+	"display_name": "Collage x Visibility",
+	"author": ["base4"],
+	"description": "the",
+	"prefix": "collage_vis",
+	"main_file": "main.lua",
+	"priority": 1000,
+	"version": "1.0.0"
+}

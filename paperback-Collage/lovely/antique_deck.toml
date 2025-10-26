@@ -1,0 +1,23 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = "v.current_weight = v.get_weight and v:get_weight() or v.weight or 1"
+position = "after"
+match_indent = true
+payload = '''
+local is_paperback_antique = ((G.GAME.selected_back_key or {}).key == 'b_paperback_antique')
+  or (G.GAME.selected_sleeve == 'sleeve_paperback_antique')
+
+if is_paperback_antique then
+  if v.kind == "paperback_minor_arcana" then
+    v.current_weight = v.current_weight * 3
+  elseif v.kind == "Arcana" then
+    v.current_weight = 0
+  end
+end
+'''

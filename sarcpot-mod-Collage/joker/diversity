@@ -1,0 +1,150 @@
+SMODS.Joker {
+    key = "diversity",
+    config = {
+        extra = {
+            mult_mod = 3,
+            mult = 0,
+            limit = 6,
+            valid_suits = 0
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        if G.playing_cards then
+            card.ability.extra.valid_suits = 0
+        local suits = {}
+        local wilds = 0
+        for _, v in ipairs(G.playing_cards) do
+            if SMODS.has_any_suit(v) then
+                wilds = wilds + 1
+            end
+            if not SMODS.has_no_suit(v) and not SMODS.has_any_suit(v) then
+                if suits[v.base.suit] then
+                    suits[v.base.suit] = suits[v.base.suit] + 1
+                else
+                    suits[v.base.suit] = 1
+                end
+            end
+        end
+        -- print(wilds)
+        local sorted = {}
+        local i = 1
+        for suit, count in pairs(suits) do
+            sorted[i] = {
+                suit = suit,
+                count = count
+            }
+            i = i + 1
+        end
+
+        table.sort(sorted, function(a, b)
+            return a.count > b.count
+        end)
+        for _, v in ipairs(sorted) do
+            if v.count > card.ability.extra.limit then
+                card.ability.extra.valid_suits = card.ability.extra.valid_suits + 1
+            else
+                if card.ability.extra.limit - v.count <= wilds then
+                    wilds = wilds - (card.ability.extra.limit - v.count)
+                    card.ability.extra.valid_suits = card.ability.extra.valid_suits + 1
+                end
+            end
+            -- print(v.suit .. " " .. v.count)
+        end
+        if wilds > card.ability.extra.limit then
+            card.ability.extra.valid_suits = card.ability.extra.valid_suits + 1
+        end
+        card.ability.extra.mult = card.ability.extra.valid_suits*card.ability.extra.mult_mod
+        -- print("Valid Suits = " .. card.ability.extra.valid_suits)
+        
+        end
+        return {
+            vars = {card.ability.extra.mult_mod, card.ability.extra.limit, card.ability.extra.mult}
+        }
+    end,
+    rarity = 1,
+    pos = {
+        x = 2,
+        y = 5
+    },
+    atlas = 'sarcpot_atlas',
+    cost = 5,
+    unlocked = true,
+    discovered = false,
+    blueprint_compat = true,
+    eternal_compat = true,
+    soul_pos = nil,
+    
+    in_pool = function (self, args)
+        if G.playing_cards then
+            for i=1 , #G.playing_cards do
+                if not SMODS.has_no_suit(G.playing_cards[i]) then
+                    return true
+                end
+            end
+        end
+
+        return false
+    end,
+
+    update = function(self, card, dt)
+        
+        
+    end,
+
+    calculate = function(self, card, context)
+        
+        if context.joker_main then   
+            if G.playing_cards then
+            card.ability.extra.valid_suits = 0
+        local suits = {}
+        local wilds = 0
+        for _, v in ipairs(G.playing_cards) do
+            if SMODS.has_any_suit(v) then
+                wilds = wilds + 1
+            end
+            if not SMODS.has_no_suit(v) and not SMODS.has_any_suit(v) then
+                if suits[v.base.suit] then
+                    suits[v.base.suit] = suits[v.base.suit] + 1
+                else
+                    suits[v.base.suit] = 1
+                end
+            end
+        end
+        -- print(wilds)
+        local sorted = {}
+        local i = 1
+        for suit, count in pairs(suits) do
+            sorted[i] = {
+                suit = suit,
+                count = count
+            }
+            i = i + 1
+        end
+
+        table.sort(sorted, function(a, b)
+            return a.count > b.count
+        end)
+        for _, v in ipairs(sorted) do
+            if v.count > card.ability.extra.limit then
+                card.ability.extra.valid_suits = card.ability.extra.valid_suits + 1
+            else
+                if card.ability.extra.limit - v.count <= wilds then
+                    wilds = wilds - (card.ability.extra.limit - v.count)
+                    card.ability.extra.valid_suits = card.ability.extra.valid_suits + 1
+                end
+            end
+            -- print(v.suit .. " " .. v.count)
+        end
+        if wilds > card.ability.extra.limit then
+            card.ability.extra.valid_suits = card.ability.extra.valid_suits + 1
+        end
+        card.ability.extra.mult = card.ability.extra.valid_suits*card.ability.extra.mult_mod
+        -- print("Valid Suits = " .. card.ability.extra.valid_suits)
+        
+        end
+            return{
+                mult = card.ability.extra.mult
+            }
+        end
+    end
+}

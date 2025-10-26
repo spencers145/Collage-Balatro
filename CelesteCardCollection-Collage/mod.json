@@ -1,0 +1,14 @@
+{
+	"id": "CelesteCardCollection",
+	"name": "Celeste Card Collection",
+	"display_name": "CCC",
+	"author": ["AuroraAquir", "toneblock", "Gappie", "bein", "sunsetquasar", "goose!"],
+	"description": "Featuring 4 new decks, 50+ new jokers, and 2 new vouchers! Additional thanks to Bred and Fytos for concepts!",
+	"prefix": "ccc",
+	"main_file": "main.lua",
+	"priority": 10,
+	"badge_colour": "ffc0ff",
+	"badge_text_colour": "ffffff",
+	"version": "0.37.4",
+	"dependencies": ["Steamodded (>=1.0.0~BETA-0319c)", "3xCredits (==1.*~)"]
+}

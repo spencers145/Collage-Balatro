@@ -1,0 +1,114 @@
+---- SMODS.Joker {
+----   key = 'sputnik',
+----   name = 'Sputnik',
+----   atlas = 'Jokers',
+----   rarity = 3,
+----   cost = 8,
+----   unlocked = true, 
+----   discovered = true,
+----   blueprint_compat = true,
+----   eternal_compat = true,
+----   perishable_compat = true,
+----   pos = GetJokersAtlasTable('sputnik'),
+----   config = {
+----     juicing = false,
+----     played_hands = {}
+----   },
+
+----   loc_vars = function(self, info_queue, card)
+----     local string_hands_played = '(' .. localize('rainydays_hands_played') .. ': '
+----     local count = 0
+----     for key, value in ipairs(G.handlist) do
+----       if list_contains(card.ability.played_hands, value) then
+----         count = count + 1
+----         string_hands_played = string_hands_played .. localize(value, 'poker_hands') .. (count < #card.ability.played_hands and ', ' or ')')
+----       end
+----     end
+
+----     local string_parts = splitString(string_hands_played, 30)
+----     local nodes = {}
+----     for i = 1, #string_parts do
+----       nodes[#nodes + 1] = {
+----         n = G.UIT.R, config= { align = "cm" },
+----         nodes = {{
+----           n = G.UIT.T,
+----           config = {
+----             text = string_parts[i],
+----             colour = G.C.UI.TEXT_INACTIVE,
+----             scale = 0.3,
+----             shadow = false
+----           }
+----         }}
+----       }
+----     end
+
+----     return {
+----       main_end = #card.ability.played_hands > 0 and {{
+----         n = G.UIT.C,
+----         config = { align = "bm", minh =  0.02 },
+----         nodes = nodes
+----       }} or nil
+----     }
+----   end,
+
+----   update = function(self, card, dt)
+----     if G.hand and G.hand.highlighted and #G.hand.highlighted > 0 and not card.ability.juicing then
+----       local current_hand = (G.FUNCS.get_poker_hand_info(G.hand.highlighted))
+----       if not hand_played(card, current_hand) then
+----         card.ability.juicing = true
+----         card:juice_up(0.1, 0.1)
+----         G.E_MANAGER:add_event(Event({
+----           trigger = 'after',
+----           delay = 0.3,
+----           blocking = false,
+----           blockable = false,
+----           timer = 'REAL',
+----           func = function()
+----             card.ability.juicing = false
+----             return true
+----           end
+----         }))
+----       end
+----     end
+----   end,
+
+----   calculate = function(self, card, context)
+----     if context.joker_main and not hand_played(card, context.scoring_name) then      
+----       card.ability.played_hands[#card.ability.played_hands + 1] = context.scoring_name
+----       if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+----         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+----         G.E_MANAGER:add_event(Event({
+----           trigger = 'before',
+----           delay = 0.0,
+----           func = function()
+----             SMODS.add_card({ set = 'Constellation' })
+----             G.GAME.consumeable_buffer = 0
+----             return true
+----           end
+----         }))
+
+----         return {
+----           message = localize('rainydays_plus_constellation'), 
+----           colour = G.C.SECONDARY_SET.Constellation 
+----         }
+----       end
+----     end
+
+----     if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint and G.GAME.blind.boss then
+----       card.ability.played_hands = {}
+----       return {
+----         message = localize('k_reset'),
+----         colour = G.C.RED
+----       }
+----     end
+----   end
+---- }
+
+---- function hand_played(card, poker_hand)
+----   for i = 1, #card.ability.played_hands do
+----     if poker_hand == card.ability.played_hands[i] then
+----       return true
+----     end
+----   end
+----   return false
+---- end

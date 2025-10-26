@@ -1,0 +1,53 @@
+SMODS.Consumable({
+    key = 'magic_survival',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = { x =3, y = 2 },
+    discovered = false,
+    config = { limit = 5, ante = 0 },
+    loc_vars = function(self, info_queue)
+        self.config.ante = math.min(self.config.limit, G.GAME.round_resets.ante)
+        return { vars = { self.config.limit, self.config.ante  } }
+    end,
+    cost = 3,
+    calculate = function(self, card, context)
+
+            
+
+    end,
+    can_use = function(self, card)
+        return #G.hand.cards > 0
+    end,
+
+    use = function(self, card, area, copier)
+        
+        local unenhanced = 0
+        local enhanced_list = {}
+        for i = 1,#G.hand.cards do
+            if SMODS.has_enhancement(G.hand.cards[i], 'c_base') then
+                unenhanced = unenhanced+1
+            else
+                table.insert(enhanced_list, i)
+            end
+        end
+        local num_targets = math.max(math.min(unenhanced, math.min(self.config.limit, G.GAME.round_resets.ante)), 0)
+        local random_indexes = SARC.get_rand_hand_index(num_targets, enhanced_list)
+        for _,v in ipairs(random_indexes) do
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    blocking = true,
+                    delay = 0.2,
+                    func = function()
+                        play_sound('tarot1',(math.random(9,11)/10))
+                        G.hand.cards[v]:juice_up()
+                        local new_enhancement = SMODS.poll_enhancement({guaranteed = true, key = 'magic_survival'})
+                        G.hand.cards[v]:set_ability(G.P_CENTERS[new_enhancement])
+                        return true
+                    end
+                }))
+         
+        end
+       
+    end
+
+})

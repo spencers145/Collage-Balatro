@@ -1,0 +1,30 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "local extrafunc = nil"
+position = "after"
+payload = '''
+if (not buf.compat.talisman) then
+	if eval_type == 'e_mult' then 
+		sound = 'buf_emult'
+		amt = amt
+		text = '^' .. amt .. ' Mult'
+		colour = G.C.MULT
+		config.type = 'fade'
+		config.scale = 0.7
+	elseif eval_type == 'e_chips' then
+		sound = 'buf_echip'
+		amt = amt
+		text = '^' .. amt
+		colour = G.C.CHIPS
+		config.type = 'fade'
+		config.scale = 0.7
+	end
+end
+'''
+match_indent = true

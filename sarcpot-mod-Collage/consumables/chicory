@@ -1,0 +1,79 @@
+SMODS.Consumable({
+    key = 'chicory',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = {
+        x = 2,
+        y = 3
+    },
+    discovered = false,
+    config = {max_highlighted = 4, money = 3},
+    keep_on_use = function(self, card)
+        return false
+    end,
+    loc_vars = function(self, info_queue)
+        return {
+            vars = {self.config.max_highlighted ,self.config.money}
+        }
+    end,
+    cost = 3,
+    can_use = function(self, card)
+        return #G.hand.highlighted <= card.ability.max_highlighted and #G.hand.highlighted >= 1
+    end,
+
+    use = function(self, card, area, copier)
+        local suits, suits_size = SARC.get_available_suits()
+        local base_suits = {['Diamonds'] = true,['Spades'] = true, ['Clubs'] = true, ['Hearts'] = true}
+        local selected_suit_array = {}
+        --print('Hand highlited:'..#G.hand.highlighted)
+        --print('Available suits:'..suits_size)
+  
+        if #G.hand.highlighted <= suits_size then
+            selected_suit_array = suits
+            --print('Deck suits')
+        else
+            selected_suit_array = base_suits
+            --print('Base suits')
+        end
+        local valued_suits = {}
+        local index = 1
+        for k, v in pairs(selected_suit_array) do
+            valued_suits[index] = k
+            index = index + 1
+            --print(valued_suits[index])
+        end
+         G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 1,
+                func = function()
+                    return true
+                end
+            }))
+        for i=1, #G.hand.highlighted do
+            local rand_index = math.random(1, #valued_suits)
+            local rand_suit = valued_suits[rand_index]
+            --print("Random suit = "..rand_suit)
+           
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.2,
+                func = function()
+                    play_sound('tarot1',(math.random(8,12)/10))
+                    G.hand.highlighted[i]:juice_up()
+                    SMODS.change_base(G.hand.highlighted[i], rand_suit,nil)
+                    return true
+                end
+            }))
+            table.remove(valued_suits, rand_index)
+        end
+        local total = self.config.money * #G.hand.highlighted
+        G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.5,
+                func = function()
+                    ease_dollars(total)
+                    return true
+                end
+            }))
+    end
+})

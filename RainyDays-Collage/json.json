@@ -1,0 +1,14 @@
+{
+	"id": "rainydays",
+	"name": "Rainy Days",
+	"display_name": "Rainy Days",
+	"author": [ "RainDance" ],
+	"description": "A small collection of Vanilla-style jokers",
+	"prefix": "RainyDays",
+	"main_file": "main.lua",
+	"priority": 1,
+	"badge_colour": "4846a4",
+	"badge_text_colour": "f8f8ff",
+	"version": "0.2.0",
+	"dependencies": [ "Steamodded (>=1.0.0~BETA-0711a)" ]
+}

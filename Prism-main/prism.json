@@ -1,0 +1,15 @@
+{
+	"id": "Prism",
+	"name": "Prism",
+	"display_name": "Prism",
+	"author": ["Blazingulag"],
+	"website_url": "https://github.com/blazingulag/Prism",
+	"description": "Vanilla oriented content mod. Includes new Jokers, Consumables and more!",
+	"prefix": "prism",
+	"main_file": "main.lua",
+	"priority": 0,
+	"badge_colour": "665775",
+	"badge_text_colour": "ffffff",
+	"version": "1.9.2",
+	"dependencies": ["Steamodded (>=1.0.0~BETA-0525b)"]
+}

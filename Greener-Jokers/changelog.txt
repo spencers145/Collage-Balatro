@@ -1,0 +1,47 @@
+1.2.0
+
+Additions:
+Added Light Switch, Gnome, High Striker, Comet, Fun Guy, Grand Canyon, Carnival Cannon, Boss Sauce, Missing Poster, Minesweeper, Paranoid Joker, Hungry Hungry Jimbos, Operation, Watering Can, and Railroad! These Jokers mostly serve to fix up issues that Greener Jokers created with early-game balancing, and a lack of proper immediate scoring jokers. This also brings the Joker count to 75! That's half the number of Jokers in vanilla Balatro
+
+Changes:
+Ouija Board has been moved to uncommon
+Candle has been reworked, it's pretty much identical besides excluding flushes from the list of valid hands and probably working a bit differently with modded hands
+Plastic Bag has been nerfed a bit
+Sackboy is strong and I like it that way! However for some unbelievable reason it costs $4? So it costs $6 now
+Scrapbook has been buffed to +5 mult per lucky card and moved to uncommon
+Crazy 8s has been reworked to assign wild to a card held in hand to make it hopefully less clunky, it's also been changed to actually be compatible with blueprint because it wasn't actually compatible even though it said it was for some reason
+Fixed a Step Ladder bug with reordering cards (thanks base4!)
+Birthday Deck no longer starts with Clearance Sale
+peninsula upgrade color changed to red because its mult
+Cotton Candy and Aw Shucks have had their descriptions changed to say round instead of rounds remaining when there's only 1 round left. this is the greatest achievement in modding history 
+
+
+
+1.1.1
+
+Changes:
+- Idol Swap now properly removes extra sell value added by Jokers such as Gift Card and Egg
+- Reworked Joker Potion and fixed a bunch of weird bugs with it in the process (this is a pretty significant buff and I'm interested in feedback but I think at the very least it's worth taking now whereas previously you never really have a reason to take it)
+- Landfill now only costs $4 to discard instead of $5, which should make it more worth taking. This is a vibes based thing and I don't really have much of a base for it besides that, if people think this is crazy strong now I'll probably change it back
+- Food jokers (Joker Potion, Blueberries, Aw Shucks, and Cotton Candy) are now in a food pool which should at the very least be paperback compatible :)
+
+
+
+
+1.1.0
+
+Additions:
+- Added Pickup 2, Idol Swap, Ferrets, Combination Lock, Ouija Board, Norm, Scrapbook, Landfill, Joker Potion, and Zucchini
+- Added 10 new challenges! 
+
+Changes:
+- Coral Reef, Honeypot, and Fire Eater have all been nerfed by 1 mult each, they're still strong but I'm hoping this change makes them fun while not being able to stand on their own fully for too long
+- Mayhem joker has been buffed to +7 mult from +5, for a number of tiny reasons
+- Stained Glass has been buffed to give the created glass cards an Edition as well
+- Shrimps now gives the $3 from the joker it destroys if it successfully destroys a joker, since previously it was pretty misleading about how much money it actually gave
+- Éalú gains 30 chips instead of 35
+- Pinhead gives 40 chips instead of 35
+- 50-ball is now Uncommon
+- Fixed Recycling Bin not giving multiple instances of money when multiple cards are added at a time (for example from Familiar)
+- Fixed Crazy 8s incorrectly checking for other wild cards before deciding which card to make wild
+- Minor description tweaks for a few jokers, including The Fountain and Shaman

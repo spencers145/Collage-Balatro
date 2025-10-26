@@ -1,0 +1,15 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+# Syzygy
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if self.edition[v.key:sub(3)] and v.shader then"
+position = "at"
+payload = '''
+if self.edition[v.key:sub(3)] and v.shader and not self.cosmos_hide_edition then
+'''
+match_indent = true

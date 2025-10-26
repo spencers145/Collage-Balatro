@@ -1,0 +1,108 @@
+# Meant to add the ability to specify credits that are shown on the right side of the card 
+
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+
+# The thing that makes the credits appear
+[[patches]]
+[patches.regex]
+target = "functions/UI_definitions.lua"
+pattern = '''badges\[1\] and \{n=G\.UIT\.R, config=\{align = "cm", padding = 0\.03\}, nodes=badges\} or nil,\n\s+\}\}\n\s+\}\}\n\s+\}\},''' #'''badges[1] and {n=G.UIT.R, config={align = "cm", padding = 0.03}, nodes=badges} or nil,\n'''
+position = "after"
+payload = '''
+AUT.mod_credit and (G.STATE ~= G.STATES.SHOP or G.SETTINGS.paused or C3XHELPER.has_value(G.jokers.cards, card))  and ({n=G.UIT.C,  config={align = "cm", r = 0.1, padding = 0.05, emboss = 0.05}, nodes={
+	{n=G.UIT.R, config={align = "cm", colour = lighten(G.C.JOKER_GREY, 0.5), r = 0.1, padding = 0.05, emboss = 0.05}, nodes={
+	{n=G.UIT.R, config={align = "cm", colour = lighten(G.C.GREY, 0.15), r = 0.1, padding=0.2}, nodes={
+	{n=G.UIT.R, config={align = "cm"}, nodes={
+		{n=G.UIT.O, config={object = DynaText({string = localize("c3x_art_by"), colours = {G.C.WHITE}, shadow = true, offset_y = -0.05, silent = true, spacing = 1, scale = 0.33})}},
+		{n=G.UIT.O, config={object = DynaText({string = AUT.mod_credit.art, colours = {SMODS.Gradients.c3x_COLOUR}, float = true, shadow = true, offset_y = -0.05, silent = true, spacing = 1, scale = 0.33})}}}},
+	{n=G.UIT.R, config={align = "cm"}, nodes={
+		{n=G.UIT.O, config={object = DynaText({string = localize("c3x_code_by"), colours = {G.C.WHITE}, shadow = true, offset_y = -0.05, silent = true, spacing = 1, scale = 0.33})}},
+		{n=G.UIT.O, config={object = DynaText({string = AUT.mod_credit.code, colours = {SMODS.Gradients.c3x_COLOUR }, float = true, shadow = true, offset_y = -0.05, silent = true, spacing = 1, scale = 0.33})}}}},
+	{n=G.UIT.R, config={align = "cm"}, nodes={
+		{n=G.UIT.O, config={object = DynaText({string = localize("c3x_concept_by"), colours = {G.C.WHITE}, shadow = true, offset_y = -0.05, silent = true, spacing = 1, scale = 0.33})}},
+		{n=G.UIT.O, config={object = DynaText({string = AUT.mod_credit.concept, colours = {SMODS.Gradients.c3x_COLOUR }, float = true, shadow = true, offset_y = -0.05, silent = true, spacing = 1, scale = 0.33})}}}},
+}}}}}}) or nil
+'''
+match_indent = true
+
+
+# deck credits NEW RUN
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''{n=G.UIT.R, config={align = "cm", colour = G.C.WHITE, minh = 1.7, r = 0.1}, nodes={'''
+position = "before"
+payload = '''
+	c3x_generate_deck_credit_payload(),
+'''
+match_indent = true
+
+# deck credits CONTINUE
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''{n=G.UIT.R, config={align = "cm", colour = G.C.WHITE,padding = 0.03, minh = 1.75, r = 0.1}, nodes={'''
+position = "before"
+payload = '''
+	c3x_generate_deck_credit_payload(),
+'''
+match_indent = true
+
+# deck credits COLLECTION
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''{n=G.UIT.R, config={align = "cm", colour = G.C.WHITE, emboss = 0.1, minh = 2.2, r = 0.1}, nodes={'''
+position = "before"
+payload = '''
+	c3x_generate_deck_credit_payload(),
+'''
+match_indent = true
+
+# revert steamodded patch if credits present
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''        config = (not e.config.ref_table or not e.config.ref_table[1].config.card_pos or e.config.ref_table[1].config.card_pos > G.ROOM.T.w*0.4) and'''
+position = "at"
+payload = '''
+        config = (not e.config.ref_table or not e.config.ref_table[1].config.card_pos or e.config.ref_table[1].config.card_pos > G.ROOM.T.w*0.4 or e.config.ref_table[1].config.credit) and
+'''
+match_indent = true
+
+# ref
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = '''info_boxes = {{n=G.UIT.R, config = {align="cm", padding = 0.05, card_pos = card.T.x }, nodes = info_cols}}'''
+position = "at"
+payload = '''
+info_boxes = {{n=G.UIT.R, config = {align="cm", padding = 0.05, card_pos = card.T.x, credit = AUT.mod_credit and true or nil }, nodes = info_cols}}
+'''
+match_indent = true
+
+# handle steamodded override if credits present
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = '''(self.T.y > G.CARD_H*0.8 and self.T.y < G.CARD_H*1.8) and ((self.T.x > G.ROOM.T.w*0.4) and "cl" or "cr") or'''
+position = "at"
+payload = '''
+not self.config.center.credit and (self.T.y > G.CARD_H*0.8 and self.T.y < G.CARD_H*1.8) and ((self.T.x > G.ROOM.T.w*0.4) and "cl" or "cr") or
+'''
+match_indent = true
+
+# lower
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/overrides.lua"]'''
+pattern = '''(self.T.y < G.CARD_H*0.8) and 'bm' or'''
+position = "at"
+payload = '''
+(self.T.y < G.CARD_H*1.25) and 'bm' or
+'''
+match_indent = true

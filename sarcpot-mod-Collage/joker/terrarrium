@@ -1,0 +1,80 @@
+SMODS.Joker {
+    discovered = false,
+    key = 'terrarrium',
+
+    config = {
+        extra = {
+            unique_consumables = 0,
+            x_mult_mod = 0.5,
+            total_x_mult = 0,
+            consumable_slot = 1
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        if not G.consumeables then
+            return {
+                vars = {card.ability.extra.x_mult_mod, 1 + (card.ability.extra.x_mult_mod * 3),
+                        card.ability.extra.consumable_slot}
+            }
+        end
+        card.ability.extra.unique_consumables = 0
+        local seen_keys = {}
+
+        for _, v1 in pairs(G.consumeables.cards) do
+            local key = v1.config.center.key
+
+            -- Check if the key has been seen before using the hash table
+            if not seen_keys[key] then
+                seen_keys[key] = true
+                card.ability.extra.unique_consumables = card.ability.extra.unique_consumables + 1
+            end
+        end
+        card.ability.extra.total_x_mult = card.ability.extra.unique_consumables * card.ability.extra.x_mult_mod
+
+        return {
+            vars = {card.ability.extra.x_mult_mod, 1 + card.ability.extra.total_x_mult,
+                    card.ability.extra.consumable_slot}
+        }
+    end,
+    rarity = 3,
+    atlas = 'sarcpot_atlas',
+    pos = {
+        x = 3,
+        y = 7
+    },
+    cost = 8,
+    blueprint_compat = true,
+    in_pool = function(self, args)
+        return true
+    end,
+
+    add_to_deck = function(self, card, from_debuff)
+        G.consumeables:change_size(card.ability.extra.consumable_slot)
+    end,
+    calculate = function(self, card, context)
+
+        if context.joker_main then
+            card.ability.extra.unique_consumables = 0
+            local seen_keys = {}
+
+            for _, v1 in pairs(G.consumeables.cards) do
+                local key = v1.config.center.key
+
+                -- Check if the key has been seen before using the hash table
+                if not seen_keys[key] then
+                    seen_keys[key] = true
+                    card.ability.extra.unique_consumables = card.ability.extra.unique_consumables + 1
+                end
+            end
+            card.ability.extra.total_x_mult = card.ability.extra.unique_consumables * card.ability.extra.x_mult_mod
+            return {
+                x_mult = 1 + card.ability.extra.total_x_mult
+            }
+        end
+
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        G.consumeables:change_size(-card.ability.extra.consumable_slot)
+    end
+
+}

@@ -1,0 +1,28 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 10
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if next(find_joker('Smeared Joker')) and (self.base.suit == 'Hearts' or self.base.suit == 'Diamonds') == (suit == 'Hearts' or suit == 'Diamonds') then"
+position = 'before'
+match_indent = true
+payload = '''
+if next(SMODS.find_card('j_sins_carousel')) then
+    if self.base.suit == 'Spades' and (self.base.suit == 'Spades') == (suit == 'Spades' or suit == 'Hearts') then
+        return true
+    end
+    if self.base.suit == 'Hearts' and (self.base.suit == 'Hearts') == (suit == 'Hearts' or suit == 'Clubs') then
+        return true
+    end
+    if self.base.suit == 'Clubs' and (self.base.suit == 'Clubs') == (suit == 'Clubs' or suit == 'Diamonds') then
+        return true
+    end
+    if self.base.suit == 'Diamonds' and (self.base.suit == 'Diamonds') == (suit == 'Diamonds' or suit == 'Spades') then
+        return true
+    end
+end
+'''
+

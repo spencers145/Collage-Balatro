@@ -1,0 +1,37 @@
+
+Hi, I'm ABuffZucchini. I made Greener Jokers. But I didn't do it entirely by myself, in fact, far from it!
+
+
+For credits:
+As this is my first time properly coding anything besides some Unity work, and a bit of Java for school, I got a ton of coding help, namely from sunsetquasar, Vitellary, Aurora Aquir, Somethingcom515, N', and too many other members of the Balatro Discord to count. I also owe a ton to Astra, nh6574, and BakersDozenBagels, as the few Jokers I did manage to get working on the first couple of attempts, were only able to be functional so fast because of the incredible resource that is VanillaRemade. Being able to have this many concepts working smoothly in such little time is a feat I could not have done without all the awesome documentation in the community, or without all the help from my friends.
+
+For the more gameplay-focused stuff, I'd like to thank Bissy, Crispybag, NoahCrawfish, tobyaaa, gooseberry, Worldwaker2, B1ackZer0, Xolimono, Skqw, and the_orang_man. These were the people who playtested my Jokers during development, gave feedback, helped with Joker concepts, did multiplayer games with me, and were also just generally super there and down to yap about Joker ideas/balancing. I'd also like to thank and shout out sunsetquasar here, as I had some practice in Joker design through coming up with some concepts for her mod, Femto Labs Collection! It's super worth a play and has some crazy unique concepts, and it's pretty sick to be able to say a few of them are mine, too. Although a majority of the ideas I had from that era didn't end up used in their current form here, it gave me a lot of realizations about how Balatro handles its Joker designs, and it definitely helped make this mod more awesome.
+
+
+Art-wise, I had some help from a few people, especially towards the end where I got pretty burnt out. These contributions are:
+
+- NoahCrawfish for Tuna, Panic Button, Pinhead, Aw Shucks, Strawberry Jam, Solar Panel, and Comet
+- Worldwaker2 for Dizzy, Coral Reef, Arrow Ace, Volcano, High Striker, Carnival Cannon, My Dog Ate My Deck, and Firewalking Deck
+- gooseberry for Threes McGee
+- Tobyaaa for Cotton Candy
+- DanTKO for The Fountain
+- PPNyan for My Friend Nyan
+- dewdrop for Honeypot
+- the_orang_man for Oil Barrel
+- Crispybag for Grand Canyon
+- GlerG for Hungry Hungry Jimbos
+
+
+
+I also want to thank NoahCrawfish in particular, for being the main person I concepted this mod with. This mod absolutely would not exist without him, and while eventually my Joker ideas turned into insane rambling in my notes app, the original 30 or so jokers, plus a bunch of extra cut ones, were concepted on a doc for both of us, and even art aside Noah's been super helpful for motivation and an awesome guy to chill with. He also did the compatibility with Celeste Card Collection's Climbing Gear and Bulldozer, which is pretty huge
+
+I'd also like to thank a few specific inspirations, for mods which got me infatuated with the potential of the modding community:
+
+- Plantain for being probably the most succinct Balatro mod out there, every Joker fits in beautifully with vanilla in a way that makes adding it pretty much a no-brainer for any kind of run
+- Femto Labs Collection for reasons I mentioned earlier, it's just so awesome and inventive and innovative
+- Cosmos, KCvanilla, Neato Jokers and Extra Credit for having really neat ideas that all expand on the vanilla game in fun ways without going too off the rails
+- Rift Raft because it's sick as hell and it's important in times like these to support my goat Vitellary
+- Celeste Card Collection for being a major inspiration for me, showing the potential of a larger scale Balatro mod that is especially balanced with vanilla in mind, having incredible art, and bringing my fixation from one game to another super smoothly. 
+
+
+I hope you enjoy everything this mod has to offer! Now that an additional 25 Jokers have been added, I'm not sure if I'll be coming back to this for any major content updates, as the last few Jokers were a STRUGGLE to come up with, probably the hardest game design I've ever game designed, but who knows, maybe I'll add a deck or a few more challenges or something. The original 50 took a bit over a month to make, with a few of the joker arts stockpiled from before I was willing to code anything. If you had a good time, feel free to let me know @abuffzucchini on discord. 

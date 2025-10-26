@@ -1,0 +1,112 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "engine/controller.lua"
+pattern = "if  G.OVERLAY_MENU then"
+position = "at"
+payload = '''
+if G.OVERLAY_MENU or (_card and _card.area and _card.area.config and _card.area.config.collection) then
+'''
+match_indent = true
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "engine/controller.lua"
+pattern = '''    if key == "a" and self.held_keys["g"] and not _RELEASE_MODE then'''
+position = "at"
+payload = '''    if key == "a" and self.held_keys["g"] and not _RELEASE_MODE and not G.TMJUI then'''
+match_indent = true
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''if args.key == '[' or args.key == ']' then return end'''
+position = "at"
+payload = ""
+match_indent = true
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''    local lower_ext = '1234567890-=;\',./'
+    local upper_ext = '!@#$%^&*()_+:"<>?'
+    if string.find(lower_ext, args.key) and args.caps then 
+      args.key = string.sub(string.sub(upper_ext,string.find(lower_ext, args.key)), 0, 1)
+    end'''
+position = "at"
+payload = '''    local lower_ext = '1234567890-=;\',./[]'
+    local upper_ext = '!@#$%^&*()_+:"<>?{}'
+        if string.find(lower_ext, args.key, nil, true) and args.caps then 
+          args.key = string.sub(string.sub(upper_ext,string.find(lower_ext, args.key, nil, true)), 0, 1)
+        end'''
+match_indent = true
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "engine/controller.lua"
+pattern = '''if key == "r" and not G.SETTINGS.paused then'''
+position = "at"
+payload = '''if key == "r" and not G.SETTINGS.paused and not G.CONTROLLER.text_input_hook then'''
+match_indent = true
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''    if not G.OVERLAY_MENU and old_center and not next(SMODS.find_card(old_center.key, true)) then'''
+position = "at"
+payload = '''    if not G.OVERLAY_MENU and old_center and old_center.key and not next(SMODS.find_card(old_center.key, true)) then'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''if args.key == '0' then args.key = 'o' end'''
+position = "at"
+payload = '''if args.key == '0' and G.CONTROLLER.text_input_hook.config.ref_table and G.CONTROLLER.text_input_hook.config.ref_table.ref_value == "setup_seed" then args.key = 'o' end'''
+match_indent = true
+overwrite = false
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if self.ability and old_center and old_center.config.bonus then'''
+position = "at"
+payload = '''if self.ability and old_center and old_center.config and old_center.config.bonus then'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "engine/ui.lua"
+pattern = '''    if self.config.colour[4] > 0.01 then'''
+position = "at"
+payload = '''    if self.config.colour and (self.config.colour[4] > 0.01) then'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''                card.T.y = self.T.y + self.T.h/2 - card.T.h/2 - highlight_height+ (G.SETTINGS.reduced_motion and 0 or 1)*0.03*math.sin(0.666*G.TIMERS.REAL+card.T.x)'''
+position = "at"
+payload = '''                card.T.y = self.T.y + self.T.h/2 - card.T.h/2 - highlight_height+ (((self and self.config and self.config.tmj) or G.SETTINGS.reduced_motion) and 0 or 1)*0.03*math.sin(0.666*G.TIMERS.REAL+card.T.x)'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''                card.T.r = 0.1*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)'''
+position = "at"
+payload = '''                card.T.r = 0.1*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (((self and self.config and self.config.tmj) or G.SETTINGS.reduced_motion) and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)'''
+match_indent = true

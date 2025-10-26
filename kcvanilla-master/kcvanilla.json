@@ -1,0 +1,14 @@
+{
+	"id": "kcvanilla",
+	"name": "KCVanilla",
+	"display_name": "KCVanilla",
+	"author": ["krackocloud"],
+	"description": "A small pack of plausible Jokers with a faithful art style. Intended to look and feel as vanilla as possible.",
+	"prefix": "kcvanilla",
+	"main_file": "kcvanilla.lua",
+	"priority": 0,
+	"badge_colour": "77604f",
+	"badge_text_colour": "dbd5ce",
+	"version": "2.4.1",
+	"dependencies": ["Steamodded (>>1.0.0~ALPHA-1304a)"]
+}

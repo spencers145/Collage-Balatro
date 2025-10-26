@@ -1,0 +1,87 @@
+local bearded_joker = {
+    object_type = "Joker",
+    order = 208,
+
+    key = "bearded_joker",
+    config = {
+      extra = {
+        mult = 0,
+        mult_mod = 2,
+      }
+    },
+    rarity = 1,
+    pos = { x = 22, y = 7},
+    atlas = 'joker_atlas',
+    cost = 4,
+    unlocked = true,
+    discovered = false,
+    blueprint_compat = true,
+    eternal_compat = true,
+  
+    loc_vars = function(self, info_queue, card)
+        local enhancement_tally = 0
+        if G.GAME and G.playing_cards then
+            for _, card in ipairs(G.playing_cards) do
+                if card.config.center ~= G.P_CENTERS.c_base then
+                   enhancement_tally = enhancement_tally + 1
+                end
+            end
+        end
+        card.ability.extra.mult = enhancement_tally
+        SMODS.scale_card(card, {
+	        ref_table = card.ability.extra,
+            ref_value = "mult",
+	        scalar_value = "mult_mod",
+            operation = '+',
+            no_message = true,
+        })
+        return {
+            vars = {
+                card.ability.extra.mult_mod,
+                card.ability.extra.mult,
+            }
+        }
+    end,
+  
+    calculate = function(self, card, context)
+        local enhancement_tally = 0
+        if G.GAME and G.playing_cards and not context.blueprint then
+            for _, card in ipairs(G.playing_cards) do
+                if card.config.center ~= G.P_CENTERS.c_base then
+                 enhancement_tally = enhancement_tally + 1
+                end
+            end
+        end
+        card.ability.extra.mult = enhancement_tally
+        SMODS.scale_card(card, {
+	        ref_table = card.ability.extra,
+            ref_value = "mult",
+	        scalar_value = "mult_mod",
+            operation = '+',
+            no_message = true,
+        })
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult,
+                card = card
+            }
+        end
+    end,
+    in_pool = function(self, args)
+        local enhancement_tally = 0
+        if G.GAME and G.playing_cards then
+            for _, card in ipairs(G.playing_cards) do
+                if card.config.center ~= G.P_CENTERS.c_base then
+                    enhancement_tally = enhancement_tally + 1
+                end
+            end
+        end
+        if enhancement_tally > 2 then
+            return true
+        else
+            return false
+        end
+    end,
+  
+}
+return { name = {"Jokers"}, items = {bearded_joker} }

@@ -1,0 +1,13 @@
+{
+	"id": "Handy",
+	"name": "Handy",
+	"display_name": "Handy",
+	"author": ["SleepyG11"],
+	"description": "Quality of Life controls & keybinds",
+	"prefix": "handy",
+	"main_file": "steamodded.lua",
+	"priority": 0,
+	"version": "1.5.1i",
+	"dependencies": [],
+	"allow_redistribution": true
+}

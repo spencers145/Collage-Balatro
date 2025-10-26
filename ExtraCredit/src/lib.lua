@@ -1,0 +1,4 @@
+ExtraCredit = {}
+ExtraCredit.INIT = {
+    Jokers = {}
+}

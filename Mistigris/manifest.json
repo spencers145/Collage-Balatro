@@ -1,0 +1,17 @@
+{
+    "id": "mistigris",
+    "name": "Mistigris",
+    "display_name": "Mistigris",
+    "author": [
+        "astrapboy"
+    ],
+    "description": "A mod that's designed to spice up the gameplay of Balatro, while still feeling balanced enough to not cause too much mayhem!",
+    "prefix": "mstg",
+    "main_file": "main.lua",
+    "priority": 69,
+    "version": "0.4.1",
+    "dependencies": [
+        "Steamodded (>=1.0.0~BETA-0323b)",
+        "Lovely (>=0.7.1)"
+    ]
+}

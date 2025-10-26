@@ -1,0 +1,85 @@
+---- SMODS.Joker {
+----   key = 'breakfast_cereal',
+----   name = 'Breakfast Cereal',
+----   atlas = 'Jokers',
+----   pools = { Food = true },
+----   rarity = 1,
+----   cost = 4,
+----   unlocked = true, 
+----   discovered = true,
+----   blueprint_compat = true,
+----   eternal_compat = true,
+----   perishable_compat = true,
+----   pos = GetJokersAtlasTable('breakfast_cereal'),
+----   config = {
+----     extra = {
+----       poker_hand = 'High Card',
+----       upgrades_left = 4,
+----       repetitions = 1,
+----       money_reward = 15
+----     }
+----   },
+  
+----   loc_vars = function(self, info_queue, card)
+----     return {
+----       vars = {
+----         localize(card.ability.extra.poker_hand, 'poker_hands'),
+----         card.ability.extra.upgrades_left,
+----         card.ability.extra.money_reward
+----       }
+----     } 
+----   end,
+  
+----   calculate = function (self, card, context)
+----     if context.hand_upgrade_repetitions and list_contains(context.hands_upgraded, card.ability.extra.poker_hand) then
+----       if context.blueprint then
+----         if GetJokerPosition(context.blueprint_card) < GetJokerPosition(card) then
+----            card.ability.extra.give_repetitition = (card.ability.extra.upgrades_left > 1)
+----         end
+----       else
+----         card.ability.extra.give_repetitition = false
+----         if card.ability.extra.upgrades_left > 0 then
+----           card.ability.extra.give_repetitition = true
+----           card.ability.extra.upgrades_left = card.ability.extra.upgrades_left - 1
+----         end
+----       end
+
+----       if card.ability.extra.give_repetitition then
+----         local func_eaten = function()
+----           card_eval_status_text(card, 'jokers', nil, nil, nil, { message = localize('k_eaten_ex'), colour = G.C.RED })
+----           G.E_MANAGER:add_event(Event({
+----             func = function()
+----               play_sound('tarot1')
+----               card.T.r = -0.2
+----               card:juice_up(0.3, 0.4)
+----               card.states.drag.is = true
+----               card.children.center.pinch.x = true
+----               G.E_MANAGER:add_event(Event({
+----                 trigger = 'after',
+----                 delay = 0.3,
+----                 blockable = false,
+----                 func = function()
+----                   ease_dollars(card.ability.extra.money_reward)
+----                   card_eval_status_text(card, 'extra', nil, nil, nil, {
+----                     message = localize('$') .. card.ability.extra.money_reward,
+----                     colour = G.C.MONEY,
+----                     no_juice = true
+----                   })
+----                   card:remove()
+----                   return true
+----                 end
+----               }))
+----               return true
+----             end
+----           }))
+----         end
+
+----         return {
+----           hands = { card.ability.extra.poker_hand },
+----           repetitions = card.ability.extra.repetitions,
+----           func = (not context.blueprint and card.ability.extra.upgrades_left <= 0) and func_eaten or nil
+----         }
+----       end
+----     end
+----   end
+---- }

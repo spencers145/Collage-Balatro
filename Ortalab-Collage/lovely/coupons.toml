@@ -1,0 +1,605 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+# Catalog
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''G.GAME.current_round.used_packs = G.GAME.current_round.used_packs or {}'''
+position = 'before'
+match_indent = true
+payload = '''--if i == 1 and G.GAME.modifiers.ortalab_boosters then for _ = 1, G.GAME.modifiers.ortalab_boosters do Ortalab.spawn_booster() end end'''
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.cost > 0 then '''
+position = 'before'
+match_indent = true
+payload = '''
+if self.config.center.ortalab_type == 'ortalab_loteria' then
+    G.GAME.pack_choices = G.GAME.pack_choices + G.GAME.ortalab.vouchers.cantor
+end
+
+'''
+
+# Natal Sign Calculation
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#pattern = '''local nu_chip, nu_mult = G.GAME.selected_back:trigger_effect{context = 'final_scoring_step', chips = hand_chips, mult = mult}'''
+#position = 'before'
+#match_indent = true
+#payload = '''
+#if G.GAME.used_vouchers.v_ortalab_natal_sign then
+#    for _, curr_zod in pairs(G.zodiacs) do
+#        if text == curr_zod.config.extra.hand_type then
+#            for i=1, math.floor(curr_zod.config.extra.temp_level / 4) do
+#                if not Ortalab.config.zodiac_skip then 
+#                    G.E_MANAGER:add_event(Event({
+#                        delay = 2/G.SETTINGS.GAMESPEED,
+#                        trigger = 'after',
+#                        func = (function()
+#                            attention_text({
+#                                text = 'X'..G.GAME.natal_sign_rate,
+#                                colour = G.C.WHITE,
+#                                scale = 1, 
+#                                hold = 2/G.SETTINGS.GAMESPEED,
+#                                cover = curr_zod.HUD_zodiac,
+#                                cover_colour = G.C.RED,
+#                                align = 'cm',
+#                                })
+#                            play_sound('multhit2', 0.7, 0.4)
+#                            return true
+#                        end)
+#                    }))
+#                end
+#                mult = mod_mult(mult*G.GAME.natal_sign_rate)
+#                update_hand_text({delay = 0}, {mult = mult})
+#            end
+#        end
+#    end
+#end
+#'''
+
+# hone/glowup inverse
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+match_indent = true
+position = 'after'
+pattern = '''
+if key ~= 'smods' and type(effect) == 'table' then
+    local calc = SMODS.calculate_effect(effect, effect.scored_card or card, key == 'edition')
+    for k, v in pairs(calc) do ret[k] = type(ret[k]) == 'number' and ret[k] + v or v end
+end
+'''
+payload = '''
+if key == 'edition' and ret.calculated then
+    if type(effect) == 'table' and not effect.swap and effect.card.ability.set == 'Joker' then
+        local edition_reps = {}
+        for _, voucher in pairs(G.vouchers.cards) do
+            if voucher.ability and type(voucher.ability.extra) == 'table' and voucher.ability.extra.edition_reps then
+                for i=1, voucher.ability.extra.edition_reps do
+                    edition_reps[#edition_reps+1] = {message = localize('k_again_ex'), colour = G.C.DARK_EDITION, card = voucher}
+                end
+            end
+        end
+        for _, rep_eff in pairs(edition_reps) do
+            SMODS.calculate_effect(rep_eff, rep_eff.card, key == 'edition')
+            SMODS.calculate_effect(effect, card, key == 'edition')
+        end
+    end
+end
+'''
+
+# Money coupons
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+if G.GAME.modifiers.no_blind_reward and G.GAME.modifiers.no_blind_reward[self:get_type()] then self.dollars = 0 end 
+'''
+payload = '''
+if G.GAME.ortalab.blind_rewards then self.dollars = self.dollars + G.GAME.ortalab.blind_rewards end
+'''
+
+# comment
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+G.GAME.orbital_choices = G.GAME.orbital_choices or {}
+'''
+payload = '''
+local dollars = blind_choice.config.dollars
+if G.GAME.ortalab.blind_rewards then dollars = dollars + G.GAME.ortalab.blind_rewards end
+'''
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+{n=G.UIT.T, config={text = string.rep(localize("$"), blind_choice.config.dollars)..'+', scale = 0.35, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.MONEY, shadow = not disabled}}
+'''
+payload = '''
+{n=G.UIT.T, config={text = dollars < 10 and string.rep(localize("$"), dollars)..'+' or localize("$")..dollars..'+', scale = 0.35, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.MONEY, shadow = not disabled}}
+'''
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+G.GAME.current_round.dollars_to_be_earned = self.dollars > 0 and (string.rep(localize('$'), self.dollars)..'') or ('')
+'''
+payload = '''
+G.GAME.current_round.dollars_to_be_earned = to_big(self.dollars) > to_big(0) and (to_big(self.dollars) < to_big(10) and string.rep(localize('$'), self.dollars)..'' or localize('$')..self.dollars) or ('')
+'''
+
+# UI for rigged game
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
+'''
+payload = '''
+local alt_button
+if type == 'Boss' and G.GAME.ortalab.alt_boss then
+    local alt_blind = G.P_BLINDS[G.GAME.ortalab.alt_boss]
+    local alt_blind_name = localize{type = 'name_text', key = alt_blind.key, set = 'Blind'}
+        local alt_blind_reward = localize("$")..alt_blind.dollars + (G.GAME.ortalab.blind_rewards or 0) .. '+'
+        local alt_blind_score = localize('ortalab_score') .. number_format(get_blind_amount(G.GAME.round_resets.blind_ante) * alt_blind.mult * G.GAME.starting_params.ante_scaling)
+    local alt_blind_col = get_blind_main_colour(G.GAME.ortalab.alt_boss)
+    alt_button = {n=G.UIT.R, config={align = "cm", r = 0.1, outline = 1, outline_colour = alt_blind_col, colour = darken(alt_blind_col, 0.6), maxw = 2.4, emboss = 0.1, padding = 0.07, line_emboss = 0.8, button = 'swap_blind', type = type}, nodes={
+            {n=G.UIT.R, config = {align = 'cm'}, nodes = {
+                    {n=G.UIT.O, config={object = DynaText({string = alt_blind_name, colours = {G.C.UI.TEXT_INACTIVE}, shadow = not disabled, float = false, y_offset = -4, scale = 0.35, maxw =1.6})}},
+                }},
+                {n=G.UIT.R, config={align="cm"}, nodes ={
+                    {n=G.UIT.O, config={object = DynaText({string = alt_blind_score, colours = {mix_colours(G.C.UI.TEXT_INACTIVE, G.C.RED, 0.7)}, shadow = not disabled, float = false, y_offset = -4, scale = 0.25, maxw =1.2})}},
+                    {n=G.UIT.O, config={object = DynaText({string = ' / ', colours = {G.C.UI.TEXT_INACTIVE}, shadow = not disabled, float = false, y_offset = -4, scale = 0.25, maxw =0.6})}},
+                    {n=G.UIT.O, config={object = DynaText({string = alt_blind_reward, colours = {mix_colours(G.C.UI.TEXT_INACTIVE, G.C.GOLD, 0.7)}, shadow = not disabled, float = false, y_offset = -4, scale = 0.25, maxw =1})}},
+                }}
+        }}
+elseif G.GAME.ortalab.double_blind then
+    if type == 'Small' then
+        local alt_small = G.P_BLINDS[G.GAME.ortalab.alt_small]
+        local alt_small_name = localize{type = 'name_text', key = alt_small.key, set = 'Blind'}
+        local alt_small_reward = localize("$")..alt_small.dollars + (G.GAME.ortalab.blind_rewards or 0) .. '+'
+        local alt_small_score = localize('ortalab_score') .. number_format(get_blind_amount(G.GAME.round_resets.blind_ante) * alt_small.mult * G.GAME.starting_params.ante_scaling)
+        local alt_small_col = (G.GAME.round_resets.blind_states[type] == 'Defeated' or G.GAME.round_resets.blind_states[type] == 'Skipped') and G.C.BLACK or get_blind_main_colour(G.GAME.ortalab.alt_small)
+        alt_button = {n=G.UIT.R, config={align = "cm", r = 0.1, outline = 1, outline_colour = alt_small_col, colour = darken(alt_small_col, 0.6), maxw = 2.4, emboss = 0.1, padding = 0.07, line_emboss = 0.8, button = 'swap_blind', type = type}, nodes={
+                {n=G.UIT.R, config = {align = 'cm'}, nodes = {
+                    {n=G.UIT.O, config={object = DynaText({string = alt_small_name, colours = {G.C.UI.TEXT_INACTIVE}, shadow = not disabled, float = false, y_offset = -4, scale = 0.35, maxw =1.6})}},
+                }},
+                {n=G.UIT.R, config={align="cm"}, nodes ={
+                    {n=G.UIT.O, config={object = DynaText({string = alt_small_score, colours = {mix_colours(G.C.UI.TEXT_INACTIVE, G.C.RED, 0.7)}, shadow = not disabled, float = false, y_offset = -4, scale = 0.25, maxw =1.2})}},
+                    {n=G.UIT.O, config={object = DynaText({string = ' / ', colours = {G.C.UI.TEXT_INACTIVE}, shadow = not disabled, float = false, y_offset = -4, scale = 0.25, maxw =0.6})}},
+                    {n=G.UIT.O, config={object = DynaText({string = alt_small_reward, colours = {mix_colours(G.C.UI.TEXT_INACTIVE, G.C.GOLD, 0.7)}, shadow = not disabled, float = false, y_offset = -4, scale = 0.25, maxw =1})}},
+                }}
+            }}
+    elseif type == 'Big' then
+        local alt_small = G.P_BLINDS[G.GAME.ortalab.alt_big]
+        local alt_small_name = localize{type = 'name_text', key = alt_small.key, set = 'Blind'}
+        local alt_small_reward = localize("$")..alt_small.dollars + (G.GAME.ortalab.blind_rewards or 0) .. '+'
+        local alt_small_score = localize('ortalab_score') .. number_format(get_blind_amount(G.GAME.round_resets.blind_ante) * alt_small.mult * G.GAME.starting_params.ante_scaling)
+        local alt_small_col = (G.GAME.round_resets.blind_states[type] == 'Defeated' or G.GAME.round_resets.blind_states[type] == 'Skipped') and G.C.BLACK or get_blind_main_colour(G.GAME.ortalab.alt_big)
+        alt_button = {n=G.UIT.R, config={align = "cm", r = 0.1, outline = 1, outline_colour = alt_small_col, colour = darken(alt_small_col, 0.6), maxw = 2.4, emboss = 0.1, padding = 0.07, line_emboss = 0.8, button = 'swap_blind', type = type}, nodes={
+                {n=G.UIT.R, config = {align = 'cm'}, nodes = {
+                    {n=G.UIT.O, config={object = DynaText({string = alt_small_name, colours = {G.C.UI.TEXT_INACTIVE}, shadow = not disabled, float = false, y_offset = -4, scale = 0.35, maxw =1.6})}},
+                }},
+                {n=G.UIT.R, config={align="cm"}, nodes ={
+                    {n=G.UIT.O, config={object = DynaText({string = alt_small_score, colours = {mix_colours(G.C.UI.TEXT_INACTIVE, G.C.RED, 0.7)}, shadow = not disabled, float = false, y_offset = -4, scale = 0.25, maxw =1.2})}},
+                    {n=G.UIT.O, config={object = DynaText({string = ' / ', colours = {G.C.UI.TEXT_INACTIVE}, shadow = not disabled, float = false, y_offset = -4, scale = 0.25, maxw =0.6})}},
+                    {n=G.UIT.O, config={object = DynaText({string = alt_small_reward, colours = {mix_colours(G.C.UI.TEXT_INACTIVE, G.C.GOLD, 0.7)}, shadow = not disabled, float = false, y_offset = -4, scale = 0.25, maxw =1})}},
+                }}
+            }}
+    end
+end
+
+'''
+# Recolour initial selection
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+G.blind_select_opts.small = G.GAME.round_resets.blind_states['Small'] ~= 'Hide' and UIBox{definition = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={UIBox_dyn_container({create_UIBox_blind_choice('Small')},false,get_blind_main_colour('Small'))}}, config = {align="bmi", offset = {x=0,y=0}}} or nil
+G.blind_select_opts.big = G.GAME.round_resets.blind_states['Big'] ~= 'Hide' and UIBox{definition = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={UIBox_dyn_container({create_UIBox_blind_choice('Big')},false,get_blind_main_colour('Big'))}}, config = {align="bmi", offset = {x=0,y=0}}} or nil
+'''
+payload = '''
+G.blind_select_opts.small = G.GAME.round_resets.blind_states['Small'] ~= 'Hide' and UIBox{definition = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={UIBox_dyn_container({create_UIBox_blind_choice('Small')},false,get_blind_main_colour('Small'), mix_colours(G.C.BLACK, get_blind_main_colour('Small'), 0.8))}}, config = {align="bmi", offset = {x=0,y=0}}} or nil
+G.blind_select_opts.big = G.GAME.round_resets.blind_states['Big'] ~= 'Hide' and UIBox{definition = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={UIBox_dyn_container({create_UIBox_blind_choice('Big')},false,get_blind_main_colour('Big'), mix_colours(G.C.BLACK, get_blind_main_colour('Big'), 0.8))}}, config = {align="bmi", offset = {x=0,y=0}}} or nil
+'''
+
+# Recolour skip area
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+_tag_container.children[2].config.colour = G.C.BLACK
+'''
+payload = '''
+_tag_container.children[2].config.colour = mix_colours(G.C.BLACK, get_blind_main_colour(e.config.id), 0.9)
+'''
+
+# Add button to display
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+{n=G.UIT.R, config={align = "cm", r = 0.1, outline = 1, outline_colour = blind_col, colour = darken(blind_col, 0.3), minw = 2.9, emboss = 0.1, padding = 0.07, line_emboss = 1}, nodes={
+'''
+payload = '''
+alt_button and alt_button or nil,
+'''
+# Reroll extra boss
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+G.GAME.round_resets.blind_choices.Boss = get_new_boss()
+'''
+payload = '''
+if G.GAME.ortalab.alt_boss then G.GAME.ortalab.alt_boss = get_new_boss() end
+'''
+
+# Tags in shop
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+for _, v in ipairs(rates) do
+'''
+payload = '''
+table.insert(rates, { type = 'Tag', val = G.GAME.ortalab.vouchers.tags_in_shop })
+'''
+# Adjust rates
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+local polled_rate = pseudorandom(pseudoseed('cdt'..G.GAME.round_resets.ante))*total_rate
+'''
+payload = '''
+total_rate = total_rate + G.GAME.ortalab.vouchers.tags_in_shop
+'''
+
+# create_card Tag compat
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+center = G.P_CENTERS[center]
+'''
+payload = '''
+if _type == 'Tag' then
+    center = G.P_TAGS[center]
+    center.pixel_size = {w = 32, h = 32}
+else
+    center = G.P_CENTERS[center]
+end
+'''
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+center = G.P_CENTERS[forced_key]
+'''
+payload = '''
+if _type == 'Tag' then
+    center = G.P_TAGS[forced_key]
+    center.pixel_size = {w = 32, h = 32}
+else
+    center = G.P_CENTERS[forced_key]
+end
+'''
+
+# Change sprite
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+if card.ability.consumeable and not skip_materialize then card:start_materialize() end
+'''
+payload = '''
+if _type == 'Tag' then
+    card.tag = Tag(center.key, false, pseudorandom_element({'Small','Big'}, 'tag_in_shop'))
+    card.ability = card.tag.ability
+    card.ability.set = 'Tag'
+    SMODS.merge_defaults(card.config, card.tag.config)
+    card.base_cost = 8
+    card:set_cost()
+    card.children.center = Sprite(0,0,0.8,0.8,G.ASSET_ATLAS[center.atlas or "tags"], center.pos)
+    card.children.center.states.hover = card.states.hover
+    card.children.center.states.click = card.states.click
+    card.children.center.states.drag = card.states.drag
+    card.children.center.states.collide.can = false
+    card.children.center:set_role({major = card, role_type = 'Glued', draw_major = card})
+end
+'''
+# Change buy functionality
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+elseif e.config.id ~= 'buy_and_use' then
+'''
+payload = '''
+elseif c1.tag then
+    add_tag(c1.tag)
+    c1:remove()
+    for i = 1, #G.GAME.tags do
+        G.GAME.tags[i]:apply_to_run({type = 'immediate'})
+    end
+'''
+# Tooltip fix
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+self.ability_UIBox_table = self:generate_UIBox_ability_table()
+'''
+payload = '''
+self.ability_UIBox_table = self.tag and self.tag:get_uibox_table({}).ability_UIBox_table or self:generate_UIBox_ability_table()
+'''
+# Fix Loading
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+self.config.center = G.P_CENTERS[self.config.center_key]
+'''
+payload = '''
+if cardTable.tag then self.config.center = G.P_TAGS[cardTable.tag] end
+'''
+# Fix saving
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+seal = self.seal,
+'''
+payload = '''
+tag = self.tag and self.tag.key,
+'''
+# Sprite initialisation
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+local W = G.CARD_W
+'''
+payload = '''
+if cardTable.tag then
+    H = 0.8
+    W = 0.8
+end
+'''
+
+# Mythos in shop
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+if G.load_shop_booster then 
+'''
+payload = '''
+if G.load_shop_ortalab_mythos then 
+    nosave_shop = true
+    G.shop_ortalab_mythos:load(G.load_shop_ortalab_mythos)
+    for k, v in ipairs(G.shop_ortalab_mythos.cards) do
+        create_shop_card_ui(v)
+        v:start_materialize()
+    end
+    G.load_shop_ortalab_mythos = nil
+elseif G.GAME.ortalab.vouchers.mythos_shop_slot then
+    local mythos_pool = get_current_pool('ortalab_mythos')
+    local selection = pseudorandom_element(mythos_pool, pseudoseed('ortalab_mythos_shop'))
+    while selection == "UNAVAILABLE" do
+        selection = pseudorandom_element(mythos_pool, pseudoseed('ortalab_mythos_shop_re'))
+    end
+    local card = Card(G.shop_ortalab_mythos.T.x + G.shop_ortalab_mythos.T.w/2,
+    G.shop_ortalab_mythos.T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty, G.P_CENTERS[selection], {bypass_discovery_center = true, bypass_discovery_ui = true})
+    create_shop_card_ui(card)
+    card:start_materialize()
+    G.shop_ortalab_mythos:emplace(card)
+end
+'''
+
+# Adjust shop areas
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+G.shop_vouchers = CardArea(
+    G.hand.T.x+0,
+    G.hand.T.y+G.ROOM.T.y + 9,
+    2.1*G.CARD_W,
+    1.05*G.CARD_H, 
+    {card_limit = 1, type = 'shop', highlight_limit = 1})
+
+G.shop_booster = CardArea(
+    G.hand.T.x+0,
+    G.hand.T.y+G.ROOM.T.y + 9,
+    2.4*G.CARD_W,
+    1.15*G.CARD_H, 
+    {card_limit = 2, type = 'shop', highlight_limit = 1, card_w = 1.27*G.CARD_W})
+'''
+payload = '''
+ G.shop_vouchers = CardArea(
+    G.hand.T.x+0,
+    G.hand.T.y+G.ROOM.T.y + 9,
+    G.GAME.ortalab.vouchers.mythos_shop_slot and 1.5*G.CARD_W or 2.1*G.CARD_W,
+    1.05*G.CARD_H, 
+    {card_limit = 1, type = 'shop', highlight_limit = 1})
+
+G.shop_ortalab_mythos = CardArea(
+    G.hand.T.x+0,
+    G.hand.T.y+G.ROOM.T.y + 9,
+    0.85*G.CARD_W,
+    1.05*G.CARD_H, 
+    {card_limit = 1, type = 'shop', highlight_limit = 1})
+
+G.shop_booster = CardArea(
+    G.hand.T.x+0,
+    G.hand.T.y+G.ROOM.T.y + 9,
+    G.GAME.ortalab.vouchers.mythos_shop_slot and 2.0*G.CARD_W or 2.4*G.CARD_W,
+    1.15*G.CARD_H, 
+    {card_limit = 2, type = 'shop', highlight_limit = 1, card_w = 1.22*G.CARD_W})
+'''
+# Add area to shop ui definition
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+{n=G.UIT.C, config={align = "cm", padding = 0.15, r=0.2, colour = G.C.L_BLACK, emboss = 0.05}, nodes={
+    {n=G.UIT.O, config={object = G.shop_booster}},
+}},
+'''
+payload = '''
+G.GAME.ortalab.vouchers.mythos_shop_slot and {n=G.UIT.C, config={align = "cm", padding = 0.15, r=0.2, colour = G.ARGS.LOC_COLOURS.ortalab_mythos_alt, emboss = 0.05}, nodes={
+    {n=G.UIT.C, config={align = "cm", padding = 0.2, r=0.2, colour = darken(G.C.SET.ortalab_mythos, 0.6), maxh = G.shop_ortalab_mythos.T.h+0.4}, nodes={
+        {n=G.UIT.O, config={object = G.shop_ortalab_mythos}},
+    }},
+}} or nil,
+'''
+
+# Statue
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/state_events.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#-- TARGET: adding to hand effects
+#'''
+#payload = '''
+#if next(SMODS.find_card('v_ortalab_statue')) then
+#    table.insert(final_scoring_hand, G.hand.cards[#G.hand.cards])
+#    table.insert(Ortalab.polydactyly.cards, G.hand.cards[#G.hand.cards])
+#    SMODS.calculate_effect({message = localize('ortalab_statue')}, G.vouchers.cards[1])
+#end
+#'''
+
+# Chisel tooltip
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/common_events.lua'
+#match_indent = true
+#position = 'before'
+#pattern = '''
+#if main_end then 
+#'''
+#payload = '''
+#if card and card.ability and card.ability.chiselled then
+#    info_queue[#info_queue+1] = {set = 'Other', key = 'ortalab_chiselled'}
+#end
+#'''
+
+# Free booster
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+local t1 = {
+              n=G.UIT.ROOT, config = {minw = 0.6, align = 'tm', colour = darken(G.C.BLACK, 0.2), shadow = true, r = 0.05, padding = 0.05, minh = 1}, nodes={
+                  {n=G.UIT.R, config={align = "cm", colour = lighten(G.C.BLACK, 0.1), r = 0.1, minw = 1, minh = 0.55, emboss = 0.05, padding = 0.03}, nodes={
+                    {n=G.UIT.O, config={object = DynaText({string = {{prefix = localize('$'), ref_table = card, ref_value = 'cost'}}, colours = {G.C.MONEY},shadow = true, silent = true, bump = true, pop_in = 0, scale = 0.5})}},
+                  }}
+              }}
+'''
+payload = '''
+local free_pack = SMODS.find_card('v_ortalab_anti_inv')
+if card.ability.set == 'Booster' and to_big(card.cost) > to_big(0) and next(free_pack) and free_pack[1].ability.extra.active then
+    t1 = {
+        n=G.UIT.ROOT, config = {minw = 0.6, align = 'tm', colour = darken(G.C.BLACK, 0.2), shadow = true, r = 0.05, padding = 0.05, minh = 1}, nodes={
+            {n=G.UIT.C, config={align = "cm", colour = lighten(G.C.BLACK, 0.1), r = 0.1, minw = 1, minh = 0.55, emboss = 0.05, padding = 0.03}, nodes={
+            {n=G.UIT.R, config={align='cm'}, nodes={
+                {n=G.UIT.O, config={object = DynaText({string = {{string='Free'}}, colours = {G.C.MONEY},shadow = true, silent = true, bump = true, pop_in = 0, scale = 0.5})}},
+            
+                {n=G.UIT.T, config={text = ' (', scale = 0.3, colour = G.C.MONEY}},
+                {n=G.UIT.O, config={object = DynaText({string = {{prefix = localize('$'), ref_table = card, ref_value = 'cost'}}, colours = {G.C.MONEY},shadow = true, silent = true, bump = true, pop_in = 0, scale = 0.3})}},
+                {n=G.UIT.T, config={text = ')', scale = 0.3, colour = G.C.MONEY}},
+            }} 
+            }},
+        }
+    }
+end
+'''
+
+# Position free cost
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+offset = {x=0,y=1.5},
+'''
+payload = '''
+offset = (card.ability.set == 'Booster' and to_big(card.cost) > to_big(0) and next(free_pack) and free_pack[1].ability.extra.active and {x=0,y=3} or {x=0,y=1.5}),
+'''
+
+
+# Can open free packs
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+G.FUNCS.can_open = function(e)'''
+payload = '''
+local free_packs = SMODS.find_card('v_ortalab_anti_inv')
+if (next(free_packs) and free_packs[1].ability.extra.active) then
+    e.config.colour = G.C.GREEN
+    e.config.button = 'use_card'
+    return
+end
+'''

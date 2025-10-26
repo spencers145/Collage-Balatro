@@ -1,0 +1,55 @@
+SMODS.Consumable({
+    key = 'isaac',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = {
+        x = 2,
+        y = 4
+    },
+    discovered = false,
+    config = {
+        rerolls = 3
+    },
+    keep_on_use = function(self, card)
+        return false
+    end,
+    loc_vars = function(self, info_queue)
+        return {self.config.rerolls}
+    end,
+    cost = 3,
+    can_use = function(self, card)
+        return true
+    end,
+    use = function(self, card, area, copier)
+   G.E_MANAGER:add_event(Event({
+    trigger = "after",
+    delay = 0.5,
+    function ()
+         card:juice_up()
+                play_sound('tarot1')
+                SMODS.calculate_effect({
+                    message = localize('sarc_plus_rerolls'),
+                    colour = G.C.GREEN
+                }, card)
+                return true
+    end
+       
+            }))
+        G.E_MANAGER:add_event(Event({
+            trigger = "immediate",
+            blocking = false,
+            function()
+                if not(area==G.shop_jokers or area==G.shop_vouchers) then
+                          return false
+                else
+              
+                    print("True")
+                    G.GAME.current_round.free_rerolls = G.GAME.current_round.free_rerolls + self.config.rerolls
+                    calculate_reroll_cost(true)
+                    return true
+                end
+            end
+        }))
+    end
+})
+

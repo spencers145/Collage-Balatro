@@ -1,0 +1,128 @@
+SMODS.Shader({
+    key = "ultra_killma_cards",
+    path = "ultra_killma_cards.fs"
+})
+
+SMODS.Sound({
+    key = "revolver",
+    path = "revolver.ogg",
+    volume = 0.18
+})
+
+SMODS.Sound({
+    key = "coin",
+    path = "coin.wav",
+    volume = 0.2
+})
+
+SMODS.DrawStep{
+    key   = 'ultrakill_shot',
+    order = 777,
+    func  = function(card, layer)
+        local duration = 12
+        if card.ability and (type(card.ability.extra) == "table") and card.ability.extra and card.ability.extra.shooting then
+            if G.SPEEDFACTOR >= 4 then card.ability.extra.line_progress = card.ability.extra.line_progress + 0.5*G.SPEEDFACTOR
+            else card.ability.extra.line_progress = card.ability.extra.line_progress + 1 end
+            local line = G.SHADERS["sarc_ultra_killma_cards"]
+            line:send("u_startPos", {card.ability.extra.pos1.x, card.ability.extra.pos1.y})
+            line:send("u_endPos", {card.ability.extra.pos2.x, card.ability.extra.pos2.y})
+            line:send("u_thickness", 40 * (love.graphics.getWidth() / 1920))
+            line:send("u_progress", card.ability.extra.line_progress / duration)
+
+            love.graphics.setShader(line)
+            love.graphics.rectangle("fill", -1000, -1000, love.graphics.getWidth()*5, love.graphics.getHeight()*5) -- HUGE MEGA RECTANGLE OF DOOM
+            love.graphics.setShader()
+
+            if card.ability.extra.line_progress >= duration then card.ability.extra.shooting = false end
+        end
+    end
+}
+
+SMODS.Consumable({
+    key = 'ultrakill',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = {
+        x = 1,
+        y = 3
+    },
+    discovered = false,
+    config = {
+        max_highlighted = 1, cards_sealed = 2, extra = { line_progress = 0, shooting = false, pos1 = {x = 0, y = 0}, pos2 = {x = 0, y = 0} }
+    },
+    keep_on_use = function(self, card)
+        return false
+    end,
+    loc_vars = function(self, info_queue)
+         return {
+            vars = {self.config.max_highlighted, self.config.cards_sealed}
+        }
+    end,
+    cost = 3,
+    can_use = function(self, card)
+        return #G.hand.highlighted <= card.ability.max_highlighted and #G.hand.highlighted >= 1
+    end,
+
+    use = function(self, card, area, copier)
+        play_sound('sarc_coin')
+        local removed = {G.hand.highlighted[1]}
+        SMODS.calculate_context({remove_playing_cards = true, removed = removed})
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 1,
+            func = function()
+                card.ability.extra.pos1.x = (card.T.x + G.CARD_W/2 + 1.44) / (22.88) * love.graphics.getWidth()
+                card.ability.extra.pos1.y = (card.T.y + G.CARD_H/2 + 0.66) / (12.82) * love.graphics.getHeight()
+                card.ability.extra.pos2.x = (G.hand.highlighted[1].T.x + G.CARD_W/2 + 1.44) / (22.88) * love.graphics.getWidth()
+                card.ability.extra.pos2.y = (G.hand.highlighted[1].T.y + G.CARD_H/2 + 0.66) / (12.82) * love.graphics.getHeight()
+                card.ability.extra.shooting = true
+                
+                card:shatter()
+                G.hand.highlighted[1]:shatter()
+                play_sound('sarc_revolver')
+               
+                return true
+            end
+        }))
+        
+        
+        --G.E_MANAGER:add_event(Event({
+        --    trigger = 'after',
+        --    delay = 0.11 * G.SPEEDFACTOR,
+        --    func = function()
+        --        play_sound('sarc_coin', 1.1)
+        --        play_sound('sarc_coin_spin', 1.1)
+        --        return true
+        --    end
+        --}))
+        --G.E_MANAGER:add_event(Event({
+        --    trigger = 'after',
+        --    delay = 0.05 * G.SPEEDFACTOR,
+        --    func = function()
+        --        play_sound('sarc_coin', 1.1)
+        --        play_sound('sarc_coin_spin', 1.1)
+        --        return true
+        --    end
+        --}))
+
+        if G.hand.highlighted[1].seal then
+            local seal = G.hand.highlighted[1].seal
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                blockable = true;
+                func = function()
+                    
+                    local targets = SARC.get_rand_hand_index(2, nil, nil, true)
+
+                    for _, v in ipairs(targets) do
+                        G.hand.cards[v]:juice_up(0.4, 1.5)
+                        G.hand.cards[v]:set_seal(seal,true,true)
+                    end
+                    return true
+                end
+            }))
+            
+        end
+    end
+})

@@ -1,0 +1,51 @@
+SMODS.Joker {
+    discovered = false,
+    key = 'sunflower',
+
+    config = {
+        extra = {
+            active = false
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        local status = ""
+        if card.ability.extra.active == true then
+            status = localize('sarc_active')
+        else
+            status = localize('sarc_inactive')
+        end
+        return {
+            vars = {status}
+        }
+    end,
+    rarity = 3,
+    atlas = 'sarcpot_atlas',
+    pos = {
+        x = 3,
+        y = 5
+    },
+    cost = 5,
+    blueprint_compat = true,
+    in_pool = function(self, args)
+        return true
+    end,
+    calculate = function(self, card, context)
+        if context.skip_blind and not context.blueprint and card.ability.extra.active ~= true then
+            card.ability.extra.active = true
+            local eval = function(card)
+                return card.ability.extra.active == true
+            end
+            juice_card_until(card, eval, true)
+            return {
+                message = localize('sarc_active')
+            }
+        end
+        if context.setting_blind and G.GAME.blind.boss and card.ability.extra.active ==true and not G.GAME.blind.disabled then
+            G.GAME.blind:disable()
+            card.ability.extra.active = false
+            return {
+                message = localize('sarc_disabled')
+            }
+        end
+    end
+}

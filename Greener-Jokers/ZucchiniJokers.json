@@ -1,0 +1,13 @@
+{
+    "id": "greener-jokers",
+    "name": "Greener Jokers",
+    "author": ["ABuffZucchini & The Green Crew"],
+    "description": "A collection of Vanilla-focused Jokers, Challenges, and Decks! Special thanks to everyone who helped make this mod possible, a full credits list is located in the credits.txt. If you enjoyed this mod, or found a bug, feel free to let me know @abuffzucchini on Discord!",
+    "prefix": "znm",
+    "main_file": "main.lua",
+    "badge_colour": "5cb890",
+    "dependencies": [
+        "Steamodded (>=1.0.0~BETA-0827a),"
+    ],
+    "version": "1.2.0"
+}

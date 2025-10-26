@@ -1,0 +1,213 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+## Shop Card Area Width
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''add_round_eval_row({dollars = G.GAME.blind.dollars, name='blind1', pitch = pitch})'''
+position = 'after'
+match_indent = true
+payload = '''if G.GAME.modifiers.frozen_deck then
+add_round_eval_row({dollars = G.GAME.blind.dollars, bonus='true', name='joker_frozen_deck', card={config={center={set='Back', key='b_ortalab_frozen'}}, juice_up=function(self) end}, pitch = pitch})
+G.GAME.blind.dollars = G.GAME.blind.dollars * 2
+G.GAME.modifiers.frozen_deck = false end
+'''
+
+# Fix orbital tags
+[[patches]]
+[patches.pattern]
+target = 'tag.lua'
+pattern = '''
+if G.GAME.orbital_choices and G.GAME.orbital_choices[G.GAME.round_resets.ante][self.ability.blind_type] then
+    self.ability.orbital_hand = G.GAME.orbital_choices[G.GAME.round_resets.ante][self.ability.blind_type]       
+end
+'''
+position = 'at'
+match_indent = true
+payload = '''
+if G.GAME.orbital_choices and G.GAME.orbital_choices[G.GAME.round_resets.ante] and G.GAME.orbital_choices[G.GAME.round_resets.ante][self.ability.blind_type] then
+    self.ability.orbital_hand = G.GAME.orbital_choices[G.GAME.round_resets.ante][self.ability.blind_type]       
+else
+    local _poker_hands = {}
+    for k, v in pairs(G.GAME.hands) do
+        if v.visible then _poker_hands[#_poker_hands+1] = k end
+    end
+    G.GAME.orbital_choices[G.GAME.round_resets.ante] = G.GAME.orbital_choices[G.GAME.round_resets.ante] or {}
+    G.GAME.orbital_choices[G.GAME.round_resets.ante][type] = pseudorandom_element(_poker_hands, pseudoseed('orbital'))
+end
+'''
+
+# Experimental display loterias
+#[[patches]]
+#[patches.pattern]
+#target = 'functions/button_callbacks.lua'
+#match_indent = true
+#position = 'after'
+#pattern = '''
+#G.deck:hard_set_T()
+#'''
+#payload = '''
+#delay(0.3)
+#if G.GAME.selected_back.effect.center.key == 'b_ortalab_experimental' and G.GAME.round_resets.blind_states.Boss == 'Defeated' then
+#    G.GAME.selected_back.effect.config.target_loterias = {}
+#    G.GAME.selected_back.effect.config.target_loterias_keys = {}
+#
+#    for i=1, G.GAME.selected_back.effect.config.loterias do
+#        local new_loteria = pseudorandom_element(G.P_CENTER_POOLS.ortalab_loteria, 'ortalab_experimental_deck')
+#        while G.GAME.selected_back.effect.config.target_loterias[new_loteria.key] do
+#            new_loteria = pseudorandom_element(G.P_CENTER_POOLS.ortalab_loteria, 'ortalab_experimental_deck_resample')
+#        end
+#        G.GAME.selected_back.effect.config.target_loterias[new_loteria.key] = true
+#    end
+#    for key, _ in pairs(G.GAME.selected_back.effect.config.target_loterias) do
+#        table.insert(G.GAME.selected_back.effect.config.target_loterias_keys, localize({key = key, set = 'ortalab_loteria', type = 'name_text'}))
+#        G.E_MANAGER:add_event(Event({
+#            trigger = 'after',
+#            delay = 0.7,
+#            func = function()
+#                SMODS.add_card({key = key, area = G.play})
+#                return true
+#            end
+#        }))
+#    end
+#    G.E_MANAGER:add_event(Event({
+#        trigger = 'after',
+#        delay = 0.7,
+#        func = function()
+#            attention_text({
+#                scale = 1, text = 'Use these cards for a bonus!', hold = 4, align = 'cm', offset = {x = 0,y = 2.1},major = G.play
+#            })
+#            return true
+#        end
+#    }))
+#    G.E_MANAGER:add_event(Event({
+#        trigger = 'after',
+#        delay = 5,
+#        func = function()
+#            for _, card in ipairs(G.play.cards) do
+#                card:start_dissolve()
+#            end              
+#            return true
+#        end
+#    }))      
+#end
+#'''
+
+# Back save loteria cards
+#[[patches]]
+#[patches.pattern]
+#target = 'back.lua'
+#match_indent = true
+#position = 'at'
+#pattern = '''
+#effect = self.effect,
+#'''
+#payload = '''
+#effect = recursive_table_cull(self.effect),
+#'''
+
+# Back:load()
+#[[patches]]
+#[patches.pattern]
+#target = 'back.lua'
+#match_indent = true
+#position = 'before'
+#pattern = '''
+#self.effect.center = G.P_CENTERS[backTable.key] or G.P_CENTERS.b_red
+#'''
+#payload = '''
+#self.target_loterias = backTable.target_loterias
+#'''
+
+# Actually load back effects
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+G.GAME.blind:load(saveTable.BLIND)
+'''
+payload = '''
+G.GAME.selected_back:load(saveTable.BACK)
+'''
+
+# No reshuffle mid ante - Restored? Deck
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+G.FUNCS.draw_from_hand_to_discard()
+'''
+payload = '''
+if G.GAME.round_resets.blind_states.Boss ~= 'Current' and G.GAME.ortalab.no_reshuffle then
+    G.FUNCS.draw_from_hand_to_deck()
+else
+    G.FUNCS.draw_from_hand_to_discard()
+end
+'''
+
+# No reshuffle mid ante - Restored? Deck
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+G.FUNCS.draw_from_discard_to_deck()
+'''
+payload = '''
+if G.GAME.round_resets.blind_states.Boss ~= 'Current' and G.GAME.ortalab.no_reshuffle then
+else
+    G.FUNCS.draw_from_discard_to_deck()
+end
+'''
+
+# Neon Deck - cost manipulation
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'after'
+pattern = '''
+self.cost = math.max(1, math.floor((self.base_cost + self.extra_cost + 0.5)*(100-G.GAME.discount_percent)/100))
+'''
+payload = '''
+if G.GAME.modifiers.neon_deck and self.edition then
+    self.cost = math.ceil(self.cost / 2)
+end
+'''
+
+# Prismatic Check
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+match_indent = true
+position = 'before'
+pattern = '''
+return self.base.suit == suit
+'''
+payload = '''
+if Ortalab.suit_smear(self, flush_calc) then
+    return true
+end
+'''
+
+# Challenge Deck Support
+[[patches]]
+[patches.pattern]
+target = 'back.lua'
+match_indent = true
+position = 'at'
+pattern = '''
+name_to_check == 'Challenge Deck' and UIBox_button({button = 'deck_view_challenge', label = {localize(challenge.id, 'challenge_names')},  minw = 2.2, minh = 1, scale = 0.6, id = challenge})
+'''
+payload = '''
+challenge.id and UIBox_button({button = 'deck_view_challenge', label = {localize(challenge.id, 'challenge_names')},  minw = 2.2, minh = 1, scale = 0.6, id = challenge})
+'''
+

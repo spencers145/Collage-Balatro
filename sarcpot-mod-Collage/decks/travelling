@@ -1,0 +1,23 @@
+
+  SMODS.Back {
+    key = 'travelling',
+    atlas = 'decks',
+    pos = { x = 0, y = 0 },
+    config = {
+      consumable_slot = 1,
+      consumables = {'c_sarc_haven'},
+      vouchers = {
+        'v_sarc_compass'
+      },
+    },
+    unlocked = false,
+
+    loc_vars = function(self, info_queue)
+      return {
+        vars = {
+          localize { type = 'name_text', key = 'v_sarc_compass', set = 'Voucher' },
+          self.config.consumable_slot
+        }
+      }
+    end
+  }

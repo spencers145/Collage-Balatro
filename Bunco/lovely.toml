@@ -1,0 +1,3160 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 10
+
+# Exotics toggle
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.hands[text].played = G.GAME.hands[text].played + 1'
+position = 'after'
+match_indent = true
+payload = '''
+
+if string.find(text, "Spectrum") then
+    enable_exotics()
+    unlock_card(G.P_CENTERS.b_bunc_fairy)
+end
+
+'''
+
+# Exotic color, part 1/2
+[[patches]]
+[patches.pattern]
+target = 'globals.lua'
+pattern = "RENTAL = HEX('b18f43'),"
+position = 'after'
+match_indent = true
+payload = '''BUNCO_EXOTIC = HEX('ef9ae7'),'''
+
+# Exotic color, part 2/2
+[[patches]]
+[patches.pattern]
+target = 'functions/misc_functions.lua'
+pattern = "legendary = G.C.RARITY[4],"
+position = 'after'
+match_indent = true
+payload = '''bunco_exotic = G.C.BUNCO_EXOTIC,'''
+
+# Colorful Finishers, part 1/4
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "function ease_background_colour_blind(state, blind_override)"
+position = 'before'
+match_indent = true
+payload = '''
+
+local function invert_color(color, invert_red, invert_green, invert_blue)
+    local inverted_color = {
+    1 - (color[1] or 0),
+    1 - (color[2] or 0),
+    1 - (color[3] or 0),
+    color[4] or 1
+    }
+
+    if invert_red then
+        inverted_color[1] = color[1] or 0
+    end
+    if invert_green then
+        inverted_color[2] = color[2] or 0
+    end
+    if invert_blue then
+        inverted_color[3] = color[3] or 0
+    end
+
+    return inverted_color
+end
+
+local function increase_saturation(color, value)
+    -- Extract RGB components
+    local r = color[1] or 0
+    local g = color[2] or 0
+    local b = color[3] or 0
+
+    -- Convert RGB to HSL
+    local max_val = math.max(r, g, b)
+    local min_val = math.min(r, g, b)
+    local delta = max_val - min_val
+
+    local h, s, l = 0, 0, (max_val + min_val) / 2
+
+    if delta ~= 0 then
+        if l < 0.5 then
+            s = delta / (max_val + min_val)
+        else
+            s = delta / (2 - max_val - min_val)
+        end
+
+        if r == max_val then
+            h = (g - b) / delta
+        elseif g == max_val then
+            h = 2 + (b - r) / delta
+        else
+            h = 4 + (r - g) / delta
+        end
+
+        h = h * 60
+        if h < 0 then
+            h = h + 360
+        end
+    end
+
+    -- Increase saturation
+    s = math.min(s + value, 1)
+
+    -- Convert back to RGB
+    local c = (1 - math.abs(2 * l - 1)) * s
+    local x = c * (1 - math.abs((h / 60) % 2 - 1))
+    local m = l - c / 2
+
+    local r_new, g_new, b_new = 0, 0, 0
+
+    if h < 60 then
+        r_new, g_new, b_new = c, x, 0
+    elseif h < 120 then
+        r_new, g_new, b_new = x, c, 0
+    elseif h < 180 then
+        r_new, g_new, b_new = 0, c, x
+    elseif h < 240 then
+        r_new, g_new, b_new = 0, x, c
+    elseif h < 300 then
+        r_new, g_new, b_new = x, 0, c
+    else
+        r_new, g_new, b_new = c, 0, x
+    end
+
+    -- Adjust RGB values
+    r_new, g_new, b_new = (r_new + m), (g_new + m), (b_new + m)
+
+    return {r_new, g_new, b_new, color[4] or 1}
+end
+
+'''
+
+# Colorful Finishers, part 2/4
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "if v.name == blindname then"
+position = 'after'
+match_indent = true
+payload = '''
+boss_col = v.boss_colour
+'''
+# Colorful Finishers, part 3/4
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "ease_background_colour{new_colour = G.C.BLUE, special_colour = G.C.RED, tertiary_colour = darken(G.C.BLACK, 0.4), contrast = 3}"
+position = 'at'
+match_indent = true
+payload = '''
+
+if BUNCOMOD.content.config.colorful_finishers then
+    ease_background_colour{new_colour = increase_saturation(mix_colours(boss_col, invert_color(boss_col), 0.3), 1),
+    special_colour = boss_col,
+    tertiary_colour = darken(increase_saturation(mix_colours(boss_col, invert_color(boss_col, true, false, false), 0.3), 0.6), 0.4), contrast = 1.7}
+else
+    ease_background_colour{new_colour = G.C.BLUE, special_colour = G.C.RED, tertiary_colour = darken(G.C.BLACK, 0.4), contrast = 3}
+end
+
+'''
+
+# Colorful Finishers, part 4/4
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'elseif G.GAME.won then'
+position = 'at'
+match_indent = true
+payload = '''elseif G.GAME.won and not BUNCOMOD.content.config.colorful_finishers then'''
+
+# Text icons
+[[patches]]
+[patches.pattern]
+target = 'functions/misc_functions.lua'
+pattern = "local desc_scale = *"
+position = 'before'
+match_indent = true
+payload = '''
+
+local function add_symbol(text, symbol)
+    local leading_spaces = string.match(text, "^%s*")
+
+    _, word_amount = text:gsub("%S+","")
+
+    if word_amount == 1 then
+        if #leading_spaces > 0 then
+            return leading_spaces..symbol..string.sub(text, #leading_spaces + 1)
+        else
+            return symbol..text
+        end
+    else
+        return text
+    end
+end
+--[[
+print("parts:")
+print("parts:")
+print("parts:")
+print("parts:")
+print("parts:")
+print("parts:")
+print(inspect(part.strings))
+print(":")
+print(":")
+print(":")
+print("lines:")
+if (lines[1]['strings']) then
+    print(inspect(lines[1]['strings']))
+end]]
+
+local suit_symbols = {
+    Diamonds = '♦',
+    Hearts = '♥',
+    Spades = '♠',
+    Clubs = '♣',
+    bunc_Fleurons = '✤',
+    bunc_Halberds = '✠',
+    paperback_Crowns = '♛',
+    paperback_Stars = '★',
+}
+local found_strings = {}
+
+-- Ordering the symbol insertion so that symbols appear in the order the words appear in the text
+for key, symbol in pairs(suit_symbols) do
+    local result = string.find(assembled_string, localize(key, 'suits_singular')) or string.find(assembled_string, localize(key, 'suits_plural'))
+    if result then
+        table.insert(found_strings, {result, symbol})
+    end
+end
+table.sort(found_strings, function(a, b)
+    return a[1] > b[1]
+end)
+
+for _, v in ipairs(found_strings) do
+    assembled_string = add_symbol(assembled_string, v[2])
+end
+'''
+
+# Luchador Rework 1/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if self.ability.name == 'Luchador' then"
+position = 'at'
+match_indent = true
+payload = '''if self.ability.name == 'Luchador' and not BUNCOMOD.content.config.gameplay_reworks then'''
+
+# Luchador Rework 2/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "elseif self.ability.name == 'Luchador' then"
+position = 'at'
+match_indent = true
+payload = '''elseif self.ability.name == 'Luchador' and not BUNCOMOD.content.config.gameplay_reworks then'''
+
+# Red Card Rework
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if self.ability.name == 'Red Card' and not context.blueprint then"
+position = 'at'
+match_indent = true
+payload = '''if self.ability.name == 'Red Card' and not context.blueprint and not BUNCOMOD.content.config.gameplay_reworks then'''
+
+# Boss Tag Rework
+[[patches]]
+[patches.pattern]
+target = 'tag.lua'
+pattern = "if self.name == 'Boss Tag' then"
+position = 'at'
+match_indent = true
+payload = '''if self.name == 'Boss Tag' and not BUNCOMOD.content.config.gameplay_reworks then'''
+
+# # Shiny Blinds
+# [[patches]]
+# [patches.pattern]
+# target = 'blind.lua'
+# pattern = "self.children.animatedSprite:draw_shader('dissolve', 0.1)"
+# position = 'at'
+# match_indent = true
+# payload = '''
+
+# self.ARGS.send_to_shader = self.ARGS.send_to_shader or {}
+# self.ARGS.send_to_shader[1] = self.children.animatedSprite.VT.r*10 + G.TIMERS.REAL/(28) + (self.children.animatedSprite.juice and self.children.animatedSprite.juice.r*10 or 0) + self.tilt_var.amt
+# self.ARGS.send_to_shader[2] = G.TIMERS.REAL
+# self.children.animatedSprite:draw_shader('polychrome', 0.1, self.ARGS.send_to_shader)
+
+# '''
+# # Shiny Blinds
+# [[patches]]
+# [patches.pattern]
+# target = 'blind.lua'
+# pattern = "self.children.animatedSprite:draw_shader('dissolve')"
+# position = 'at'
+# match_indent = true
+# payload = '''
+
+# self.children.animatedSprite:draw_shader('polychrome', nil, self.ARGS.send_to_shader)
+
+# '''
+
+# # Shiny Blinds
+# [[patches]]
+# [patches.pattern]
+# target = 'functions\UI_definitions.lua'
+# pattern = "{shader = 'dissolve', shadow_height = 0.05}"
+# position = 'at'
+# match_indent = true
+# payload = '''
+# {shader = 'polychrome', shadow_height = 0.05}
+# '''
+
+# function generate_card_ui() (Temporary extra chips)
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if main_end then"
+position = "before"
+match_indent = true
+payload = '''
+if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and type(card.ability) == 'table' and card.ability.temporary_extra_chips and not card.debuff then
+    localize{type = 'other', key = 'bunc_temporary_extra_chips', nodes = desc_nodes, vars = {card.ability.temporary_extra_chips}}
+end'''
+
+## These don't seem to be needed as of SMOD 1413a. Wouldn't be surprised if it changes again.
+
+# # Linked cards drawing 1/4
+# [[patches]]
+# [patches.pattern]
+# target = "game.lua"
+# pattern = "if G.GAME.current_round.hands_played == 0 and"
+# position = "before"
+# match_indent = true
+# payload = '''
+
+# G.E_MANAGER:add_event(Event({func = function()
+
+# '''
+
+# # Linked cards drawing 2/4
+# [[patches]]
+# [patches.regex]
+# target = "game.lua"
+# pattern = '(?<indent>[\t ]*).*drawn_to_hand\(\)\n(.*)return true\n(.*)end\n(.*)\n'
+# position = "after"
+# line_prepend = "$indent"
+# payload = '''
+# return true end}))
+# '''
+
+# Linked cards drawing 3/4
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "G.FUNCS.draw_from_deck_to_hand()"
+position = "after"
+match_indent = true
+payload = '''
+
+-- TODO Add support for modded packs (this hinders the card clicking)
+
+G.DRAWING_CARDS = G.STATE
+
+'''
+
+# Linked cards drawing 4/4
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "G.CONTROLLER:recall_cardarea_focus('pack_cards')"
+position = "after"
+match_indent = true
+payload = '''
+
+G.E_MANAGER:add_event(Event({func = function() G.DRAWING_CARDS = nil return true end}))
+
+'''
+
+# Linked cards drawing fix
+# A fix for ghost cards
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if from then card = from:remove_card(card) end"
+position = "before"
+match_indent = true
+payload = '''
+
+local in_area = false
+for n = 0, #from.cards do
+    if from.cards[n] == card then
+        in_area = true
+        break
+    end
+end
+if not in_area and from == G.deck then
+    return true
+end
+
+'''
+
+# Linked cards can discard
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "if G.GAME.current_round.discards_left <= 0 or #G.hand.highlighted <= 0 or #G.hand.highlighted > math.max(G.GAME.starting_params.discard_limit, 0) then"
+position = "at"
+match_indent = true
+payload = '''if G.GAME.current_round.discards_left <= 0 or #G.hand.highlighted <= 0 or #G.hand.highlighted > math.max(G.GAME.starting_params.discard_limit, 0) or (G.GAME.THE_8_BYPASS and (#G.hand.highlighted > G.GAME.starting_params.discard_limit)) then'''
+
+# Linked cards selection 1/2
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'function CardArea:can_highlight(card)'
+position = 'after'
+match_indent = true
+payload = '''
+
+-- Anything is selectable with The 8 active
+
+if card and self == G.hand and G.GAME and G.GAME.THE_8_BYPASS then
+    return true
+end
+
+-- Making so the player can't choose a group of linked cards if it'd bypass highlighted limit
+
+if card and card.ability.group then
+
+    local group_amount = 0 -- Amount of cards in the same group
+    local highlighted_amount = 0 -- Amount of cards already highlighted
+    local highlighted_group_amount = 0 -- Amount of cards already highlighted in the same group
+
+    for i = 1, #self.cards do
+        if self.cards[i].ability.group and self.cards[i].ability.group.id == card.ability.group.id then
+            if not self.cards[i].highlighted then
+                group_amount = group_amount + 1
+            else
+                highlighted_group_amount = highlighted_group_amount + 1
+            end
+        end
+        if self.cards[i].highlighted then
+            highlighted_amount = highlighted_amount + 1
+        end
+    end
+
+
+    -- If you select a group that has more cards than the game allows
+    if (not card.highlighted) and (group_amount > self.config.highlighted_limit) then
+
+        -- Check if there's already cards selected
+        if highlighted_amount ~= 0 then
+            return false
+        end
+
+        return true
+    end
+
+    -- If you select a normal amount of cards but the amount of cards in the group and already highlighted will bypass the limit
+    if (not card.highlighted) and (self.config.highlighted_limit < (group_amount + highlighted_amount)) then
+        return false
+    end
+
+    -- If you want to unselect cards that already bypassed the limit
+    if card.highlighted then
+        return true
+    end
+end
+
+'''
+
+# Linked cards selection 2/2
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'if #self.highlighted >= self.config.highlighted_limit then'
+position = 'at'
+match_indent = true
+payload = '''if (#self.highlighted >= self.config.highlighted_limit) and (not card.ability.group) and (G.GAME and not G.GAME.THE_8_BYPASS) then'''
+
+# Linked cards destruction 1/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.removed = true'
+position = 'before'
+match_indent = true
+payload = '''
+
+local grouped
+if self.ability.group and (not self.fake_card) and not (self.area and self.area.config and self.area.config.view_deck) then
+    grouped = self
+end
+
+'''
+
+# Linked cards destruction 2/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'Moveable.remove(self)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if grouped and G.playing_cards and #G.playing_cards > 0 then
+
+    local next_card
+    local destroyed_cards = {}
+    for i=1, #G.playing_cards do
+        if G.playing_cards[i].ability.group then
+            if (G.playing_cards[i].ability.group.id == grouped.ability.group.id) and (not G.playing_cards[i].destroyed) and (not G.playing_cards[i].shattered) then
+                table.insert(destroyed_cards, G.playing_cards[i])
+            end
+        end
+    end
+
+    for _, next_card in ipairs(destroyed_cards) do
+
+        if SMODS.has_enhancement(next_card, 'm_glass') then
+            next_card:shatter()
+            next_card.shattered = true
+        else
+            next_card:start_dissolve()
+            next_card.destroyed = true
+        end
+
+        for i = 1, #G.jokers.cards do
+            eval_card(G.jokers.cards[i], {
+                cardarea = G.jokers,
+                remove_playing_cards = true,
+                removed = {next_card}
+            })
+        end
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                next_card:remove()
+            return true end
+        }))
+    end
+end
+
+'''
+
+# Linked cards description
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if main_end then"
+position = "before"
+match_indent = true
+payload = '''
+if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and type(card.ability) == 'table' and card.ability.group then
+    localize{type = 'other', key = card.greyed and 'bunc_drawn_linked_cards' or 'bunc_linked_cards', nodes = desc_nodes, vars = {}}
+    if not (card.area.config.type == 'title' and card.greyed) then
+        main_end = main_end or {}
+        local all_cards_from_group = {}
+        if card and card.area then
+            if card.area.config.type == 'title' then
+                for i = 1, #G.playing_cards do
+                    local check_card = G.playing_cards[i]
+                    if check_card.ability and type(check_card.ability) == 'table' and check_card.ability.group then
+                        if check_card.ability.group.id == card.ability.group.id then
+                            table.insert(all_cards_from_group, check_card)
+                        end
+                    end
+                end
+            else
+                for i = 1, #card.area.cards do
+                    local check_card = card.area.cards[i]
+                    if check_card.ability and type(check_card.ability) == 'table' and check_card.ability.group then
+                        if check_card.ability.group.id == card.ability.group.id then
+                            table.insert(all_cards_from_group, check_card)
+                        end
+                    end
+                end
+            end
+        end
+        local cardarea = CardArea(
+            0,
+            0,
+            2.85 * G.CARD_W,
+            0.75 * G.CARD_H,
+            {card_limit = #all_cards_from_group, type = 'title', highlight_limit = 0}
+        )
+        for k, v in ipairs(all_cards_from_group) do
+            local group_card = copy_card(v, nil, 0.5)
+            group_card.fake_card = true
+            group_card.states.hover.can = false
+            group_card:juice_up(0.3, 0.2)
+            if k == 1 then play_sound('paper1', 0.95 + math.random() * 0.1, 0.3) end
+            ease_value(group_card.T, 'scale', 0.25, nil, 'REAL', true, 0.2)
+            cardarea:emplace(group_card)
+            if (v.facing == 'back') and v.area ~= G.deck then
+                group_card.sprite_facing = 'back'
+            end
+        end
+        table.insert(main_end, {n=G.UIT.R, config = {align = "cm", colour = G.C.CLEAR, r = 0.0}, nodes={
+            {n=G.UIT.C, config = {align = "cm"}, nodes={
+                {n=G.UIT.O, config = {object = cardarea}}
+            }}
+        }})
+        info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
+    end
+end'''
+
+# Linked cards undiscovered sprite
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/card_draw.lua"]'
+pattern = '''local shared_sprite = (self.ability.set == 'Edition' or self.ability.set == 'Joker') and G.shared_undiscovered_joker or G.shared_undiscovered_tarot'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if not G.shared_undiscovered_polymino then G.shared_undiscovered_polymino = Sprite(0, 0, G.CARD_W, G.CARD_H, G.ASSET_ATLAS['bunc_bunco_polyminoes_undiscovered'], {x = 1, y = 0}) end
+
+if self.ability.set == 'Polymino' then
+    shared_sprite = G.shared_undiscovered_polymino
+end
+
+'''
+
+# Can play more than 5 cards with linked cards
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > math.max(G.GAME.starting_params.play_limit, 1) then'
+position = 'at'
+match_indent = true
+payload = '''
+
+local group_size = 0
+
+if G.hand and G.hand.highlighted then
+    for i = 1, #G.hand.highlighted do
+        if G.hand.highlighted[i].ability.group then
+            group_size = group_size + 1
+        end
+    end
+end
+
+if #G.hand.highlighted <= (G.GAME.blind and G.GAME.blind.name == 'cry-Sapphire Stamp' and not G.GAME.blind.disabled and 1 or 0) or G.GAME.blind.block_play or (#G.hand.highlighted > G.GAME.starting_params.play_limit and group_size <= G.GAME.starting_params.play_limit) or (G.GAME.THE_8_BYPASS and (#G.hand.highlighted > G.GAME.starting_params.play_limit)) then
+
+'''
+
+# Virtual pack deck alignment
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = '''if self.children.view_deck then'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if self.config.type == 'hand' and G.hand and G.STATE == G.STATES.SMODS_BOOSTER_OPENED and SMODS.OPENED_BOOSTER.config.center.type == 'bunc_virtual' then
+    G.hand:sort()
+    for i = 1, #G.hand.cards do
+        local card = G.hand.cards[i]
+        card.states.drag.can = false
+
+        local offset_mult = 0.4
+
+        card.T.y = card.T.y - (
+            card.base.suit == 'Spades' and offset_mult * 2
+        or card.base.suit == 'Hearts' and offset_mult * 1
+        or card.base.suit == 'Clubs' and offset_mult * 0
+        or card.base.suit == 'Diamonds' and offset_mult * -1
+        or card.base.suit == 'bunc_Fleurons' and offset_mult * -2
+        or card.base.suit == 'bunc_Halberds' and offset_mult * -3
+        or offset_mult * -4)
+
+        local align_mult = 0.2
+
+        card.T.x = card.T.x - (
+            card.base.suit == 'Spades' and 0.0
+        or card.base.suit == 'Hearts' and align_mult
+        or card.base.suit == 'Clubs' and align_mult * 2
+        or card.base.suit == 'Diamonds' and align_mult * 3
+        or card.base.suit == 'bunc_Fleurons' and align_mult * 4
+        or card.base.suit == 'bunc_Halberds' and align_mult * 5
+        or align_mult * 6)
+
+        card.T.r = card.T.r / 3.0
+        if card.highlighted then
+            card.T.y = card.T.y + 0.5
+            card.greyed = false
+        else
+            card.greyed = true
+        end
+    end
+end
+
+'''
+
+# Linked cards saving (experimental)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''play_sound('card1', 0.85 + percent*0.2/100, 0.6*(vol or 1))'''
+position = 'after'
+match_indent = true
+payload = '''
+
+G.E_MANAGER:add_event(Event({blocking = false, trigger = 'after', func = function()
+    if card and card.ability and card.ability.group then
+        save_run()
+    end
+    return true
+end}))
+
+'''
+
+# function Card:flip() (Cassette)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "self.facing='back'"
+position = 'after'
+match_indent = true
+payload = '''
+
+if self.config.center.key == 'j_bunc_cassette' then
+    self:flip()
+    self:calculate_joker({flip = true})
+end
+
+'''
+
+# function CardArea:emplace() (X-Ray)
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'if #self.cards > self.config.card_limit then'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil and self == G.hand and next(SMODS.find_card('j_bunc_xray')) then
+    SMODS.calculate_context({emplaced_card = card})
+end
+
+'''
+
+# function copy_card (Dread)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'if not strip_edition then'
+position = 'before'
+match_indent = true
+payload = '''
+
+if new_card.config.center.key == 'j_bunc_dread' then
+    new_card.ability.extra.level_up_list = {}
+end
+
+'''
+
+# function Card:set_cost() (Loan Shark)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'if self.area and self.ability.couponed and (self.area == G.shop_jokers or self.area == G.shop_booster) then self.cost = 0 end'
+position = 'after'
+match_indent = true
+payload = '''
+
+if self.config.center.key == 'j_bunc_loan_shark' and self.added_to_deck then
+    self.sell_cost = self.ability.extra.cost + (self.ability.extra_value or 0)
+end
+
+'''
+
+# Joker Knight variables
+[[patches]]
+[patches.pattern]
+target = 'engine/node.lua'
+pattern = 'function Node:drag()'
+position = 'before'
+match_indent = true
+payload = '''
+
+local break_table = {before = nil, after = nil, node = nil}
+
+'''
+
+# function Node:drag() (Joker Knight 1/2)
+[[patches]]
+[patches.pattern]
+target = 'engine/node.lua'
+pattern = 'function Node:drag()'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil and self:is(Card) and self.area == G.jokers then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.config.center.key == 'j_bunc_knight' and not v.debuff then
+            if break_table.before == nil then
+
+                break_table.before = {}
+
+                for _, v in ipairs(G.jokers.cards) do
+                    table.insert(break_table.before, v.ability.name)
+                end
+
+                break_table.after = break_table.before
+                break_table.node = self
+
+            end
+        end
+    end
+end
+
+'''
+
+# function Node:stop_drag() (Joker Knight 2/2)
+[[patches]]
+[patches.pattern]
+target = 'engine/node.lua'
+pattern = 'function Node:stop_drag()'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil and self == break_table.node and next(SMODS.find_card('j_bunc_knight')) then
+    function do_tables_match(a, b)
+        return table.concat(a) == table.concat(b)
+    end
+
+    if break_table.before ~= nil then
+
+        break_table.before = {}
+
+        for _, v in ipairs(G.jokers.cards) do
+            table.insert(break_table.before, v.ability.name)
+        end
+
+        if not do_tables_match(break_table.before, break_table.after) then
+            SMODS.calculate_context({ break_positions = true })
+        end
+
+        break_table.before = nil
+        break_table.after = nil
+
+    end
+end
+
+'''
+
+# function create_card() (JMJB)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'card:set_edition(edition)'
+position = 'before'
+match_indent = true
+payload = '''if card.config.center.key == 'j_bunc_jmjb' then edition = poll_edition(nil, nil, true, true) end'''
+
+# function create_card() (Doorhanger)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'local _pool, _pool_key = get_current_pool(_type, _rarity, legendary, key_append)'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.config.center.key == 'j_bunc_doorhanger' and not v.debuff then
+            if _rarity == nil
+            or ((type(_rarity) == 'number') and (_rarity < 0.9))
+            or ((type(_rarity) == 'string') and (_rarity == 'Common')) then
+
+                _rarity = 0.9
+
+                if pseudorandom('doorhanger'..G.SEED) > 0.98 then
+                    _rarity = 1
+                end
+            end
+        end
+    end
+end
+
+'''
+
+# function Card:set_ability() (Neon Joker)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.config.center = center'
+position = 'after'
+match_indent = true
+payload = '''
+
+if center and (not initial) and (old_center ~= center) and center.set == 'Enhanced' then
+    SMODS.calculate_context({enhance_card = true, enhanced_card = self})
+end
+
+'''
+
+# function CardArea:parse_highlighted (Registration Plate 1/3)
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "update_hand_text({immediate = true, nopulse = nil, delay = 0}, {handname=disp_text, level=G.GAME.hands[text].level, mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})"
+position = 'at'
+match_indent = true
+payload = '''
+if text == 'bunc_Deal' then
+    update_hand_text({immediate = true, nopulse = nil, delay = 0}, {handname=disp_text, level='0', mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})
+else
+    update_hand_text({immediate = true, nopulse = nil, delay = 0}, {handname=disp_text, level=G.GAME.hands[text].level, mult = G.GAME.hands[text].mult, chips = G.GAME.hands[text].chips})
+end
+'''
+
+# function Game:set_globals (Registration Plate 2/3)
+[[patches]]
+[patches.pattern]
+target = 'globals.lua'
+pattern = "G.C.HAND_LEVELS[0] = G.C.RED"
+position = 'at'
+match_indent = true
+payload = '''
+G.C.HAND_LEVELS[0] = G.C.JOKER_GREY
+'''
+
+# function level_up_hand (Registration Plate 3/3)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "function level_up_hand(card, hand, instant, amount)"
+position = 'after'
+match_indent = true
+payload = '''
+local hd = G.GAME.hands[hand]
+local function to_num(x)
+    if type(x) == "table" then
+        return tonumber(x.toNumber and x:toNumber() or tostring(x))
+    end
+    return x
+end
+hd.level   = to_num(hd.level)
+hd.l_mult  = to_num(hd.l_mult)
+hd.mult    = to_num(hd.mult)
+hd.l_chips = to_num(hd.l_chips)
+hd.chips   = to_num(hd.chips)
+
+-- early exit for Deal so we don’t run the rest
+if hand == 'bunc_Deal' then return end
+'''
+
+# Deal hand crash fix for Blue Seal
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "local card = create_card(card_type,G.consumeables, nil, nil, nil, nil, _planet, 'blusl')"
+position = 'before'
+match_indent = true
+payload = '''
+
+if _planet == 0 then
+    _planet = 'c_pluto'
+end
+
+'''
+
+# function level_up_hand (Head in the Clouds)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "function level_up_hand(card, hand, instant, amount)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil and next(SMODS.find_card('j_bunc_head_in_the_clouds')) then
+    if (amount == nil) or not (amount <= 0) then
+        SMODS.calculate_context({level_up_hand = hand})
+    end
+end
+if hand == 'Head in the Clouds' then hand = 'High Card' end -- Prevents Head in the Clouds triggering itself
+
+'''
+
+# function Card:highlight (Trigger Finger)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.highlighted = is_higlighted'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil and next(SMODS.find_card('j_bunc_trigger_finger')) then
+    SMODS.calculate_context({bunc_trigger_finger_highlight_card = true})
+end
+
+'''
+
+# function Card:draw (Vandalism 1/3)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''self.children.center.states.hover = self.states.hover'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if _center.name == 'Vandalism' and (_center.discovered or self.bypass_discovery_center) then
+    self.children.center = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[(G.GAME.viewed_back or G.GAME.selected_back) and ((G.GAME.viewed_back or G.GAME.selected_back)[G.SETTINGS.colourblind_option and 'hc_atlas' or 'lc_atlas'] or (G.GAME.viewed_back or G.GAME.selected_back).atlas) or 'centers'], self.params.bypass_back or (self.playing_card and G.GAME[self.back].pos or G.P_CENTERS['b_red'].pos))
+end
+
+'''
+
+# function Blind:stay_flipped (Vandalism 2/3)
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = '''if self.name == 'The Wheel' and pseudorandom(pseudoseed('wheel')) < G.GAME.probabilities.normal/7 then'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil and next(SMODS.find_card('j_bunc_vandalism')) then
+    local ret = SMODS.calculate_context({stay_flipped = true})
+    if ret.stay_flipped then
+        return true
+    end
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted (Vandalism 3/3)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''--check the hand first'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    SMODS.calculate_context({bunc_play_cards = true})
+end
+
+'''
+
+# G.FUNCS.reroll_shop (Running Joke)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'for i = 1, G.GAME.shop.joker_max - #G.shop_jokers.cards do'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    SMODS.calculate_context({bunc_enter_shop = true})
+end
+
+'''
+
+# G.FUNCS.draw_from_play_to_discard (Cellphone 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "draw_card(G.play,G.discard, it*100/play_count,'down', false, v)"
+position = 'at'
+match_indent = true
+payload = '''
+
+local cards_to_hand = {}
+
+if G.jokers ~= nil then
+    for _, joker in ipairs(G.jokers.cards) do
+        if joker.config.center.key == 'j_bunc_cellphone' and joker.ability.extra.active and not joker.debuff then
+            for __, card in ipairs(joker.ability.extra.cards_to_hand) do
+                table.insert(cards_to_hand, card)
+            end
+            break
+        end
+    end
+end
+
+if cards_to_hand ~= {} then
+    local condition = false
+    for _, card_to_hand in ipairs(cards_to_hand) do
+        if v == card_to_hand then
+            condition = true
+        end
+    end
+    if condition then
+        draw_card(G.play,G.hand, it*100/play_count,'up', true, v)
+    else
+        draw_card(G.play,G.discard, it*100/play_count,'down', false, v)
+    end
+else
+    draw_card(G.play,G.discard, it*100/play_count,'down', false, v)
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Cellphone 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "inc_career_stat('c_hands_played', 1)"
+position = 'after'
+match_indent = true
+payload = '''
+
+SMODS.calculate_context({ bunc_press_play = true })
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Domino 1/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "if c1 and c1:is(Card) then"
+position = 'after'
+match_indent = true
+payload = '''
+
+local pre_cardarea = c1.area
+local pre_card_pos
+local pre_card_left
+local pre_card_right
+
+if c1.area then
+    for i = 1, #c1.area.cards do
+        if c1.area.cards[i] == c1 then
+            pre_card_pos = i
+        end
+    end
+end
+
+if pre_cardarea and pre_cardarea.cards[pre_card_pos - 1] then pre_card_left = pre_cardarea.cards[pre_card_pos - 1] end
+if pre_cardarea and pre_cardarea.cards[pre_card_pos + 1] then pre_card_right = pre_cardarea.cards[pre_card_pos + 1] end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Domino 2/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "if G.GAME.modifiers.inflation then"
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.config.center.key == 'j_bunc_domino' and not v.debuff then
+            v:calculate_joker({buying_card = true,
+            card = c1,
+            pre_cardarea = pre_cardarea,
+            pre_card_pos = pre_card_pos,
+            pre_card_left = pre_card_left,
+            pre_card_right = pre_card_right})
+            break
+        end
+    end
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Domino 3/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "if card:check_use() then"
+position = 'before'
+match_indent = true
+payload = '''
+
+local pre_cardarea = card.area
+local pre_card_pos
+local pre_card_left
+local pre_card_right
+
+if card.area then
+    for i = 1, #card.area.cards do
+        if card.area.cards[i] == card then
+            pre_card_pos = i
+        end
+    end
+end
+
+if pre_cardarea and pre_cardarea.cards[pre_card_pos - 1] then pre_card_left = pre_cardarea.cards[pre_card_pos - 1] end
+if pre_cardarea and pre_cardarea.cards[pre_card_pos + 1] then pre_card_right = pre_cardarea.cards[pre_card_pos + 1] end
+
+local function call_getting_booster_card()
+    G.E_MANAGER:add_event(Event{func = function()
+        if G.jokers ~= nil then
+            for _, v in ipairs(G.jokers.cards) do
+                if v.config.center.key == 'j_bunc_domino' and not v.debuff then
+                    v:calculate_joker({getting_booster_card = true,
+                    card = card,
+                    pre_cardarea = pre_cardarea,
+                    pre_card_pos = pre_card_pos,
+                    pre_card_left = pre_card_left,
+                    pre_card_right = pre_card_right})
+                    break
+                end
+            end
+        end
+        return true
+    end})
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Domino 4/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "card:add_to_deck()"
+position = 'after'
+match_indent = true
+payload = '''
+
+call_getting_booster_card()
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Domino 5/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = "e.config.ref_table:use_consumeable(area)"
+position = 'before'
+match_indent = true
+payload = '''
+
+call_getting_booster_card()
+
+'''
+
+# function CardArea:align_cards() (Taped)
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'if self.children.view_deck then'
+position = 'before'
+match_indent = true
+payload = '''
+
+for k, card in ipairs(self.cards) do
+    if card.config.center.key == 'j_bunc_taped' and (card.config.center.discovered or card.bypass_discovery_center) then
+        if not card.states.drag.is then
+            card.T.x = card.T.x + (0.18 * card.T.w)
+            card.T.y = card.T.y - (0.01 * card.T.h)
+        end
+    end
+end
+
+'''
+
+# Card:click() (Stylophone)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''function Card:click()'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    SMODS.calculate_context({click = true, other_card = self})
+end
+
+'''
+
+# function Card:is_suit (Myopia & Astigmatism)
+[[patches]]
+[patches.regex]
+target = 'card.lua'
+pattern = "(?<indent>[\t ]*)if (?:next\\(find_joker\\('Smeared Joker'\\)\\) and )?SMODS\\.smeared_check\\(self, suit\\) then"
+position = 'before'
+line_prepend = "$indent"
+payload = '''
+if BUNCOMOD.funcs.myopia_check(self, suit) then
+    return true
+end
+if BUNCOMOD.funcs.astigmatism_check(self, suit) then
+    return true
+end
+'''
+
+# Challenge cards unlocking 1/2
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "unlock_achievement('rule_bender')"
+position = 'before'
+match_indent = true
+payload = '''
+
+for i = 1, #G.P_LOCKED do
+    check_for_unlock({type = 'win_challenge'})
+end
+
+'''
+
+# Challenge cards unlocking 2/2
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "if not SMODS.config.seeded_unlocks and (G.GAME.seeded or G.GAME.challenge) then return end"
+position = 'at'
+match_indent = true
+payload = '''if not SMODS.config.seeded_unlocks and (G.GAME.seeded or (G.GAME.challenge and not card.challenge_bypass)) then return end'''
+
+# Deck size unlocking (1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.current_round.discards_left = math.max(0, G.GAME.round_resets.discards + G.GAME.round_bonus.discards)'
+position = 'before'
+match_indent = true
+payload = '''
+
+local deck_size = 0
+
+G.GAME.last_deck_size = G.GAME.last_deck_size
+
+for k, v in pairs(G.playing_cards) do
+    deck_size = deck_size + 1
+end
+
+if G.GAME.last_deck_size ~= deck_size then
+    local difference = deck_size - G.GAME.last_deck_size
+
+    check_for_unlock({type = 'round_deck_size', round_deck_size_diff = difference})
+end
+
+G.GAME.last_deck_size = deck_size
+
+'''
+
+# Deck size unlocking (2/2)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'self.HUD:recalculate()'
+position = 'after'
+match_indent = true
+payload = '''
+
+local deck_size = 0
+
+for k, v in pairs(G.playing_cards) do
+    deck_size = deck_size + 1
+end
+
+G.GAME.last_deck_size = deck_size
+
+'''
+
+# Money spending unlocking (2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.current_round.discards_left = math.max(0, G.GAME.round_resets.discards + G.GAME.round_bonus.discards)'
+position = 'before'
+match_indent = true
+payload = '''G.GAME.bunc_money_spend_this_round = 0'''
+
+# Blind defeat unlocking
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''check_for_unlock({type = 'round_win'})'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if not G.GAME.blind.disabled then
+    check_for_unlock({type = 'defeat_blind', blind = G.GAME.blind})
+end
+
+'''
+
+# Booster pack unlocking - Per profile
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.set == "Booster" then'''
+position = 'after'
+match_indent = true
+payload = '''
+
+    G.PROFILES[G.SETTINGS.profile].booster_packs_opened = (G.PROFILES[G.SETTINGS.profile].booster_packs_opened or 0) + 1
+    check_for_unlock({type = 'open_pack', packs_total = G.PROFILES[G.SETTINGS.profile].booster_packs_opened})
+
+'''
+
+# Booster pack unlocking - Per game (1/2)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'hands_played = 0,'
+position = 'after'
+match_indent = true
+payload = '''booster_packs_opened = 0,'''
+
+# Booster pack unlocking - Per game (2/2)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.set == "Booster" then'''
+position = 'after'
+match_indent = true
+payload = '''
+
+    G.GAME.booster_packs_opened = G.GAME.booster_packs_opened + 1
+
+'''
+
+# Ante down unlocking
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'G.GAME.round_resets.ante = G.GAME.round_resets.ante + mod'
+position = 'after'
+match_indent = true
+payload = '''
+
+if to_big(mod) < to_big(0) then
+    check_for_unlock({type = 'ante_down', ante = G.GAME.round_resets.ante})
+end
+
+'''
+
+# Common Joker count unlocking (1/2)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'max_jokers = 0,'
+position = 'after'
+match_indent = true
+payload = '''max_common_jokers = 0,'''
+
+# Common Joker count unlocking (2/2)
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'if joker_tally > G.GAME.max_jokers then G.GAME.max_jokers = joker_tally end'
+position = 'after'
+match_indent = true
+payload = '''
+
+G.GAME.max_common_jokers = G.GAME.max_common_jokers or 0
+local common_joker_tally = 0
+for i = 1, #G.jokers.cards do
+    if G.jokers.cards[i].ability.set == 'Joker' and G.jokers.cards[i].config.center.rarity == 1 then common_joker_tally = common_joker_tally + 1 end
+end
+if not G.GAME.max_common_jokers or common_joker_tally > G.GAME.max_common_jokers then G.GAME.max_common_jokers = common_joker_tally end
+
+'''
+
+# Consumables with edition unlocking
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'local used_tarot = copier or self'
+position = 'after'
+match_indent = true
+payload = '''
+
+if used_tarot.edition then
+    G.PROFILES[G.SETTINGS.profile].consumables_with_edition_used = (G.PROFILES[G.SETTINGS.profile].consumables_with_edition_used or 0) + 1
+    if G.PROFILES[G.SETTINGS.profile].consumables_with_edition_used then
+        check_for_unlock({type = 'use_consumable_with_edition', used_total = G.PROFILES[G.SETTINGS.profile].consumables_with_edition_used})
+    end
+end
+
+'''
+
+# Flipped cards in hand unlocking
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''--check the hand first'''
+position = 'after'
+match_indent = true
+payload = '''
+
+local unlock_all_flipped = true
+
+for i = 1, #G.hand.highlighted do
+    if G.hand.highlighted[i].facing ~= 'back' then
+        unlock_all_flipped = false
+    end
+end
+
+if (not G.hand.highlighted) or (#G.hand.highlighted == 0) then unlock_all_flipped = false end
+
+if unlock_all_flipped and #G.hand.highlighted >= 5 then
+    check_for_unlock({type = 'play_all_flipped'})
+end
+
+'''
+
+# Enhancement usage detection unlocking (1/2)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'bosses_used = bosses_used,'
+position = 'after'
+match_indent = true
+payload = '''enhancements_used = false,'''
+
+# Enhancement usage detection unlocking (2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''if args.type == 'modify_deck' then'''
+position = 'after'
+match_indent = true
+payload = '''
+
+local enhancement_count = 0
+for _, v in pairs(G.playing_cards) do
+    if v.config.center ~= G.P_CENTERS.c_base then G.GAME.enhancements_used = true break end
+end
+
+'''
+
+# Total skips unlocking
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'G.GAME.skips = (G.GAME.skips or 0) + 1'
+position = 'after'
+match_indent = true
+payload = '''
+
+G.PROFILES[G.SETTINGS.profile].skips_total = (G.PROFILES[G.SETTINGS.profile].skips_total or 0) + 1
+if G.PROFILES[G.SETTINGS.profile].skips_total then
+    check_for_unlock({type = 'blind_skipped', skips_total = G.PROFILES[G.SETTINGS.profile].skips_total})
+end
+
+'''
+
+# G.FUNCS.discard_cards_from_highlighted() (The Paling 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'for i=1, highlighted_count do'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_paling' and not G.GAME.blind.disabled then
+    for i=1, highlighted_count do
+        G.E_MANAGER:add_event(Event({func = function()
+            if G.hand.highlighted[i] and not G.hand.highlighted[i].removed then
+                G.hand.highlighted[i]:juice_up()
+            end
+        return true end }))
+        ease_dollars(-1)
+        delay(0.23)
+    end
+end
+
+'''
+
+# G.FUNCS.discard_cards_from_highlighted() (The Paling 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.FUNCS.discard_cards_from_highlighted = function(e, hook)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_paling' and not G.GAME.blind.disabled then
+    G.GAME.blind:wiggle()
+    delay(0.7)
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (The Umbrella)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "inc_career_stat('c_hands_played', 1)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_umbrella' and not G.GAME.blind.disabled then
+    G.E_MANAGER:add_event(Event({func = function()
+
+        for k, v in ipairs(G.hand.cards) do
+            if v.facing == 'front' and not v.highlighted then
+                v:flip()
+            end
+        end
+
+        G.GAME.blind:wiggle()
+        G.GAME.blind.triggered = true
+
+    return true end }))
+end
+
+'''
+
+# The Tine 1/3
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "highlight_card(scoring_hand[i],(i-0.999)/5,'up')"
+position = 'after'
+match_indent = true
+payload = '''
+
+local played_rank = scoring_hand[i].base.value
+
+if G.GAME.played_ranks == nil then G.GAME.played_ranks = {} end
+
+if G.GAME.played_ranks[played_rank] then
+    G.GAME.played_ranks[played_rank] = G.GAME.played_ranks[played_rank] + 1
+else
+    G.GAME.played_ranks[played_rank] = 1
+end
+
+'''
+
+# function end_round() (The Tine 2/3)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.GAME.current_round.most_played_poker_hand = _handname"
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.GAME.played_ranks ~= nil then
+    local max_rank = nil
+    local max_count = -1
+
+    for _, rank in ipairs(SMODS.Rank.obj_buffer) do
+        count = G.GAME.played_ranks[rank] or 0
+        -- tiebreak with highest rank
+        if count >= max_count then
+            max_count = count
+            max_rank = rank
+        end
+    end
+
+    G.GAME.current_round.most_played_rank = max_rank
+end
+
+
+'''
+
+# The Tine 3/3
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = "most_played_poker_hand = 'High Card',"
+position = 'after'
+match_indent = true
+payload = '''
+most_played_rank = '2','''
+
+# G.FUNCS.discard_cards_from_highlighted() (The Swing 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.current_round.discards_used = G.GAME.current_round.discards_used + 1'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_swing' and not G.GAME.blind.disabled then
+    G.E_MANAGER:add_event(Event({ func = function()
+        for k, v in ipairs(G.hand.cards) do
+            v:flip()
+        end
+
+        G.GAME.blind:wiggle()
+        G.GAME.blind.triggered = true
+
+        if G.GAME.Swing == true then
+            G.GAME.Swing = false
+        else
+            G.GAME.Swing = true
+        end
+    return true end }))
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (The Swing 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "inc_career_stat('c_hands_played', 1)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_swing' and not G.GAME.blind.disabled then
+    G.E_MANAGER:add_event(Event({ func = function()
+        for k, v in ipairs(G.hand.cards) do
+            if not (v.area == G.hand and v.highlighted and v.facing == 'front') then
+                v:flip()
+            end
+        end
+
+        G.GAME.blind:wiggle()
+        G.GAME.blind.triggered = true
+
+        if G.GAME.Swing == true then
+            G.GAME.Swing = false
+        else
+            G.GAME.Swing = true
+        end
+    return true end }))
+end
+
+'''
+
+# G.FUNCS.cash_out (The Miser)
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'G.STATE = G.STATES.SHOP'
+position = 'at'
+match_indent = true
+payload = '''
+
+if G.GAME.Miser then
+    G.STATE = G.STATES.BLIND_SELECT
+    G.GAME.Miser = false
+else
+    G.STATE = G.STATES.SHOP
+end
+
+'''
+
+# function Card:highlight (The Gate 1/2)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.highlighted = is_higlighted'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_gate' and not G.GAME.blind.disabled and is_higlighted and self.area == G.hand then
+    self.ability.forced_selection = true
+end
+
+'''
+
+# function CardArea:remove_from_highlighted (The Gate 2/2)
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = 'function CardArea:remove_from_highlighted(card, force)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_gate' and not force and card.area == G.hand then
+    if G.GAME.blind.disabled then
+        card.ability.forced_selection = false
+    elseif not G.GAME.blind.disabled and card.ability.forced_selection == true then
+        G.GAME.blind:wiggle()
+    end
+end
+
+'''
+
+# function end_round() (The Mask 1/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.GAME.current_round.most_played_poker_hand = _handname"
+position = 'before'
+match_indent = true
+payload = '''
+
+local lowestValue = math.huge
+local leastPlayedHand = ''
+
+for i = #G.handlist, 1, -1 do
+    local v = G.handlist[i]
+    local playedCount = G.GAME.hands and G.GAME.hands[v] and G.GAME.hands[v].played or 0
+    if (playedCount < lowestValue) and G.GAME.hands[v].visible then
+        lowestValue = G.GAME.hands[v].visible and playedCount or lowestValue
+        leastPlayedHand = G.GAME.hands[v].visible and v or leastPlayedHand
+    end
+end
+
+G.GAME.current_round.least_played_poker_hand = leastPlayedHand
+
+'''
+
+# The Mask 2/2
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = "most_played_poker_hand = 'High Card',"
+position = 'after'
+match_indent = true
+payload = '''
+least_played_poker_hand = 'High Card','''
+
+# The Blade
+# Patch should work with talisman
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "check_and_set_high_score('hand', hand_chips*mult)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_blade' and not G.GAME.blind.disabled then
+
+    local overscore = G.GAME.blind.chips * 1.5
+
+    if type(hand_chips) == 'table' then overscore = to_big(overscore) end
+
+    if (overscore < math.floor(hand_chips*mult) + G.GAME.chips) then
+
+        mult = mod_mult(0)
+        hand_chips = mod_chips(0)
+
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            func = (function()
+                G.GAME.blind:disable()
+                return true
+            end)
+        }))
+
+        local blade_message = G.localization.misc.dictionary.bunc_exceeded_score
+        play_area_status_text(blade_message)
+
+    end
+end
+
+'''
+
+# G.FUNCS.discard_cards_from_highlighted (The Claw)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])"
+position = 'at'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_claw' and not G.GAME.blind.disabled then
+    draw_card(G.hand, G.deck, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])
+    G.deck:shuffle('claw'..G.GAME.round_resets.ante)
+else
+    draw_card(G.hand, G.discard, i*100/highlighted_count, 'down', false, G.hand.highlighted[i])
+end
+
+'''
+
+# function Card:highlight (The Veil)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.highlighted = is_higlighted'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_veil' and not G.GAME.blind.disabled and is_higlighted and self.area == G.hand then
+
+    if self.ability.group then
+        for _, group_card in ipairs(G.hand.cards) do
+            if group_card.ability and group_card.ability.group and group_card.ability.group.id == self.ability.group.id then
+                if group_card ~= self and group_card.facing == 'front' then
+                    group_card:flip()
+                end
+            end
+        end
+    end
+
+    if self.facing == 'front' then
+        self:flip()
+        G.GAME.blind:wiggle()
+    end
+end
+
+'''
+
+# function get_new_boss() (Vermilion Trident 2/2)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'function Game:update(dt)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.round_resets.blind_choices and G.GAME.round_resets.blind_choices.Boss and G.GAME.round_resets.blind_choices.Boss == 'bl_bunc_final_trident' then
+    G.GAME.Trident = true
+else
+    G.GAME.Trident = false
+    G.GAME.ante_purchases = 0
+end
+
+'''
+
+# G.FUNCS.discard_cards_from_highlighted (Magenta Dagger 1/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.FUNCS.discard_cards_from_highlighted = function(e, hook)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_final_dagger' and not G.GAME.blind.disabled then
+    G.GAME.blind:wiggle()
+    G.GAME.blind.antiscore = true
+    G.FUNCS.play_cards_from_highlighted()
+    return
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 2/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "ease_hands_played(-1)"
+position = 'at'
+match_indent = true
+payload = '''
+
+local function calculate_discard()
+    for i = 1, #G.hand.cards do
+        eval_card(G.hand.cards[i], {pre_discard = true, full_hand = G.hand.highlighted, hook = hook})
+    end
+    for j = 1, #G.jokers.cards do
+        G.jokers.cards[j]:calculate_joker({pre_discard = true, full_hand = G.hand.highlighted, hook = hook})
+    end
+end
+
+if not G.GAME.ignore_hand_played then
+    if G.GAME.blind.antiscore then
+        ease_discard(-1)
+        calculate_discard()
+    else
+        ease_hands_played(-1)
+    end
+else
+    G.GAME.ignore_hand_played = nil
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted (Magenta Dagger 3/5)
+# Wildcard for talisman compat
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.FUNCS.evaluate_play(*"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.blind.antiscore then
+    G.GAME.blind.antiscore = false
+end
+
+'''
+
+# # G.FUNCS.play_cards_from_highlighted (Magenta Dagger 4/5)
+# # Will fail with talisman installed
+# [[patches]]
+# [patches.pattern]
+# target = 'functions/state_events.lua'
+# pattern = "G.FUNCS.evaluate_play = function(e)"
+# position = 'after'
+# match_indent = true
+# payload = '''
+
+# local antiscore = G.GAME.blind.antiscore
+
+# '''
+
+# function update_hand_text (Magenta Dagger 5/5)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "ease_to = G.GAME.chips + math.floor(hand_chips*mult),"
+position = 'at'
+match_indent = true
+payload = '''ease_to = G.GAME.chips + math.floor(hand_chips * mult) * (G.GAME.blind.antiscore and -1 or 1),'''
+
+# # function get_new_boss() (Turquoise Shield 1/2)
+# [[patches]]
+# [patches.pattern]
+# target = 'game.lua'
+# pattern = 'function Game:update(dt)'
+# position = 'after'
+# match_indent = true
+# payload = '''
+
+# if G.GAME.round_resets.blind_choices and G.GAME.round_resets.blind_choices.Boss and G.GAME.round_resets.blind_choices.Boss == 'bl_bunc_final_shield' then
+#     G.GAME.Shield = true
+# else
+#     G.GAME.Shield = false
+# end
+
+# '''
+
+# function end_round() (Turquoise Shield 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "function end_round()"
+position = 'after'
+match_indent = true
+payload = '''
+if G.GAME.blind:get_type() == 'Boss' then
+    G.GAME.overscore = 0
+else
+    if type(G.GAME.chips) ~= 'table' then
+        if G.GAME.chips - G.GAME.blind.chips >= 0 then
+            G.GAME.overscore = (G.GAME.overscore or 0) + G.GAME.chips - G.GAME.blind.chips
+        end
+    else
+        if G.GAME.chips - G.GAME.blind.chips >= to_big(0) then
+            G.GAME.overscore = (G.GAME.overscore or 0) + G.GAME.chips - G.GAME.blind.chips
+        end
+    end
+end
+'''
+
+# Insta-yep for tags, delayless yep
+[[patches]]
+[patches.pattern]
+target = 'tag.lua'
+pattern = 'function Tag:yep(message, _colour, func)'
+position = 'before'
+match_indent = true
+payload = '''
+
+function Tag:instayep(message, _colour, func, delay)
+    stop_use()
+    if delay then
+        G.E_MANAGER:add_event(Event({
+        delay = delay,
+        trigger = 'after',
+        func = (function()
+            attention_text({
+                text = message,
+                colour = G.C.WHITE,
+                scale = 1, 
+                hold = 0.3/G.SETTINGS.GAMESPEED,
+                cover = self.HUD_tag,
+                cover_colour = _colour or G.C.GREEN,
+                align = 'cm',
+                })
+            play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+            play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+            return true
+        end)
+        }))
+        G.E_MANAGER:add_event(Event({
+            func = (function()
+                self.HUD_tag.states.visible = false
+                return true
+            end)
+        }))
+        G.E_MANAGER:add_event(Event({
+            func = func
+        }))
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.7,
+            func = (function()
+                self:remove()
+                return true
+            end)
+        }))
+    else
+        attention_text({
+            text = message,
+            colour = G.C.WHITE,
+            scale = 1,
+            hold = 0.3/G.SETTINGS.GAMESPEED,
+            cover = self.HUD_tag,
+            cover_colour = _colour or G.C.GREEN,
+            align = 'cm',
+            })
+        play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+        play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+
+        G.E_MANAGER:add_event(Event({
+            blockable = false,
+            blocking = false,
+            trigger = 'after',
+            func = (function()
+                self.HUD_tag.states.visible = false
+                return true
+            end)
+        }))
+        G.E_MANAGER:add_event(Event({
+            blockable = false,
+            blocking = false,
+            func = func
+        }))
+        G.E_MANAGER:add_event(Event({
+            blockable = false,
+            blocking = false,
+            trigger = 'after',
+            delay = 0.7,
+            func = (function()
+                self:remove()
+                return true
+            end)
+        }))
+    end
+end
+
+'''
+
+# Edition tags 1/4
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'local modded = false'
+position = 'before'
+match_indent = true
+payload = '''
+
+for i = 1, #G.GAME.tags do
+    G.GAME.tags[i]:apply_to_run({type = 'hand_played', before = true})
+end
+
+'''
+
+# Edition tags 2/4
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "local nu_chip, nu_mult = G.GAME.selected_back:trigger_effect{context = 'final_scoring_step'*"
+position = 'before'
+match_indent = true
+payload = '''
+
+for i = 1, #G.GAME.tags do
+    G.GAME.tags[i]:apply_to_run({type = 'hand_played', after = true})
+end
+
+'''
+
+# function Card:use_consumeable() Edition tags 3/4
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'local used_tarot = copier or self'
+position = 'after'
+match_indent = true
+payload = '''
+
+if used_tarot.edition then
+    if used_tarot.edition.foil then
+        add_tag(Tag('tag_bunc_chips'))
+        play_sound('generic1')
+    elseif used_tarot.edition.holo then
+        add_tag(Tag('tag_bunc_mult'))
+        play_sound('generic1')
+    elseif used_tarot.edition.polychrome then
+        add_tag(Tag('tag_bunc_xmult'))
+        play_sound('generic1')
+    elseif used_tarot.edition.bunc_glitter then
+        add_tag(Tag('tag_bunc_xchips'))
+        play_sound('generic1')
+    elseif used_tarot.edition.bunc_fluorescent then
+        ease_dollars(2)
+    elseif used_tarot.edition.ortalab_anaglyphic then
+        add_tag(Tag('tag_bunc_chips'))
+        add_tag(Tag('tag_bunc_mult'))
+        play_sound('generic1')
+    end
+end
+
+'''
+
+# Edition tags 4/4
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = "function Card:calculate_edition(context)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if not (BUNCOMOD and BUNCOMOD.vars and BUNCOMOD.vars.jokerlike_consumable_editions) and self.config.center.consumeable then
+    return
+end
+
+'''
+
+# Editions in boosters 1/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'local card = nil'
+position = 'after'
+match_indent = true
+payload = '''
+
+consumable_edition = {rate = G.GAME.used_vouchers['v_bunc_lamination'] and 5 or 0, forced = G.GAME.used_vouchers['v_bunc_supercoating']}
+
+'''
+
+# Editions in boosters 2/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''card:start_materialize({G.C.WHITE, G.C.WHITE}, nil, 1.5*G.SETTINGS.GAMESPEED)'''
+position = 'before'
+match_indent = true
+payload = '''
+
+local edition = poll_edition('standard_edition'..G.GAME.round_resets.ante, consumable_edition.rate or 0, true, consumable_edition.forced or false,
+{'e_holo', 'e_foil', 'e_polychrome', 'e_bunc_glitter', 'e_ortalab_anaglyphic', 'e_paperback_dichrome', 'e_bunc_fluorescent'})
+if not card.edition and edition ~= 'e_paperback_dichrome' or consumable_edition.forced or pseudorandom(pseudoseed('dichrome_consumable_allowed'..G.GAME.round_resets.ante)) > 0.75 then
+    for _, card_type in ipairs(SMODS.ConsumableType.ctype_buffer) do
+        if card.ability.set == card_type then
+            card:set_edition(edition)
+            break
+        end
+    end
+end
+
+'''
+
+# Info queue for consumables 1/2
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "local t = {key = 'e_'..v, set = 'Edition', config = {}}"
+position = 'before'
+match_indent = true
+payload = '''
+if _c.consumeable and (v == 'foil' or v == 'holo' or v == 'polychrome' or v == 'bunc_glitter' or v == 'ortalab_anaglyphic' or v == 'bunc_fluorescent') then
+    info_queue[#info_queue + 1] = G.P_CENTERS['bunc_consumable_edition_'..v]
+    if v ~= 'bunc_fluorescent' then
+        info_queue[#info_queue + 1] = {
+            key = (v == 'foil') and 'tag_bunc_chips'
+                or (v == 'holo') and 'tag_bunc_mult'
+                or (v == 'polychrome' or v == 'ortalab_anaglyphic') and 'tag_bunc_xmult'
+                or (v == 'bunc_glitter') and 'tag_bunc_xchips',
+            set = 'Tag',
+            specific_vars = (v == 'foil') and {G.P_CENTERS.e_foil.config.extra}
+                or (v == 'holo') and {G.P_CENTERS.e_holo.config.extra}
+                or (v == 'polychrome' or v == 'ortalab_anaglyphic') and {G.P_CENTERS.e_polychrome.config.extra}
+                or (v == 'bunc_glitter') and {G.P_CENTERS.e_bunc_glitter.config.Xchips}
+        }
+        if v == 'ortalab_anaglyphic' then
+            info_queue[#info_queue + 1] = {
+                key = 'tag_bunc_xchips',
+                set = 'Tag',
+                specific_vars = {G.P_CENTERS.e_bunc_glitter.config.Xchips}
+            }
+        end
+    end
+else
+'''
+
+# Info queue for consumables 2/2
+# Complicated regex just matches the first 'end' after the above patch's pattern
+[[patches]]
+[patches.regex]
+target = 'functions/common_events.lua'
+pattern = "local t = \\{key = 'e_'\\.\\.v, set = 'Edition', config = \\{\\}\\}((.|\n)*?)(?<indent>[\t ]*)end\n"
+position = 'after'
+line_prepend = "$indent"
+payload = '''end'''
+
+# function card_open() (Filigree Tag)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "SMODS.calculate_context({open_booster = true, card = self})"
+position = 'after'
+match_indent = true
+payload = '''
+
+for i = 1, #G.GAME.tags do
+    if (self.ability.name == 'Standard Pack' or
+    self.ability.name == 'Jumbo Standard Pack' or
+    self.ability.name == 'Mega Standard Pack') then
+        if G.GAME.tags[i]:apply_to_run({type = 'standard_pack_opened'}) then break end
+    end
+end
+
+'''
+
+# Fluorescent edition 1/3
+# Prevent flipping
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if self.facing == 'front' then"
+position = 'after'
+match_indent = true
+payload = '''
+
+if (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables) and self.edition and self.edition.bunc_fluorescent then
+    return
+end
+
+'''
+
+# Fluorescent edition 2/3
+# Prevent forced selection
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "function CardArea:remove_from_highlighted(card, force)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if card.edition and card.edition.bunc_fluorescent then
+    card.ability.forced_selection = false
+end
+
+'''
+
+# Fluorescent edition 3/3
+# Prevent debuff
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "function Card:set_debuff(should_debuff)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if self.edition and self.edition.bunc_fluorescent then
+    if self.debuff then
+        self.debuff = false
+        if self.area == G.jokers then self:add_to_deck(true) end
+    end
+    return
+end
+
+if (self.debuff and should_debuff == false and self.area == G.hand and self.edition and self.edition.card_limit) then
+    self.area.config.real_card_limit = (self.area.config.real_card_limit or self.area.config.card_limit) + self.edition.card_limit
+    self.area.config.card_limit = math.max(0, self.area.config.real_card_limit)
+end
+
+'''
+
+# function Blind:press_play() (Hedge Trimmer)
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = 'function Blind:press_play()'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.used_vouchers['v_bunc_hedge_trimmer'] then
+    local final_chips = (G.GAME.blind.chips / 100) * (100 - SMODS.Centers['v_bunc_hedge_trimmer'].config.percent)
+    local chip_mod -- iterate over ~120 ticks
+    if type(G.GAME.blind.chips) ~= 'table' then
+        chip_mod = math.ceil((G.GAME.blind.chips - final_chips) / 120)
+    else
+        chip_mod = ((G.GAME.blind.chips - final_chips) / 120):ceil()
+    end
+    local step = 0
+    G.E_MANAGER:add_event(Event({trigger = 'after', blocking = true, func = function()
+        G.GAME.blind.chips = G.GAME.blind.chips - G.SETTINGS.GAMESPEED * chip_mod
+        if G.GAME.blind.chips > final_chips then
+            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+            if step % 5 == 0 then
+                play_sound('chips1', math.max(1.0 - (step * 0.005), 0.001))
+            end
+            step = step + 1
+        else
+            G.GAME.blind.chips = final_chips
+            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+            return true
+        end
+    end}))
+
+    G.PROFILES[G.SETTINGS.profile].hedge_trimmer_usage = (G.PROFILES[G.SETTINGS.profile].hedge_trimmer_usage or 0) + 1
+
+    check_for_unlock({type = 'hedge_trimmer_used', used_total = G.PROFILES[G.SETTINGS.profile].hedge_trimmer_usage})
+end
+
+'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if self.ability.set == 'Booster' then"
+position = "after"
+payload = '''
+    if G.GAME.used_vouchers.v_bunc_cups_n_balls then
+        self.ability.extra = (self.ability.extra or 2) + 1
+    end
+    if G.GAME.used_vouchers.v_bunc_shell_game then
+        self.ability.choose = (self.ability.choose or 1) + 1
+    end
+    local extra_choices = 0
+    local goobers = SMODS.find_card('j_femtoLabsCollection_gooseberry')
+    for i=1, #goobers do
+        extra_choices = goobers[i].ability.extra.choices
+    end   
+    if G.GAME.starting_params.flc_gradientdeck then
+        self.ability.extra = self.ability.extra + 1
+    end
+    self.ability.choose = math.min(self.ability.choose + extra_choices, self.ability.extra)
+'''
+match_indent = true
+
+# Masquerade
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'if self.area and self.ability.couponed and (self.area == G.shop_jokers or self.area == G.shop_booster) then self.cost = 0 end'
+position = 'after'
+match_indent = true
+payload = '''
+
+if self.config.center.type == 'bunc_blind' and G.GAME.used_vouchers['v_bunc_masquerade'] then
+    self.cost = 0
+end
+
+'''
+
+# Fanny Pack
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'add_tag(_tag.config.ref_table)'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.GAME.used_vouchers['v_bunc_fanny_pack'] then
+    if pseudorandom('fanny_pack'..G.SEED) < G.GAME.probabilities.normal / G.P_CENTERS.v_bunc_fanny_pack.config.extra.odds then
+        add_tag(Tag('tag_double'))
+    end
+end
+
+'''
+
+# New Reactive Sticker
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = 'G.GAME.skips = (G.GAME.skips or 0) + 1'
+position = 'after'
+match_indent = true
+payload = '''
+
+    for i=1, #G.jokers.cards do
+      if G.jokers.cards[i].ability.bunc_reactive then
+        G.jokers.cards[i]:remove_sticker("bunc_reactive")
+
+        G.E_MANAGER:add_event(Event({trigger = 'before', delay = 0,
+        func = function()
+            card_eval_status_text(
+                G.jokers.cards[i],
+                'extra',
+                nil, nil, nil,
+                {message = "Reacted!", colour = G.C.PURPLE, instant = true}
+            )
+            return true
+        end
+        }))
+
+        play_sound("cardFan2", 0.9, 1.1) -- yes
+      end
+    end
+
+'''
+
+
+
+# Pin Collector 1/2
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = 'function add_tag(_tag)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.used_vouchers['v_bunc_pin_collector'] then
+    if _tag.key == 'tag_double' then
+        _tag = Tag('tag_bunc_triple')
+    end
+end
+
+'''
+
+# Pin Collector 2/2
+[[patches]]
+[patches.pattern]
+target = 'tag.lua'
+pattern = "if self.name == 'Double Tag' and _context.tag.key ~= 'tag_double' then"
+position = 'at'
+match_indent = true
+payload = '''if self.name == 'Double Tag' and _context.tag.key ~= 'tag_double' and _context.tag.key ~= 'tag_bunc_triple' then'''
+
+# Blind Cards 1/3
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''function G.UIDEF.use_and_sell_buttons(card)'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if card.area and card.area == G.pack_cards and card.ability.blind_card then
+    return {
+        n = G.UIT.ROOT, config = {padding = 0, colour = G.C.CLEAR}, nodes = {
+            {n = G.UIT.R, config = {ref_table = card, r = 0.08, padding = 0.1, align = "bm", minw = 0.5 * card.T.w - 0.15, maxw = 0.9 * card.T.w - 0.15, minh = 0.3 * card.T.h, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_blind_card', func = 'can_use_blind_card'}, nodes = {
+                {n=G.UIT.T, config={text = localize('b_select'), colour = G.C.UI.TEXT_LIGHT, scale = 0.45, shadow = true}}
+        }},
+    }}
+end
+
+'''
+
+# Blind Cards 2/3
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''G.FUNCS.sell_card = function(e)'''
+position = 'before'
+match_indent = true
+payload = '''
+
+G.FUNCS.can_use_blind_card = function(e)
+    e.config.colour = G.C.GREEN
+    e.config.button = 'use_blind_card'
+end
+
+G.FUNCS.use_blind_card = function(e)
+    local card = e.config.ref_table
+
+    local boss = card.ability.blind_card.blind.key
+
+    play_sound('other1')
+
+    e.config.button = nil
+
+    local par = G.blind_select_opts.boss.parent
+    G.GAME.round_resets.blind_choices.Boss = boss
+
+    if G.blind_select_opts.boss and par and par.config.object then
+        G.blind_select_opts.boss:remove()
+        G.blind_select_opts.boss = UIBox{
+            T = {par.T.x, 0, 0, 0},
+            definition = {
+                n = G.UIT.ROOT,
+                config = {
+                    align = "cm",
+                    colour = G.C.CLEAR
+                },
+                nodes = {UIBox_dyn_container({create_UIBox_blind_choice('Boss')}, false,
+                    get_blind_main_colour('Boss'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))}
+            },
+            config = {
+                align = "bmi",
+                offset = {
+                    x = 0,
+                    y = G.ROOM.T.y + 9
+                },
+                major = par,
+                xy_bond = 'Weak'
+            }
+        }
+        par.config.object = G.blind_select_opts.boss
+        par.config.object:recalculate()
+        G.blind_select_opts.boss.parent = par
+        G.blind_select_opts.boss.alignment.offset.y = 0
+    end
+
+    G.PROFILES[G.SETTINGS.profile].blind_cards_used = (G.PROFILES[G.SETTINGS.profile].blind_cards_used or 0) + 1
+    if G.PROFILES[G.SETTINGS.profile].blind_cards_used then
+        check_for_unlock({type = 'use_blind_card', blinds_total = G.PROFILES[G.SETTINGS.profile].blind_cards_used})
+    end
+
+    G.FUNCS.end_consumeable(nil, 0.2)
+end
+
+
+'''
+
+# Blind Cards 3/3 (Blind Animation)
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'if G.STAGE == G.STAGES.RUN then'
+position = 'before'
+match_indent = true
+payload = '''
+
+if self.ability and self.ability.blind_card then
+    local timer = G.TIMERS.REAL * G.ANIMATION_FPS
+    local frame_amount = 20
+    local wrapped_value = (math.floor(timer) - 1) % frame_amount + 1
+    self.children.center:set_sprite_pos({x = wrapped_value, y = self.children.center.sprite_pos.y})
+end
+
+'''
+
+# Virtual color, part 1/2
+[[patches]]
+[patches.pattern]
+target = 'globals.lua'
+pattern = "RENTAL = HEX('b18f43'),"
+position = 'after'
+match_indent = true
+payload = '''BUNCO_VIRTUAL = HEX('69fa93'),
+BUNCO_VIRTUAL_DARK = HEX('4fb66f'),
+'''
+
+# Virtual color, part 2/2
+[[patches]]
+[patches.pattern]
+target = 'functions/misc_functions.lua'
+pattern = "legendary = G.C.RARITY[4],"
+position = 'after'
+match_indent = true
+payload = '''bunco_virtual = G.C.BUNCO_VIRTUAL,
+bunco_virtual_dark = G.C.BUNCO_VIRTUAL_DARK,'''
+
+
+# Scattering Sticker 1/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self.removed = true'
+position = 'before'
+match_indent = true
+payload = '''
+
+local scattered_jokers
+if G.jokers and G.jokers.cards and self.ability.bunc_scattering and self.area == G.jokers then
+    local position
+    for index, joker in ipairs(G.jokers.cards) do
+        if joker == self then
+            position = index
+            break
+        end
+    end
+    if position then
+        scattered_jokers = {}
+        if G.jokers.cards[position - 1] and (not G.jokers.cards[position - 1].ability.eternal) then table.insert(scattered_jokers, G.jokers.cards[position - 1]) end
+        if G.jokers.cards[position + 1] and (not G.jokers.cards[position + 1].ability.eternal) then table.insert(scattered_jokers, G.jokers.cards[position + 1]) end
+    end
+end
+
+'''
+
+# Scattering Sticker 2/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'Moveable.remove(self)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if scattered_jokers then
+    if G.jokers and G.jokers.cards and #G.jokers.cards > 0 and #scattered_jokers > 0 then
+        random_card = scattered_jokers[math.random(#scattered_jokers)]
+
+        if random_card then random_card:start_dissolve() end
+    end
+end
+
+'''
+
+# Hindered Sticker 1/3
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'self:start_dissolve({G.C.GOLD})'
+position = 'at'
+match_indent = true
+payload = '''
+
+if not self.ability.bunc_hindered then
+    self:start_dissolve({G.C.GOLD})
+else
+    self:highlight(false)
+    self.ability.bunc_hindered_sold = true
+    self.sell_cost = 0
+end
+
+'''
+
+# Hindered Sticker 2/3
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if (G.SETTINGS.tutorial_complete or G.GAME.pseudorandom.seed ~= 'TUTORIAL' or G.GAME.round_resets.ante > 1) and'''
+position = 'after'
+match_indent = true
+payload = '''not self.ability.bunc_hindered_sold and'''
+
+# Hindered Sticker 3/3
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'elseif self.children.use_button then'
+position = 'before'
+match_indent = true
+payload = '''if self.ability.bunc_hindered_sold and self.children.use_button then self.children.use_button:remove(); self.children.use_button = nil end'''
+
+
+# Eternal Sticker compat
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'card:set_eternal(true)'
+position = 'at'
+match_indent = true
+payload = '''
+
+if not (card.ability.bunc_scattering or card.ability.bunc_hindered or card.ability.bunc_reactive) then
+    card:set_eternal(true)
+end
+
+'''
+
+# Cyan Stake
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'if (area == G.shop_jokers) or (area == G.pack_cards) then'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.modifiers.enable_scattering_in_shop and pseudorandom(('scattering')..G.GAME.round_resets.ante) > 0.75 then
+    SMODS.Stickers['bunc_scattering']:apply(card, true)
+end
+
+'''
+
+# Pink Stake
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'if (area == G.shop_jokers) or (area == G.pack_cards) then'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.modifiers.enable_hindered_in_shop and pseudorandom(('hindered')..G.GAME.round_resets.ante) > 0.75 then
+    SMODS.Stickers['bunc_hindered']:apply(card, true)
+end
+
+'''
+
+# Magenta Stake
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'if (area == G.shop_jokers) or (area == G.pack_cards) then'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.GAME.modifiers.enable_reactive_in_shop and pseudorandom(('reactive')..G.GAME.round_resets.ante) > 0.85 then
+    SMODS.Stickers['bunc_reactive']:apply(card, true)
+end
+
+'''
+
+# Cracker Cards 1/3
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "G.FUNCS.discard_cards_from_highlighted = function(e, hook)"
+position = 'after'
+match_indent = true
+payload = '''
+
+G.hand.crackers_highlighted = {}
+local crackers_in_hand = false
+
+for i = 1, #G.hand.cards do
+    if G.hand.cards[i] and G.hand.cards[i].highlighted
+    and G.hand.cards[i].config.center == G.P_CENTERS.m_bunc_cracker
+    and not G.hand.cards[i].debuff then
+        crackers_in_hand = true
+        break
+    end
+end
+
+for i = 1, #G.hand.cards do
+    if G.hand.cards[i] and G.hand.cards[i].highlighted
+    and (((G.hand.cards[i].config.center == G.P_CENTERS.m_bunc_cracker) and not G.hand.cards[i].debuff) or (crackers_in_hand and #SMODS.find_card('j_bunc_pica', false) > 0)) then
+        table.insert(G.hand.crackers_highlighted, G.hand.cards[i])
+        G.hand:remove_from_highlighted(G.hand.cards[i], true)
+    end
+end
+
+'''
+
+# Cracker Cards 2/3
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'G.GAME.current_round.discards_used = G.GAME.current_round.discards_used + 1'
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.hand.crackers_highlighted and #G.hand.crackers_highlighted >= 1 then
+    for i = 1, #G.hand.crackers_highlighted do
+        if not G.hand.crackers_highlighted[i].highlighted then
+            G.hand:add_to_highlighted(G.hand.crackers_highlighted[i], true)
+        end
+        G.hand.crackers_highlighted[i].marked_cracker = true
+    end
+
+    G.E_MANAGER:add_event(Event({func = function()
+        G.GAME.ignore_hand_played = true
+        G.FUNCS.play_cards_from_highlighted()
+    return true end}))
+
+    return
+end
+
+'''
+
+# Cracker Cards 3/3
+[[patches]]
+[patches.regex]
+target = 'functions/state_events.lua'
+pattern = 'end\n(.*)\}\)\)\n(.*)end\n(?<indent>[\t ]*)(.*)end'
+position = "after"
+line_prepend = "$indent"
+payload = '''
+
+if G.hand.crackers_highlighted and #G.hand.crackers_highlighted >= 1 then
+
+    ease_discard(-1)
+
+    for i = 1, #G.hand.crackers_highlighted do
+        if not G.hand.crackers_highlighted[i].highlighted then
+            G.hand:add_to_highlighted(G.hand.crackers_highlighted[i], true)
+        end
+        G.hand.crackers_highlighted[i].marked_cracker = true
+    end
+
+    if #G.play.cards ~= 0 then
+        for i=1, #G.hand.highlighted do
+            if G.hand.highlighted[i] and G.hand.highlighted[i].config.center == G.P_CENTERS.m_bunc_cracker then
+                if G.hand.highlighted[i]:is_face() then inc_career_stat('c_face_cards_played', 1) end
+                G.hand.highlighted[i].base.times_played = G.hand.highlighted[i].base.times_played + 1
+                G.hand.highlighted[i].ability.played_this_ante = true
+                G.GAME.round_scores.cards_played.amt = G.GAME.round_scores.cards_played.amt + 1
+                draw_card(G.hand, G.play, i*100/#G.hand.highlighted, 'up', nil, G.hand.highlighted[i])
+            end
+        end
+    end
+
+    G.E_MANAGER:add_event(Event({func = function()
+        if #G.play.cards == 0 then
+            G.GAME.ignore_hand_played = true
+            G.FUNCS.play_cards_from_highlighted()
+        end
+    return true end}))
+
+    return
+end
+
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'SMODS.calculate_context({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true})'
+position = 'after'
+match_indent = true
+payload = '''
+
+calculate_cracker_cards({full_hand = G.play.cards, scoring_hand = scoring_hand, scoring_name = text, poker_hands = poker_hands, after = true})
+
+'''
+
+# Money gain effects
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'function ease_dollars(mod, instant)'
+position = 'after'
+match_indent = true
+payload = '''
+
+    mod = BUNCOMOD.funcs.ease_dollars(mod)
+    if to_big(mod) == to_big(0) then return end
+
+'''
+
+# Glitter edition in poll_edition
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = '''_options = { 'e_negative', 'e_polychrome', 'e_holo', 'e_foil' }'''
+position = 'after'
+match_indent = true
+payload = '''
+if BUNCOMOD.content.config.gameplay_reworks and (_key == "wheel_of_fortune" or _key == "aura") then 
+    table.insert(_options, 'e_bunc_glitter') 
+end
+'''
+
+# # Back sprite of a card check
+# [[patches]]
+# [patches.pattern]
+# target = 'card.lua'
+# pattern = '''if true then
+# self.children.back = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[(G.GAME.viewed_back or G.GAME.selected_back) and ((G.GAME.viewed_back or G.GAME.selected_back)[G.SETTINGS.colourblind_option and 'hc_atlas' or 'lc_atlas'] or (G.GAME.viewed_back or G.GAME.selected_back).atlas) or 'centers'], self.params.bypass_back or (self.playing_card and G.GAME[self.back].pos or G.P_CENTERS['b_red'].pos))'''
+# position = 'at'
+# match_indent = true
+# payload = '''if not self.children.back then
+#     self.children.back = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[(G.GAME.viewed_back or G.GAME.selected_back) and ((G.GAME.viewed_back or G.GAME.selected_back)[G.SETTINGS.colourblind_option and 'hc_atlas' or 'lc_atlas'] or (G.GAME.viewed_back or G.GAME.selected_back).atlas) or 'centers'], self.params.bypass_back or (self.playing_card and G.GAME[self.back].pos or G.P_CENTERS['b_red'].pos))'''
+
+# Min Ante for Blind's collection UI
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''ability_text[1] and {n=G.UIT.R, config={align = "cm", padding = 0.08, colour = mix_colours(blind.boss_colour, G.C.GREY, 0.4), r = 0.1, emboss = 0.05, minw = 2.5, minh = 0.9}, nodes=ability_text} or nil'''
+position = 'after'
+match_indent = true
+payload = ''',
+ability_text[1] and blind.boss and {n=G.UIT.R, config={align = "cm"}, nodes={
+    {n=G.UIT.T, config={text = blind.boss.showdown and localize('bunc_final_blind') or (localize('bunc_min_ante')..' '..(blind.boss.min or '?')), scale = 0.3, colour = G.C.UI.TEXT_INACTIVE}}
+}},
+'''
+
+# Remove exotic suit customization while locked
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''if G.COLLABS.options[suit.key] then'''
+position = 'at'
+match_indent = true
+payload = '''if G.COLLABS.options[suit.key] and
+(suit.key ~= 'bunc_Fleurons' or (suit.key == 'bunc_Fleurons' and G.P_CENTERS['b_bunc_fairy'].unlocked)) and
+(suit.key ~= 'bunc_Halberds' or (suit.key == 'bunc_Halberds' and G.P_CENTERS['b_bunc_fairy'].unlocked)) then'''
+
+# Infinite redebuff fix
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.name == 'Credit Card' then
+G.GAME.bankrupt_at = G.GAME.bankrupt_at - self.ability.extra'''
+position = 'before'
+match_indent = true
+payload = '''if not from_debuff then
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.name == 'Credit Card' then
+G.GAME.bankrupt_at = G.GAME.bankrupt_at + self.ability.extra'''
+position = 'before'
+match_indent = true
+payload = '''if not from_debuff then
+'''
+
+# Drawstep bypassing
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/card_draw.lua"]'
+pattern = '''if SMODS.DrawSteps[k]:check_conditions(self, layer) then SMODS.DrawSteps[k].func(self, layer) end'''
+position = 'at'
+match_indent = true
+payload = '''if SMODS.DrawSteps[k]:check_conditions(self, layer) and not (self.draw_bypass and self.draw_bypass[k]) then SMODS.DrawSteps[k].func(self, layer) end'''
+
+# Fix Gameplan messing with hand size too much
+# Increasing hand size now only draws to hand if there is hand size to draw to
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = '''local card_count = math.abs(delta)'''
+position = 'after'
+match_indent = true
+payload = '''card_count = math.min(card_count, math.max(0, self.config.card_limit - #self.cards))'''
+
+# Fix Gameplan messing with discards
+# Increasing hand size now only draws to hand if there is hand size to draw to
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''if math.abs(math.max(G.GAME.current_round.discards_left, mod)) == 0 *'''
+position = 'before'
+match_indent = true
+payload = '''
+if G.GAME.current_round.bunc_actual_discards_left and G.GAME.current_round.bunc_actual_discards_left <= 0 then
+    local new_mod = math.max(0, mod + G.GAME.current_round.bunc_actual_discards_left)
+    G.GAME.current_round.bunc_actual_discards_left = (G.GAME.current_round.bunc_actual_discards_left or G.GAME.current_round.discards_left) + mod
+    mod = new_mod
+else
+    G.GAME.current_round.bunc_actual_discards_left = (G.GAME.current_round.bunc_actual_discards_left or G.GAME.current_round.discards_left) + mod
+end
+'''
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''G.GAME.current_round.discards_left = math.max(0, G.GAME.round_resets.discards + G.GAME.round_bonus.discards)'''
+position = 'after'
+match_indent = true
+payload = '''
+G.GAME.current_round.bunc_actual_discards_left = G.GAME.current_round.discards_left
+'''
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''G.GAME.current_round.discards_left = math.max(0, G.GAME.round_resets.discards + G.GAME.round_bonus.discards)'''
+position = 'after'
+match_indent = true
+payload = '''
+G.GAME.current_round.bunc_actual_discards_left = G.GAME.current_round.discards_left
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = "if card.area and card.area.config.type == 'joker' then"
+position = "after"
+match_indent = true
+payload = '''
+    if card.config.center.key == "j_bunc_stylophone" or card.config.center.key == "j_bunc_mousetrap" or card.config.center.key == "j_bunc_trigger_finger" then
+        local settings_sprite = Sprite(0, 0, 0.5, 0.5, G.ASSET_ATLAS['bunc_settings_icon'] ,{x=0, y=0})
+        use = {n=G.UIT.C, config={align = "cr"}, nodes={
+            {n=G.UIT.C, config={ref_table = card, align = "cr",maxw = 1.25, padding = 0.1, r=0.08, minh = (card.area and card.area.config.type == 'joker') and 0 or 1, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, button = card.config.center.key .. '_settings'}, nodes={
+                {n=G.UIT.B, config = {w=0.1,h=0.6}},
+                {n=G.UIT.O, config={object = settings_sprite, can_collide = false, shadow = true}}
+            }}
+        }}
+    end
+'''
+
+# Lets Hindered sticker trigger even if debuffed
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = """if card.ability.rental then
+            local ret = {}
+            ret[SMODS.Stickers.rental] = card:calculate_sticker(context, 'rental')
+            return ret, {}
+        end"""
+position = "before"
+match_indent = true
+payload = '''
+if card.ability.bunc_hindered then
+    local ret = {}
+    ret[SMODS.Stickers.bunc_hindered] = card:calculate_sticker(context, 'bunc_hindered')
+    return ret, {}
+end
+'''
+
+# Black Hole 1/2
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'for k, v in pairs(self.I.POPUP) do'
+position = 'before'
+match_indent = true
+payload = '''
+
+G.FORCEFIELD_CARDS = G.FORCEFIELD_CARDS or {}
+
+for index, card in ipairs(G.FORCEFIELD_CARDS) do
+    if BUNCOMOD.content.config.high_quality_shaders
+    and card
+    and not card.removed
+    and card.states.visible
+    and index <= 5 then
+
+        love.graphics.setColor(G.C.WHITE)
+
+        local w, h = love.graphics.getWidth(), love.graphics.getHeight() -- Get the size
+
+        card.pinch_canvas = love.graphics.newCanvas(realw, realh) -- Create the black hole canvas (size is important or else it will cut off on fullscreen)
+        love.graphics.setCanvas(card.pinch_canvas) -- Enable the black hole canvas
+
+        love.graphics.draw(self.CANVAS) -- Draw the old canvas onto the black hole one
+
+        local pinch = G.SHADERS['bunc_pinch']
+
+        local card_position = {
+        (card.VT.x + (card.VT.w / 2) + G.ROOM.T.x) * G.TILESCALE * G.TILESIZE * G.CANV_SCALE,
+        (card.VT.y + (card.VT.h / 2) + G.ROOM.T.y + 0.1) * G.TILESCALE * G.TILESIZE * G.CANV_SCALE}
+
+        local dissolve_mult = 1 - (card.dissolve or 0)
+
+        pinch:send("position", card_position)
+        pinch:send("screen_size", {w, h})
+        pinch:send("radius", (card.config and card.config.forcefield and card.config.forcefield.radius or 160) * (1.2 + math.sin((index * 3.0) + G.TIMERS.REAL / 2.0) / 3.0) * dissolve_mult)
+        pinch:send("strength", (card.config and card.config.forcefield and card.config.forcefield.strength or -0.5) * (0.8 - math.cos((index * 3.0) + G.TIMERS.REAL / 2.0) / 3.0) * dissolve_mult)
+
+        love.graphics.setShader(pinch) -- Set the shader to the black hole canvas
+
+        love.graphics.setCanvas(self.CANVAS) -- Forget about the black hole canvas and switch back to the og canvas
+        love.graphics.draw(card.pinch_canvas) -- And draw the result of black hole canvas onto the og one
+
+        -- Reset shader:
+        love.graphics.setShader()
+
+    elseif (not card) or (card.removed) then
+        table.remove(G.FORCEFIELD_CARDS, index)
+    end
+end
+
+'''
+
+# Black Hole 2/2
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'Moveable.init(self,X, Y, W, H)'
+position = 'after'
+match_indent = true
+payload = '''
+
+if center and center.name == 'Black Hole' then
+    G.FORCEFIELD_CARDS = G.FORCEFIELD_CARDS or {}
+    self.config.forcefield = {}
+    self.config.forcefield.radius = 160
+    self.config.forcefield.strength = -0.5
+    table.insert(G.FORCEFIELD_CARDS, self)
+end
+
+'''

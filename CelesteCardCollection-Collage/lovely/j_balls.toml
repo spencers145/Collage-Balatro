@@ -1,0 +1,37 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# fire variable and context
+# strange
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''
+_F.timer = _F.timer + G.real_dt*(1 + _F.intensity*0.2)
+'''
+position = "before"
+payload = '''
+if G.GAME then
+	if not G.GAME.ccc_fire_triggered and _F.intensity > 0 then
+		G.GAME.ccc_fire_triggered = true
+		SMODS.calculate_context({ccc_fire = true})
+	end
+end
+'''
+match_indent = true
+
+# shop add
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''
+for i = 1, #G.GAME.tags do
+	G.GAME.tags[i]:apply_to_run({type = 'shop_final_pass'})
+end'''
+position = "before"
+payload = '''
+SMODS.calculate_context({ccc_shop_trigger = true})
+'''
+match_indent = true

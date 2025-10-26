@@ -1,0 +1,34 @@
+---- SMODS.Booster:take_ownership_by_kind('Celestial', {
+----   loc_vars = function(self, info_queue, card)
+----     local cfg = (card and card.ability) or self.config
+----     return {
+----       key = self.key:sub(1, -3),
+----       vars = { cfg.choose, cfg.extra }
+----     }
+----   end,
+  
+----   create_card = function(self, card, i)
+----     local _card
+----     if G.GAME.used_vouchers.v_telescope and i == 1 then
+----       local _planet, _hand, _tally = nil, nil, 0
+----       for k, v in ipairs(G.handlist) do
+----         if SMODS.is_poker_hand_visible(v) and G.GAME.hands[v].played > _tally then
+----           _hand = v
+----           _tally = G.GAME.hands[v].played
+----         end
+----       end
+----       if _hand then
+----         for k, v in pairs(G.P_CENTER_POOLS.Planet) do
+----           if v.config.hand_type == _hand then
+----             _planet = v.key
+----           end
+----         end
+----       end
+----       _card = {set = "Planet", area = G.pack_cards, skip_materialize = true, soulable = true, key = _planet, key_append = "pl1"}
+----     else
+----       local card_set = pseudorandom_element({"Planet", "Constellation"}, pseudoseed('celestial' .. G.GAME.round_resets.ante))
+----       _card = {set = card_set, area = G.pack_cards, skip_materialize = true, soulable = true, key_append = "pl1"}
+----     end
+----     return _card
+----   end
+---- }, true)

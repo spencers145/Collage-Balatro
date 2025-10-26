@@ -1,0 +1,67 @@
+SMODS.Consumable({
+    key = 'loop_hero',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = {
+        x = 2,
+        y = 1
+    },
+    discovered = false,
+    config = {
+        targets = 3
+    },
+    loc_vars = function(self, info_queue)
+        return {
+            vars = {self.config.targets}
+        }
+    end,
+    cost = 3,
+    calculate = function(self, card, context)
+    end,
+    can_use = function(self, card)
+        return #G.hand.cards > 0
+    end,
+    use = function(self, card, area, copier)
+        local random_indexes = SARC.get_rand_hand_index(math.min(self.config.targets, #G.hand.cards),nil)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            blocking = true,
+            func = function()
+                return true
+            end
+        }))
+        local removed = {}
+        for _, v in ipairs(random_indexes) do
+            table.insert(removed, G.hand.cards[v])
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.05,
+                func = function()
+                    play_sound('crumple1')
+                    G.hand.cards[v]:start_dissolve()
+                    return true
+                end
+            }))
+        end
+        SMODS.calculate_context({remove_playing_cards = true, removed = removed})
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.1,
+            blocking = true,
+            func = function()
+                return true
+            end
+        }))
+        for i = 1, #random_indexes do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.2,
+                func = function()
+                    draw_card(G.deck, G.hand, i * 100 / 2, 'up', true)
+                    return true
+                end
+            }))
+        end
+    end
+})

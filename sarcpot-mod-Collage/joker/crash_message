@@ -1,0 +1,58 @@
+SMODS.Joker {
+    key = "crash_message",
+    config = {
+        extra = {
+            mult_mod = 3
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        local total = 0
+        if G.playing_cards then
+            for i=1 , #G.playing_cards do
+                if SMODS.has_no_rank(G.playing_cards[i]) then
+                    total = total + 1
+                end
+            end
+        end
+        local mult = (total * card.ability.extra.mult_mod) or 0
+        return { vars = {card.ability.extra.mult_mod, mult} }
+    end,
+    rarity = 1,
+    pos = { x = 2, y = 4 },
+    atlas = 'sarcpot_atlas',
+    cost = 4,
+    unlocked = true,
+    discovered = false,
+    blueprint_compat = true,
+    eternal_compat = true,
+    soul_pos = nil,
+    in_pool = function (self, args)
+        if G.playing_cards then
+            for i=1 , #G.playing_cards do
+                if SMODS.has_no_rank(G.playing_cards[i]) then
+                    return true
+                end
+            end
+        end
+
+        return false
+    end,
+    calculate = function(self, card, context)
+        
+        if context.joker_main then
+            local total = 0
+          if G.playing_cards then
+              for i=1 , #G.playing_cards do
+                  if SMODS.has_no_rank(G.playing_cards[i]) then
+                      total = total + 1
+                  end
+              end
+          end
+          if total > 0 then
+            return {
+                mult = total*card.ability.extra.mult_mod
+            }
+        end
+        end
+    end
+}

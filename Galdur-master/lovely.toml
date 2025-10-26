@@ -1,0 +1,77 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 10
+
+# Colour stake chips in stake selector and stake chip tower
+# Card:draw()
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''self.children.back:draw(overlay)'''
+position = 'at'
+match_indent = true
+payload = '''if self.params.stake_chip then
+    if self.params.stake_chip_locked then 
+        self.children.back:draw(G.C.L_BLACK)
+    elseif self.params.chip_tower then
+        self.children.back:draw(G.C.WHITE)
+    elseif not self.children.back.won then
+        self.children.back:draw(Galdur.config.stake_colour == 1 and G.C.L_BLACK or G.C.WHITE)
+    else
+        self.children.back:draw(Galdur.config.stake_colour == 1 and G.C.WHITE or G.C.L_BLACK)
+    end
+else
+    self.children.back:draw(overlay)
+end'''
+
+# Allows hovering of chips in stake chip tower
+# Controller:update()
+[[patches]]
+[patches.pattern]
+target = 'engine/controller.lua'
+pattern = '''if self.hovering.target and self.hovering.target == self.dragging.target and not self.HID.touch then'''
+position = 'before'
+match_indent = true
+payload = '''
+if self.hovering.prev_target and self.hovering.prev_target.role and self.hovering.prev_target.role.major and self.hovering.prev_target.role.major.params and self.hovering.prev_target.role.major.params.stake_chip and self.hovering.target ~= self.hovering.prev_target then self.hovering.prev_target.role.major:stop_hover() end
+if self.hovering.target and self.hovering.target.role and self.hovering.target.role.major and self.hovering.target.role.major.params and self.hovering.target.role.major.params.stake_chip and self.hovering.target ~= self.hovering.prev_target then self.hovering.target.role.major:hover() end
+'''
+
+# Use Galdur run setup page on toggle
+# G.UIDEF.run_setup()
+[[patches]]
+[patches.regex]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+(?<indent>[\t ]*)tab_definition_function = G.UIDEF.run_setup_option,[\n\t ]*tab_definition_function_args = 'New Run'
+'''
+position = 'at'
+line_prepend = "$indent"
+payload = '''
+tab_definition_function = (Galdur.config.use and G.UIDEF.run_setup_option_new_model or G.UIDEF.run_setup_option),
+tab_definition_function_args = 'New Run'
+
+'''
+
+# Allow Galdur deck to be used
+# Game:start_run()
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = "local selected_back = saveTable and saveTable.BACK.name or (args.challenge and args.challenge.deck and args.challenge.deck.type) or (self.GAME.viewed_back and self.GAME.viewed_back.name) or self.GAME.selected_back and self.GAME.selected_back.name or 'Red Deck'"
+position = 'at'
+match_indent = true
+payload = '''
+local selected_back = saveTable and saveTable.BACK.name or (args.challenge and args.challenge.deck and args.challenge.deck.type) or (args.deck and args.deck.name) or (self.GAME.viewed_back and self.GAME.viewed_back.name) or self.GAME.selected_back and self.GAME.selected_back.name or 'Red Deck'
+'''
+
+# Cryptid compat
+# Card:draw()
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''local currentBack = self.params.viewed_back and G.GAME.viewed_back or G.GAME.selected_back'''
+position = 'at'
+match_indent = true
+payload = '''local currentBack = not self.params.galdur_selector and ((Galdur.config.use and type(self.params.galdur_back) == 'table' and self.params.galdur_back) or type(self.params.viewed_back) == 'table' and self.params.viewed_back or (self.params.viewed_back and G.GAME.viewed_back or G.GAME.selected_back)) or Back(G.P_CENTERS['b_red'])'''

@@ -1,0 +1,43 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "globals.lua"
+pattern = "RENTAL = HEX('b18f43'),"
+position = "after"
+match_indent = true
+payload = '''
+PAPERBACK_LIGHT_SUIT = HEX('F06841'),
+PAPERBACK_DARK_SUIT = HEX('3C4A4E'),
+PAPERBACK_STARS_LC = HEX('BFBFBF'),
+PAPERBACK_STARS_HC = HEX('9A9A9A'),
+PAPERBACK_CROWNS_LC = HEX('A37E4D'),
+PAPERBACK_CROWNS_HC = HEX('B38E5E'),
+PAPERBACK_MINOR_ARCANA = HEX('BDA0D9'),
+PAPERBACK_BLACK = HEX('1E2729'),
+PAPERBACK_PINK = HEX('FF79AD'),
+PAPERBACK_ENERGIZED = HEX('FD5F55'),
+PAPERBACK_TEMPORARY = HEX('B3A08A'),
+PAPERBACK_SOLEMN_WHITE = HEX('F9FFE3'),
+'''
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "G.ARGS.LOC_COLOURS = G.ARGS.LOC_COLOURS or {"
+position = "after"
+match_indent = true
+payload = '''
+  paperback_light_suit = G.C.PAPERBACK_LIGHT_SUIT,
+  paperback_dark_suit = G.C.PAPERBACK_DARK_SUIT,
+  paperback_stars = G.C.SUITS.paperback_Stars or G.C.PAPERBACK_STARS_LC,
+  paperback_crowns = G.C.SUITS.paperback_Crowns or G.C.PAPERBACK_CROWNS_LC,
+  paperback_minor_arcana = G.C.PAPERBACK_MINOR_ARCANA,
+  paperback_black = G.C.PAPERBACK_BLACK,
+  paperback_pink = G.C.PAPERBACK_PINK,
+  paperback_perishable = G.C.PERISHABLE,
+  paperback_temporary = G.C.PAPERBACK_TEMPORARY,
+'''

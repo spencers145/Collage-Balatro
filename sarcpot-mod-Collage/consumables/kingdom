@@ -1,0 +1,26 @@
+SMODS.Consumable({
+    key = 'kingdom',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = { x = 2, y = 2},
+    discovered = false,
+    config = { money = 5, money_cap = 30},
+    loc_vars = function(self, info_queue)
+        G.GAME.kingdom_count = G.GAME.kingdom_count or 0
+        local money = math.min((G.GAME.kingdom_count + 1) * self.config.money, self.config.money_cap)
+        return { vars = { money, self.config.money_cap} }
+    end,
+    cost = 3,
+    calculate = function(self, card, context)
+    end,
+    can_use = function(self, card)
+        return true
+    end,
+    use = function(self, card, area, copier)
+        G.GAME.kingdom_count = G.GAME.kingdom_count or 0
+        local money = math.min((G.GAME.kingdom_count + 1) * self.config.money, self.config.money_cap)
+        G.GAME.kingdom_count = G.GAME.kingdom_count + 1
+        ease_dollars(money)
+    end
+
+})

@@ -1,0 +1,67 @@
+SMODS.Enhancement({
+    key = "luminice",
+    atlas = "enhancements",
+    pos = {
+        x = 0,
+        y = 1
+    },
+    discovered = false,
+    no_rank = true,
+    no_suit = true,
+    always_scores = true,
+    replace_base_card = true,
+    config = {
+        extra = {
+            permamult = 2,
+        }
+    },
+    in_pool = function (self, args)
+        return false
+    end,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.permamult, card.ability.extra.permachips}
+        }
+    end,
+
+    calculate = function(self, card, context)
+        if context.cardarea == G.play and context.after and not context.debuffed_hand and card.config.center ==
+            G.P_CENTERS.m_sarc_luminice then
+
+            for k, v in ipairs(context.scoring_hand) do
+                if v.config.center ~= G.P_CENTERS.m_sarc_luminice then
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'after',
+                        blockable = true,
+                        blocking = true,
+                        func = function()
+                            if card.config.center == G.P_CENTERS.m_sarc_luminice then
+                                play_sound('tarot1')
+                                v:juice_up()
+
+                                v.ability.perma_mult = (v.ability.perma_mult or 0) + card.ability.extra.permamult
+                            end
+                            return true
+                        end
+                    }))
+                    card:juice_up()
+                    SMODS.calculate_effect({
+                        message = localize('k_upgrade_ex'),
+                        colour = G.C.BLUE
+                    }, card)
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'after',
+                        blockable = true,
+                        blocking = true,
+                        delay = 0.1,
+                        func = function()
+                            return true
+                        end
+                    }))
+                end
+            end
+
+        end
+
+    end
+})

@@ -1,0 +1,14 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "-- TARGET: main scoring on played cards"
+position = "after"
+match_indent = true
+payload = '''
+  G.GAME.paperback.jjjj_count = G.GAME.paperback.jjjj_count + 1
+'''

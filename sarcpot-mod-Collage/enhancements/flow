@@ -1,0 +1,48 @@
+SMODS.Enhancement({
+    key = "flow",
+    atlas = "enhancements",
+    pos = {x = 3, y = 0},
+    discovered = false,
+    config = { extra = {base = 1.0,mod = 0.25, flow_cards = 0}},
+    loc_vars = function(self, info_queue, card)
+        return { vars = {card.ability.extra.base, card.ability.extra.mod} }
+    end,
+    in_pool = function (self, args)
+        return false
+    end,
+
+    calculate = function(self, card, context)
+        if context.main_scoring and context.cardarea == G.play then
+            card.ability.extra.flow_cards = 0
+
+            for i=1, #context.scoring_hand do
+                if context.scoring_hand[i] == card then
+                    break
+                else
+                    if context.scoring_hand[i].config.center == G.P_CENTERS.m_sarc_flow then
+                        card.ability.extra.flow_cards = card.ability.extra.flow_cards + 1 end
+                end
+            end
+            if card.ability.extra.flow_cards > 0 then
+                return {
+                    x_chips = card.ability.extra.base + (card.ability.extra.mod * card.ability.extra.flow_cards),
+                    card = card
+                }
+            end
+        end
+
+      
+        --[[if context.cardarea == G.play and context.main_scoring then
+            card.ability.extra.flow_cards = 1
+            for i=1, #context.scoring_hand do
+                if context.scoring_hand[i].config.center == G.P_CENTERS.m_sarc_flow then
+                    card.ability.extra.flow_cards = card.ability.extra.flow_cards + 1
+                end
+            return {
+                x_chips = card.ability.extra.base + (card.ability.extra.mod * card.ability.extra.flow_cards),
+                card = card
+            }
+        end   
+    end]]--
+end
+})

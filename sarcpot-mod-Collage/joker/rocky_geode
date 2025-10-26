@@ -1,0 +1,59 @@
+SMODS.Joker {
+    key = "rocky_geode",
+    config = {
+        extra = {
+            mult_mod = 1
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+       
+            local total = 0
+          if G.playing_cards then
+            for i=1 , #G.playing_cards do
+                if G.playing_cards[i]:is_suit('Hearts') or SMODS.has_enhancement(G.playing_cards[i], 'm_stone') then
+                    total = total + 1
+                end
+            end
+          end
+          local mult = (total * card.ability.extra.mult_mod) or 0
+          return { vars = {card.ability.extra.mult_mod, mult} }
+end,
+    rarity = 1,
+    pos = { x = 2, y = 3 },
+    atlas = 'sarcpot_atlas',
+    cost = 5,
+    unlocked = true,
+    discovered = false,
+    blueprint_compat = true,
+    eternal_compat = true,
+    soul_pos = nil,
+    in_pool = function (self, args)
+        if G.playing_cards then
+            for i=1 , #G.playing_cards do
+                if G.playing_cards[i]:is_suit("Hearts") then
+                    return true
+                end
+            end
+        end
+
+        return false
+    end,
+    calculate = function(self, card, context)
+        
+        if context.joker_main then
+            local total = 0
+          if G.playing_cards then
+              for i=1 , #G.playing_cards do
+                  if G.playing_cards[i]:is_suit('Hearts') or SMODS.has_enhancement(G.playing_cards[i], 'm_stone') then
+                      total = total + 1
+                  end
+              end
+          end
+          if total > 0 then
+            return {
+                mult = total*card.ability.extra.mult_mod
+            }
+        end
+        end
+    end
+}

@@ -1,0 +1,13 @@
+{
+    "id": "VISIBILITY",
+    "name": "Visibility",
+    "author": ["GunnableScum", "InvisibleSides", "Monachrome"],
+    "description": "Read the localization file.",
+    "prefix": "vis",
+    "main_file": "Visibility.lua",
+    "badge_colour": "bdc3c7",
+    "dependencies": [
+        "Steamodded (>=1.0.0~ALPHA-1225a)"
+    ],
+    "version": "1.0.1"
+}

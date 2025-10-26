@@ -1,0 +1,49 @@
+SMODS.Joker {
+    key = "council_of_shadows",
+    config = {
+        extra = {
+            handsize_mod = 2,
+            interest_multiplier = 3
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.handsize_mod, card.ability.extra.interest_multiplier}
+        }
+    end,
+    rarity = 3,
+    pos = {
+        x = 2,
+        y = 7
+    },
+    atlas = 'sarcpot_atlas',
+    cost = 7,
+    unlocked = true,
+    discovered = false,
+    blueprint_compat = true,
+    eternal_compat = true,
+    soul_pos = nil,
+
+    in_pool = function(self, args)
+        return true
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        G.hand:change_size(-card.ability.extra.handsize_mod)
+    end,
+    calculate = function(self, card, context)
+        if context.end_of_round and context.cardarea == G.jokers then
+            SARC.apply_multiplier(G.GAME, "interest_amount", card.ability.extra.interest_multiplier,
+                tostring(card) .. "council_of_shadows")
+
+        end
+        if context.cashing_out then
+            SARC.remove_multiplier(G.GAME, "interest_amount", tostring(card) .. "council_of_shadows")
+        end
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        SARC.remove_multiplier(G.GAME, "interest_amount", tostring(card) .. "council_of_shadows")
+        G.hand:change_size(card.ability.extra.handsize_mod)
+    end
+
+}
+

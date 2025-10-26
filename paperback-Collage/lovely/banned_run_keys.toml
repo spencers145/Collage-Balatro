@@ -1,0 +1,16 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if add and not G.GAME.banned_keys[v.key] then "
+position = "before"
+match_indent = true
+payload = '''
+if G.GAME.paperback.banned_run_keys[v.key] then
+  add = nil
+end
+'''

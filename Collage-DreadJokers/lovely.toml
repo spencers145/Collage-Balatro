@@ -1,0 +1,134 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# function Blind:stay_flipped (Vandalism 6/7)
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = '''if self.name == 'The Wheel' and pseudorandom(pseudoseed('wheel')) < G.GAME.probabilities.normal/7 then'''
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.config.center.key == 'j_tma_BlindSun' and not v.debuff then
+            if (SMODS.pseudorandom_probability(v, pseudorandom("j_tma_BlindSun"), 1, v.ability.extra.odds, 'j_tma_BlindSun')) and (G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.DRAW_TO_HAND) then
+                v:calculate_joker({stay_flipped = true})
+                return true
+            end
+        end
+    end
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted (Vandalism 7/7)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''--check the hand first'''
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.jokers ~= nil then
+    for _, v in ipairs(G.jokers.cards) do
+        if v.config.center.key == 'j_tma_BlindSun' and not v.debuff then
+            v:calculate_joker({play_cards = true})
+        end
+    end
+end
+
+'''
+
+# Lighthhouse
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.perishable and self.ability.perish_tally <= 0 then'''
+match_indent = true
+position = 'before'
+payload = '''
+if next(SMODS.find_card('j_tma_Lighthouse')) and self.ability.effect ~= "Base" then
+    self.debuff = false
+    return
+end
+'''
+
+# static draw from play to discard
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "draw_card(G.play,G.discard, it*100/play_count,'down', false, v)"
+position = 'at'
+match_indent = true
+payload = '''
+
+local cards_to_hand = {}
+
+if G.consumeables ~= nil then
+    for _, c in ipairs(G.consumeables.cards) do
+        if c.config.center.key == 'c_tma_static' and c.ability.extra.active and not c.debuff then
+            for __, card in ipairs(c.ability.extra.cards_to_hand) do
+                table.insert(cards_to_hand, card)
+            end
+            break
+        end
+    end
+end
+
+if cards_to_hand ~= {} then
+    local condition = false
+    for _, card_to_hand in ipairs(cards_to_hand) do
+        if v == card_to_hand then
+            condition = true
+        end
+    end
+    if condition then
+        draw_card(G.play,G.hand, it*100/play_count,'up', true, v)
+    else
+        draw_card(G.play,G.discard, it*100/play_count,'down', false, v)
+    end
+else
+    draw_card(G.play,G.discard, it*100/play_count,'down', false, v)
+end
+
+'''
+
+# G.FUNCS.play_cards_from_highlighted() (Cellphone 2/2)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = "inc_career_stat('c_hands_played', 1)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if G.consumeables ~= nil then
+    for _, v in ipairs(G.consumeables.cards) do
+        if v.config.center.key == 'c_tma_static' and v.ability.extra.active and not v.debuff then
+            v:calculate_joker({press_play = true})
+            break
+        end
+    end
+end
+
+'''
+
+# Card:set_cost() This is new too!! add it to the end of the lovely file
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "self.sell_cost_label = self.facing == 'back' and '?' or self.sell_cost"
+position = 'after'
+match_indent = true
+payload = '''
+
+if next(SMODS.find_card("j_tma_Coffin")) and self.ability.consumeable then
+    self.sell_cost_label = self.facing == 'back' and '?' or self.sell_cost*2
+end
+
+'''

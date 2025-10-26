@@ -1,0 +1,54 @@
+SMODS.Joker {
+
+    discovered = false,
+    key = 'orchid',
+
+    config = {
+        extra = {
+            mult_mod = 2,
+            mult = 0
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {card.ability.extra.mult_mod, card.ability.extra.mult}
+        }
+    end,
+    rarity = 2,
+    atlas = 'sarcpot_atlas',
+    pos = {
+        x = 0,
+        y = 5
+    },
+    cost = 5,
+    perishable_compat = false,
+    in_pool = function (self, args)
+		if G.playing_cards then
+            for i=1 , #G.playing_cards do
+                if G.playing_cards[i]:get_id() == 11 then
+                    return true
+                end
+            end
+        end
+
+        return false
+	end,
+    calculate = function(self, card, context)
+        if context.before and context.scoring_hand and not context.blueprint then
+            local found = false
+            for _, v in pairs(context.full_hand) do
+                if v:get_id() == 11 then
+                    found = true
+                end
+            end
+            if found then
+                card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.mult_mod
+            end
+        end
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+end
+}

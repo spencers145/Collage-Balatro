@@ -1,0 +1,28 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# We target the function that builds the UI for hovering over cards
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "local cfg = (card and card.ability) or _c['config']"
+position = "after"
+match_indent = true
+payload = '''
+-- Add tooltips for items removed from the pool by the paperback config
+if (card and card.config and card.config.center and card.config.center.paperback) or (_c and _c.paperback) then
+  local config = (_c and _c.paperback) or card.config.center.paperback
+
+  for _, v in ipairs(config.requirements or {}) do
+    if not PB_UTIL.config[v.setting] and first_pass then
+      info_queue[#info_queue + 1] = {
+        set = v.set or 'Other',
+        key = v.tooltip,
+        vars = v.vars or {}
+      }
+    end
+  end
+end
+'''

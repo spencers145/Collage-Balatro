@@ -1,0 +1,16 @@
+﻿[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 65535
+
+# New colour who dis
+[[patches]]
+[patches.pattern]
+target = "globals.lua"
+pattern = "DARK_EDITION = {0,0,0,1},"
+position = "after"
+payload = '''
+MISTIGRIS = {0,0,0,1},
+'''
+match_indent = true
+times = 1

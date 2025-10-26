@@ -1,0 +1,38 @@
+{
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "Lua.format.defaultConfig": {
+    "align_continuous_assign_statement": "false"
+  },
+  "Lua.workspace.library": [
+    "../lovely/dump",
+    "../smods",
+    "../Steamodded",
+    "../JokerDisplay",
+    "../CardSleeves"
+  ],
+  "Lua.runtime.version": "Lua 5.1",
+  "Lua.codeLens.enable": true,
+  "Lua.completion.callSnippet": "Disable",
+  "Lua.hint.enable": true,
+  "Lua.hint.setType": true,
+  "Lua.type.inferParamType": false,
+  "editor.quickSuggestions": {
+    "other": "off"
+  },
+  "Lua.diagnostics.globals": [
+    "to_big",
+    "to_number",
+    "Event",
+    "create_UIBox_your_collection_stickers",
+    "create_UIBox_Other_GameObjects",
+    "hand_chips",
+    "mult",
+    "love",
+    "Back",
+    "PB_UTIL",
+    "G"
+  ],
+  "Lua.diagnostics.libraryFiles": "Disable"
+}

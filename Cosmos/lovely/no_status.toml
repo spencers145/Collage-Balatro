@@ -1,0 +1,24 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 1
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil, effects[ii].extra)"
+position = "before"
+payload = '''
+if not effects[ii].extra.no_status then
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil, effects[ii].extra)"
+position = "after"
+payload = '''
+end
+'''
+match_indent = true

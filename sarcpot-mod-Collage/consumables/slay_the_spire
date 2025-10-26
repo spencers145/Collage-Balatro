@@ -1,0 +1,55 @@
+SMODS.Consumable({
+    key = 'slay_the_spire',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = {
+        x = 3,
+        y = 0
+    },
+    discovered = false,
+    config = {
+        consumable_number = 2
+    },
+    loc_vars = function(self, info_queue)
+        return {
+            vars = {
+                self.config.consumable_number,
+                colours = {G.SP.C.travel_2}
+            }
+        }
+    end,
+    cost = 3,
+    calculate = function(self, card, context)
+    end,
+    can_use = function(self, card)
+        return true;
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                play_sound("tarot1")
+                for i = 1, self.config.consumable_number do
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.2,
+                            func = function()
+                                if #G.consumeables.cards < G.consumeables.config.card_limit then
+                                local consumable = create_card('travel', G.consumeables, false, nil, false, true, nil,
+                                    'travel')
+                                consumable:add_to_deck()
+                                G.consumeables:emplace(consumable)
+                                G.GAME.consumeable_buffer = 0
+                                play_sound("card1")
+                            end
+                            return true
+                            end
+                        }))
+            end
+                return true
+            end
+        }))
+                
+            end
+})

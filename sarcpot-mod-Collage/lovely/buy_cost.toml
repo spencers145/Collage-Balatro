@@ -1,0 +1,28 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "c1.from_area = c1.area"
+position = "before"
+match_indent = true
+payload = 'local c1_cost = c1.cost'
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = '''
+inc_career_stat('c_shop_dollars_spent', c1.cost)
+if c1.cost ~= 0 then
+  ease_dollars(-c1.cost)
+end'''
+position = "at"
+match_indent = true
+payload = '''
+inc_career_stat('c_shop_dollars_spent', c1_cost)
+if c1_cost ~= 0 then
+  ease_dollars(-c1_cost)
+end'''

@@ -1,0 +1,53 @@
+SMODS.Sound({
+    key = "sell_plort",
+    path = "reward_small_02.wav"
+})
+
+SMODS.Consumable({
+    key = 'plort',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = { x = 1, y = 1 },
+    config = { dollars = 2 },
+    loc_vars = function(self, info_queue)
+        return { vars = { self.config.dollars}}
+    end,
+    cost = 2,
+    no_collection = true,
+    in_pool = function(self)
+		return false
+    end,
+    can_use = function(self, card)
+        return true;
+    end,
+    use = function(self, card, area, copier)
+        ease_dollars(self.config.dollars)
+    end,
+    add_to_deck = function (self, card, from_debuff)
+        G.E_MANAGER:add_event(Event({
+            trigger = "after",
+            delay = 0.5,
+            func = function ()
+                ease_dollars(self.config.dollars)
+                play_sound('sarc_sell_plort', 0.9 + 0.2*math.random(), 0.5)
+                --card:start_dissolve(nil, true)
+                card.T.r = -0.2
+                card:juice_up(0.3, 0.4)
+                card.states.drag.is = true
+                card.children.center.pinch.x = true
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.3,
+                    blockable = false,
+                    func = function()
+                        G.jokers:remove_card(card)
+                        card:remove()
+                        card = nil
+                        return true;
+                    end
+                }))
+                return true
+            end
+        }))
+    end
+})

@@ -1,0 +1,155 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# do not
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.FUNCS.draw_from_hand_to_discard()"
+position = "after"
+payload = '''
+if not (G.GAME.ccc_golden_progress and G.GAME.ccc_golden_progress > 1) then
+'''
+match_indent = true
+
+# end wrap
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+            end
+        return true
+      end
+    }))
+  end
+  
+function new_round()
+'''
+position = "before"
+payload = '''
+else
+	G.FUNCS.draw_from_discard_to_deck()
+	delay(0.8)
+	local function _reset()
+		G.GAME.chips = 0
+		G.GAME.current_round.discards_left = math.max(0, G.GAME.round_resets.discards + G.GAME.round_bonus.discards)
+		G.GAME.current_round.hands_left = (math.max(1, G.GAME.round_resets.hands + G.GAME.round_bonus.next_hands))
+		G.GAME.current_round.hands_played = 0
+		G.GAME.current_round.discards_used = 0
+		for k, v in pairs(G.GAME.hands) do 
+			v.played_this_round = 0
+		end
+		G.GAME.ccc_golden_progress = G.GAME.ccc_golden_progress - 1
+		G.GAME.blind:set_text()
+		if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 1) then
+			G.GAME.ccc_bonus_blind:set_text()
+		end
+	end
+	G.E_MANAGER:add_event(Event({
+		trigger = 'immediate',
+		func = function()
+			for i, v in ipairs({'blind', 'ccc_bonus_blind'}) do
+				if G.GAME[v].name == 'ccc_Golden Crown' then
+					SMODS.juice_up_blind(v)
+				end
+			end
+			G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.06*G.SETTINGS.GAMESPEED, blockable = false, blocking = false, func = function()
+				play_sound('tarot2', 0.76, 0.4);_reset();return true end}))
+			play_sound('tarot2', 1, 0.4)
+			return true
+		end
+	}))
+	delay(0.8)
+
+	-- literally just copypasted an entire set_blind chunk (i can't run the rest of it)
+	if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 1) then
+		for i, v in ipairs({'blind', 'ccc_bonus_blind'}) do
+			local self = G.GAME[v]
+			local obj = self.config.blind
+			self.disabled = false
+			if self.name == 'The Eye' and not reset then
+				obj = G.P_BLINDS['bl_small']	-- nuke obj to avoid smods ownership
+				self.hands = {}
+				for _, v in ipairs(G.handlist) do
+					self.hands[v] = false
+				end
+			end
+			if not self.name == 'ccc_Golden Crown' and obj.set_blind and type(obj.set_blind) == 'function' then
+				obj:set_blind()
+			elseif self.name == 'The Mouth' and not reset then
+				self.only_hand = false
+			elseif self.name == 'The Fish' and not reset then 
+				self.prepped = nil
+			elseif self.name == 'The Water' and not reset then 
+				self.discards_sub = G.GAME.current_round.discards_left
+				ease_discard(-self.discards_sub)
+			elseif self.name == 'The Needle' and not reset then 
+				self.hands_sub = G.GAME.round_resets.hands - 1
+				ease_hands_played(-self.hands_sub)
+			elseif self.name == 'The Manacle' and not reset then
+				G.hand:change_size(-1)
+			elseif self.name == 'Amber Acorn' and not reset and #G.jokers.cards > 0 then
+				G.jokers:unhighlight_all()
+				for k, v in ipairs(G.jokers.cards) do
+					if v.facing == 'front' then
+						v:flip()
+					end
+				end
+				if #G.jokers.cards > 1 then 
+					G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 0.2, func = function() 
+						G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 0.85);return true end })) 
+						delay(0.15)
+						G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 1.15);return true end })) 
+						delay(0.15)
+						G.E_MANAGER:add_event(Event({ func = function() G.jokers:shuffle('aajk'); play_sound('cardSlide1', 1);return true end })) 
+						delay(0.5)
+					return true end })) 
+				end
+			end
+		end
+		for _, v in ipairs(G.playing_cards) do
+			G.GAME.blind:debuff_card(v)
+		end
+		for _, v in ipairs(G.jokers.cards) do
+			if not reset then G.GAME.blind:debuff_card(v, true) end
+		end
+	end
+
+	G.GAME.blind:alert_debuff(true)
+	if (G.GAME.modifiers.ccc_bside and G.GAME.modifiers.ccc_bside >= 1) then
+		G.GAME.ccc_bonus_blind:alert_debuff(true)
+	end
+	
+	-- TARGET: setting_blind effects
+	delay(0.4)
+	G.E_MANAGER:add_event(Event({
+		trigger = 'immediate',
+		func = function()
+			G.STATE = G.STATES.DRAW_TO_HAND
+			G.deck:shuffle('nr'..G.GAME.round_resets.ante)
+			G.deck:hard_set_T()
+			G.STATE_COMPLETE = false
+			return true
+		end
+	}))
+end
+'''
+match_indent = true
+
+# end wrap
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+if game_over then
+'''
+position = "before"
+payload = '''
+if (G.GAME.ccc_golden_progress and G.GAME.ccc_golden_progress > 1) then
+	game_won = false
+	G.GAME.won = false
+end
+'''
+match_indent = true

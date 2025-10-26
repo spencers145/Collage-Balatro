@@ -1,0 +1,16 @@
+SMODS.Consumable({
+    key = 'celeste',
+    set = 'travel',
+    atlas = 'consumables',
+    pos = {x=1, y=0},
+    discovered = false,
+    config = {mod_conv = "m_sarc_strawberry", max_highlighted = 2},
+    effect = 'Enhance',
+    cost = 3,
+    loc_vars = function(self, info_queue)
+		info_queue[#info_queue + 1] = G.P_CENTERS[self.config.mod_conv]
+
+		return { vars = { self.config.max_highlighted,self.config.mod_conv } }
+	end,
+
+})
