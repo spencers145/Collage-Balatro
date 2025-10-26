@@ -12,8 +12,8 @@ local radioactive = SMODS.Joker({
 	"to randomize each scored card's",
     "{C:attention}rank{} and {C:attention}suit{}"},
     {"Whenever this happens,",
-    "this Joker gains {C:mult}X#4#{} Mult",
-    "{C:inactive}(Currently {C:mult}X#3#{C:inactive} Mult)"}
+    "this Joker gains {C:white,X:mult}X#4#{} Mult",
+    "{C:inactive}(Currently {C:white,X:mult}X#3#{C:inactive} Mult)"}
         }
     },
 	rarity = 2,

@@ -44,6 +44,7 @@ SMODS.Joker {
 				local used_up = {}
 				local pool = {}
 				for i = 1, math.min(3, #context.scoring_hand), 1 do
+					pool = {}
 					for key, other_card in pairs(context.scoring_hand) do
 						if other_card.area == G.play then
 							local used_up_already = false
@@ -59,6 +60,8 @@ SMODS.Joker {
 						end
 					end
 
+					print(#pool .. " is pool size")
+					print(#used_up .. " used up")
 					local chosen_card = pseudorandom_element(pool, pseudoseed('gfondue_strawberry'))
 					
 					if chosen_card then

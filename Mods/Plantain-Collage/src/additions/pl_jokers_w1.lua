@@ -10,7 +10,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 0, y = 0 },
   cost = 4,
-  discovered = true,
+  discovered = false,
   pools = {
     Food = true
   },
@@ -81,7 +81,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 1, y = 0 },
   cost = 2,
-  discovered = true,
+  discovered = false,
   config = { extra = { Xmult = 1 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.Xmult + ((G.GAME.pl_postcards_sold or 0) * 2) } }
@@ -106,7 +106,7 @@ SMODS.Joker {
   rarity = 1,
   atlas = 'pl_atlas_w1',
   cost = 5,
-  discovered = true,
+  discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
@@ -149,7 +149,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 3, y = 0 },
   cost = 5,
-  discovered = true,
+  discovered = false,
   config = { extra = { mult = 4, chips = 25, bingo1 = 3, bingo2 = 7 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.bingo1, card.ability.extra.bingo2, card.ability.extra.chips, card.ability.extra.mult } }
@@ -199,7 +199,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 4, y = 0 },
   cost = 5,
-  discovered = true,
+  discovered = false,
   pools = {
     Food = true
   },
@@ -245,7 +245,7 @@ SMODS.Joker {
   rarity = 2,
   atlas = 'pl_atlas_w1',
   config = { extra = { should_destroy = true } },
-  discovered = true,
+  discovered = false,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.should_destroy } }
   end,
@@ -297,7 +297,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 1, y = 1 },
   cost = 6,
-  discovered = true,
+  discovered = false,
   calculate = function(self, card, context)
     if context.cardarea == G.play and context.repetition and not context.repetition_only then
       if next(context.poker_hands['Straight']) then
@@ -321,7 +321,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 2, y = 1 },
   cost = 6,
-  discovered = true,
+  discovered = false,
   calculate = function(self, card, context)
     if context.cardarea == G.play and context.repetition then
       if context.other_card.ability.set ~= 'Enhanced' then
@@ -340,7 +340,7 @@ SMODS.Joker {
   key = 'el_dorado',
   config = { extra = { money_mod = 2 } },
   rarity = 3,
-  discovered = true,
+  discovered = false,
   atlas = 'pl_atlas_w1',
   blueprint_compat = false,
   eternal_compat = true,
@@ -363,7 +363,7 @@ SMODS.Joker {
   key = 'black_cat',
   rarity = 2,
   atlas = 'pl_atlas_w1',
-  discovered = true,
+  discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
@@ -401,7 +401,7 @@ SMODS.Joker {
   key = 'mossy_joker',
   rarity = 3,
   atlas = 'pl_atlas_w1',
-  discovered = true,
+  discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -435,7 +435,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 2, y = 2 },
   cost = 8,
-  discovered = true,
+  discovered = false,
   config = { extra = { Xmult = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.Xmult } }
@@ -476,7 +476,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 3, y = 2 },
   cost = 7,
-  discovered = true,
+  discovered = false,
   config = { extra = { is_odd = 'pl_even', next_round = 'pl_odd', Xmult = 1.5} },
   loc_vars = function(self, info_queue, card)
     return { vars = { localize(card.ability.extra.is_odd), localize(card.ability.extra.next_round), card.ability.extra.Xmult} }
@@ -522,7 +522,7 @@ SMODS.Joker {
   end,
   pos = { x = 4, y = 2 },
   cost = 9,
-  discovered = true,
+  discovered = false,
   pools = {
     Food = true
   },

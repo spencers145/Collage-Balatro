@@ -4,7 +4,7 @@ SMODS.Consumable({
     atlas = 'collectable_atlas',
     pos = {x=5, y=14},
     soul_pos = {x=5, y=15},
-    discovered = true,
+    discovered = false,
     config = {
        extra = { 
         xmult = 1.5,

@@ -254,6 +254,7 @@
         loc_vars = function (self, info_queue, card)
             info_queue[#info_queue+1] = { key = "c_collagexdread_rotten", set = "Other" }
         end,
+        discovered = false,
         calculate = function(self, card, context)
             if context.selling_self then
                 for key, value in pairs(G.consumeables.cards) do

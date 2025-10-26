@@ -4101,7 +4101,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
-
+	discovered = false,
 
 	-- loc text is the in game description
 	loc_txt = {
@@ -4194,6 +4194,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
+	discovered = false,
 
 	-- loc text is the in game description
 	loc_txt = {
@@ -4250,7 +4251,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
-
+	discovered = false,
 
 	-- loc text is the in game description
 	loc_txt = {
@@ -4318,7 +4319,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = false,
-	
+	discovered = false,
 
 
 	-- loc text is the in game description
@@ -4378,7 +4379,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
-
+	discovered = false,
 	-- loc text is the in game description
 	loc_txt = {
 		name = 'Fun Guy',
@@ -4449,7 +4450,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
-
+	discovered = false,
 
 	-- loc text is the in game description
 	loc_txt = {
@@ -4517,6 +4518,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
+	discovered = false,
 	-- loc text is the in game description
 	loc_txt = {
 		name = 'Carnival Cannon',
@@ -4564,6 +4566,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = false,
 	perishable_compat = true,
+	discovered = false,
 
 	-- loc text is the in game description
 	loc_txt = {
@@ -4750,6 +4753,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
+	discovered = false,
 
 	-- loc text is the in game description
 	loc_txt = {
@@ -4839,6 +4843,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = false,
 	perishable_compat = true,
+	discovered = false,
 
 	-- loc text is the in game description
 	loc_txt = {
@@ -4915,6 +4920,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
+	discovered = false,
 
 	-- loc text is the in game description
 	loc_txt = {
@@ -4971,6 +4977,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = false,
+	discovered = false,
 
 	-- loc text is the in game description
 	loc_txt = {
@@ -5077,6 +5084,7 @@ SMODS.Joker {
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
+	discovered = false,
 	
 	-- loc text is the in game description
 	loc_txt = {

@@ -13,7 +13,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
-  discovered = true,
+  discovered = false,
 
   rarity = 1,
   cost = 5,
@@ -55,7 +55,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
-  discovered = true,
+  discovered = false,
 
   rarity = 2,
   cost = 5,
@@ -105,7 +105,7 @@ SMODS.Joker {
   blueprint_compat = false,
   eternal_compat = false,
   perishable_compat = false,
-  discovered = true,
+  discovered = false,
 
   rarity = 2,
   cost = 6,
@@ -164,7 +164,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
 
   rarity = 2,
   cost = 6,
@@ -206,7 +206,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
 
   rarity = 2,
   cost = 6,
@@ -245,7 +245,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
-  discovered = true,
+  discovered = false,
 
   rarity = 3,
   cost = 6,
@@ -280,7 +280,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
 
   rarity = 3,
   cost = 5,

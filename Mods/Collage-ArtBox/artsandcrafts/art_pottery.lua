@@ -6,7 +6,7 @@ SMODS.Consumable ({
 	pos = { x = 3, y = 2 },
 	cost = 4,
 	unlocked = true,
-	discovered = true,
+	discovered = false,
 	config = {mod_conv = "m_artb_clay", max_highlighted = 2},
     effect = 'Enhance',
     loc_vars = function(self, info_queue)

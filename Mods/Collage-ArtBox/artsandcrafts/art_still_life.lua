@@ -10,7 +10,7 @@ SMODS.Consumable ({
 	pos = { x = 1, y = 2 },
 	cost = 3,
 	unlocked = true,
-	discovered = true,
+	discovered = false,
   can_use = function(self, card)
 		return G.consumeables and
     (#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit

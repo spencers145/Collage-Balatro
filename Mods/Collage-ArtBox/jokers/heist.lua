@@ -1,7 +1,7 @@
 SMODS.Joker {
     key = "heist",
     unlocked = true,
-    discovered = true,
+    discovered = false,
     atlas = 'joker_atlas',
     blueprint_compat = true,
     rarity = 3,

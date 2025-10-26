@@ -210,13 +210,15 @@ function G.UIDEF.custom_deck_tab(_suit)
   loc_options = conv_loc_options
 
   local current_option = 1
-  for k, v in pairs(G.COLLABS.options[_suit]) do
-    if current_rank_option ~= 1 then
-        if G.SETTINGS.all_in_jest.Collabs[_suit][k] == v then current_option = k end
-    else
-        if G.SETTINGS.CUSTOM_DECK.Collabs[_suit] == v then current_option = k end
+  --if G.SETTINGS.all_in_jest and G.SETTINGS.all_in_jest.Collabs then
+    for k, v in pairs(G.COLLABS.options[_suit]) do
+        if current_rank_option ~= 1 then
+            if G.SETTINGS.all_in_jest.Collabs[_suit][k] == v then current_option = k end
+        else
+            if G.SETTINGS.CUSTOM_DECK.Collabs[_suit] == v then current_option = k end
+        end
     end
-  end
+--end
 
   local loc_rank_options = {}
   local index = 2

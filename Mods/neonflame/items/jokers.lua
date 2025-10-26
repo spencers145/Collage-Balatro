@@ -12,6 +12,7 @@
      eternal_compat = true,
      perishable_compat = true,
      demicolon_compat = true,
+     discovered = false,
 
      loc_vars = function(self, info_queue, card)
          return { vars = {card.ability.extra.bonus} }
@@ -781,6 +782,7 @@ SMODS.Joker {
     eternal_compat = true,
     perishable_compat = true,
     demicolon_compat = false,
+    discovered = false,
 
     loc_vars = function(self, info_queue, card)
     local num, den = SMODS.get_probability_vars(card, 1, card.ability.extra.chance, "nflame_refund")
@@ -815,6 +817,7 @@ SMODS.Joker {
     eternal_compat = true,
     perishable_compat = false,
     demicolon_compat = true,
+    discovered = false,
 
     loc_vars = function(self, info_queue, card)
         local rank = localize(card.ability.immutable.rank, "ranks")

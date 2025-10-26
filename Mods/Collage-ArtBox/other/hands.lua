@@ -29,7 +29,7 @@ SMODS.Consumable {
   set = "Planet",
   key = "vesta",
   pos = { x = 1, y = 0 },
-  discovered = true,
+  discovered = false,
   config = {
     hand_type = "artb_null",
     softlock = true

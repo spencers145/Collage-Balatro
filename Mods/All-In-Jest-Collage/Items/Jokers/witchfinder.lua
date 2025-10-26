@@ -5,10 +5,10 @@ local witchfinder = {
     config = {
 
     },
-    rarity = 1,
+    rarity = 2,
     pos = { x = 23, y = 9 },
     atlas = 'joker_atlas',
-    cost = 4,
+    cost = 8,
     unlocked = true,
     discovered = false,
     blueprint_compat = false,
@@ -25,6 +25,7 @@ local witchfinder = {
                     local key = 'p_arcana_normal_' .. pseudorandom('witchfinder', 1, 4)
                     local booster = SMODS.add_booster_to_shop(key)
                     booster:set_cost()
+                    booster.cost = 0
                     return true
                 end
             })

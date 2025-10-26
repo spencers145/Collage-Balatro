@@ -7,7 +7,7 @@ SMODS.Consumable({
 	pos = { x = 2, y = 2 },
 	cost = 4,
 	unlocked = true,
-	discovered = true,
+	discovered = false,
 
 	use = function(self, card, area)
 

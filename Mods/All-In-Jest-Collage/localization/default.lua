@@ -2642,7 +2642,7 @@ return {
             j_aij_witchfinder = { 
                 name = "Witchfinder", 
                 text = { 
-                    "{C:attention}1{} additional {C:tarot}Arcana{}",
+                    "{C:attention}1{} additional {C:money}free{} {C:tarot}Arcana{}",
                     "{C:tarot}Pack{} available in {C:money}Shop"
                 } 
             },
