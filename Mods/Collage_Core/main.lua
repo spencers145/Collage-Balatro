@@ -1,6 +1,3 @@
-
-
-
 G.FUNCS.collage_tutorial = function()
     G.SETTINGS.paused = true
     G.FUNCS.overlay_menu {
@@ -15,6 +12,7 @@ end
 G.FUNCS.true_back_button = function()
     G.SETTINGS.paused = false
     G.SETTINGS.badge_tutorial = true
+    G.SETTINGS.tutorial_complete = true -- kill jimbo 4ever
     G.FUNCS:exit_overlay_menu()
 end
 
@@ -245,7 +243,7 @@ function Game:main_menu(change_context)
             major = G.ROOM_ATTACH
         }
     })
-    if not self.SETTINGS.badge_tutorial then
+    if not self.SETTINGS.badge_tutorial or not G.SETTINGS.tutorial_complete then
         G.FUNCS.collage_tutorial()
     end
 end

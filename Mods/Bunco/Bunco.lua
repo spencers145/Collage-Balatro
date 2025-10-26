@@ -1926,7 +1926,7 @@ create_joker({ -- Righthook
     locked_vars = function(self, info_queue, card)
         return {vars = {self.config.extra.unlock}}
     end,
-    rarity = 'Uncommon', cost = 8,
+    rarity = 'Rare', cost = 8,
     blueprint = true, eternal = true,
     unlocked = false,
     check_for_unlock = function(self, args)

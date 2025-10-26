@@ -1,0 +1,128 @@
+[manifest]
+version = '1.0.0'
+dump_lua = true
+priority = 1
+
+# Set game variables (banned keys)
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = 'G:save_settings()'
+position = 'before'
+match_indent = true
+payload = 'BANNERMOD.setup_game(not saveTable)'
+
+# Remove disabled editions from poll_edition
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = 'for _, v in ipairs(_options) do'
+position = 'before'
+match_indent = true
+payload = '_options = BANNERMOD.apply_editions(_options)'
+
+# Remove disabled enhancements from specific "create enhanced cards" effects
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'cen_pool[#cen_pool+1] = v'
+position = 'after'
+match_indent = true
+payload = '''
+if G.GAME.bannermod_disabled[v.key] then
+	cen_pool[#cen_pool] = nil
+end
+'''
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/game_object.lua"]'
+pattern = 'cen_pool[#cen_pool + 1] = v'
+position = 'after'
+match_indent = true
+payload = '''
+if G.GAME.bannermod_disabled[v.key] then
+	cen_pool[#cen_pool] = nil
+end
+'''
+# Cryptid overwrites this too I guess !!
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Cryptid "items/stake.lua"]'
+pattern = 'cen_pool[#cen_pool + 1] = v'
+position = 'after'
+match_indent = true
+payload = '''
+if G.GAME.bannermod_disabled[v.key] then
+	cen_pool[#cen_pool] = nil
+end
+'''
+
+# Make boss blinds default to The Wall if all boss blinds disabled 
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = "local _, boss = pseudorandom_element(eligible_bosses, pseudoseed('boss'))"
+position = 'after'
+match_indent = true
+payload = 'boss = boss or "bl_wall" -- Banner default'
+
+# Make enhancements default to a Base card instead of Joker
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'else _pool[#_pool + 1] = "j_joker"'
+position = 'before'
+match_indent = true
+payload = "elseif _type == 'Enhanced' then _pool[#_pool + 1] = \"c_base\" -- Banner default"
+
+# Make seals default to Purple Seal instead of Joker
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'else _pool[#_pool + 1] = "j_joker"'
+position = 'before'
+match_indent = true
+payload = "elseif _type == 'Seal' then _pool[#_pool + 1] = \"Purple\" -- Banner default"
+
+# Check card click for left-click option
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = 'function Card:click()'
+position = 'after'
+match_indent = true
+payload = '''
+	if BANNERMOD.config.left_click and BANNERMOD.handle_collection_click_card(self) then return end
+'''
+
+# Disable debuffed tooltip in collection
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = 'local debuffed = card.debuff'
+position = 'after'
+match_indent = true
+payload = '''
+if debuffed and card.bannermod_no_debuff_tip then
+	debuffed = false
+end
+'''
+[[patches]]
+[patches.regex]
+target = 'functions/common_events.lua'
+pattern = "\\(card and card\\.debuff(?<a>)"
+position = 'at'
+root_capture = 'a'
+payload = 'and not card.bannermod_no_debuff_tip'
+
+# Add variable to collection tag sprites to check whether they're in the collection
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = 'local temp_tag_ui, temp_tag_sprite = temp_tag:generate_UI()'
+position = 'after'
+match_indent = true
+payload = '''
+temp_tag_sprite.bannermod_in_collection = true
+temp_tag_sprite.bannermod_disabled = false
+'''

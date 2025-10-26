@@ -1,0 +1,12 @@
+{
+	"id": "banner",
+	"name": "Banner",
+	"author": ["SylviBlossom"],
+	"description": "Configure which cards can appear in a run",
+	"prefix": "bannermod",
+	"main_file": "src/main.lua",
+	"dependencies": [
+		"Steamodded (>=1.*)"
+	],
+	"version": "1.1.1"
+}

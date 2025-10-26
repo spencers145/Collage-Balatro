@@ -2644,7 +2644,7 @@ return {
                 text = { 
                     "{C:attention}1{} additional {C:money}free{} {C:tarot}Arcana{}",
                     "{C:tarot}Pack{} available in {C:money}Shop"
-                } 
+                }
             },
             j_aij_trophy_kill = { name = "Trophy Kill", text = { "" } },
             j_aij_tract = { 
