@@ -1,0 +1,8 @@
+return {
+	["fixed_sprites"] = true,
+	["fixed_badges"] = false,
+	["high_quality_shaders"] = true,
+	["gameplay_reworks"] = true,
+	["jokerlike_consumable_editions"] = true,
+	["colorful_finishers"] = true,
+}

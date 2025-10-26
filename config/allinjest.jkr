@@ -1,0 +1,6 @@
+return {
+	["blue_stake_rework"] = false,
+	["moons_enabled"] = false,
+	["no_copy_neg"] = false,
+	["alter_trypophobia"] = false,
+}

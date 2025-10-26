@@ -1,0 +1,272 @@
+eval G.jokers.cards[1]
+eval G.jokers.cards[1].edition
+eval G.hand.cards[5].ability
+eval G.hand.cards[5].ability.extra
+eval G.GAME.cartomancer_bosses_list
+eval G.GAME.boosters
+eval G.GAME.booster
+eval G.boosters
+eval G.booster
+eval G.shop_boosters
+eval G.shop_booster
+eval G.shop_booster.cards[1]
+eval G.shop_booster.cards[1].ability
+eval G.shop_booster.cards[1].area
+eval G.shop_booster.cards[1].area == G.shop_booster
+eval G.vouchers
+eval G.vouchers.cards
+eval G.shop_vouchers
+eval G.shop_vouchers.cards[3]
+eval G.shop_vouchers.cards[3].shop_voucher
+eval G.shop_vouchers.cards[2].shop_voucher
+eval shop_booster
+eval G.shop_booster
+eval G.shop_booster.cards[1]
+eval G.shop_booster.cards[1].area
+eval G.shop_booster.cards[1].area == G.shop_booster
+eval G.shop_voucher
+eval G.shop_vouchers
+eval G.shop_vouchers.cards[1]
+eval G.shop_vouchers.cards[1].shop_voucher
+eval G.shop_booster.cards[1]
+eval G.shop_booster.cards[1].set
+eval G.shop_booster.cards[1].ability.set
+eval G.shop_booster
+eval G.shop_booster.cards[1]
+eval G.shop_booster.cards[1].shop
+eval G.shop_booster.cards[1].shop_booster
+eval G.shop_booster.cards[1].shop_boosters
+eval G.shop_booster.cards[1].cost
+eval G.shop_booster.cards[1].base_cost
+eval G.jokers.cards[1]
+eval G.jokers.cards[1]:get_edition()
+eval G.jokers.cards[1]:get_edition() == G.P_CENTERS.e_polychrome
+eval G.jokers.cards[1]:get_edition() ==G.P_CENTERS.e_polychrome
+eval G.jokers.cards[1]:get_edition()
+eval G.jokers.cards[1]:get_edition().key
+eval G.jokers.cards[1]:get_edition().name
+eval G.jokers.cards[1]:get_edition().card
+eval G.jokers.cards[1]:get_edition().edition
+eval G.jokers.cards[1]:get_edition().ability
+eval G.jokers.cards[1]:get_edition()
+eval G.jokers.cards[1]:get_edition().x_mult_mod == 1.5
+play_sound('tma_statement1')
+eval play_sound('tma_statement1')
+eval play_sound('tma_statement2')
+eval local mod = 1
+eval mod
+eval for key, value in pairs(G.consumeables) do\r\n            if value == card then\r\n                print('found')\r\n                break\r\n            end\r\n        end
+eval G.GAME.starting_params
+eval G.GAME.current_round
+eval G.GAME.current_round.voss
+eval G.GAME.current_round.boss
+eval G.GAME.current_round.boss_blind
+eval G.GAME.current_round.blind
+eval G.GAME.blind
+eval G.GAME.blind.boss
+eval G.GAME.blind
+G.GAME.back
+eval G.GAME.back
+eval G.GAME.current_back
+eval G.GAME.get_back
+eval G.GAME.get_b
+eval G.GAME.b
+eval G.GAME.decki
+eval G.GAME.deck
+eval G.GAME.current_round
+eval G.GAME.current_round.deck
+eval G.GAME.current_round.back
+eval G.GAME.selected_back
+eval G.GAME.selected_back.key
+eval G.GAME.selected_back.center
+eval G.GAME.selected_back.effect.center.key
+eval G.GAME.selected_sleeve
+G.jokers
+G.joker
+eval G.jokers
+eval G.jokers.area.limit
+eval G.jokers.area
+eval G.jokers.cardarea
+eval G.jokers.card_limit
+eval G.jokers.limit
+eval G.jokers.config.card_limits
+eval G.jokers.config.card_limits.card_limit
+eval G.jokers.cards[2]
+eval G.jokers.cards[2].ability.perish_tally
+eval G.jokers.cards[3]
+eval G.jokers.cards[3].eternal_compat
+eval G.jokers.cards[3].eternal_compatible
+eval G.jokers.cards[3].ability
+eval G.jokers.cards[3].ability.eternal_compat
+eval G.jokers.cards[3].ability.perishable_compat
+eval G.jokers.cards[3].center
+eval G.jokers.cards[3]
+eval G.jokers.cards[3].config
+eval G.jokers.cards[3].config.eternal_compat
+eval G.jokers.cards[3].config.center
+eval G.jokers.cards[3].config.center.eternal_compat
+eval G.consumeables
+eval G.consumeables.cards[2]
+eval G.consumeables.cards[2].ability
+resetshop
+eval G.consumeables.cards[1]
+eval G.consumeables.cards[1].key
+eval G.consumeables.cards[1].center
+eval G.consumeables.cards[1].config.center.key
+eval G.hand.cards[1].config
+eval G.hand.cards[1].config.bleached
+resetshop
+eval G.consumeables.cards[2]
+eval G.consumeables.cards[2].key
+eval G.consumeables.cards[2].ability
+eval G.consumeables.cards[2].ability.key
+eval G.consumeables.cards[2].config.center
+eval G.consumeables.cards[2].config.center.key
+G.CHOOSE_CARD = UIBox({\r\n                    definition = djinn_UIBox(card),\r\n                    config = {\r\n                        align = "cm",\r\n                        major = G.ROOM_ATTACH,\r\n                        bond = "Weak",\r\n                        instance_type = "POPUP",\r\n                    },\r\n                })
+eval G.CHOOSE_CARD = UIBox({\r\n                    definition = djinn_UIBox(card),\r\n                    config = {\r\n                        align = "cm",\r\n                        major = G.ROOM_ATTACH,\r\n                        bond = "Weak",\r\n                        instance_type = "POPUP",\r\n                    },\r\n                })
+help
+watch Collage-DreadJokers\\FearJokers.lua
+watch
+help watch
+watch lua Collage-DreadJokers\\FearJokers.lua
+watch lua \\Collage-DreadJokers\\FearJokers.lua
+watch lua Mods\\Collage-DreadJokers\\FearJokers.lua
+watch lua Mods/lovely\\dump\\functions\\misc_functions.lua
+help
+eval G.GAME.hands
+eval G.GAME.hands['vis_heavyweight'].visible
+eval G.GAME.hands['vis_heavyweight'].visible = true
+eval G.GAME.hands['vis_heavyweight']
+eval G.GAME.hands['vis_heavyweight'].secret
+eval G.GAME.hands['vis_heavyweight'].secret = false
+eval G.GAME.hands['vis_heavyweight']
+eval G.GAME.hands['pair']
+eval G.GAME.hands['Pair']
+eval G.GAME.hands['vis_heavyweight']
+eval get_current_pool('voucher')
+eval get_current_pool('Voucher')
+eval get_current_pool('Voucher')['v_overstock_norm']
+eval get_current_pool('Voucher')[63]
+eval get_current_pool('Voucher')
+eval SMODS.get_next_vouchers()
+eval get_current_pool('Voucher')
+eval localize()
+eval localize({})
+eval localize({key = 'collage_petrify_tip'})
+eval localize({key = 'collage_petrify_tip', set = 'Other'})
+eval localize({key = 'collage_petrify_tip', set = 'other'})
+eval localize({key = 'collage_petrify_tip', set = 'Other'})
+eval localize({key = 'collage_heavyweight_tip', set = 'Other'})
+eval localize({key = 'heavyweight_tip', set = 'Other'})
+eval localize({ key = "collage_voucher_notifier", set = "Other"})
+eval G.P_CENTERS.b_femtoLabsCollection_flc_slatedeck
+money set 10
+resetshop
+money set 10
+resetshop
+eval G.play
+eval G.play.cards
+eval G.play.cards[5]
+eval G.consumeables.cards[1]
+eval G.consumeables.cards[1]:use()
+eval G.consumeables.cards[1]:use
+eval G.consumeables.cards[1].use
+eval G.consumeables.cards[1].on_use
+eval G.consumeables.cards[1]
+eval G.consumeables.cards[1].config
+eval G.consumeables.cards[1].config.use
+eval G.consumeables.cards[1].configcenter
+eval G.consumeables.cards[1].config.center.use
+eval G.consumeables.cards[1].config.center.use()
+eval G.consumeables.cards[1].config.center:use()
+eval G.P_CENTERS.b_red
+eval G.P_CENTERS.b_red.stake
+eval G.P_CENTERS.b_red
+eval G.P_CENTER_POOLS
+eval G.P_CENTER_POOLS['Back']
+eval G.P_CENTER_POOLS['Back']['b_red']
+eval G.P_CENTER_POOLS['Back'].b_red
+eval G.P_CENTER_POOLS['Back'][1]
+eval get_deck_win_sticker(G.P_CENTERS.b_red)
+eval get_deck_win_sticker(G.P_CENTERS.b_blue)
+eval get_deck_win_sticker(G.P_CENTERS.b_ortalab_royal)
+eval get_deck_win_sticker(G.P_CENTERS.b_ortalab_royal) == true
+eval if get_deck_win_sticker(G.P_CENTERS.b_ortalab_royal) then return true end
+eval G.jokers.cards[1].ability.extra
+eval G.jokers.cards[1].ability.extra.attached_card
+eval G.consumeables.cards[1].custom_property
+eval G.consumeables.cards[1]
+eval G.consumeables.cards[1].custom_property
+eval G.consumeables.cards[1].ability
+eval G.consumeables.cards[1].ability.extra
+eval G.consumeables.cards[1].ability.extra.custom_propety
+eval G.consumeables.cards[1].ability.extra.custom_property
+eval G.jokers.cards[1].ability.extra
+eval G.jokers.cards[1].ability.extra.attached_card == "MANUAL_REPLACE"
+eval G.jokers.cards[1].ability.extra.attached_card .. '' == "MANUAL_REPLACE"
+eval G.jokers.cards[1].ability.extra.attached_card
+eval G.jokers.cards[1].ability.extra.attached_card == [["]].."MANUAL_REPLACE"..[["]]
+eval G.jokers.cards[1].ability.extra
+eval G.jokers.cards[1].ability.extra.shots_left = 1
+money set 13
+eval G.hands
+eval G.poker_hands
+eval G.poker_hand
+eval G.hand
+eval G.GAME.hands
+eval G.GAME.hands.Pair
+eval hand_chips
+play_sound('RainyDays_microwave_ding', 0.7, 0.4)
+eval play_sound('RainyDays_microwave_ding', 0.7, 0.4)
+eval for i = 1, 20, 1 do\r\n                                play_sound('RainyDays_microwave_ding', 0.7, 0.4)\r\n                                delay(0.125)\r\n                            end
+eval for i = 1, 20, 1 do\r\n                                play_sound('RainyDays_microwave_ding', 0.7, 0.4)\r\n                                delay(0.5)\r\n                            end
+eval stop_audio()
+eval G.stop_audio()
+eval G.GAME.stop_audio()
+eval STOP_AUDIO()
+eval G.SETTINGS.SOUND.music_volume
+eval G.SETTINGS.SOUND.music_volume = 0
+eval G.SETTINGS.SOUND.music_volume = 50
+eval G.SETTINGS.SOUND.game_sounds_volume
+eval play_sound('collage_microwave_innocent', 1, 0.2)
+eval play_sound('collage_microwave_innocent', 1, 0.5)
+eval play_sound('collage_microwave_innocent', 1, 0.6)
+eval play_sound('collage_microwave_innocent', 1, 0.7)
+eval G.jokers.cards
+eval G.jokers.cards[1].ability
+eval G.jokers.cards[1].ability.extra.plus_mult = 20
+eval G.jokers.cards[1].ability.extra.plus_mult = 19
+eval G.jokers.cards[1].ability.extra.plus_mult = 17
+money set 16
+eval G.jokers.cards[1].ability.extra.plus_mult = 17
+money set 23
+eval play_sound('collage_alarm_clock', 1, 1.1)
+eval G.jokers.cards[1]
+eval G.jokers.cards[1].rarity
+eval G.jokers.cards[1].type
+eval G.jokers.cards[1].config.center
+eval G.jokers.cards[1].config.center.rarity
+eval G.jokers.cards[1].config.center.rarity = 1
+eval G.jokers.cards[1].config.center.rarit
+eval G.jokers.cards[1].config.center.rarity
+eval G.jokers.cards[1].config.center.rarity = 1
+eval G.jokers.cards[1].config.center.rarity
+eval play_sound('collage_vis_harken')
+eval G.jokers[1]
+eval G.jokers.cards[1]
+eval G.jokers.cards[1].ability
+eval G.jokers.cards[1].ability.extra
+eval G.jokers.cards[1].ability.extra.balance=6
+eval G.play.cards
+eval play_sound('collage_vis_dad1')
+eval play_sound('collage_vis_dad3')
+play_sound("collage_vis_dad1")
+eval play_sound("collage_vis_dad1")
+eval play_sound("collage_vis_dad1", 0.7)
+eval play_sound("collage_vis_dad1", 1, 0.7)
+eval play_sound("collage_vis_dad1", 1, 0.6)
+eval play_sound("collage_vis_dad1", 1, 0.5)
+eval play_sound("collage_vis_dad1", 1, 0.4)
+eval play_sound("collage_vis_dad7", 1, 0.4)
+eval play_sound("collage_vis_dad9", 1, 0.4)
+eval juice_card_until(G.jokers.cards[2], function() return card.ability.extra.timer > 1 end)

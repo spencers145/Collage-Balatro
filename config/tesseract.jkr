@@ -1,0 +1,5 @@
+return {
+	["suppression_apple_pie"] = 1,
+	["rebalance"] = true,
+	["suppression_plushie"] = 3,
+}

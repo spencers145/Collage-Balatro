@@ -1,0 +1,12 @@
+return {
+	["menu_toggle"] = false,
+	["artist_credits"] = true,
+	["enhancement_skip"] = false,
+	["ortalab_only"] = true,
+	["reduced_mod_badge"] = false,
+	["initial_setup_demo_3"] = true,
+	["full_credits"] = false,
+	["placeholders"] = true,
+	["credit_pos"] = 1,
+	["loteria_skip"] = false,
+}

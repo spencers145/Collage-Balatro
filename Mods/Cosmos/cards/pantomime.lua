@@ -9,7 +9,7 @@ SMODS.Joker {
         }
     },
     unlocked = true,
-    discovered = false,
+    discovered = true,
     blueprint_compat = true,
     config = { extra = { retrigger = 1, prev_ranks = {} } },
     rarity = 3,

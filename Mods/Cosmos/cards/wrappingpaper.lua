@@ -11,7 +11,7 @@ SMODS.Joker {
         }
     },
     unlocked = true,
-    discovered = false,
+    discovered = true,
     blueprint_compat = false,
     config = { extra = { maximum = 20 } },
     rarity = 2,

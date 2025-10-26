@@ -1,0 +1,46 @@
+return { 
+  ["improved_hand_sorting"] = true,
+  ["flames_intensity_min"] = 0.5,
+  ["flames_intensity_vanilla"] = false,
+  ["hide_consumables"] = false,
+  ["deck_view_stack_background_opacity"] = "60",
+  ["flames_volume"] = 100,
+  ["dynamic_hand_align"] = false,
+  ["blinds_info"] = true,
+  ["hide_tags"] = false,
+  ["flames_relative_intensity"] = true,
+  ["deck_view_stack_pos_horizontal"] = 2,
+  ["deck_view_stack_x_color"] = "ed7575",
+  ["deck_view_stack_modifiers"] = false,
+  ["compact_deck_enabled"] = false,
+  ["deck_view_hide_drawn_cards"] = false,
+  ["deck_view_stack_enabled"] = true,
+  ["jokers_controls_buttons"] = true,
+  ["jokers_controls_show_after"] = 13,
+  ["deck_view_stack_chips"] = true,
+  ["keybinds"] = { 
+    ["toggle_consumables"] = { 
+      ["[none]"] = true,
+    },
+    ["toggle_jokers"] = { 
+      ["[none]"] = true,
+    },
+    ["toggle_jokers_buttons"] = { 
+      ["[none]"] = true,
+    },
+    ["hide_joker"] = { 
+      ["lalt"] = true,
+      ["h"] = true,
+    },
+    ["toggle_deck"] = { 
+      ["[none]"] = true,
+    },
+    ["toggle_tags"] = { 
+      ["[none]"] = true,
+    },
+  },
+  ["compact_deck_visible_cards"] = 300,
+  ["hide_deck"] = false,
+  ["deck_view_stack_pos_vertical"] = 1,
+  ["flames_intensity_max"] = 40,
+}

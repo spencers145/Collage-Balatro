@@ -1,0 +1,14 @@
+return {
+	["tags_enabled"] = true,
+	["blinds_enabled"] = true,
+	["vouchers_enabled"] = false,
+	["minor_arcana_enabled"] = false,
+	["jokers_enabled"] = true,
+	["plague_doctor_quotes_enabled"] = false,
+	["editions_enabled"] = true,
+	["suits_enabled"] = false,
+	["spectrals_enabled"] = false,
+	["ranks_enabled"] = false,
+	["enhancements_enabled"] = false,
+	["paperclips_enabled"] = false,
+}

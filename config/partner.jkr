@@ -1,0 +1,5 @@
+return {
+	["enable_speech_bubble"] = true,
+	["enable_partner"] = false,
+	["temporary_unlock_all"] = false,
+}

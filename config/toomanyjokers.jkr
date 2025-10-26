@@ -1,0 +1,14 @@
+return {
+	["rows"] = 4,
+	["pinned_keys"] = {
+		["j_lucky_cat"] = true,
+	},
+	["arrow_key_scroll"] = false,
+	["disable_ctrl_enter"] = true,
+	["columns"] = 4,
+	["hide_undiscovered"] = false,
+	["show_all_tags"] = false,
+	["close_on_esc"] = false,
+	["scroll_full_page"] = false,
+	["size"] = 0.7,
+}

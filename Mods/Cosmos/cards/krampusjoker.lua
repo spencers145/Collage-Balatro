@@ -3,14 +3,15 @@ SMODS.Joker {
     loc_txt = {
         name = "Krampus",
         text = {
-            {"When {C:attention}purchasing{} from the Shop,",
+            "When {C:attention}purchasing{} from the Shop,",
             "this Joker gains {X:mult,C:white}X#2#{} Mult",
-            "{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"},
-            {"{C:red,E:2}Items cost {C:money}$#1#{C:red,E:2} more"}
+            "{s:0.33} ",
+            "{C:red,E:2}Items cost {C:money}$#1#{C:red,E:2} more",
+            "{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"
         },
     },
     unlocked = true,
-    discovered = false,
+    discovered = true,
     blueprint_compat = true,
     eternal_compat = false,
     perishable_compat = true,

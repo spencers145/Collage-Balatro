@@ -1,0 +1,7 @@
+return {
+	["blinds_enabled"] = true,
+	["pizza_music"] = true,
+	["green_old"] = false,
+	["myth_enabled"] = false,
+	["jokers_enabled"] = true,
+}

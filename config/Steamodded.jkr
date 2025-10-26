@@ -1,0 +1,12 @@
+return {
+	["achievements"] = 1,
+	["no_mod_badges"] = false,
+	["seeded_unlocks"] = false,
+	["graphics_mipmap_level_options"] = {
+		0,
+		2,
+		4,
+		8,
+	},
+	["graphics_mipmap_level"] = 4,
+}
