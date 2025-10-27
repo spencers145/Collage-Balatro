@@ -7716,7 +7716,7 @@ SMODS.Voucher{ -- Shell Game
 
 
     redeem = function(self, voucher)
-        unlock_card(G.P_CENTERS.b_femtoLabsCollection_gradient)
+        --unlock_card(G.P_CENTERS.b_femtoLabsCollection_gradient)
         if not G.GAME.shop then return end
         if G.shop_booster and G.shop_booster.cards then
             for _, booster in ipairs(G.shop_booster.cards) do
