@@ -9,7 +9,7 @@ priority = 0
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = "-- TARGET: effects after hand evaluation"
+pattern = "BLOCKER_STRING_CCC-- TARGET: effects after hand evaluation"
 position = "after"
 payload = '''
 local blindlist = {

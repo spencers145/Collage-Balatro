@@ -85,7 +85,7 @@ target = "functions/state_events.lua"
 pattern = "draw_card(G.play,G.discard, it*100/play_count,'down', false, v)"
 position = "after"
 payload = '''
-end
+--end
 '''
 match_indent = true
 

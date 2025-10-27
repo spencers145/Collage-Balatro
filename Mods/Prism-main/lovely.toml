@@ -58,7 +58,7 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = "G.deck:shuffle('nr'..G.GAME.round_resets.ante)"
+pattern = "BLOCKER_STRING_PRISMG.deck:shuffle('nr'..G.GAME.round_resets.ante)"
 position = "after"
 payload = '''
 local cards = {}
@@ -136,7 +136,7 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = "draw_card(G.play,G.discard, it*100/play_count,'down', false, v)"
+pattern = "BLOCKER_STRING_PRISMdraw_card(G.play,G.discard, it*100/play_count,'down', false, v)"
 position = "before"
 payload = '''
 if v.seal == "prism_green" and not v.ability.greened then

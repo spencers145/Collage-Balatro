@@ -14,7 +14,7 @@ SMODS.Consumable({
 
 	use = function(self, card, area)
 
-		G.E_MANAGER:add_event(Event {
+	G.E_MANAGER:add_event(Event {
       func = function()
         G.playing_card = (G.playing_card or 0) + 1
         local new_card = copy_card(G.hand.highlighted[1], nil, nil, G.playing_card)

@@ -7,7 +7,7 @@ priority = 0
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = "G.FUNCS.draw_from_hand_to_discard()"
+pattern = "BLOCKER_STRING_CCCG.FUNCS.draw_from_hand_to_discard()"
 position = "after"
 payload = '''
 if not (G.GAME.ccc_golden_progress and G.GAME.ccc_golden_progress > 1) then
@@ -18,7 +18,7 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = '''
+pattern = '''BLOCKER_STRING_CCC
             end
         return true
       end
@@ -142,7 +142,7 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = '''
+pattern = '''BLOCKER_STRING_CCC
 if game_over then
 '''
 position = "before"
