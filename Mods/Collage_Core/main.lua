@@ -227,7 +227,7 @@ function Game:main_menu(change_context)
                     n = G.UIT.T,
                     config = {
                         scale = 0.3,
-                        text = "Collage v1.0.1e",
+                        text = "Collage v1.0.1f",
                         colour = G.C.UI.TEXT_LIGHT
                     }
                 }

@@ -45,7 +45,7 @@ local nature_tapes = {
             end
         end
         if context.joker_main then
-            if card.ability.extra.cur_mult > 0 then
+            if to_big(card.ability.extra.cur_mult) > to_big(0) then
                 return {
                     mult = card.ability.extra.cur_mult
                 }
