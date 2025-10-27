@@ -164,18 +164,19 @@ function buf_get_new_boss()
 	local loop_ante = (G.GAME.round_resets.ante - 1) % win_ante + 1  -- Resets every win_ante
 
 	for k, v in pairs(G.P_BLINDS) do
-		if not v.boss then
-		elseif not v.boss.showdown then
-			if G.GAME.modifiers.buf_halfstep_bosses and ((v.boss.min <= loop_ante and (loop_ante % win_half ~= first_showdown % win_half or loop_ante < 2))) then
-				eligible_bosses[k] = true
-			elseif not G.GAME.modifiers.buf_halfstep_bosses and ((v.boss.min <= math.max(1, G.GAME.round_resets.ante) and ((math.max(1, G.GAME.round_resets.ante))%G.GAME.win_ante ~= 0 or G.GAME.round_resets.ante < 2))) then
-				eligible_bosses[k] = true
-			end
-		elseif v.boss.showdown then
-			if G.GAME.modifiers.buf_halfstep_bosses and (loop_ante % win_half == first_showdown % win_half and loop_ante >= 2) then
-				eligible_bosses[k] = true
-			elseif not G.GAME.modifiers.buf_halfstep_bosses and ((G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2) then
-				eligible_bosses[k] = true
+		if v.boss and (not v.boss.in_pool or v.boss.in_pool()) then
+			if not v.boss.showdown then
+				if G.GAME.modifiers.buf_halfstep_bosses and ((v.boss.min <= loop_ante and (loop_ante % win_half ~= first_showdown % win_half or loop_ante < 2))) then
+					eligible_bosses[k] = true
+				elseif not G.GAME.modifiers.buf_halfstep_bosses and ((v.boss.min <= math.max(1, G.GAME.round_resets.ante) and ((math.max(1, G.GAME.round_resets.ante))%G.GAME.win_ante ~= 0 or G.GAME.round_resets.ante < 2))) then
+					eligible_bosses[k] = true
+				end
+			elseif v.boss.showdown then
+				if G.GAME.modifiers.buf_halfstep_bosses and (loop_ante % win_half == first_showdown % win_half and loop_ante >= 2) then
+					eligible_bosses[k] = true
+				elseif not G.GAME.modifiers.buf_halfstep_bosses and ((G.GAME.round_resets.ante)%G.GAME.win_ante == 0 and G.GAME.round_resets.ante >= 2) then
+					eligible_bosses[k] = true
+				end
 			end
 		end
 	end
