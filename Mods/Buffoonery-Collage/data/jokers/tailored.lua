@@ -43,6 +43,7 @@ SMODS.Joker {
 		}))
 	end,
 	update = function(self, card, context)
+		if not self.discovered then return end
 		if G.playing_cards then -- prevents a crash when looking at this joker's page in the collection
 			for k in pairs(card.ability.extra.suit_counts) do -- Count occurrences of each suit
 				card.ability.extra.suit_counts[k] = nil

@@ -1,4 +1,4 @@
-SMODS.Tag {
+--[[SMODS.Tag {
     key = "foresight",
     atlas = "TextureAtlasTags",
     pos = { x = 0, y = 0 },
@@ -23,7 +23,7 @@ SMODS.Tag {
     in_pool = function (self, args)
         return false -- Cannot appear in skip pool
     end
-}
+}]]
 
 SMODS.Tag {
     key = "divine",

@@ -12,6 +12,7 @@ SMODS.Joker({
     config = {extra = {}},
     artist_credits = {'tevi'},
     draw = function(self, card, layer)
+        if not self.discovered then return end
         card.children.center:draw_shader('voucher',nil, card.ARGS.send_to_shader)
     end,
     calculate = function(self, card, context)

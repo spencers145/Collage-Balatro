@@ -7007,7 +7007,7 @@ SMODS.Tag{ -- Arcade
     end
 }
 
-SMODS.Tag{ -- Triple
+--[[SMODS.Tag{ -- Triple
     key = 'triple',
     discovered = false,
 
@@ -7035,7 +7035,7 @@ SMODS.Tag{ -- Triple
     atlas = 'bunco_tags',
 
     in_pool = function() return G.GAME.used_vouchers['v_bunc_pin_collector'] end
-}
+}]]
 
 SMODS.Tag{ -- Glitter
     key = 'glitter',

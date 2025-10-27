@@ -55,6 +55,7 @@ SMODS.Joker {
     end,
 
     draw = function(self, card, layer)
+    if not self.discovered then return end
     if (layer == 'card' or layer == 'both') then
       if card.ability.extra.active==true then
         card.children.center:set_sprite_pos({ x = 2, y = 6})

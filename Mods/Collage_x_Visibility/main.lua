@@ -339,6 +339,7 @@ SMODS.Joker{
 		return { key = card.ability.extra.active and "j_collage_vis_harken" or "j_collage_vis_harken_inactive", set = "Joker", vars = { card.ability.extra.xmult_mod, card.ability.extra.xmult } }
 	end,
     update = function(self, card, dt)
+        if not self.discovered then return end
         if card.ability.extra.active then
             card.children.center:set_sprite_pos({x = 1, y = 2})
         else

@@ -11,6 +11,7 @@ SMODS.Joker {
         card.ability.extra.state = 2
     end,
     update = function(self, card, dt)
+        if not self.discovered then return end
         if card.ability.extra.state == 1 then
             card.children.center:set_sprite_pos({x = 3, y = 3})
         elseif card.ability.extra.state == 2 then

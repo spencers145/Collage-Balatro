@@ -257,10 +257,10 @@ return {
 			["j_tma_BlindSun"] = {
 				["name"] = "Eclipse",
 				["text"] = {
-					"{C:green}#1# in #2#{} cards are",
-					"drawn face down,",
-					"Face down cards give",
-					"{C:mult}+#3#{} Mult when scored"
+					{"{C:green}#1# in #2#{} cards are",
+					"drawn face down"},
+					{"Face down cards give",
+					"{C:mult}+#3#{} Mult when scored"}
 				},
 			},
 			["j_tma_LightlessFlame"] = {
@@ -268,7 +268,7 @@ return {
 				["text"] = {
 					"When {C:attention}Blind{} is selected,",
 					"destroy {C:attention}consumable{} cards",
-					"in possesion and gain",
+					"in possession and gain",
 					"{C:mult}+#2#{} Mult for each",
 					"{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)"
 				},

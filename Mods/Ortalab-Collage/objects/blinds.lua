@@ -322,7 +322,7 @@ SMODS.Blind({
         for _, card in pairs(cards) do
             if SMODS.always_scores(card) then always_scores_count = always_scores_count + 1 end
         end
-        if #scoring_hand + always_scores_count ~= #cards then return true end
+        if not next(SMODS.find_card("j_splash")) and #scoring_hand + always_scores_count ~= #cards then return true end
     end,
 })
 

@@ -592,11 +592,11 @@ PB_UTIL.ENABLED_VOUCHERS = {
 }
 
 PB_UTIL.ENABLED_TAGS = {
-  'angel_investment',
+  --'angel_investment',
   --'divination',
   'dichrome',
   'high_risk',
-  'breaking',
+  --'breaking',
 }
 
 PB_UTIL.ENABLED_ENHANCEMENTS = {

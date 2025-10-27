@@ -25,6 +25,7 @@ local coreswitch = {
 }
 
 coreswitch.set_ability = function(self, card, initial, delay_sprites)
+	if not self.discovered then return end
 	card.ability.extra.pos_override.x = pseudorandom_element({ 6, 7 }, pseudoseed('coreswitch'))
 	card.children.center:set_sprite_pos(card.ability.extra.pos_override)
 end
