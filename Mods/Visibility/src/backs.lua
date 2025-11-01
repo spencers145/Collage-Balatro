@@ -46,7 +46,7 @@ SMODS.Back {
     atlas = "TextureAtlasDecks",
     pos = { x = 1, y = 0 },
     unlocked = false,
-    config = {vouchers = {'v_bunc_hedge_trimmer'}},
+    config = {},
     --unlock_condition = {type = 'discover_amount', amount = 500},
     apply = function(self, back)
         --[[G.E_MANAGER:add_event(Event({
@@ -90,7 +90,8 @@ SMODS.Back {
     end,
     calculate = function (self, back, context)
         if context.end_of_round and context.main_eval then
-            local val = pseudorandom_element(G.hand.cards, pseudoseed('b_gardening'))
+            local val = G.hand.cards[1]
+            if not val then return end
             local _card = copy_card(val, nil, nil, G.playing_card)
             _card.states.visible = false
             
@@ -111,23 +112,34 @@ SMODS.Back {
     end
 }
 
---[[SMODS.Back {
+SMODS.Back {
     key = "heavenly",
     atlas = "TextureAtlasDecks",
     pos = { x = 2, y = 0 },
-    config = { voucher = 'v_vis_divine_merchant', consumables = { 'c_vis_pact' } },
-    loc_vars = function (self, info_queue, card)
-        return {
-            vars = {
-                "Divine Merchant",
-                "Pact",
-                colours = { G.C.SET.Divine } 
-            },
-        }
-    end,
-    unlocked = true,
-    discovered = true,
-}]]
+    --config = { consumables = { 'c_vis_mind' } },
+    unlocked = false,
+    discovered = false,
+    apply = function (self, back)
+        G.E_MANAGER:add_event(Event({
+			func = function ()
+				G.E_MANAGER:add_event(Event({
+					func = function ()
+						G.E_MANAGER:add_event(Event({
+							func = function ()
+								add_tag(Tag('tag_vis_divine'))
+								play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+                				play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+								return true
+							end
+						}))
+						return true
+					end
+				}))
+				return true
+			end
+		}))
+    end
+}
 
 --[[SMODS.Back {
     key = "burnt",

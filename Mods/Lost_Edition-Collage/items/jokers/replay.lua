@@ -3,13 +3,13 @@ discovered = false,
     key = "replay",
     pos = LOSTEDMOD.funcs.coordinate(11),
     atlas = 'losted_jokers',
-    rarity = 1,
-    cost = 4,
+    rarity = 2,
+    cost = 6,
     unlocked = true,
     blueprint_compat = true,
     config = { 
         extra = { 
-            repetitions = 2 
+            repetitions = 2
         } 
     },
     loc_vars = function(self, info_queue, card)

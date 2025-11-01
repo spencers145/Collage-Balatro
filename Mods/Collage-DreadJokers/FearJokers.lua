@@ -632,22 +632,40 @@
         key = 'Hunter', discovered = false, atlas = 'tma_joker', pos = {x = 3, y = 1}, rarity = 2, cost = 6, blueprint_compat = true,
         config = {
             extra = {
-                money = 3
+                money = 3,
+                hand_money = 1,
             }
         },
         loc_vars = function(self,info_queue,card)
             return {
-                vars = {card.ability.extra.money}
+                vars = {card.ability.extra.money, card.ability.extra.hand_money}
             }
         end,
+        in_pool = function (self, args)
+            local seals = 0
+            for key, value in pairs(G.playing_cards) do
+                if value:get_seal() then
+                    seals = seals + 1
+                end
+            end
+            
+            return seals >= 2
+        end,
         calculate = function(self,card,context)
-            if context.individual and context.cardarea == G.play and context.other_card:get_seal() then
-                G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.money
-                G.E_MANAGER:add_event(Event({func = (function() G.GAME.dollar_buffer = 0; return true end)}))
-                return {
-                    dollars = card.ability.extra.money,
-                    card = card
-                }
+            if context.individual and context.other_card:get_seal() and not context.end_of_round then
+                local dollars = 0
+                if context.cardarea == G.play then
+                    dollars = card.ability.extra.money
+                elseif context.cardarea == G.hand then
+                    dollars = card.ability.extra.hand_money
+                end
+
+                if dollars > 0 then
+                    return {
+                        dollars = dollars,
+                        card = card
+                    }
+                end
             end
         end
     })
@@ -1389,22 +1407,19 @@
             }
         },
         collection_rows = {4, 4},
-        shop_rate = 0.2
+        shop_rate = 0
     }
+
     SMODS.Booster{
         key = 'audio_basic1',
         config = {extra = 3, choose = 1},
         discovered = false,
         get_weight = function(self)
-            if G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 1 then
-                return 0.15
-            else
-                return 0
-            end
+            return collage_ease_weight(60, 80, 0.17, 4, 3)
         end,
         atlas = 'tma_tarot',
         cost = 8,
-        weight = 0.15,
+        weight = 0.17,
         pos = { x = 0, y = 3 },
         loc_vars = function(self, info_queue, card)
             return {vars = {card.config.center.config.choose, card.ability.extra}}
@@ -1418,20 +1433,17 @@
         end,
         group_key = "k_tma_audio_pack",
     }
+
     SMODS.Booster{
         key = 'audio_basic2',
         config = {extra = 3, choose = 1},
         discovered = false,
         get_weight = function(self)
-            if G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 1 then
-                return 0.15
-            else
-                return 0
-            end
+            return collage_ease_weight(60, 80, 0.17, 4, 3)
         end,
         atlas = 'tma_tarot',
         cost = 8,
-        weight = 0.15,
+        weight = 0.17,
         pos = { x = 1, y = 3 },
         loc_vars = function(self, info_queue, card)
             return {vars = {card.config.center.config.choose, card.ability.extra}}
@@ -1445,20 +1457,17 @@
         end,
         group_key = "k_tma_audio_pack",
     }
+
     SMODS.Booster{
         key = 'audio_jumbo',
         config = {extra = 5, choose = 1},
         discovered = false,
         get_weight = function(self)
-            if G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 1 then
-                return 0.15
-            else
-                return 0
-            end
+            return collage_ease_weight(60, 80, 0.17, 4, 3)
         end,
         atlas = 'tma_tarot',
         cost = 10,
-        weight = 0.15,
+        weight = 0.17,
         pos = { x = 2, y = 3 },
         loc_vars = function(self, info_queue, card)
             return {vars = {card.config.center.config.choose, card.ability.extra}}
@@ -1472,20 +1481,17 @@
         end,
         group_key = "k_tma_audio_pack",
     }
+
     SMODS.Booster{
         key = 'audio_mega',
         config = {extra = 5, choose = 2},
         discovered = false,
         get_weight = function(self)
-            if G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 1 then
-                return 0.075
-            else
-                return 0
-            end
+            return collage_ease_weight(60, 80, 0.085, 4, 3)
         end,
         atlas = 'tma_tarot',
         cost = 12,
-        weight = 0.075,
+        weight = 0.085,
         pos = { x = 3, y = 3 },
         loc_vars = function(self, info_queue, card)
             return {vars = {card.config.center.config.choose, card.ability.extra}}
@@ -1499,6 +1505,7 @@
         end,
         group_key = "k_tma_audio_pack",
     }
+
     -- Nightfall
     SMODS.Consumable {
         set = 'Statement', atlas = 'tma_tarot', key = 'nightfall',

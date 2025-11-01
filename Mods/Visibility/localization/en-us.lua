@@ -39,13 +39,10 @@ return {
             b_vis_gardening = {
                 name = "Gardening Deck",
                 text = {
-                    "Start with the",
-                    "{C:attention,T:v_bunc_hedge_trimmer}Hedge Trimmer{} voucher",
-                    "{s:0.2} {}",
                     "At end of round,",
-                    "{C:attention}copy{} a card held in hand and",
-                    "add a random, {C:red}debuffed{} card",
-                    "to the deck"
+                    "{C:attention}copy{} the leftmost card held",
+                    "in hand and add a random,",
+                    "{C:red}debuffed{} card to the deck"
                 },
                 unlock = {
                     "Redeem the",
@@ -55,9 +52,12 @@ return {
             b_vis_heavenly = {
                 name = "Heavenly Deck",
                 text = {
-                    "Start run with the",
-                    "{V:1,T:v_vis_divine_merchant}#1#{} voucher",
-                    "and a {C:spectral,T:c_vis_pact}#2#{}",
+                    "Start run with",
+                    "a {C:attention,T:tag_vis_divine}Divine Tag{}",
+                },
+                unlock = {
+                    "Play a hand with {C:attention}5{}",
+                    "scoring {C:attention}Notebook Cards"
                 }
             },
             b_vis_burnt = {
@@ -385,10 +385,10 @@ return {
             j_vis_flat_earth = {
                 name = "Flat Earth",
                 text = {
-                    "Earn {C:money}$#2#{} at end of",
-                    "round for every",
-                    "{C:attention}#1#{} level",
-                    "{C:inactive}(Currently {C:money}$#4#{C:inactive})",
+                    "If poker hand contains",
+                    "a {C:attention}Full House{}, each card",
+                    "held in hand gives",
+                    "{C:mult}+#1#{} Mult"
                 },
             },
             j_vis_atomic_bomb = {
@@ -616,9 +616,10 @@ return {
             j_vis_playing_piece = {
                 name = "Playing Piece",
                 text = {
-                    "If your hand contains a {C:attention}Flush{}, {C:attention}#1#{} and {C:attention}#2#{},",
-                    "gain a Divine Card",
-                    "{s:0.7}Ranks change every round"
+                    {"If scored hand contains a",
+                    "{C:attention}Flush{}, {C:attention}#1#{} and {C:attention}#2#{}, create",
+                    "a random {C:attention}Divine Card{}"},
+                    {"Ranks change each round"}
                 },
             },
             j_vis_insomnia = {
@@ -651,16 +652,15 @@ return {
                 name = "Gardening Sleeve",
                 text = {
                     "At end of round,",
-                    "{C:attention}copy{} a card held in hand"
+                    "{C:attention}copy{} the leftmost card",
+                    "held in hand"
                 },
             },
             sleeve_vis_gardening_alt = {
                 name = "Gardening Sleeve",
                 text = {
-                    "Start with the",
-                    "{C:attention,T:v_bunc_chainsaw}Chainsaw{} voucher",
-                    "and a copy of",
-                    "{C:attention,T:c_tma_exhaustion}Exhaustion"
+                    "Start with a copy of",
+                    "{C:attention,T:c_tma_exhaustion}Exhaustion{} and a {T:tag_ortalab_slipup,C:attention}Slip-Up Patch{}"
                 }
             },
             sleeve_vis_gardening_checkered = {
@@ -820,7 +820,7 @@ return {
                     "After being played {C:attention}twice{},",
                     "becomes {C:attention}active{}",
                     "{C:inactive}(Currently: {C:attention}#1#{C:inactive}{C:attention}#2#{C:inactive})",
-                    "{S:0.2} {}",
+                    "{s:0.2} {}",
                     "When active, {C:linked_group,E:1}link{} scoring",
                     "cards with {C:attention}active{} seals",
                     "and strip this seal"
@@ -951,9 +951,8 @@ return {
             c_vis_floppy_disk = {
                 name="Floppy Disk",
                 text={
-                    "Creates up to {C:attention}#1#",
-                    "random {C:attention}Consumable{} cards",
-                    "{C:inactive}(Must have room)",
+                    "Creates two",
+                    "{C:attention}Overstuffed Tags",
                 },
             },
             c_vis_coupon = {
@@ -1091,9 +1090,13 @@ return {
             v_vis_warhead = {
                 name = "Warhead",
                 text = {
-                    "{C:attention}+#1#{} Ante",
+                    "Increase {C:attention}Ante{} by {C:attention}#1#{}",
                     "{C:attention}+#2#{} hand size",
-                }
+                },
+                unlock = {
+					"Win {C:attention}3{} runs with",
+					"{C:attention,E:1}Collage{} installed"
+				}
             },
             v_vis_fallout = {
                 name = "Fallout",

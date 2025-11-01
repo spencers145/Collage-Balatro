@@ -524,22 +524,18 @@ return {
 			porc_info = {
 				name = "Porcelain Card",
 				text = {
-						"{X:chips,C:white}X1.75{} Chips,",
-						"is {C:attention}fragile",
+						"{X:chips,C:white}X1.75{} Chips, is {C:red}Fragile",
 						"{s:0.2} {}",
-						"Earn {C:money}$3{} when",
-						"destroyed"
+						"Earn {C:money}$3{} when destroyed"
 				}
 			},
 			porcg_info = {
 				name = "Royal Porcelain",
 				text = {
-						"{X:chips,C:white}X2{} Chips,",
-						"is {C:attention}fragile{} and",
-						"a {C:attention}Face Card",
+						"{X:chips,C:white}X2{} Chips, is {C:red}Fragile{}",
+						"and a {C:attention}Face Card",
 						"{s:0.2} {}",
-						"Earn {C:money}$6{} when",
-						"destroyed"
+						"Earn {C:money}$6{} when destroyed"
 				}
 			},
 			buf_fragile_info = {
@@ -612,7 +608,7 @@ return {
 			m_buf_porcelain = {
 				name = "Porcelain Card",
 				text = {"{X:chips,C:white}X1.75{} Chips,",
-						"is {C:attention}fragile",
+						"is {C:red}Fragile",
 						"{s:0.2} {}",
 						"Earn {C:money}$3{} when",
 						"destroyed"
@@ -620,12 +616,10 @@ return {
 			},
 			m_buf_porcelain_g = {
 				name = "Royal Porcelain Card",
-				text = {"{X:chips,C:white}X2{} Chips,",
-						"is {C:attention}fragile{} and",
-						"a {C:attention}Face Card",
+				text = {"{X:chips,C:white}X2{} Chips, is {C:red}Fragile{}",
+						"and a {C:attention}Face Card",
 						"{s:0.2} {}",
-						"Earn {C:money}$6{} when",
-						"destroyed"
+						"Earn {C:money}$6{} when destroyed"
 				}
 			},
 		},

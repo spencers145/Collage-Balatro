@@ -59,7 +59,8 @@ return {
                 text = {
                     {"{C:mult}+#1#{} Mult"},
                     {"When {C:attention}blind{} is selected,",
-                    "creates a copy of this Joker"},
+                    "creates a copy of this Joker",
+                    "{C:inactive}(Must have room)"},
                 }
             },
 
@@ -459,7 +460,7 @@ return {
                 text = {
                     {'Destroys {C:attention}1{} selected card'},
                     {'Gives {C:money}$#4#{} for the card,',
-                    'gives {C:money}$#3#{} for the {C:attention}enhancement{},',
+                    '{C:money}$#3#{} for the {C:attention}enhancement{},',
                     '{C:money}$#2#{} for the {C:attention}seal{},',
                     'and {C:money}$#1#{} for the {C:attention}edition{}'}
                 }
@@ -515,9 +516,8 @@ return {
                 text = {
                     {'Destroys {C:attention}1{} selected',
                     'playing card'},
-                    {'Creates {C:attention}Collectables{} of its',
-                    '{C:attention}Edition{}, {C:attention}Seal{} and {C:attention}Enhancement{}',
-                    'if it has any',
+                    {'Creates {C:attention}Collectables{}',
+                    'of its {C:attention}Modifiers{}',
                     '{C:inactive}(Must have room)'}
                 }
             },
@@ -526,8 +526,8 @@ return {
                 name = 'Imitation',
                 text = {
                     'Select {C:attention}1{} playing card,',
-                    'create an {C:attention}exact?{}',
-                    'copy of it',
+                    'create an {C:attention}exact*{} copy',
+                    '{C:inactive}*results may vary'
                 }
             },
 
@@ -616,8 +616,8 @@ return {
            name = 'Wood Card',
            text = {
             "While held in hand,",
-            "scored cards gain",
-            "{C:chips}+#1#{} chips permanently"
+            "{C:chips}+#1#{} permanent Chips",
+            "to scoring cards"
             }
         },
 
@@ -626,12 +626,9 @@ return {
                 text = {
                     "No rank or suit",
                     "{s:0.2} {}",
-                    "{C:attention}Sculpted{} after being",
-                    "played {C:attention}4{} times",
-                    "{C:inactive}(#2#/4){}",
-                    "Once {C:attention}sculpted{},",
-                    "is a Face Card and",
-                    "gives {X:chips,C:white}X2{} Chips",
+                    "Becomes {C:attention}Sculpted{} after",
+                    "being played {C:attention}4{} times",
+                    "{C:inactive}(Currently #2#/4){}",
                 }
             },
 
@@ -715,6 +712,14 @@ return {
             },
         },
         Other = {
+            artb_sculpted = {
+                name = 'Sculpted',
+                text = {
+                    "Is considered a {C:attention}Face Card{}",
+                    "and gives {X:chips,C:white}X2{} Chips",
+                }
+            },
+
             artb_gros_michel_explainer = {
                 name = 'Gros Michel Collectable',
                 text = {

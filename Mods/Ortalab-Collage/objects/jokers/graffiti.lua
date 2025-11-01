@@ -4,13 +4,16 @@ SMODS.Joker({
     pos = {x = 1, y = 1},
     rarity = 2,
     cost = 6,
-    unlocked = true,
+    unlocked = false,
     discovered = false,
     blueprint_compat = false,
     eternal_compat = true,
     perishable_compat = true,
     config = {extra = {blind_size = 2, vouchers = 1}},
     artist_credits = {'flare','gappie'},
+    check_for_unlock = function(self, args)
+        return G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 3
+    end,
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.blind_size}}
     end,
@@ -36,7 +39,7 @@ SMODS.Joker({
             local _pool = get_current_pool('Voucher')
         local voucher = pseudorandom_element(_pool, pseudoseed('ortalab_hooligan'))
         local it = 1
-        while voucher == 'UNAVAILABLE' do
+        while voucher == 'UNAVAILABLE' or voucher == 'v_vis_warhead' do
             it = it + 1
             voucher = pseudorandom_element(_pool, pseudoseed('ortalab_hooligan'..it))
         end

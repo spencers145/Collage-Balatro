@@ -10,11 +10,14 @@ SMODS.Voucher({
 	atlas = "coupons",
 	pos = {x = 0, y = 0},
 	cost = 10,
-	unlocked = true,
+	unlocked = false,
 	discovered = false,
 	available = true,
 	config = {extra = {booster_gain = 1}},
     artist_credits = {'flare'},
+    check_for_unlock = function(self, args)
+        return G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 1
+    end,
 	redeem = function(self, card)
         --SMODS.change_booster_limit(card.ability.extra.booster_gain)
     end,

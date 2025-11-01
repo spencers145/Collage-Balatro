@@ -75,7 +75,7 @@ return {
             },
 
             collage_voucher_notifier = {
-                name = 'Ante voucher',
+                name = 'Shop voucher',
                 text = {
                     'May only purchase',
                     '{C:attention}1{} each ante, except',

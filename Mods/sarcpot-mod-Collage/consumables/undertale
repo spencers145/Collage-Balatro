@@ -13,6 +13,9 @@ SMODS.Consumable({
     keep_on_use = function(self, card)
         return false
     end,
+    in_pool = function (self, args)
+      return collage_ease_pool(72, 72, 4)
+    end,
     loc_vars = function(self, info_queue)
         return {
             vars = {G.GAME.undertale_count, self.config.count_mod, G.GAME.undertale_limit + 1}

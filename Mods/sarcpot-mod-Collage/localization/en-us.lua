@@ -91,7 +91,8 @@ return {
                     {"Converts up to {C:attention}#1#{}",
                     "selected cards into",
                     "{C:attention}distinct{} suits"},
-                    {"Gain {C:money}#2#${} per card converted"}
+                    {"Gain {C:money}$#2#{} per",
+                    "card converted"}
                 }
             },
             c_sarc_deaths_door = {
@@ -100,7 +101,7 @@ return {
                     {"Select up to {C:attention}#1#{} cards"},
                     {"Destroy the leftmost",
                     "to convert the others into",
-                    "the selected card's {C:attention}suit{}"},
+                    "the destroyed card's {C:attention}suit{}"},
                 }
             },
             c_sarc_going_under = {
@@ -135,7 +136,7 @@ return {
                 text = {
                     {"Gain {C:money}+#1#${}"},
                     {"{C:money}+$5{} more each use",
-                        "{C:inactive}(Max of {C:money}#2#${}{C:inactive}){}"}
+                    "{C:inactive}(Max of {C:money}#2#${}{C:inactive}){}"}
                 }
             },
             c_sarc_loop_hero = {
@@ -143,8 +144,9 @@ return {
                 text = {
                     {"Destroys up to {C:attention}#1#{}",
                     "random cards in hand"},
-                    {"Draw the same number",
-                    "of destroyed cards"}
+                    {"Immediately draw",
+                    "replacements from",
+                    "the deck"}
                 }
             },
             c_sarc_magic_survival = {
@@ -163,7 +165,7 @@ return {
                     {"Select up to {C:attention}#1#{} cards"},
                     {"Destroy the leftmost",
                     "to convert the others into",
-                    "the selected card's {C:attention}rank{}"},
+                    "the destroyed card's {C:attention}rank{}"},
                 }
             },
             c_sarc_plort = {
@@ -198,10 +200,10 @@ return {
             c_sarc_undertale = {
                 name = "...It's Still You",
                 text = {
-                    "After {C:attention}#3#{} uses, {C:attention}-1 Ante{}",
-                    "{C:inactive}(Currently #1#/#3#){}",
-                    "{C:inactive}(Required uses increases by {C:attention}#2#{}",
-                    "{C:inactive}after triggering){}"
+                    {"After {C:attention}#3#{} uses, {C:attention}-1 Ante{}",
+                    "{C:inactive}(Currently #1#/#3#){}"},
+                    {"Required uses increases by {C:attention}#2#{}",
+                    "after triggering{}"}
                 }
             },
             c_sarc_wildfrost = {
@@ -237,8 +239,9 @@ return {
                 name = 'Slime Card',
                 text = {
                     "When held in hand,",
-                    "{C:green}#1# in #2#{} chance to",
-                    "create a {C:attention}Plort{}",
+                    "{C:green}#1# in #2#{} chance to give {C:money}$2{}",
+                    "by creating a {C:attention}Pink Plort{}",
+                    "{C:inactive}(Must have room)",
                     "{C:inactive}(Once per round)"
                 }
             },

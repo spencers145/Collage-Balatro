@@ -21,6 +21,7 @@ SMODS.Booster {
     },
 
     create_card = function(self, card)
+        unlock_card(G.P_CENTERS.v_sarc_compass)
         local card = create_card('travel', G.consumeables, false, nil, true, true, nil, 'travel')
         return card
     end,
@@ -49,9 +50,10 @@ SMODS.Booster {
         }
     end,
 
-   
-
     weight = 2.2,
+    get_weight = function(self)
+        return collage_ease_weight(40, 60, 2.2, 4)
+    end,
 
     cost = 4,
 

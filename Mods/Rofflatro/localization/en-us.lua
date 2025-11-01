@@ -381,11 +381,11 @@ return {
             j_roff_draw_diamonds = {
                 name = 'Draw the Diamonds',
                 text = {
-                    {'{C:attention}Scored{} cards with {C:diamonds}Diamond{} suit',
+                    {'{C:attention}Scoring{} base-suit {C:diamonds}Diamond{} cards',
                     'are converted to {C:attention}different{} suits'},
                     {'Raises the interest cap by {C:money}$#1#',
-                    'for every {C:attention}7 {C:diamonds}Diamonds{} scored',
-                    '{C:inactive}(Currently +{C:money}$#2#{C:inactive}, #3#/7)'},
+                    'for every {C:attention}3 {C:diamonds}Diamonds{} scored',
+                    '{C:inactive}(Currently +{C:money}$#2#{C:inactive}, #3#/3)'},
                 },
             },
             j_roff_clam = {

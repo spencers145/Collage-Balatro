@@ -19,7 +19,7 @@ if SARC.config.consumables_enabled then
         requires = {'v_sarc_compass'},
         redeem = function(self, card)
 
-            G.GAME.travel_rate = 3
+            G.GAME.travel_rate = 4
         end
     }
 end

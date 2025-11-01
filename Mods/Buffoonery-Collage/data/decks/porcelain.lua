@@ -1,4 +1,4 @@
-SMODS.Back {
+--[[SMODS.Back {
     key = 'porcelain',
     unlocked = false,
     atlas = 'buf_decks',
@@ -16,7 +16,7 @@ SMODS.Back {
 
     apply = function(self)
         G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.8, func = function()
-            --[[local card = nil
+            local card = nil
 			if not buf.compat.sleeves or G.GAME.selected_sleeve ~= 'sleeve_buf_porcelain' then
 				play_sound('timpani')
 				card = create_card('Joker', G.jokers, nil, nil, nil, nil, 'j_buf_dorkshire', 'por')
@@ -25,7 +25,7 @@ SMODS.Back {
 				card:start_materialize()
 				card:set_edition()
 				G.GAME.joker_buffer = 0
-			end]]
+			end
 			local rmvd_suit = {'Spades', 'Hearts', 'Clubs', 'Diamonds'}
 			local random = rmvd_suit[math.random(1, 4)]
 			local target_suit = random
@@ -63,7 +63,7 @@ SMODS.Back {
     end,
 
 	calculate = function (self, back, context)
-		--[[if context.end_of_round and context.main_eval and context.beat_boss and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+		if context.end_of_round and context.main_eval and context.beat_boss and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
 			G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
 			G.E_MANAGER:add_event(Event({
                 func = function()
@@ -71,6 +71,6 @@ SMODS.Back {
 					G.GAME.consumeable_buffer = 0
                 return true
             end}))
-		end]]
+		end
 	end
-}
+}]]

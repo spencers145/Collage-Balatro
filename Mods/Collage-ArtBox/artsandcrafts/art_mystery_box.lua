@@ -9,6 +9,10 @@ SMODS.Consumable({
 	unlocked = true,
 	discovered = false,
 
+	loc_vars = function (self, info_queue, card)
+		info_queue[#info_queue + 1] = {key = 'artb_mod_collectable_explain', set = 'Other'}
+	end,
+
 	use = function(self, card, area)
 
 		while #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit do

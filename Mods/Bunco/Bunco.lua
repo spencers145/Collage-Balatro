@@ -1659,6 +1659,10 @@ create_joker({ -- Dread
                 -- added an additional check if the cards are already destroyed.
                 -- Without this check a second Dread would cause a destroying sound to play
                 -- despite not having any cards to destroy
+                SMODS.calculate_context({remove_playing_cards = true, removed = trash_list})
+                for key, value in pairs(trash_list) do
+                    value:calculate_seal({remove_playing_cards = true, removed = {value}})
+                end
                 local dissolve_time_fac = 3
                 event({
                     trigger = 'before',
@@ -1678,7 +1682,7 @@ create_joker({ -- Dread
                 for _, card_to_trash in ipairs(trash_list) do
                     card_to_trash.destroyed = true
                 end
-                SMODS.calculate_context({remove_playing_cards = true, removed = trash_list})
+                
                 card.ability.extra.trash_list = {}
             end
         end
@@ -6635,7 +6639,7 @@ discovered = false, -- The Depths
 }
 
 SMODS.Blind{
-discovered = false, -- The Chasm
+    discovered = false, -- The Chasm
     key = 'chasm',
     boss = {min = 4},
     dollars = 4,
@@ -6668,7 +6672,7 @@ discovered = false, -- The Chasm
 
 -- Finishers
 
-SMODS.Blind{
+--[[SMODS.Blind{
 discovered = false, -- Chartreuse Crown
     key = 'final_crown',
     boss = {showdown = true, min = 10, max = 10},
@@ -6714,7 +6718,7 @@ discovered = false, -- Chartreuse Crown
 
     pos = {y = 0},
     atlas = 'bunco_blinds_finisher'
-}
+}]]
 
 SMODS.Blind{
 discovered = false, -- Vermilion Trident
@@ -7606,7 +7610,10 @@ SMODS.Voucher{ -- Lamination
     key = 'lamination',
 	discovered = false,
 
-    unlocked = true,
+    unlocked = false,
+    check_for_unlock = function(self, args)
+        return G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 2
+    end,
 
     pos = coordinate(1),
     atlas = 'bunco_vouchers',
@@ -7784,6 +7791,7 @@ SMODS.Voucher{ -- Masquerade
 SMODS.Voucher{ -- Arcade Machine
     key = 'arcade_machine',
 
+	unlocked = false,
 	discovered = false,
 
     pos = coordinate(11),
@@ -7967,7 +7975,7 @@ for i = 1, 4 do -- Virtual
 
         weight = i <= 2 and 0.14 or i == 3 and 0.1 or 0.06,
         get_weight = function(self)
-            local new_weight = self.weight * (G.GAME.used_vouchers['v_bunc_arcade_machine'] and 4 or 1)
+            local new_weight = collage_ease_weight(40, 80, i <= 2 and 0.14 or i == 3 and 0.1 or 0.06, 8, 1) * (G.GAME.used_vouchers['v_bunc_arcade_machine'] and 4 or 1)
             return new_weight
         end,
 
@@ -7976,7 +7984,10 @@ for i = 1, 4 do -- Virtual
             -- return {set = 'Polymino', area = G.pack_cards, skip_materialize = nil, soulable = nil, key_append = 'vir'}
         end,
 
-        create_UIBox = function(self) -- I don't know if I should do it like that, but since I can't inject into steamodded's files directly I do this
+        create_UIBox = function(self)
+            unlock_card(G.P_CENTERS.v_bunc_arcade_machine)
+
+            -- I don't know if I should do it like that, but since I can't inject into steamodded's files directly I do this
             -- However I could mess with the node structure instead of repeating the whole thing. Do you want me to suffer?
             -- Look at this mess. Terrible
 

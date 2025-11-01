@@ -242,7 +242,7 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+--[[SMODS.Blind({
     key = 'parasol',
     atlas = 'ortalab_blinds',
     pos = {x = 0, y = 4},
@@ -271,7 +271,7 @@ SMODS.Blind({
         end
         return false
     end
-})
+})]]
 
 SMODS.Blind({
     key = 'glass',
@@ -326,7 +326,7 @@ SMODS.Blind({
     end,
 })
 
-SMODS.Blind({
+--[[SMODS.Blind({
     key = 'buckler',
     atlas = 'ortalab_blinds',
     pos = {x = 0, y = 7},
@@ -355,7 +355,7 @@ SMODS.Blind({
         end
         return false
     end
-})
+})]]
 
 SMODS.Blind({
     key = 'oil',
@@ -375,7 +375,7 @@ SMODS.Blind({
     end,
 })
 
-SMODS.Blind({
+--[[SMODS.Blind({
     key = 'room',
     atlas = 'ortalab_blinds',
     pos = {x = 0, y = 9},
@@ -404,7 +404,7 @@ SMODS.Blind({
         end
         return false
     end
-})
+})]]
 
 SMODS.Blind({
     key = 'bellows',
@@ -720,7 +720,7 @@ SMODS.Sound({
     path = 'spring.ogg'
 })
 
-SMODS.Blind({
+--[[SMODS.Blind({
     key = 'face',
     atlas = 'ortalab_blinds',
     pos = {x = 0, y = 17},
@@ -749,7 +749,7 @@ SMODS.Blind({
         end
         return false
     end
-})
+})]]
 
 SMODS.Blind({
     key = 'tongs',

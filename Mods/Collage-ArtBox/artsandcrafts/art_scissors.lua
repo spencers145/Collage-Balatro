@@ -11,6 +11,13 @@ SMODS.Consumable({
 	cost = 3,
 	unlocked = true,
 	discovered = false,
+	in_pool = function (self, args)
+		return collage_ease_pool(32, 32, 4)
+	end,
+
+	loc_vars = function (self, info_queue, card)
+		info_queue[#info_queue + 1] = {key = 'artb_mod_collectable_explain', set = 'Other'}
+	end,
 
 	use = function(self, card, area)
 		local selected = G.hand.highlighted[1]

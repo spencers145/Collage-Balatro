@@ -676,18 +676,18 @@ return {
                 }
             },
             j_bunc_dread = {
-                ['name'] = 'Dread',
-                ['text'] = {
-                    [1] = 'After scoring your {C:attention}last{} hand,',
-                    [2] = 'upgrade it by {C:attention}#1# levels{}',
-                    [3] = 'and {C:attention}destroy{} scored cards',
-                    [4] = '{C:inactive,s:0.8}All levels gained by this Joker',
-                    [5] = '{C:inactive,s:0.8}are lost on its removal'
+                name = 'Dread',
+                text = {
+                    {'After scoring your {C:attention}last{} hand,',
+                    'upgrade it by {C:attention}#1# levels{} and',
+                    '{C:attention}destroy{} scored cards'},
+                    {'All levels given by this Joker',
+                    'are lost upon its removal'}
                 },
-                ['unlock'] = {
-                    [1] = 'Reduce your deck',
-                    [2] = 'by at least {E:1,C:attention}#1#{} cards',
-                    [3] = 'in one round'
+                unlock = {
+                    'Reduce your deck',
+                    'by at least {E:1,C:attention}#1#{} cards',
+                    'in one round'
                 }
             },
             j_bunc_prehistoric = {
@@ -1817,6 +1817,10 @@ return {
                     [1] = 'Consumables in',
                     [2] = '{C:attention}Booster Packs{} may',
                     [3] = 'appear with {C:dark_edition}Edition'
+                },
+                ['unlock'] = {
+                    [1] = "Win {C:attention}2{} runs with",
+					[2] = "{C:attention,E:1}Collage{} installed"
                 }
             },
             v_bunc_supercoating = {
@@ -1875,7 +1879,8 @@ return {
                 ['name'] = 'Disguise',
                 ['text'] = {
                     [1] = '{C:attention}Blind Packs{} may',
-                    [2] = 'appear in the shop'
+                    [2] = 'appear in the shop',
+                    [3] = '{C:inactive}(Rerolls the Boss Blind)'
                 }
             },
             v_bunc_masquerade = {
@@ -1917,6 +1922,10 @@ return {
                 ['text'] = {
                     [1] = '{C:bunco_virtual_dark}Virtual Packs',
                     [2] = 'appear {C:attention}4X{} more often'
+                },
+                ['unlock'] = {
+                    [1] = "Open a",
+					[2] = "{C:attention,E:1}Virtual Pack{}"
                 }
             },
             v_bunc_polybius = {

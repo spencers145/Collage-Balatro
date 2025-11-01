@@ -18,6 +18,7 @@ SMODS.Enhancement({
   end,
 
   loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue+1] = {key = 'artb_sculpted', set = 'Other'}
     return {
       vars = {
         card.ability.x_chips,

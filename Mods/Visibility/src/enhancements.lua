@@ -40,9 +40,9 @@ SMODS.Enhancement {
                 SMODS.calculate_context({remove_playing_cards = true, removed = {pummeled}, scoring_hand = context.scoring_hand})
                 pummeled.destroyed = true
 
-                if SMODS.has_enhancement(pummeled, 'm_buf_porcelain') or SMODS.has_enhancement(pummeled, 'm_buf_porcelain_g') then
+                --[[if SMODS.has_enhancement(pummeled, 'm_buf_porcelain') or SMODS.has_enhancement(pummeled, 'm_buf_porcelain_g') then
                     unlock_card(G.P_CENTERS.b_buf_porcelain)
-                end
+                end]]
                 
                 event({trigger = 'before', delay = 1, func = function()
                     pummeled:start_dissolve()
@@ -152,6 +152,10 @@ SMODS.Enhancement {
 
                     total_notebooks = total_notebooks + 1
                 end
+            end
+
+            if total_notebooks >= 5 then
+                unlock_card(G.P_CENTERS.b_vis_heavenly)
             end
 
             return {

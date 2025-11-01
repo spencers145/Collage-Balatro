@@ -446,10 +446,11 @@ return {
       j_paperback_joke_master = {
         name = "Joke Master",
         text = {
-          "This Joker gains {C:mult}+#1#{} Mult if",
+          {"This Joker gains {C:mult}+#1#{} Mult if",
           "played hand is a {C:attention}#2#{}",
-          "{s:0.8}hand changes every round",
-          "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"
+          "{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)"},
+          {"Hand changes every round"},
+          
         }
       },
       j_paperback_ultra_rare = {

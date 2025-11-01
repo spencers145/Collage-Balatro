@@ -20,6 +20,9 @@ SMODS.Consumable({
     can_use = function(self, card)
         return #G.hand.highlighted <= card.ability.max_highlighted and #G.hand.highlighted >= 1
     end,
+    in_pool = function (self, args)
+		return collage_ease_pool(56, 56, 4)
+	end,
 
     use = function(self, card, area, copier)
         local suits, suits_size = SARC.get_available_suits()

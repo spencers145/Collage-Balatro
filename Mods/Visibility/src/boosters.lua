@@ -35,11 +35,7 @@ SMODS.Booster{
     kind = "VisibilityPack",
 
     get_weight = function(self)
-        if G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 5 then
-            return 0.20
-        else
-            return 0
-        end
+        return collage_ease_weight(80, 100, 0.2, 10, 5)
     end,
 
     create_card = function(self, card, i)
@@ -90,11 +86,7 @@ SMODS.Booster{
     kind = "VisibilityPack",
 
     get_weight = function(self)
-        if G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 5 then
-            return 0.1
-        else
-            return 0
-        end
+        return collage_ease_weight(80, 100, 0.1, 10, 5)
     end,
 
     create_card = function(self, card, i)
@@ -145,11 +137,7 @@ SMODS.Booster{
     kind = "VisibilityPack",
 
     get_weight = function(self)
-        if G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 5 then
-            return 0.05
-        else
-            return 0
-        end
+        return collage_ease_weight(80, 100, 0.05, 10, 5)
     end,
 
     create_card = function(self, card, i)
@@ -196,6 +184,9 @@ SMODS.Booster{
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("B4CEFF") } } }
     end,
     weight = 0.2,
+    get_weight = function(self)
+        return collage_ease_weight(48, 80, 0.2, 4, 2)
+    end,
     cost = 6,
     kind = "Divine",
 
@@ -234,6 +225,9 @@ SMODS.Booster{
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("B4CEFF") } } }
     end,
     weight = 0.2,
+    get_weight = function(self)
+        return collage_ease_weight(60, 80, 0.2, 4, 2)
+    end,
     cost = 6,
     kind = "Divine",
 
@@ -272,6 +266,9 @@ SMODS.Booster{
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("B4CEFF") } } }
     end,
     weight = 0.2,
+    get_weight = function(self)
+        return collage_ease_weight(60, 80, 0.2, 4, 2)
+    end,
     cost = 8,
     kind = "Divine",
 
@@ -310,6 +307,9 @@ SMODS.Booster{
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("B4CEFF") } } }
     end,
     weight = 0.05,
+    get_weight = function(self)
+        return collage_ease_weight(60, 80, 0.05, 4, 2)
+    end,
     cost = 10,
     kind = "Divine",
 

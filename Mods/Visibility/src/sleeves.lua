@@ -56,19 +56,15 @@ CardSleeves.Sleeve {
         local key
         if self.get_current_deck_key() == "b_vis_gardening" then
             key = self.key .. "_alt"
-            self.config = { voucher = 'v_bunc_chainsaw', consumables = {'c_tma_exhaustion'} }
-        --[[elseif self.get_current_deck_key() == "b_checkered" then
-            key = self.key .. "_checkered"
-            self.config = {}]]
         else
             key = self.key
-            self.config = {}
         end
         return { key = key }
     end,
     calculate = function(self, sleeve, context) --taken from base cardsleeves checkered as it does basically the same thing
         if context.end_of_round and context.main_eval and self.get_current_deck_key() ~= "b_vis_gardening" and self.get_current_deck_key() ~= "b_checkered" then
-            local val = pseudorandom_element(G.hand.cards, pseudoseed('b_gardening_sleeve'))
+            local val = G.hand.cards[1]
+            if not val then return end
             local _card = copy_card(val, nil, nil, G.playing_card)
             _card.states.visible = false
             
@@ -104,33 +100,44 @@ CardSleeves.Sleeve {
             end
         end
     end,
-    --[[apply = function(self, sleeve)
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                if self.get_current_deck_key() == "b_checkered" then
-                    for k, v in pairs(G.playing_cards) do
-                        if v.base.suit == 'Clubs' then
-                            v:change_suit('bunc_Halberds')
+    apply = function(self, sleeve)
+        if self.get_current_deck_key() == "b_vis_gardening" then
+            G.E_MANAGER:add_event(Event({
+                func = function ()
+                    G.E_MANAGER:add_event(Event({
+                        func = function ()
+                            G.E_MANAGER:add_event(Event({
+                                func = function ()
+                                    add_tag(Tag('tag_ortalab_slipup'))
+                                    play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
+                                    play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
+                                    return true
+                                end
+                            }))
+                            return true
                         end
-                        if v.base.suit == 'Diamonds' then
-                            v:change_suit('bunc_Fleurons')
-                        end
-                    end
-                    return true
-                else if self.get_current_deck_key() == "b_vis_gardening" then
-                    for k, v in pairs(G.playing_cards) do
-                        if v.base.suit == 'Spades' then
-                            v:change_suit('bunc_Halberds')
-                        end
-                        if v.base.suit == 'Hearts' then
-                            v:change_suit('bunc_Fleurons')
-                        end
-                    end
+                    }))
                     return true
                 end
-            end
-        end}))
-    end,]]
+            }))
+            G.E_MANAGER:add_event(Event({
+                func = function ()
+                    G.E_MANAGER:add_event(Event({
+                        func = function ()
+                            G.E_MANAGER:add_event(Event({
+                                func = function ()
+                                    SMODS.add_card({key = 'c_tma_exhaustion'})
+                                    return true
+                                end
+                            }))
+                            return true
+                        end
+                    }))
+                    return true
+                end
+            }))
+        end
+    end,
 }
 
 -- Checkered Sleeve mixin (hooking)

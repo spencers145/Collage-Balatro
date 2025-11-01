@@ -1094,6 +1094,10 @@ return {
 					{'{X:attention,C:white}X#1#{} Boss Blind amount',},
 					{'{C:attention}Redeem{} a random {C:attention}voucher',
 					'when {C:attention}Boss Blind{} is defeated'}
+				},
+				unlock = {
+					"Win {C:attention}3{} runs with",
+					"{C:attention,E:1}Collage{} installed"
 				}
 			},
 			['j_ortalab_hot_chocolate'] = {
@@ -2865,12 +2869,16 @@ return {
 				["text"] = {
 					"Remove limit on {C:attention}Shop boosters{}",
 					"purchased each shop",
+				},
+				["unlock"] = {
+					"Win {C:attention}1{} run with",
+					"{C:attention,E:1}Collage{} installed"
 				}
 			},
 			['v_ortalab_ad_campaign'] = {
 				["name"] = "Ad Campaign",
 				["text"] = {
-					"Remove limit on {C:attention}Ante vouchers{}",
+					"Remove limit on {C:attention}Shop vouchers{}",
 					"purchased each ante",
 				}
 			},

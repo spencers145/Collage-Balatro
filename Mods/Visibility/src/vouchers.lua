@@ -20,9 +20,13 @@ SMODS.Voucher {
     key = 'fallout',
     pos = { x = 1, y = 0 },
     config = { extra = { joker_slots = 1, size = -1 } },
+    unlocked = false,
     discovered = false,
     requires = { 'v_vis_warhead' },
     atlas = "TextureAtlasVouchers",
+    check_for_unlock = function(self, args)
+        return G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 3
+    end,
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.joker_slots, -card.ability.extra.size } }
     end,

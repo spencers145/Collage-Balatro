@@ -2818,8 +2818,8 @@ return {
             j_aij_tetrominoker = { 
                 name = "Tetrominoker", 
                 text = { 
-                    "Scoring {C:attention}4s{} have a {C:green}#1# in #2#{}",
-                    "chance to give {C:white,X:mult}X4{} Mult"
+                    "Scoring {C:attention}4s{}",
+                    "give {C:white,X:mult}X1.4{} Mult"
                 } 
             },
             j_aij_mr_catfish = { 
@@ -3579,7 +3579,7 @@ return {
                 name = "Biancolelli", 
                 text = { 
                     "{C:aij_plasma}Balance{} {C:chips}Chips{} and {C:mult}Mult{}", 
-                    "after Jokers trigger"
+                    "after scoring finishes"
                 }, 
                 unlock = { 
                     "?????" 

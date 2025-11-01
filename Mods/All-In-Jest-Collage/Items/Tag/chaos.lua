@@ -57,9 +57,9 @@ local chaos = {
         if context.type == 'new_blind_choice' then
             tag:jest_apply("+", G.C.ATTENTION, function()
                 if effect == "money" then
-                    local money = math.random(5,25)
+                    local money = math.random(1,35)
                     ease_dollars(money)
-                    if money > 20 then
+                    if money > 27 then
                         unlock_card(G.P_CENTERS.b_ortalab_hoarder)
                     end
                 elseif effect == "boss_reroll" then

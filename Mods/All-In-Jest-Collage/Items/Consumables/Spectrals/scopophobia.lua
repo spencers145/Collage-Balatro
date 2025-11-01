@@ -9,7 +9,7 @@ local scopophobia = {
     order = 8,
 	config = {},
     in_pool = function (self, args)
-        return G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 1
+        return G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 3
     end,
     can_use = function(self, card)
         local mod = 0

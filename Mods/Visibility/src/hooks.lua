@@ -101,7 +101,7 @@ function SMODS.create_mod_badges(obj, badges)
         return scale_fac
     end
     local scale_fac = {}
-    local scroll_text = { "Visibility" }
+    local scroll_text = { "Visibility*" }
     if obj.credits then
         local min_scale_fac = 1
         for k, v in pairs(obj.credits) do

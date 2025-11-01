@@ -713,12 +713,13 @@ SMODS.Joker{ --Farmer
         }
     },
     loc_txt = {
-        ['name'] = 'Farmer',
-        ['text'] = {
-            [1] = 'Cards with {V:1}#2#{} suit',
-            [2] = 'held in hand give {C:money}$#1#',
-            [3] = 'at end of round',
-            [4] = "{s:0.8}suit changes at end of round"
+        name = 'Farmer',
+        text = {
+            {'Cards with {V:1}#2#{} suit',
+            'held in hand give {C:money}$#1#',
+            'at end of round'},
+            {'Suit changes after',
+            'end of round'}
         }
     },
     pos = {

@@ -6,7 +6,7 @@ if SARC.config.consumables_enabled then
             x = 2,
             y = 0
         },
-        unlocked = true,
+        unlocked = false,
         discovered = false,
         available = true,
         loc_vars = function(self, info_queue)

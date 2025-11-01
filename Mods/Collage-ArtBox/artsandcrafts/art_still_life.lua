@@ -11,6 +11,9 @@ SMODS.Consumable ({
 	cost = 3,
 	unlocked = true,
 	discovered = false,
+  in_pool = function (self, args)
+		return collage_ease_pool(48, 48, 4)
+	end,
   can_use = function(self, card)
 		return G.consumeables and
     (#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit

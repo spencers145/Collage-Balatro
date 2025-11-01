@@ -7,7 +7,11 @@ SMODS.Consumable({
     config = {mod_conv = "m_sarc_flow", max_highlighted = 3},
     effect = 'Enhance',
     cost = 3,
+    in_pool = function (self, args)
+      return collage_ease_pool(60, 60, 4)
+    end,
     loc_vars = function(self, info_queue)
+    
 		info_queue[#info_queue + 1] = G.P_CENTERS[self.config.mod_conv]
 
 		return { vars = { self.config.max_highlighted,self.config.mod_conv } }

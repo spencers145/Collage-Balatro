@@ -10,6 +10,9 @@ SMODS.Consumable ({
 	discovered = false,
 	config = {mod_conv = "m_artb_marble", max_highlighted = 1},
     effect = 'Enhance',
+	in_pool = function (self, args)
+		return collage_ease_pool(44, 44, 8)
+	end,
     loc_vars = function(self, info_queue)
 		info_queue[#info_queue + 1] = G.P_CENTERS[self.config.mod_conv]
 

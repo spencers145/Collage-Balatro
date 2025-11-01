@@ -585,7 +585,8 @@ match_indent = true
 target = "game.lua"
 pattern = "c_cards_sold = 0,"
 position = "after"
-payload = "c_collage_wins = 0,"
+payload = '''c_collage_wins = 0,
+c_collage_antes = 0,'''
 match_indent = true
 
 [[patches]]
@@ -620,3 +621,18 @@ pattern = '''if (not v.config.softlock or G.GAME.hands[v.config.hand_type].playe
 position = 'at'
 match_indent = true
 payload = '''if (not v.config.softlock or G.GAME.hands[v.config.hand_type].played > 0 or G.GAME.hands[v.config.hand_type].visible) then'''
+
+
+
+
+
+
+
+# you may not unlock jokers...4ever...muahahhaa
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''if G.P_CENTERS[key] then '''
+position = 'after'
+match_indent = true
+payload = '''if G.P_CENTERS[key].set == 'Joker' then return end'''

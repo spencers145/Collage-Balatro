@@ -330,8 +330,10 @@ return {
 			["j_tma_Hunter"] = {
 				["name"] = "Hunter",
 				["text"] = {
-					"Played {C:attention}Sealed{} cards",
-					"give {C:money}$#1#{} when scored"
+					{"Played {C:attention}Sealed{} cards",
+					"give {C:money}$#1#{} when scored"},
+					{"{C:attention}Sealed{} cards held",
+					"in hand give {C:money}$#2#"}
 				}
 			},
 			["j_tma_MrSpider"] = {

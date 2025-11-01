@@ -6,7 +6,7 @@ SMODS.Joker{
    perishable_compat = false,
    discovered = false,
    rarity = 2,
-   cost = 7,
+   cost = 6,
    config = { extra = { interest_mod = 1, interest = 0, amount_scored = 0, }},
    loc_vars = function(self, info_queue, card)
       return {
@@ -15,29 +15,23 @@ SMODS.Joker{
    end,
    calculate = function(self, card, context)
       if context.individual and context.cardarea == G.play and not context.blueprint then
-         if context.other_card:is_suit('Diamonds') then
+         if context.other_card:is_suit('Diamonds') and context.other_card.base.suit == 'Diamonds' then
             local suits = {'Spades', 'Hearts', 'Clubs'}
             local interest_cap = G.GAME.interest_cap - (card.ability.extra.interest * 5)
             local kcard = context.other_card
             card.ability.extra.amount_scored = card.ability.extra.amount_scored + 1
-            if card.ability.extra.amount_scored == 7 then
-               card.ability.extra.interest = card.ability.extra.interest + card.ability.extra.interest_mod
-               G.GAME.interest_cap = interest_cap + card.ability.extra.interest * 5
-               card.ability.extra.amount_scored = 0
-            end
             G.E_MANAGER:add_event(Event{
-               trigger = 'after',
-               delay = 0.8,
                func = function()
                   SMODS.change_base(kcard, suits[pseudorandom('diamonds', 1, 3)], nil)
                   kcard:juice_up()
                   return true
                end
             })
-            if amount_scored == 7 then
-               return {
-                  message = 'Deposited!'
-               }
+            if card.ability.extra.amount_scored == 3 then
+               card.ability.extra.interest = card.ability.extra.interest + card.ability.extra.interest_mod
+               G.GAME.interest_cap = interest_cap + card.ability.extra.interest * 5
+               card.ability.extra.amount_scored = 0
+               --forced_message(localize('k_upgrade_ex'), card)
             end
             if pseudorandom('diamonds') > 0.03 then
                return {
