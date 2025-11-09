@@ -1921,7 +1921,7 @@ return {
                 ['name'] = 'Arcade Machine',
                 ['text'] = {
                     [1] = '{C:bunco_virtual_dark}Virtual Packs',
-                    [2] = 'appear {C:attention}4X{} more often'
+                    [2] = 'appear {C:attention}5X{} more often'
                 },
                 ['unlock'] = {
                     [1] = "Open a",

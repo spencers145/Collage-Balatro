@@ -52,7 +52,7 @@ SMODS.Booster {
 
     weight = 1.5,
     get_weight = function(self)
-        return collage_ease_weight(4, 16, 1.5, 4)
+        return collage_ease_weight(4, 6, 1.5, 4)
     end,
 
     cost = 4,
@@ -114,7 +114,7 @@ SMODS.Booster {
 
     weight = 1.5,
     get_weight = function(self)
-        return collage_ease_weight(4, 16, 1.5, 4)
+        return collage_ease_weight(4, 6, 1.5, 4)
     end,
 
     cost = 4,
@@ -176,7 +176,7 @@ SMODS.Booster {
 
     weight = 1.5,
     get_weight = function(self)
-        return collage_ease_weight(4, 16, 1.5, 4)
+        return collage_ease_weight(4, 6, 1.5, 4)
     end,
 
     cost = 6,
@@ -238,7 +238,7 @@ SMODS.Booster {
 
     weight = 0.75,
     get_weight = function(self)
-        return collage_ease_weight(4, 16, 0.75, 4)
+        return collage_ease_weight(4, 6, 0.75, 4)
     end,
 
     cost = 8,

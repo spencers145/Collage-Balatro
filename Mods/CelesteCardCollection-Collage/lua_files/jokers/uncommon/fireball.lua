@@ -20,6 +20,10 @@ local fireball = {
     description = "If your score display catches fire during the round, the next shop has an extra Mega booster pack"
 }
 
+fireball.in_pool = function(self)
+	return false
+end
+
 fireball.calculate = function(self, card, context)
 	if context.ccc_switch and context.ccc_switch['ice'] and not context.blueprint then
 		local old_count = card.ability.extra.count

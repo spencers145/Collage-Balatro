@@ -3,23 +3,13 @@ SMODS.Back({
     atlas = "TextureAtlasDecks",
     pos = { x = 0, y = 0 },
     unlocked = false,
-    config = { vouchers = { "v_losted_stapler" } },
+    config = { },
     apply = function (self, back)
         G.E_MANAGER:add_event(Event({
             func = function ()
-                G.E_MANAGER:add_event(Event({
-                    func = function ()
-                        G.E_MANAGER:add_event(Event({
-                            func = function ()
-                                add_tag(Tag('tag_buffoon'))
-                                play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
-                                play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
-                                return true
-                            end
-                        }))
-                        return true
-                    end
-                }))
+                for key, value in pairs(G.playing_cards) do
+                    value:set_ability(G.P_CENTERS.m_bunc_cracker)
+                end
                 return true
             end
         }))

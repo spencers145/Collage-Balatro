@@ -2790,7 +2790,7 @@ position = 'after'
 match_indent = true
 payload = '''
 
-if G.GAME.modifiers.enable_reactive_in_shop and pseudorandom(('reactive')..G.GAME.round_resets.ante) > 0.85 then
+if G.GAME.modifiers.enable_reactive_in_shop and pseudorandom(('reactive')..G.GAME.round_resets.ante) > 0.875 then
     SMODS.Stickers['bunc_reactive']:apply(card, true)
 end
 

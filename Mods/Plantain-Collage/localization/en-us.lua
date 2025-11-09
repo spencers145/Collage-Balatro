@@ -1,6 +1,21 @@
 return {
   descriptions = {
-    --Back={},
+    Back={
+      b_pl_sponsored = {
+        name = "Sponsored Deck",
+        text = {
+          'Start run with',
+          '{C:attention,T:v_pl_ad_break}Ad Break{} and a {C:attention,T:c_vis_coupon}Coupon',
+          '{s:0.2} {}',
+          '{C:attention}-1{} voucher in shop'
+        },
+        unlock = {
+          'Redeem enough {C:attention}Vouchers',
+          'to reach a base reroll',
+          'cost of {C:money}$0'
+        }
+      },
+    },
     --Blind={},
     --Edition={},
     --Enhanced={},
@@ -143,15 +158,15 @@ return {
         name = 'Croissant',
         text = {
           'Retrigger next {C:attention}#1#',
-          'hand upgrades'
+          '{C:planet}Planet{} cards'
         }
       },
       j_pl_pop_up_joker = {
         name = 'Pop-Up Joker',
         text = {
           '{C:green}#1# in #2#{} chance to',
-          'add a random {C:attention}Booster Pack',
-          'to the shop after {C:attention}reroll'
+          'refill 1 {C:attention}Booster Pack',
+          'in shop on {C:attention}reroll'
         }
       },
       j_pl_lamp = {
@@ -176,10 +191,10 @@ return {
       j_pl_hot_air_balloon = {
         name = 'Hot Air Balloon',
         text = {
-          {'Earn {C:money}$#1#{} at end of round'},
-          {'Payout increases by {C:money}$#2#{} when',
-          '{C:tarot}Tarot{} card used, with a {C:green}#3# in #4#',
-          'chance this card is {C:attention}destroyed'}
+          'Earn {C:money}$#1#{} at end of round',
+          'When {C:tarot}Tarot{} card used, increase',
+          'payout by {C:money}$#2#{}, with {C:green}#3# in #4#{}',
+          'chance this card is {C:attention}destroyed'
         }
       },
       j_pl_three_body_problem = {
@@ -199,6 +214,14 @@ return {
           'are retriggered {C:attention}again'
         }
       },
+      j_pl_painterly_joker = {
+        name = 'Painterly Joker',
+        text = {
+          'Gains {X:mult,C:white}X#1#{} Mult when',
+          'a card changes suits',
+          '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+        }
+      },
       j_pl_quarry = {
         name = 'Quarry',
         text = {
@@ -215,6 +238,49 @@ return {
           {'{X:mult,C:white}X#1#{} Mult'},
           {'Loses {X:mult,C:white}X#2#{} Mult',
           'per card {C:attention}sold'}
+        }
+      },
+      j_pl_early_man = {
+        name = 'Early Man',
+        text = {
+          'Create a copy of',
+          '{C:tarot}The Wheel of Fortune',
+          'when {C:attention}Blind{} selected'
+        }
+      },
+      j_pl_archaeologist = {
+        name = 'Archaeologist',
+        text = {
+          {'Each card held in',
+          'hand with {V:1}#1#{} suit',
+          'gives {C:mult}+#2#{} Mult'},
+          {'Suit changes at',
+          'end of round'}
+        }
+      },
+      j_pl_game_cartridge = {
+        name = 'Game Cartridge',
+        text = {
+          'First played {C:attention}2{}, {C:attention}4{}, and {C:attention}8',
+          '{C:attention}each{} give {X:mult,C:white}X#1#{} Mult',
+          'when scored'
+        }
+      },
+      j_pl_dunce = {
+        name = 'Dunce',
+        text = {
+          'Played cards give {C:mult}+#1#{} Mult',
+          '{C:attention}minus their rank{} when scored',
+          '{C:inactive}(Minimum of {C:mult}0{C:inactive} Mult)'
+        }
+      },
+      j_pl_extraterrestrial_joker = {
+        name = 'Extraterrestrial Joker',
+        text = {
+          'When {C:attention}Blind{} selected,',
+          '{C:attention}destroy all consumables{} and',
+          'upgrade {C:attention}most played{} hand',
+          '{C:inactive}(Currently {C:attention}#1#{C:inactive})'
         }
       },
     },
@@ -251,7 +317,24 @@ return {
     --Stake={},
     --Tag={},
     --Tarot={},
-    -- Voucher = {},
+    Voucher = {
+      v_pl_ad_break = {
+        name = 'Ad Break',
+        text = {
+          {'Reroll the leftmost {C:attention}unopened',
+          'booster pack on reroll'},
+          {'Rerolls cost',
+          '{C:money}$#1#{} less'}
+        }
+      },
+      v_pl_product_placement = {
+        name = 'Product Placement',
+        text = {
+          'Reroll all {C:attention}unopened',
+          'booster packs on reroll'
+        }
+      },
+    },
   },
   misc = {
     dictionary = {

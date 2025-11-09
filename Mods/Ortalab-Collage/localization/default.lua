@@ -1736,8 +1736,9 @@ return {
 			['j_ortalab_sunnyside'] = {
 				["name"] = "Sunny Side Up",
 				["text"] = {
-					"Adds {C:money}$#1#{} of {C:attention}sell value",
-					"to leftmost {C:attention}Consumable{}",
+					"For each empty {C:attention}Joker{}",
+					"slot, adds {C:money}$#1#{} of {C:attention}sell value",
+					"to the leftmost {C:attention}Consumable{}",
 					"when {C:attention}Blind{} is selected"
 				}
 			},
@@ -2669,9 +2670,8 @@ return {
 				["name"] = "Membership Deck",
 				["text"] = {
 					"Start with the",
-					'{C:attention,T:v_ortalab_catalog}#1#{} voucher,',
-					'{C:attention,T:v_seed_money}#2#{} voucher,',
-					'and a {C:attention,T:c_vis_coupon}Coupon{}',
+					'{C:attention,T:v_ortalab_catalog}#1#{} voucher',
+					'and a {C:attention,T:c_vis_floppy_disk}Floppy Disk{}',
 				},
 				["unlock"] = {
 					"Redeem the",

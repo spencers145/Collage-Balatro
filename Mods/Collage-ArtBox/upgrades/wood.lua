@@ -22,17 +22,16 @@ SMODS.Enhancement({
 
   calculate = function(self, card, context)
     if context.main_scoring and context.cardarea == G.hand then
-      
-          for k, v in ipairs(context.scoring_hand) do
-            v.ability.perma_bonus = (v.ability.perma_bonus or 0) + card.ability.extra.chips
-            SMODS.calculate_effect({extra = { message = localize('k_upgrade_ex'), colour = G.C.CHIPS }}, v)
-          end
+      for k, v in ipairs(context.scoring_hand) do
+        v.ability.perma_bonus = (v.ability.perma_bonus or 0) + card.ability.extra.chips
+        SMODS.calculate_effect({extra = { message = localize('k_upgrade_ex'), colour = G.C.CHIPS }}, v)
+      end
 
-          return {
-                extra = { message = localize('artb_wood'), colour = G.C.CHIPS },
-                colour = G.C.CHIPS,
-                card = card
-            }
+      return {
+            extra = { message = localize('artb_wood'), colour = G.C.CHIPS },
+            colour = G.C.CHIPS,
+            card = card
+        }
     end
   end
 })

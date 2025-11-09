@@ -24,7 +24,7 @@ SMODS.Seal {
     key = "wooden",
     atlas = "TextureAtlasSeals",
     pos = { x = 1, y = 0 },
-    config = { extra = { x_chips = 1.5, odds = 6 } },
+    config = { extra = { x_chips = 1.75, odds = 6 } },
     discovered = false,
     loc_vars = function (self, info_queue, card)
         local n,d = SMODS.get_probability_vars(card, 1, card.ability.seal.extra.odds, 'wooden_seal')
@@ -36,15 +36,7 @@ SMODS.Seal {
             and SMODS.pseudorandom_probability(card, pseudoseed('wooden_seal'), 1, card.ability.seal.extra.odds, 'wooden_seal') then
             return {
                 message = "Cracked!",
-                func = function()
-                    G.E_MANAGER:add_event(Event({
-                        delay = 0.2,
-                        func = function()
-                            card:start_dissolve()
-                            return true
-                        end
-                    }))
-                end,
+                remove = true
             }
         end
         if context.main_scoring and context.cardarea == G.play then

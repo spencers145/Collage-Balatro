@@ -923,7 +923,7 @@
         calculate = function(self, card, context)
             if context.end_of_round and not context.blueprint and not context.repetition and not context.individual and #G.consumeables.cards > 0 then 
                 for k, v in ipairs(G.consumeables.cards) do
-                    if not card.edition or not card.edition.key == 'e_negative' then
+                    if (not v.edition) or v.edition.key ~= 'e_negative' then
                         card.ability.extra.mult = card.ability.extra.mult + v.sell_cost
                         v:juice_up()
                     end

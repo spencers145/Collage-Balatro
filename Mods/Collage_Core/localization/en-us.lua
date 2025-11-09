@@ -11,6 +11,11 @@ return {
 			['ui_collage_modified1'] = 'Real quick:',
 			['ui_collage_modified2'] = 'Collage marks CHANGED content with an * symbol',
 			['ui_collage_modified3'] = 'on the mod badge! Example on the left.',
+			['ui_collage_silent_title'] = 'Psst...Hey!',
+			['ui_collage_silent1'] = 'Collage has silent unlocks. You just unlocked',
+			['ui_collage_silent2'] = "your first modded consumable pack: Art & Crafts!",
+			['ui_collage_silent3'] = "You won't be told about future unlocks. Keep playing,",
+			['ui_collage_silent4'] = "and you'll spot new things appearing over time..."
 		},
 	},
 	["descriptions"] = {

@@ -31,5 +31,5 @@ SMODS.Joker({
                 repetitions = card.ability.extra.reps
             }
         end
-    end    
+    end
 })

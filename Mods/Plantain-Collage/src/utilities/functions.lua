@@ -10,27 +10,64 @@ end
 
 function PL_UTIL.add_booster_pack()
   if not G.shop then return end
-  local pack_watch = {}
-  for k, v in pairs(G.P_CENTERS) do
-    if v.set == 'Booster' then
-      table.insert(pack_watch, k)
-    end
-  end
-  local pack_chosen = pseudorandom_element(pack_watch, pseudoseed('pl_pop_up'))
-  local pack = Card(
-    G.shop_booster.T.x + G.shop_booster.T.w / 2,
-    G.shop_booster.T.y,
-    G.CARD_W * 1.27, G.CARD_H * 1.27,
-    G.P_CARDS.empty,
-    G.P_CENTERS[pack_chosen],
-    { bypass_discovery_center = true, bypass_discovery_ui = true }
-  )
-  if price then
-    pack.cost = price
-  end
+  local pack = SMODS.create_card({ set = 'Booster', key_append = 'pl_popup'..G.GAME.round_resets.ante })
+  pack.T.w = G.CARD_W * 1.27
+  pack.T.h = G.CARD_H * 1.27
+  
+  G.shop_booster:emplace(pack)
+
   create_shop_card_ui(pack, 'Booster', G.shop_booster)
   pack:start_materialize()
-  G.shop_booster:emplace(pack)
+  pack:set_card_area(G.shop_booster)
+  pack:juice_up()
+end
+
+function PL_UTIL.reroll_booster_packs(justone)
+  if not G.shop then return end
+
+  local pack_count = #G.shop_booster.cards
+
+  if pack_count <= 0 then return end
+
+  if justone then
+    G.GAME.current_round.used_packs = G.GAME.current_round.used_packs or {}
+    G.GAME.current_round.used_packs[1] = get_pack('shop_pack').key 
+    local card = Card(G.shop_booster.T.x + G.shop_booster.T.w/2, G.shop_booster.T.y, G.CARD_W*1.27, G.CARD_H*1.27, G.P_CARDS.empty, G.P_CENTERS[G.GAME.current_round.used_packs[1]], {bypass_discovery_center = true, bypass_discovery_ui = true})
+    create_shop_card_ui(card, 'Booster', G.shop_booster)
+    card.ability.booster_pos = 1
+    card:start_materialize()
+    G.shop_booster:emplace(card)
+
+    local c = G.shop_booster:remove_card(G.shop_booster.cards[1])
+    c:remove()
+
+    if G.GAME.collage_boosters_purchased_this_shop >= 2 and not G.GAME.used_vouchers['v_ortalab_catalog'] then
+      card:set_debuff(true)
+    end
+  else
+    for i=1, pack_count do
+      G.GAME.current_round.used_packs = G.GAME.current_round.used_packs or {}
+      G.GAME.current_round.used_packs[i] = get_pack('shop_pack').key 
+      local card = Card(G.shop_booster.T.x + G.shop_booster.T.w/2, G.shop_booster.T.y, G.CARD_W*1.27, G.CARD_H*1.27, G.P_CARDS.empty, G.P_CENTERS[G.GAME.current_round.used_packs[i]], {bypass_discovery_center = true, bypass_discovery_ui = true})
+      create_shop_card_ui(card, 'Booster', G.shop_booster)
+      card.ability.booster_pos = i
+      card:start_materialize()
+      G.shop_booster:emplace(card, i)
+
+      local c = G.shop_booster:remove_card(G.shop_booster.cards[i])
+      c:remove()
+      c = nil
+      if G.GAME.collage_boosters_purchased_this_shop >= 2 and not G.GAME.used_vouchers['v_ortalab_catalog'] then
+        card:set_debuff(true)
+      end
+
+    end
+  end
+  
+
+
+  
+
 end
 
 NametagCompatible = {}

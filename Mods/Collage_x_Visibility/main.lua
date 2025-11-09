@@ -412,6 +412,9 @@ SMODS.Joker{
         code = "base4",
         concept = "base4"
     },
+    in_pool = function (self, args)
+        return false
+    end,
 	config = { extra = { hands = 3, dollars = 3, left = 0, primed = false, thisturn = false } },
 	loc_vars = function(self, info_queue, card)
         local left = ""

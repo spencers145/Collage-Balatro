@@ -31,7 +31,7 @@ SMODS.Back({
     end,
 })
 
-SMODS.Back({
+--[[SMODS.Back({
     key = "cyan",
     atlas = "decks",
     pos = {x = 1, y = 0}, 
@@ -41,7 +41,7 @@ SMODS.Back({
         -- info_queue[#info_queue+1] = {generate_ui = ortalab_artist_tooltip, key = 'crimson'}
         --return {vars = {self.config.hands, self.config.discards}}
     end,
-})
+})]]
 
 SMODS.Back({
     key = "shady", 
@@ -293,7 +293,7 @@ SMODS.Back({
     atlas = "decks",
     pos = {x = 0, y = 2},
     unlocked = false,
-    config = {vouchers = {'v_ortalab_catalog', 'v_seed_money'}, consumables = {'c_vis_coupon'}}, 
+    config = {vouchers = {'v_ortalab_catalog'}, consumables = {'c_vis_floppy_disk'}}, 
     loc_vars = function(self, info_queue, card)
         -- info_queue[#info_queue+1] = {generate_ui = ortalab_artist_tooltip, key = 'crimson'}
         return {vars = {localize({type = 'name_text', set = 'Voucher', key = self.config.vouchers[1]}), localize({type = 'name_text', set = 'Voucher', key = self.config.vouchers[2]}), localize({type = 'name_text', set = 'Voucher', key = self.config.vouchers[3]})}}

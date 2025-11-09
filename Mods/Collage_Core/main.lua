@@ -16,6 +16,12 @@ G.FUNCS.true_back_button = function()
     G.FUNCS:exit_overlay_menu()
 end
 
+G.FUNCS.true_back_button2 = function()
+    G.SETTINGS.paused = false
+    G.SETTINGS.collage_silent_unlock_tutorial = true
+    G.FUNCS:exit_overlay_menu()
+end
+
 function collage_tutorial_ui()
     local overlay_colour = {0.32,0.36,0.41,0}
     t = {n=G.UIT.ROOT, config = {align = "cm", padding = 32.05, r=0.1, colour = overlay_colour, emboss = 0.05}, nodes={
@@ -227,7 +233,7 @@ function Game:main_menu(change_context)
                     n = G.UIT.T,
                     config = {
                         scale = 0.3,
-                        text = "Collage v1.1.0a",
+                        text = "Collage v1.2.0a",
                         colour = G.C.UI.TEXT_LIGHT
                     }
                 }
@@ -262,7 +268,7 @@ end
 --- @param unlock_all_mod number
 --- @return number
 function collage_ease_weight(min_progress, max_progress, weight, unlock_all_mod, win_gate)
-    local progress = G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_antes + G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins * 8
+    local progress = G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_antes + G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins * 4
 
     local mod = 1
 
@@ -283,8 +289,8 @@ end
 --- @param weight number
 --- @param unlock_all_mod number
 --- @return boolean
-function collage_ease_pool(min_progress, max_progress, unlock_all_mod, win_gate)
-    local progress = G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_antes + G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins * 8
+function collage_ease_pool(min_progress, max_progress, unlock_all_mod, win_gate, min_chance)
+    local progress = G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_antes + G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins * 4
 
     local mod = 1
 
@@ -296,16 +302,79 @@ function collage_ease_pool(min_progress, max_progress, unlock_all_mod, win_gate)
         return false
     end
 
-    return pseudorandom(pseudoseed('collage_ease_pool')) <= math.min(1, mod * math.max(0, progress - min_progress)/math.max(1, max_progress - min_progress))
+    if not min_chance then
+        min_chance = 0
+    end
+
+    return pseudorandom(pseudoseed('collage_ease_pool')) <= min_chance + (1 - min_chance) * math.min(1, mod * math.max(0, progress - min_progress)/math.max(1, max_progress - min_progress))
 end
+
+
+function collage_silent_unlocks_ui()
+    local overlay_colour = {0.32,0.36,0.41,0}
+    t = {n=G.UIT.ROOT, config = {align = "cm", padding = 32.05, r=0.1, colour = overlay_colour, emboss = 0.05}, nodes={
+        {n=G.UIT.R, config={align = "cm", minh = 1,r = 0.3, padding = 0.07, minw = 1, colour = G.C.JOKER_GREY, emboss = 0.1}, nodes={
+            {n=G.UIT.C, config={align = "cm", minh = 1,r = 0.2, padding = 0.2, minw = 1, colour = G.C.L_BLACK}, nodes={
+                {n=G.UIT.R, config={align = "cm",padding = 0.2, minw = 7}, nodes= {
+                    {n=G.UIT.C, config={align = "cm",padding = 0.2}, nodes= {
+                        {n=G.UIT.R, config={align = "cm", r, padding = 0.03}, nodes= {
+                            {n=G.UIT.R, config={align = "cm"}, nodes={
+                                {n=G.UIT.T, config={align = "tm",scale = 0.5, text = localize('ui_collage_silent_title'), maxw = 1, colour = G.C.UI.WHITE}},
+                            }},
+                        }},
+                        {n=G.UIT.R, config={align = "cm", r, padding = 0.01}, nodes= {
+                            {n=G.UIT.R, config={align = "cm"}, nodes={
+                                {n=G.UIT.T, config={align = "tm",scale = 0.4, text = localize('ui_collage_silent1'), maxw = 1, colour = G.C.UI.WHITE}},
+                            }},
+                        }},
+                        {n=G.UIT.R, config={align = "cm", r, padding = 0.01}, nodes= {
+                            {n=G.UIT.R, config={align = "cm"}, nodes={
+                                {n=G.UIT.T, config={align = "tm",scale = 0.4, text = localize('ui_collage_silent2'), maxw = 1, colour = G.C.UI.WHITE}},
+                            }},
+                        }},
+                        {n=G.UIT.R, config={align = "cm", r, padding = 0.01}, nodes= {
+                            {n=G.UIT.R, config={align = "cm"}, nodes={
+                                {n=G.UIT.T, config={align = "tm",scale = 0.4, text = localize('ui_collage_silent3'), maxw = 1, colour = G.C.UI.WHITE}},
+                            }},
+                        }},
+                        {n=G.UIT.R, config={align = "cm", r, padding = 0.01}, nodes= {
+                            {n=G.UIT.R, config={align = "cm"}, nodes={
+                                {n=G.UIT.T, config={align = "tm",scale = 0.4, text = localize('ui_collage_silent4'), maxw = 1, colour = G.C.UI.WHITE}},
+                            }},
+                        }},
+                    }},
+                }},
+                {n=G.UIT.R, config={align = "cm", padding = 0, no_fill = true, minw = 2.5}, nodes={
+                UIBox_button({button = 'true_back_button2', minw = 7.5, padding =0.1, r = 0.1, hover = true, colour = G.C.ORANGE, label = {"ok thanks i like art!!!"}, id = 'back_button_nope'}),
+                }},
+            }},
+        }},
+        }}
+    return t
+end
+
 
 local ease_anteRef = ease_ante
 function ease_ante(mod, ante_end)
-	ease_anteRef(mod, ante_end)
     if mod > 0 then
         G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_antes = G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_antes or 0
         G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_antes = G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_antes + 1 -- not mod, purposefully
     end
+	ease_anteRef(mod, ante_end)
+end
+
+local refshop = Game.update_shop
+function Game:update_shop(dt)
+    if not G.SETTINGS.collage_silent_unlock_tutorial and
+    G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_antes == 4
+    and not G.PROFILES[G.SETTINGS.profile].all_unlocked then
+        G.SETTINGS.collage_silent_unlock_tutorial = true
+        G.SETTINGS.paused = true
+        G.FUNCS.overlay_menu {
+            definition = collage_silent_unlocks_ui()
+        }
+    end
+    refshop(self, dt)
 end
 
 COLLAGE_MODIFIED_TABLE_MINOR = {
@@ -393,6 +462,8 @@ COLLAGE_MODIFIED_TABLE_MAJOR = {
     'sleeve_vis_poptart',
     'sleeve_vis_gardening',
     'sleeve_vis_rolling',
+    'b_pl_sponsored',
+    'v_pl_ad_break',
 }
 
 COLLAGE_MODIFIED_TABLE = {
@@ -484,6 +555,7 @@ COLLAGE_MODIFIED_TABLE = {
 	"j_ccc_wingedstrawberry",
 	"j_ccc_cassetteblock",
     "j_ccc_chests",
+    "j_ccc_iceball",
 
     "j_ExtraCredit_turtle",
     "j_ExtraCredit_pridefuljoker",
@@ -576,6 +648,9 @@ COLLAGE_MODIFIED_TABLE = {
 	"j_pl_lamp",
 	"j_pl_odd_sock",
 	"j_pl_quarry",
+    "j_pl_archaeologist",
+    "j_pl_early_man",
+    "j_pl_dunce",
 
 	"j_prism_motherboard",
 	"j_prism_sculptor",
@@ -660,6 +735,14 @@ COLLAGE_MODIFIED_TABLE = {
     "j_sins_chastity",
     "j_sins_restraint",
     "j_sins_obedience"
+}
+
+COLLAGE_ALWAYS_IN_POOL = {
+    'j_tma_Coffin',
+    'j_tma_PlagueDoctor',
+    'j_roff_grossmichael',
+    'j_tma_Syringe',
+    'j_aij_jester_zombie'
 }
 
 --[[SMODS.Joker{

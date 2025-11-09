@@ -20,6 +20,9 @@ SMODS.Voucher({
     end,
 	redeem = function(self, card)
         --SMODS.change_booster_limit(card.ability.extra.booster_gain)
+        for key, value in pairs(G.shop_booster.cards) do
+            value:set_debuff(false)
+        end
     end,
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.booster_gain}}
@@ -387,7 +390,7 @@ SMODS.Voucher({
     end,
 })]]
 
-SMODS.Voucher({
+--[[SMODS.Voucher({
 	key = "one_mans_trash",
 	atlas = "coupons",
 	pos = {x = 6, y = 2},
@@ -426,7 +429,7 @@ SMODS.Voucher({
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.extra_dollars}}
     end,
-})
+})]]
 
 SMODS.Voucher({
 	key = "wasteful_inv",

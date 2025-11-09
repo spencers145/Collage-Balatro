@@ -402,9 +402,10 @@ return {
 			["j_ccc_iceball"] = {
 				["name"] = "Iceball",
 				["text"] = {
-					"If your {C:attention}score display{} didn't",
-					"catch {C:attention}fire{} during the",
-					"{C:attention}previous{} round, {C:white,X:red}X3{} Mult",
+					"{C:white,X:red}X2{} Mult if your",
+					"{C:attention}score{} didn't catch",
+					"{C:attention}fire{} last hand",
+					"{C:inactive}(Currently: Active!)"
 				},
 			},
 			["j_ccc_chests"] = {

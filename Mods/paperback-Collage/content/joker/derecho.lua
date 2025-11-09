@@ -2,14 +2,14 @@ SMODS.Joker {
   key = 'derecho',
   config = {
     extra = {
-      x_mult_mod = 0.15,
+      x_mult_mod = 0.12,
       x_mult = 1
     }
   },
   rarity = 3,
   pos = { x = 0, y = 1 },
   atlas = 'jokers_atlas',
-  cost = 9,
+  cost = 8,
   unlocked = true,
   discovered = false,
   blueprint_compat = true,

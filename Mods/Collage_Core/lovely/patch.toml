@@ -636,3 +636,32 @@ pattern = '''if G.P_CENTERS[key] then '''
 position = 'after'
 match_indent = true
 payload = '''if G.P_CENTERS[key].set == 'Joker' then return end'''
+
+
+
+
+
+
+# modded jokers all silently "unlock" over time (pool weight increases over time)
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''elseif v.enhancement_gate then'''
+position = 'before'
+match_indent = true
+payload = '''elseif v.set == 'Joker' and (not v.enhancement_gate or collage_ease_pool(0, 100, 100, nil, 0.1)) then
+    if v.original_mod and v.original_mod.id and v.original_mod.id ~= '' then
+        local match = false
+        for _, jonkerid in pairs(COLLAGE_ALWAYS_IN_POOL) do
+            if jonkerid == v.key then
+                match = true
+            end
+        end
+        if match then
+            add = true
+        else
+            add = collage_ease_pool(0, 200, 100, nil, 0.12)
+        end
+    else
+        add = true
+    end'''

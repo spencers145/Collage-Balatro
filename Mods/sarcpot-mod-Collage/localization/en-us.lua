@@ -573,6 +573,10 @@ return {
                     "Create a {V:1}Cardinal Tag{} after",
                     "defeating the {C:attention}Boss Blind{}"
                 },
+                unlock = {
+                    "Open a",
+                    "{C:attention}Travel Pack{}"
+                }
             },
             v_sarc_journey= {
                 name = 'Journey',

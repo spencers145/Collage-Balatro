@@ -26,14 +26,12 @@ return {
             b_vis_poptart = {
                 name = "Poptart Deck",
                 text = {
-                    "Start with the",
-                    "{C:attention,T:v_losted_stapler}Stapler{} Voucher",
-                    "and a {C:attention,T:tag_buffoon}Buffoon Tag"
+                    "All cards start as",
+                    "{C:attention,T:m_bunc_cracker}Cracker Cards"
                 },
                 unlock = {
-                    "Redeem the",
-                    "{C:attention}Staple Gun",
-                    "voucher"
+                    "Destroy 3 {C:attention}Cracker Cards",
+                    "in a single played hand"
                 }
             },
             b_vis_gardening = {

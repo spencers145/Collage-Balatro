@@ -7648,7 +7648,7 @@ SMODS.Voucher{ -- Supercoating
 SMODS.Voucher{ -- Hedge Trimmer
     key = 'hedge_trimmer',
 
-    config = {percent = 8},
+    config = {percent = 10},
     loc_vars = function(self, info_queue)
         return {vars = {self.config.percent}}
     end,
@@ -7662,7 +7662,7 @@ SMODS.Voucher{ -- Hedge Trimmer
 SMODS.Voucher{ -- Chainsaw
     key = 'chainsaw',
 
-    config = {percent = 25, unlock = 20},
+    config = {percent = 35, unlock = 20},
     loc_vars = function(self, info_queue)
         return {vars = {self.config.percent}}
     end,
@@ -7975,7 +7975,7 @@ for i = 1, 4 do -- Virtual
 
         weight = i <= 2 and 0.14 or i == 3 and 0.1 or 0.06,
         get_weight = function(self)
-            local new_weight = collage_ease_weight(40, 80, i <= 2 and 0.14 or i == 3 and 0.1 or 0.06, 8, 1) * (G.GAME.used_vouchers['v_bunc_arcade_machine'] and 4 or 1)
+            local new_weight = collage_ease_weight(40, 80, i <= 2 and 0.14 or i == 3 and 0.1 or 0.06, 8, 1) * (G.GAME.used_vouchers['v_bunc_arcade_machine'] and 5 or 1)
             return new_weight
         end,
 
@@ -8137,6 +8137,9 @@ function calculate_cracker_cards(context)
             end
         end
         if #crackers_total > 0 then
+            if #crackers_total >= 3 then
+                unlock_card(G.P_CENTERS.b_vis_poptart)
+            end
             SMODS.calculate_context({remove_playing_cards = true, removed = crackers_total, scoring_hand = context.scoring_hand})
         end
     end
