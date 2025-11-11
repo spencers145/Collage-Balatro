@@ -3,13 +3,13 @@ SMODS.Joker({
 	atlas = "jokers",
 	pos = {x=2,y=2},
 	rarity = 2,
-	cost = 6,
+	cost = 5,
 	unlocked = true,
 	discovered = false,
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
-	config = {extra = {chips_add = 8}},
+	config = {extra = {chips_add = 7}},
 	artist_credits = {'flare'},
 	loc_vars = function(self, info_queue, card)
         local sell_cost = 0
