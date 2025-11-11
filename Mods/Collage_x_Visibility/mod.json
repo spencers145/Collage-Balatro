@@ -3,7 +3,7 @@
 	"name": "Collage x Visibility",
 	"display_name": "Collage x Visibility",
 	"author": ["base4"],
-	"description": "the",
+	"description": "An official collaboration between Visibility and Collage. Primarily adds jokers using unsued art from Visibility.",
 	"prefix": "collage_vis",
 	"main_file": "main.lua",
 	"priority": 1000,

@@ -41,10 +41,8 @@ SMODS.Consumable({
                 trigger = 'after',
                 delay = 0.05,
                 func = function()
-                    if G.hand.cards and G.hand.cards[v] then
-                        play_sound('crumple1')
-                        G.hand.cards[v]:start_dissolve()
-                    end
+                    play_sound('crumple1')
+                    G.hand.cards[v]:start_dissolve()
                     return true
                 end
             }))

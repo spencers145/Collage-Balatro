@@ -3,9 +3,9 @@
 	"name": "Collage",
 	"display_name": "Collage",
 	"author": ["base4"],
-	"description": "the",
+	"description": "Collage is a modpack centered around ArtBox that ties together a huge variety of mods in a cohesive way. It makes transformative use of content to implement cross-mod interactions, remove mechanical overlap, and rebalance mods around each other.",
 	"prefix": "collage",
 	"main_file": "main.lua",
 	"priority": 1000,
-	"version": "1.0.0"
+	"version": "1.2.0b"
 }

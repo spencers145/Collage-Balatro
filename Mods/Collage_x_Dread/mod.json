@@ -3,7 +3,7 @@
 	"name": "Collage x The Dread Jokers",
 	"display_name": "Collage x Dread",
 	"author": ["base4"],
-	"description": "the",
+	"description": "An official collaboration between The Dread Jokers and Collage. Features custom cross-mod.",
 	"prefix": "collagexdread",
 	"main_file": "main.lua",
 	"priority": 1000,
