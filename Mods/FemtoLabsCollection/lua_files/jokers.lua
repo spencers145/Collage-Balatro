@@ -3742,7 +3742,7 @@ cityplan.calculate = function(self, card, context)
         end
     end
 
-    if not card.removed and G.GAME.dollars <= 0 then
+    if not card.removed and to_big(G.GAME.dollars) <= to_big(0) then
         card.removed = true
         return {
             message = "No Funding!",

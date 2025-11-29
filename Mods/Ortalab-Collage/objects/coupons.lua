@@ -19,10 +19,12 @@ SMODS.Voucher({
         return G.PROFILES[G.SETTINGS.profile].career_stats.c_collage_wins >= 1
     end,
 	redeem = function(self, card)
-        --SMODS.change_booster_limit(card.ability.extra.booster_gain)
-        for key, value in pairs(G.shop_booster.cards) do
-            value:set_debuff(false)
+        if G.shop_booster then
+            for key, value in pairs(G.shop_booster.cards) do
+                value:set_debuff(false)
+            end
         end
+        --SMODS.change_booster_limit(card.ability.extra.booster_gain)
     end,
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.booster_gain}}

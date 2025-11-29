@@ -7,5 +7,5 @@
 	"prefix": "collage",
 	"main_file": "main.lua",
 	"priority": 1000,
-	"version": "1.2.0b"
+	"version": "1.2.0c"
 }
