@@ -43,7 +43,7 @@ local dead_president = {
               local juiced = false 
 
               if left_joker then
-                  if left_joker.sell_cost > 0 and left_joker ~= card then
+                  if to_big(left_joker.sell_cost) > to_big(0) and left_joker ~= card then
                       left_joker.ability.extra_value = (left_joker.ability.extra_value or 0) + math.min(left_joker.sell_cost, card.ability.extra.max)
                       left_joker:set_cost() 
                       left_joker:juice_up(0.5, 0.3) 
@@ -56,7 +56,7 @@ local dead_president = {
               end
 
               if right_joker then
-                  if right_joker.sell_cost > 0 and right_joker ~= card then
+                  if to_big(right_joker.sell_cost) > to_big(0) and right_joker ~= card then
                       right_joker.ability.extra_value = (right_joker.ability.extra_value or 0) + math.min(right_joker.sell_cost, card.ability.extra.max)
                       right_joker:set_cost()
                       right_joker:juice_up(0.5, 0.3)
