@@ -142,6 +142,8 @@ if jest_to_hand ~= {} then
         draw_card(G.play,G.discard, it*100/play_count,'down', false, v)
     end
 else
+    draw_card(G.play,G.discard, it*100/play_count,'down', false, v)
+end
 '''
 match_indent = true
 

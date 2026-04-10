@@ -105,6 +105,7 @@ G.FUNCS.toggle_shop = function(e)
     _orig_toggle_shop(e)
 end
 
+loc_colour('red')
 G.ARGS.LOC_COLOURS['strawberry'] = HEX('FF6B7E')
 G.ARGS.LOC_COLOURS['linked_group'] = HEX('1B691E')
 
@@ -233,7 +234,7 @@ function Game:main_menu(change_context)
                     n = G.UIT.T,
                     config = {
                         scale = 0.3,
-                        text = "Collage v1.2.1exp",
+                        text = "Collage v1.2.0c",
                         colour = G.C.UI.TEXT_LIGHT
                     }
                 }

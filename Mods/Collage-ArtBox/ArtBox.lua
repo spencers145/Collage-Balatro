@@ -8,6 +8,7 @@ ArtBox.C = {
     ARTB_SECONDARY = HEX('86d4c9'),
 }
 
+loc_colour('red')
 G.ARGS.LOC_COLOURS['art'] = HEX('D691A0')
 G.ARGS.LOC_COLOURS['gros'] = HEX('E3C355')
 G.ARGS.LOC_COLOURS['cavendish'] = HEX('F2DD42')
