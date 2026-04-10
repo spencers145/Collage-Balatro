@@ -103,7 +103,7 @@ match_indent = true
 [patches.pattern]
 target = "functions/state_events.lua"
 pattern = "draw_card(G.play,G.discard, it*100/play_count,'down', false, v)"
-position = "before"
+position = "at"
 payload = '''
 local jest_to_hand = {}
             
