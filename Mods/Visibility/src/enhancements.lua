@@ -137,7 +137,7 @@ SMODS.Enhancement {
                 aij_balance_percent = card.ability.extra.hand_balance * 0.01
             }]]
         end
-        if context.final_scoring_step then
+        if context.final_scoring_step and context.cardarea == G.play then
             local iamfirst = false
             local total_notebooks = 0
             for key, value in pairs(context.scoring_hand) do
