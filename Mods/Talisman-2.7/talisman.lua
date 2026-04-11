@@ -40,12 +40,17 @@ function init_localization()
 	talismanloc()
 end
 
-Talisman = {config_file = {disable_anims = false, break_infinity = "omeganum", score_opt_id = 2}, mod_path = talisman_path}
-if nativefs.read(talisman_path.."/config.lua") then
-    Talisman.config_file = STR_UNPACK(nativefs.read(talisman_path.."/config.lua"))
+Talisman = {config_file = {disable_anims = false, break_infinity = "omeganum", score_opt_id = 2}, mod_path = talisman_path, default_notation = "Balatro"}
+local config_read_result = nativefs.read(talisman_path.."/config.lua")
+if config_read_result then
+    Talisman.config_file = STR_UNPACK(config_read_result)
     if Talisman.config_file.break_infinity == "bignumber" then
       Talisman.config_file.break_infinity = "omeganum"
       Talisman.config_file.score_opt_id = 2
+    end
+
+    if not Talisman.config_file.notation_key then
+      Talisman.config_file.notation_key = "Balatro"
     end
     if Talisman.config_file.score_opt_id == 3 then Talisman.config_file.score_opt_id = 2 end
     if Talisman.config_file.break_infinity and type(Talisman.config_file.break_infinity) ~= 'string' then
@@ -69,6 +74,30 @@ if not SMODS or not JSON then
   end
 end
 
+Talisman.notations = {
+  loc_keys = {
+    "talisman_notations_hypere",
+    -- "talisman_notations_letter",
+    "talisman_notations_array",
+    -- "k_ante"
+  },
+  filenames = {
+    "Balatro",
+    -- "LetterNotation",
+    "ArrayNotation",
+    -- "AnteNotation",
+  }
+}
+
+local function getlocs(key_array)
+  local ret = {}
+
+  for _,entry in ipairs(key_array) do
+    table.insert(ret, localize(entry))
+  end
+  return ret
+end
+
 Talisman.config_tab = function()
                 tal_nodes = {{n=G.UIT.R, config={align = "cm"}, nodes={
                   {n=G.UIT.O, config={object = DynaText({string = localize("talisman_string_A"), colours = {G.C.WHITE}, shadow = true, scale = 0.4})}},
@@ -80,9 +109,17 @@ Talisman.config_tab = function()
                   label = localize("talisman_string_C"),
                   scale = 0.8,
                   w = 6,
-                  options = {localize("talisman_vanilla"), localize("talisman_omeganum") .. "(e10##1000)"},
+                  options = {localize("talisman_vanilla"), localize("talisman_omeganum") .. "(e308##e308)"},
                   opt_callback = 'talisman_upd_score_opt',
                   current_option = Talisman.config_file.score_opt_id,
+                }),
+                create_option_cycle({
+                  label = localize("talisman_notation"),
+                  scale = 0.8,
+                  w = 6,
+                  options = getlocs(Talisman.notations.loc_keys),
+                  opt_callback = 'talisman_upd_notation_opt',
+                  current_option = Talisman.config_file.notation_id,
                 })}
                 return {
                 n = G.UIT.ROOT,
@@ -122,6 +159,14 @@ G.FUNCS.talisman_upd_score_opt = function(e)
   Talisman.config_file.break_infinity = score_opts[e.to_key]
   nativefs.write(talisman_path .. "/config.lua", STR_PACK(Talisman.config_file))
 end
+
+G.FUNCS.talisman_upd_notation_opt = function(e)
+  Talisman.config_file.notation_id = e.to_key
+  Talisman.config_file.notation_key = Talisman.notations.filenames[e.to_key]
+  nativefs.write(talisman_path .. "/config.lua", STR_PACK(Talisman.config_file))
+end
+
+
 if Talisman.config_file.break_infinity then
   Big, err = nativefs.load(talisman_path.."/big-num/"..Talisman.config_file.break_infinity..".lua")
   if not err then Big = Big() else Big = nil end
@@ -143,19 +188,19 @@ if Talisman.config_file.break_infinity then
 
   local nf = number_format
   function number_format(num, e_switch_point)
-      if type(num) == 'table' then
-          --num = to_big(num)
+      if is_number(num) then
+          num = to_big(num)
           if num.str then return num.str end
           if num:arraySize() > 2 then
-            local str = Notations.Balatro:format(num, 3)
+            local str = Notations[Talisman.config_file.notation_key or Talisman.default_notation]:format(num, 3)
             num.str = str
             return str
           end
-          G.E_SWITCH_POINT = G.E_SWITCH_POINT or 100000000000
-          if (num or 0) < (to_big(G.E_SWITCH_POINT) or 0) then
+          G.E_SWITCH_POINT = Notations[Talisman.config_file.notation_key or Talisman.default_notation].E_SWITCH_POINT or G.E_SWITCH_POINT or 100000000000
+          if ((num or 0) < (to_big(G.E_SWITCH_POINT) or 0)) and not Notations[Talisman.config_file.notation_key or Talisman.default_notation].always_use then
               return nf(num:to_number(), e_switch_point)
           else
-            return Notations.Balatro:format(num, 3)
+            return Notations[Talisman.config_file.notation_key or Talisman.default_notation]:format(num, 3)
           end
       else return nf(num, e_switch_point) end
   end
@@ -171,7 +216,7 @@ if Talisman.config_file.break_infinity then
       return mc(x)
   end
 
-function lenient_bignum(x)
+  function lenient_bignum(x)
     if type(x) == "number" then return x end
     if to_big(x) < to_big(1e300) and to_big(x) > to_big(-1e300) then
       return x:to_number()
@@ -179,15 +224,39 @@ function lenient_bignum(x)
     return x
   end
 
-  --prevent some log-related crashes
-  local sns = score_number_scale
-  function score_number_scale(scale, amt)
-    local ret = sns(scale, amt)
-    if type(ret) == "table" then
-      if ret > to_big(1e300) then return 1e300 end
-      return ret:to_number()
+  --despite the name, it only works best with m6x11plus\
+  --and only support the following characters: `0-9`, `e`, `{`, `}`, `,`,\
+  --`#` and `.` for the sake of number format simplicity
+  function tal_get_string_pixel_length(num)
+    if is_number(num) then
+      local num_text, length = number_format(num, G.E_SWITCH_POINT), 0
+      for i = 1, #num_text do
+        if string.sub(num_text, i, i) == "," or string.sub(num_text, i, i) == "." then
+          length = length + 3/6
+        elseif string.sub(num_text, i, i) == "{" or string.sub(num_text, i, i) == "}" then
+          length = length + 1
+        elseif string.sub(num_text, i, i) == "#" then
+          length = length + 8/6
+        else
+          length = length + 7/6
+        end
+      end
+      return length
     end
-    return ret
+  end
+
+  -- I'm completely overriding this since I don't think any other mods
+  -- would alter a text scale adjustment function (HuyTheKiller)
+  function score_number_scale(scale, amt)
+    G.E_SWITCH_POINT = Notations[Talisman.config_file.notation_key or Talisman.default_notation].E_SWITCH_POINT or G.E_SWITCH_POINT or 100000000000
+    if not is_number(amt) then return 0.7*(scale or 1) end
+    if to_big(amt) >= to_big(G.E_SWITCH_POINT) or Talisman.config_file.notation_key ~= "Balatro" then
+      return math.min(6/math.floor(tal_get_string_pixel_length(amt)+1), 0.7)*(scale or 1)
+    elseif to_big(amt) >= to_big(1000000) then
+      return 14*0.75/(math.floor(math.log(amt))+4)*(scale or 1)
+    else
+      return 0.75*(scale or 1)
+    end
   end
 
   local gftsj = G.FUNCS.text_super_juice
@@ -371,14 +440,14 @@ function lenient_bignum(x)
       else
         scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.max(7,string.len(number.str or number_format(number))-1))
       end
-    elseif to_big(number) >= to_big(e_switch_point or G.E_SWITCH_POINT) then
+    elseif math.abs(to_big(number)) >= to_big(e_switch_point or G.E_SWITCH_POINT) then
       if number:arraySize() <= 2 and (number.array[1] or 0) <= 999 then --gross hack
         scale = scale*math.floor(math.log(max*10, 10))/7 --this divisor is a constant so im precalcualting it
       else
         scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.max(7,string.len(number_format(number))-1))
       end
-    elseif to_big(number) >= to_big(max) then
-      scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.log(number*10, 10))
+    elseif math.abs(to_big(number)) >= to_big(max) then
+      scale = scale*math.floor(math.log(max*10, 10))/math.floor(math.log(math.abs(number)*10, 10))
     end
     local scale = math.min(3, scale:to_number())
     number.scale = scale
@@ -520,7 +589,7 @@ function tal_uht(config, vals)
         end
         if type(vals.chips) == 'string' then delta = vals.chips end
         G.GAME.current_round.current_hand.chips = vals.chips
-        if G.hand_text_area.chips.config.object then
+        if (G.hand_text_area.chips or {config = {}}).config.object then
           G.hand_text_area.chips:update(0)
         end
     end
@@ -532,7 +601,7 @@ function tal_uht(config, vals)
         end
         if type(vals.mult) == 'string' then delta = vals.mult end
         G.GAME.current_round.current_hand.mult = vals.mult
-        if G.hand_text_area.mult.config.object then
+        if  (G.hand_text_area.mult or {config = {}}).config.object then
           G.hand_text_area.mult:update(0)
         end
     end
@@ -779,11 +848,13 @@ function Card:set_seal(a,b,immediate)
   return ss(self,a,b,Talisman.config_file.disable_anims and (Talisman.calculating_joker or Talisman.calculating_score or Talisman.calculating_card) or immediate)
 end
 
-function Card:get_chip_x_bonus()
-    if self.debuff then return 0 end
-    if self.ability.set == 'Joker' then return 0 end
-    if (SMODS.multiplicative_stacking(self.ability.x_chips or 1, self.ability.perma_x_chips or 0) or 0) <= 1 then return 0 end
-    return SMODS.multiplicative_stacking(self.ability.x_chips or 1, self.ability.perma_x_chips or 0)
+if not SMODS then
+  function Card:get_chip_x_bonus()
+      if self.debuff then return 0 end
+      if self.ability.set == 'Joker' then return 0 end
+      if (self.ability.x_chips or 0) <= 1 then return 0 end
+      return self.ability.x_chips
+  end
 end
 
 function Card:get_chip_e_bonus()
@@ -903,7 +974,7 @@ end
 local g_start_run = Game.start_run
 function Game:start_run(args)
   local ret = g_start_run(self, args)
-  self.GAME.round_resets.ante_disp = self.GAME.round_resets.ante_disp or number_format(self.GAME.round_resets.ante)
+  self.GAME.round_resets.ante_disp = self.GAME.round_resets.ante_disp or number_format(self.GAME.round_resets.ante, 1000000)
   return ret
 end
 
@@ -935,9 +1006,9 @@ if SMODS and SMODS.calculate_individual_effect then
               card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = "^"..amount, colour =  G.C.EDITION, edition = true})
           elseif key ~= 'Echip_mod' then
               if effect.echip_message then
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.echip_message)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.echip_message)
               else
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'e_chips', amount, percent)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'e_chips', amount, percent)
               end
           end
       end
@@ -958,9 +1029,9 @@ if SMODS and SMODS.calculate_individual_effect then
               card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = "^^"..amount, colour =  G.C.EDITION, edition = true})
           elseif key ~= 'EEchip_mod' then
               if effect.eechip_message then
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.eechip_message)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.eechip_message)
               else
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'ee_chips', amount, percent)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'ee_chips', amount, percent)
               end
           end
       end
@@ -981,9 +1052,9 @@ if SMODS and SMODS.calculate_individual_effect then
               card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = "^^^"..amount, colour =  G.C.EDITION, edition = true})
           elseif key ~= 'EEEchip_mod' then
               if effect.eeechip_message then
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.eeechip_message)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.eeechip_message)
               else
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'eee_chips', amount, percent)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'eee_chips', amount, percent)
               end
           end
       end
@@ -1004,9 +1075,9 @@ if SMODS and SMODS.calculate_individual_effect then
               card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = (amount[1] > 5 and ('{' .. amount[1] .. '}') or string.rep('^', amount[1])) .. amount[2], colour =  G.C.EDITION, edition = true})
           elseif key ~= 'hyperchip_mod' then
               if effect.hyperchip_message then
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.hyperchip_message)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.hyperchip_message)
               else
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'hyper_chips', amount, percent)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'hyper_chips', amount, percent)
               end
           end
       end
@@ -1027,9 +1098,9 @@ if SMODS and SMODS.calculate_individual_effect then
               card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = "^"..amount.." "..localize("k_mult"), colour =  G.C.EDITION, edition = true})
           elseif key ~= 'Emult_mod' then
               if effect.emult_message then
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.emult_message)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.emult_message)
               else
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'e_mult', amount, percent)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'e_mult', amount, percent)
               end
           end
       end
@@ -1050,9 +1121,9 @@ if SMODS and SMODS.calculate_individual_effect then
               card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = "^^"..amount.." "..localize("k_mult"), colour =  G.C.EDITION, edition = true})
           elseif key ~= 'EEmult_mod' then
               if effect.eemult_message then
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.eemult_message)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.eemult_message)
               else
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'ee_mult', amount, percent)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'ee_mult', amount, percent)
               end
           end
       end
@@ -1073,9 +1144,9 @@ if SMODS and SMODS.calculate_individual_effect then
               card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = "^^^"..amount.." "..localize("k_mult"), colour =  G.C.EDITION, edition = true})
           elseif key ~= 'EEEmult_mod' then
               if effect.eeemult_message then
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.eeemult_message)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.eeemult_message)
               else
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'eee_mult', amount, percent)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'eee_mult', amount, percent)
               end
           end
       end
@@ -1096,9 +1167,9 @@ if SMODS and SMODS.calculate_individual_effect then
               card_eval_status_text(scored_card, 'jokers', nil, percent, nil, {message = ((amount[1] > 5 and ('{' .. amount[1] .. '}') or string.rep('^', amount[1])) .. amount[2]).." "..localize("k_mult"), colour =  G.C.EDITION, edition = true})
           elseif key ~= 'hypermult_mod' then
               if effect.hypermult_message then
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.hypermult_message)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'extra', nil, percent, nil, effect.hypermult_message)
               else
-                  card_eval_status_text(scored_card or effect.card or effect.focus, 'hyper_mult', amount, percent)
+                  card_eval_status_text(effect.message_card or effect.juice_card or scored_card or effect.card or effect.focus, 'hyper_mult', amount, percent)
               end
           end
       end
