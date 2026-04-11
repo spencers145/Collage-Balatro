@@ -1,6 +1,6 @@
 --override of the original function, changes pretty much everything, so not worth it to use lovely injects
 
-function level_up_hand(card, hand, instant, level_up, chip_upgrade, mult_upgrade, money_upgrade)
+--[[function level_up_hand(card, hand, instant, level_up, chip_upgrade, mult_upgrade, money_upgrade)
   level_up_table(card, { hand }, nil, instant, level_up, chip_upgrade, mult_upgrade, money_upgrade)
 end
 
@@ -30,7 +30,7 @@ function level_up_table_tailends(card, table_hands, description, instant, level_
     hand_info = { handname = "", level = "", chips = 0, mult = 0 }
   end
    update_hand_text({ sound = "button", volume = 0.7, pitch = 1.1, delay = 0 }, hand_info)
-end
+end]]
   
 --new function that allows upgrading multiple hands at once
 function level_up_table(card, table_hands, description, instant, level_up, chip_upgrade, mult_upgrade, money_upgrade, repetitions)

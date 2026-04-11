@@ -1151,7 +1151,7 @@ function update_hand_text(config, vals)
     ortalab_update_hand_text(config, vals)
 end
 
-local ortalab_level_up_hand = level_up_hand
+--[[local ortalab_level_up_hand = level_up_hand
 function level_up_hand(card, hand, instant, amount)
     local temp = G.GAME.ortalab.temp_levels
     if SMODS.displaying_scoring and not (SMODS.displayed_hand == hand) then
@@ -1159,7 +1159,7 @@ function level_up_hand(card, hand, instant, amount)
     end
     ortalab_level_up_hand(card, hand, instant, amount)
     update_hand_text({delay = 0, nopulse = true}, {temp_level = temp, temp_colour = G.hand_text_area.temporary_level.config.colour})
-end
+end]]
 
 local press_play = Blind.press_play
 function Blind:press_play()

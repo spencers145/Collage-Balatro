@@ -6,15 +6,6 @@ function LostedSpeed.FF()
     return G.SETTINGS.FASTFORWARD
 end
 
-G.FUNCS.change_fastforward = function(args)
-    G.SETTINGS.FASTFORWARD = (
-        args.to_val == localize('k_fast_forward_planets') and 1 or
-        args.to_val == localize('k_fast_forward_on') and 2 or
-        args.to_val == localize('k_fast_forward_unsafe') and 3 or
-        0
-    )
-end
-
 G.FUNCS.change_statustext = function(args)
     G.SETTINGS.STATUSTEXT = (
         args.to_val == localize('k_status_text_less_annoying') and 1 or
@@ -46,24 +37,6 @@ function G.UIDEF.lostedspeed_options()
         )
     })
     return speeds
-end
-
-function G.UIDEF.lostedspeed_fastforward_options()
-    if not G.SETTINGS.FASTFORWARD then G.SETTINGS.FASTFORWARD = 0 end
-    local ff = create_option_cycle({
-        label = localize('k_fast_forward_label'),
-        w = 5,
-        scale = 0.8,
-        options = {
-            localize('k_fast_forward_off'),
-            localize('k_fast_forward_planets'),
-            localize('k_fast_forward_on'),
-            localize('k_fast_forward_unsafe')
-        },
-        opt_callback = 'change_fastforward',
-        current_option = G.SETTINGS.FASTFORWARD + 1
-    })
-    return ff
 end
 
 function G.UIDEF.lostedspeed_statustext_options()
@@ -102,77 +75,6 @@ function card_eval_status_text(card, eval_type, amt, percent, dir, extra)
     end
 
     return cest(card, eval_type, amt, percent, dir, extra)
-end
-
-local uhtr = update_hand_text
-function update_hand_text(config, vals)
-    if G.SETTINGS.FASTFORWARD and G.SETTINGS.FASTFORWARD >= 2 then
-        config.immediate = true
-        config.delay = 0
-        config.blocking = false
-        vals.StatusText = nil
-    end
-    return uhtr(config, vals)
-end
-
-local delay_ref = delay
-function delay(time, queue)
-    if G.SETTINGS.FASTFORWARD and G.SETTINGS.FASTFORWARD > 1 then
-        return
-    end
-    return delay_ref(time, queue)
-end
-
-local original_event_init = Event.init
-function Event:init(config)
-    original_event_init(self, config)
-    if G.SETTINGS.FASTFORWARD and G.SETTINGS.FASTFORWARD > 2 then
-        self.blocking = false
-        self.blockable = false
-        if self.trigger == 'ease' then self.delay = 0.0001 else self.delay = 0 end
-    end
-end
-
-local lvupref = level_up_hand
-function level_up_hand(card, hand, instant, amount)
-    if G.SETTINGS.FASTFORWARD and G.SETTINGS.FASTFORWARD > 0 and not instant then
-        instant = true
-        lvupref(card, hand, instant, amount)
-        if card then
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2, func = function()
-                play_sound('tarot1')
-                card:juice_up(0.8, 0.5)
-            return true end }))
-        end
-        update_hand_text({sound = 'button', volume = 0.7, pitch = 0.9, delay = 0.3}, {chips = G.GAME.hands[hand].chips, mult = G.GAME.hands[hand].mult, level=G.GAME.hands[hand].level, StatusText = true})
-        delay(1.3)
-    else
-        lvupref(card, hand, instant, amount)
-    end
-end
-
-local ccr = create_card
-function create_card(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-    if G.SETTINGS.FASTFORWARD and G.SETTINGS.FASTFORWARD > 1 and _type == 'Joker' and area ~= G.jokers then
-        local eternal_perishable_poll = pseudorandom((area == G.pack_cards and 'packetper' or 'etperpoll')..G.GAME.round_resets.ante)
-        local eternal = G.GAME.modifiers.all_eternal or (G.GAME.modifiers.enable_eternals_in_shop and eternal_perishable_poll > 0.7)
-        local perish = G.GAME.modifiers.enable_perishables_in_shop and ((eternal_perishable_poll > 0.4) and (eternal_perishable_poll <= 0.7)) and not eternal
-        local rental = G.GAME.modifiers.enable_rentals_in_shop and pseudorandom((area == G.pack_cards and 'packssjr' or 'ssjr')..G.GAME.round_resets.ante) > 0.7
-        local card = ccr(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-        if card then
-            if eternal then
-                card:set_eternal(true)
-            elseif perish then
-                card:set_perishable(true)
-            end
-            if rental then
-                card:set_rental(true)
-            end
-        end
-        return card
-    else
-        return ccr(_type, area, legendary, _rarity, skip_materialize, soulable, forced_key, key_append)
-    end
 end
 
 local gfecr = G.FUNCS.end_consumeable
