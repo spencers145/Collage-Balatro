@@ -4,8 +4,8 @@ SMODS.Joker {
     unlocked = true,
     discovered = false,
     blueprint_compat = true,
-    rarity = 2,
-    cost = 6,
+    rarity = 3,
+    cost = 7,
     pos = { x = 9, y = 3 },
     credits = {
         idea = "Monachrome",
