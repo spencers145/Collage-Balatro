@@ -618,7 +618,7 @@ SMODS.Blind({
     end
 })
 
-SMODS.Blind({
+--[[SMODS.Blind({
     key = 'ladder',
     atlas = 'ortalab_blinds',
     pos = {x = 0, y = 13},
@@ -644,7 +644,7 @@ SMODS.Blind({
     disable = function(self)
         G.hand:change_size(-self.config.extra.hand_size)
     end
-})
+})]]
 
 SMODS.Blind({
     key = 'hearth',
