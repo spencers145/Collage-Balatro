@@ -47,10 +47,10 @@ SMODS.Joker {
 	loc_txt = {
 		name = 'Tuna',
 		text = {
-			'{C:chips}+#1#{} Chips',
-			'Loses {C:money}$#2#{} of {C:attention}sell value{}',
+			{'{C:chips}+#1#{} Chips'},
+			{'Loses {C:money}$#2#{} of {C:attention}sell value{}',
 			'at end of round',
-			'{C:green,s:0.8}Art by NoahCrawfish{}'
+			'{C:green,s:0.8}Art by NoahCrawfish{}'}
 		}
 	},
 
