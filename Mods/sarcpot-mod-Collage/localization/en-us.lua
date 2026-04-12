@@ -421,7 +421,7 @@ return {
                 name = 'Phase Shift',
                 text = {
                     "Played {V:1}#1#{} and {V:2}#2#",
-                    "Balance {C:attention}#3#%{} of {C:mult}Mult{} and {C:chips}Chips{}",
+                    "balance {C:purple}#3#%{} of {C:mult}Mult{} and {C:chips}Chips{}",
                     "when {C:attention}scored{}",
                   
                 

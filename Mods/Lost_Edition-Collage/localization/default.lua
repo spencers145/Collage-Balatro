@@ -600,7 +600,7 @@ return {
                     'If the {C:attention}first hand{} of the round',
                     'has at most {C:attention}3{} cards,',
                     'randomizes the {C:attention}suit{}, {C:attention}rank{},',
-                    'and {C:dark_edition}improvements{}',
+                    'and {C:dark_edition}modifiers{}',
                     'of the {C:attention}played cards{}',
                 },
                 unlock={

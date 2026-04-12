@@ -38,10 +38,10 @@ return {
       j_tes_conduit = {
         name = 'Conduit',
         text = {
-          "Played {C:attention}Bonus Cards{} give",
-          "{C:mult}+#2#{} Mult when scored",
-          "Played {C:attention}Mult Cards{} give",
-          "{C:chips}+#1#{} Chips when scored"
+          {"Played {C:attention}Bonus Cards{} give",
+          "{C:mult}+#2#{} Mult when scored"},
+          {"Played {C:attention}Mult Cards{} give",
+          "{C:chips}+#1#{} Chips when scored"}
         }
       },
       
@@ -82,8 +82,8 @@ return {
       j_tes_mint = {
         name = 'Mint Condition',
         text = {
-          "Earn {C:money}$#1#{} at end of round",
-          "Reduce by {C:money}$#2#{} on {C:red}discard"
+          {"Earn {C:money}$#1#{} at end of round"},
+          {"Reduce by {C:money}$#2#{} on {C:red}discard"}
         }
       },
       
@@ -111,10 +111,10 @@ return {
       j_tes_pineapple = {
         name = 'Pineapple',
         text = {
-          "{C:chips}+#1#{} Chips",
-          "{C:chips}-#2#{} Chips at end of round",
+          {"{C:chips}+#1#{} Chips"},
+          {"{C:chips}-#2#{} Chips at end of round",
           "if {C:attention}first hand{} of round",
-          "doesn't beat the {C:attention}Blind"
+          "doesn't beat the {C:attention}Blind"}
         }
       },
       
@@ -129,10 +129,10 @@ return {
       j_tes_waterfall = {
         name = 'Waterfall',
         text = {
-          "{C:mult}+#1#{} discard each round",
-          "This Joker gains {C:chips}+#2#{} Chips",
+          {"{C:mult}+#1#{} discard each round"},
+          {"This Joker gains {C:chips}+#2#{} Chips",
           "when a {C:attention}3{} or {C:attention}6{} is discarded",
-          "{C:inactive}(Currently {C:chips}+#3#{} {C:inactive}chips)"
+          "{C:inactive}(Currently {C:chips}+#3#{} {C:inactive}chips)"}
         }
       }
     }

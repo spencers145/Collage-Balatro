@@ -222,11 +222,11 @@ return {
             j_vis_monolith = {
                 name = "Monolith",
                 text = {
-                    "Gains {X:mult,C:white}X#1#{} Mult for every played hand",
-                    "that is not {C:attention}#2#{} or {C:attention}#3#{}",
-                    "Hands {C:attention}change{} every played hand,",
-                    "{C:red}resets{} when either is played",
-                    "{C:inactive}(Currently: {X:mult,C:white}X#4#{} {C:inactive}Mult)",
+                    {"Gains {X:mult,C:white}X#1#{} Mult for every played hand",
+                    "that is not {C:attention}#2#{} or {C:attention}#3#{},",
+                    "and {C:red}resets{} when either is played",
+                    "{C:inactive}(Currently: {X:mult,C:white}X#4#{} {C:inactive}Mult)",},
+                    {"Hands {C:attention}change{} every played hand"},
                 }
             },
             j_vis_blackbeard = {
@@ -257,9 +257,10 @@ return {
             j_vis_monochromatic_joker = {
                 name = 'Monochromatic Joker',
                 text = {
-                    "{C:green}#1# in #2#{} chance to change a non-edition joker into a",
-                    "{C:dark_edition}negative{} after defeating the {C:mult}Boss Blind{}",
-                    "Is destroyed on success"
+                    {"{C:green}#1# in #2#{} chance to change a",
+                    "non-edition joker into a {C:dark_edition}Negative{}",
+                    "after defeating the {C:mult}Boss Blind{}"},
+                    {"Is destroyed on success"}
                 }
             },
             j_vis_lean = {
@@ -364,8 +365,7 @@ return {
             j_vis_russian_roulette = {
                 name = "Dogs Playing Russian Roulette",
                 text = {
-                    "{C:green}#1# in #2#{} chance for",
-                    "{X:mult,C:white}X#3#{} Mult",
+                    "{C:green}#1# in #2#{} chance for {X:mult,C:white}X#3#{} Mult",
                 }
             },
             j_vis_sd_card = {
@@ -527,7 +527,7 @@ return {
                 name = "RV Lab",
                 text = {
                     "Each {C:attention}Jack{}",
-                    "held in hand",
+                    "{C:attention}held in hand",
                     "gives {X:chips,C:white} X#1# {} Chips",
                 },
             },
@@ -575,8 +575,8 @@ return {
             j_vis_caution_sign = {
                 name = "Caution Sign",
                 text = {
-                    "Retriggers the first",
-                    "{C:attention}card held in hand {C:attention}#1#{} additional times",
+                    "Retriggers the first card",
+                    "{C:attention}held in hand {C:attention}#1#{} additional times",
                 }
             },
             j_vis_teto = {

@@ -1,7 +1,7 @@
 SMODS.Joker {
     key = "playing_piece",
-    rarity = 1,
-    cost = 4,
+    rarity = 2,
+    cost = 5,
     blueprint_compat = true,
     unlocked = true,
 	discovered = false,

@@ -3653,11 +3653,11 @@ SMODS.Joker {
 	loc_txt = {
 		name = 'Combination Lock',
 		text = {
-			'Earn {C:money}$#1#{} if ranks',
-			'in {C:attention}poker hand{} add up to',
-			'{C:attention}#2#{}, number changes each round',
-			'{C:inactive,s:0.8}(Number chosen between 20 and 35){}',
-			'{C:green,s:0.8}Concept by Bissy{}'
+			{'Earn {C:money}$#1#{} if ranks in',
+			'{C:attention}poker hand{} add up to {C:attention}#2#{}'},
+			{'Number changes to between',
+			'20 and 35 each round',
+			'{C:green,s:0.8}Concept by Bissy{}'},
 		}
 	},
 	rarity = 1,
@@ -3721,8 +3721,8 @@ SMODS.Joker {
 		name = 'Ouija Board',
 		text = {
 			'If played hand is a single',
-			'{C:attention}#1# of {V:1}#2#{},',
-			'add a {C:purple}Purple Seal{} to played card',
+			'{C:attention}#1# of {V:1}#2#{}, add a',
+			'{C:purple}Purple Seal{} to played card',
 			'{s:0.8}Card changes every round'
 
 
@@ -4458,8 +4458,8 @@ SMODS.Joker {
 		text = {
 			'{C:attention}6s{}, {C:attention}7s{}, {C:attention}8s{}, and {C:attention}9s{}',
 			'give {X:mult,C:white} X#1# {} Mult when scored,',
-			'with a {C:green}#2# in #3#{} chance',
-			'to be {C:attention}destroyed{} after scoring',
+			'with a {C:green}#2# in #3#{} chance to be',
+			'{C:attention}destroyed{} after scoring',
 			'{C:green,s:0.8}Art by Crispybag{}'
 		}
 	},

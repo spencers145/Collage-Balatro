@@ -112,8 +112,8 @@ return {
                 name = "Sculptor",
                 text = {"Every played {C:attention}Stone Card{},",
                     "{C:attention}Luminice Card{}, {C:attention}Brick Card{}, and",
-                    "{C:attention}Marble Card{} permanently gains {C:mult}+#1#{} Mult",
-                    "when scored"
+                    "{C:attention}Marble Card{} permanently gains",
+                    "{C:mult}+#1#{} Mult when scored"
                 },
             },
             j_prism_motherboard = {
@@ -224,7 +224,7 @@ return {
                     "after {C:attention}#1#{} Jacks",
                     "have been scored",
                     "{C:inactive}(Currently {C:attention}#2#{C:inactive}/#1#)",
-                    "{C:inactive}(Only once per round)"
+                    "{C:inactive}(Once per round)"
                 },
             },
             j_prism_hit_record = {
@@ -385,7 +385,7 @@ return {
             },
             j_prism_whale = {
                 name = "Interplanetary Travel",
-                text = {"When {C:attention}Boss Blind{} is defeated",
+                text = {"When {C:attention}Boss Blind{} is defeated,",
                     "upgrade level of most played",
                     "{C:attention}poker hand{} per {C:attention}unique ",
                     "{C:planet}Planet{} used this ante",

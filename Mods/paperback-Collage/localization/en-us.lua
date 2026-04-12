@@ -175,9 +175,9 @@ return {
       j_paperback_milk_tea = {
         name = "Milk Tea",
         text = {
-          "{C:purple}Balance{} {C:attention}#1#%{} of {C:chips}Chips{} and {C:mult}Mult",
-          "Reduces by {C:attention}#2#%{} if after balancing",
-          "{C:mult}Mult{} ended up {C:attention}greater{} than {C:chips}Chips"
+          {"{C:purple}Balance{} {C:attention}#1#%{} of {C:chips}Chips{} and {C:mult}Mult"},
+          {"Reduces by {C:attention}#2#%{} if after balancing",
+          "{C:mult}Mult{} ended up {C:attention}greater{} than {C:chips}Chips"}
         }
       },
       j_paperback_nichola = {
@@ -222,11 +222,11 @@ return {
       j_paperback_pear = {
         name = "Pear",
         text = {
-          {"This Joker gains {C:chips}+#2#{} Chips if played",
-          "hand contains a {C:attention}#1#{}",
+          {"This Joker gains {C:chips}+#2#{} Chips if",
+          "played hand contains a {C:attention}#1#{}",
           "{C:inactive}(Currently {C:chips}+#4#{C:inactive} Chips)"},
-          {"This Joker loses {C:chips}-#3#{} Chips if played",
-          "hand {C:attention}does not{} contain a {C:attention}#1#{}"},
+          {"Loses {C:chips}-#3#{} Chips if played hand",
+          "{C:attention}does not{} contain a {C:attention}#1#{}"},
         }
       },
       j_paperback_the_one_who_waits = {
@@ -262,7 +262,8 @@ return {
       j_paperback_jestrogen = {
         name = "Jestrogen",
         text = {
-          "Scored {C:attention}#1#s{} and {C:attention}#2#s{} become {C:attention}#3#s{}"
+          "Scored {C:attention}#1#s{} and {C:attention}#2#s{}",
+          "become {C:attention}#3#s{}"
         }
       },
       j_paperback_langely = {
@@ -501,10 +502,10 @@ return {
       j_paperback_better_call_jimbo = {
         name = "Better Call Jimbo",
         text = {
-          "{X:mult,C:white}X#1#{} Mult for",
+          {"{X:mult,C:white}X#1#{} Mult for",
           "every {C:money}$#2#{} owned",
-          "Earn no {C:money}Interest{}",
-          "{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"
+          "{C:inactive}(Currently {X:mult,C:white}X#3#{C:inactive} Mult)"},
+          {"Earn no {C:money}Interest{}"},
         }
       },
       j_paperback_touch_tone_joker = {
@@ -590,11 +591,11 @@ return {
       j_paperback_matcha = {
         name = "Matcha",
         text = {
-          "This Joker gains {C:chips}+#1#{} Chips",
+          {"This Joker gains {C:chips}+#1#{} Chips",
           "when a card is scored",
-          "{C:green}#2# in #3#{} chance to",
-          "consume on {C:red}discard",
-          "{C:inactive}(Currently {C:chips}+#4#{C:inactive} Chips)"
+          "{C:inactive}(Currently {C:chips}+#4#{C:inactive} Chips)"},
+          {"{C:green}#2# in #3#{} chance to",
+          "consume on {C:red}discard"},
         }
       },
       j_paperback_you_are_a_fool = {
@@ -685,7 +686,7 @@ return {
       j_paperback_sake_cup = {
         name = "Sake Cup",
         text = {
-          "After a hand is played, {C:attention}#1#s",
+          "After play, {C:attention}#1#s",
           "{C:attention}held in hand{} have a {C:green}#2# in #3#",
           "chance to create the {C:planet}Planet",
           "card for played {C:attention}poker hand",
@@ -742,10 +743,10 @@ return {
       j_paperback_champagne = {
         name = "Champagne",
         text = {
-          "During a {C:attention}Boss Blind{}, scored",
+          {"During a {C:attention}Boss Blind{}, scored",
           "cards earn {C:money}$#1#{}, {C:attention}doubled{} if",
-          "the card has a {C:attention}seal",
-          "{C:attention}Consumed{} in {C:attention}#2#{} rounds"
+          "the card has a {C:attention}seal"},
+          {"{C:attention}Consumed{} in {C:attention}#2#{} rounds"}
         }
       },
       j_paperback_pocket_pair = {
@@ -844,10 +845,10 @@ return {
       j_paperback_epic_sauce = {
         name = "Epic Sauce",
         text = {
-          "{X:mult,C:white}X#1#{} Mult",
-          "Destroy a random {C:attention}Joker{}",
+          {"{X:mult,C:white}X#1#{} Mult"},
+          {"Destroy a random {C:attention}Joker{}",
           "if played hand is not",
-          "the {C:attention}first hand{} of round"
+          "the {C:attention}first hand{} of round"}
         }
       },
       j_paperback_find_jimbo = {
@@ -877,10 +878,12 @@ return {
       j_paperback_coffee = {
         name = "Coffee",
         text = {
-          "{C:attention}+#1#{} hand size,",
-          "increases by {C:attention}#2#{} when {C:attention}Blind{} is skipped.",
-          "{C:green}#3# in #4#{} chance this card is consumed when",
-          "{C:attention}Small Blind{} or {C:attention}Big Blind{} is selected",
+          {"{C:attention}+#1#{} hand size"},
+          {"Increases by {C:attention}#2#{} when",
+          "a {C:attention}Blind{} is skipped"},
+          {"{C:green}#3# in #4#{} chance to be",
+          "consumed when a {C:attention}non-Boss",
+          "{C:attention}Blind{} is selected"},
         }
       },
       j_paperback_basic_energy = {
@@ -945,11 +948,11 @@ return {
       j_paperback_complete_breakfast = {
         name = "Complete Breakfast",
         text = {
-          "{C:mult}+#1#{} Mult and {C:chips}+#2#{} Chips",
-          "{C:green}#3# in #4#{} chance this card is",
-          "eaten after played hand",
-          "Chance increases by {C:green}#5#{} after",
-          "every played hand",
+          {"{C:mult}+#1#{} Mult and {C:chips}+#2#{} Chips"},
+          {"{C:green}#3# in #4#{} chance this card is",
+          "eaten after played hand"},
+          {"Chance increases by {C:green}#5#{} after",
+          "every played hand"},
         },
       },
       j_paperback_emergency_broadcast = {
@@ -998,9 +1001,9 @@ return {
       j_paperback_charred_marshmallow = {
         name = "Charred Marshmallow",
         text = {
-          "Scored {C:spades}Spades{} give {C:mult}+#1#{} Mult",
-          "{C:green}#2# in #3#{} chance this card is",
-          "eaten at end of round",
+          {"Scored {C:spades}Spades{} give {C:mult}+#1#{} Mult"},
+          {"{C:green}#2# in #3#{} chance this card is",
+          "eaten at end of round"},
         },
       },
       j_paperback_joker_cookie = {
@@ -1075,7 +1078,8 @@ return {
       j_paperback_ghost_cola = {
         name = "Ghost Cola",
         text = {
-          "Sell this card to create a {C:attention}#1#{}",
+          "Sell this card to",
+          "create a {C:attention}#1#{}",
           "and a random {C:spectral}Spectral{} card",
           "{C:inactive}(Must have room)"
         },
@@ -1170,9 +1174,9 @@ return {
       j_paperback_caramel_apple = {
         name = "Caramel Apple",
         text = {
-          "Scored {C:clubs}Clubs{} give {C:mult}+#1#{} Mult",
-          "{C:green}#2# in #3#{} chance this card is",
-          "eaten at end of round",
+          {"Scored {C:clubs}Clubs{} give {C:mult}+#1#{} Mult"},
+          {"{C:green}#2# in #3#{} chance this card is",
+          "eaten at end of round"},
         },
       },
       j_paperback_nachos = {
@@ -1229,11 +1233,11 @@ return {
       j_paperback_wish_you_were_here = {
         name = "Wish You Were Here",
         text = {
-          "Gives {C:mult}Mult{} equal to {C:mult}#1#X{} the",
-          "{C:attention}sell value{} of this card.",
-          "Gains {C:money}$#2#{} of {C:attention}sell value{}",
-          "at end of round",
-          "{C:inactive}(Currently {C:mult}+#3# {C:inactive}Mult){}",
+          {"Gives {C:mult}Mult{} equal to {C:mult}#1#X{} the",
+          "{C:attention}sell value{} of this card",
+          "{C:inactive}(Currently {C:mult}+#3# {C:inactive}Mult){}"},
+          {"Gains {C:money}$#2#{} of {C:attention}sell value{}",
+          "at end of round",},
         },
       },
       j_paperback_calling_card = {
@@ -1293,8 +1297,8 @@ return {
         name = "Grand Strategy",
         text = {
           "{X:mult,C:white}X#1#{} Mult if",
-          "{C:attention}#2#{} unique {C:attention}enhancements{}",
-          "or {C:attention}seals{} are in your full deck",
+          "{C:attention}#2#{} unique {C:attention}enhancements{} or",
+          "{C:attention}seals{} are in your full deck",
           "{C:inactive}(Currently {C:attention}#3#{C:inactive})",
         },
       },
@@ -1302,7 +1306,8 @@ return {
         name = "Ready to Fly",
         text = {
           "This Joker gains {X:chips,C:white}X#2#{} Chips",
-          "whenever an adjacent Joker is {C:attention}triggered",
+          "whenever an adjacent {C:attention}Joker",
+          "is {C:attention}triggered",
           "{C:inactive}(Currently {X:chips,C:white}X#1#{C:inactive} Chips)",
         },
       },
@@ -1326,9 +1331,9 @@ return {
       j_paperback_dreamsicle = {
         name = "Dreamsicle",
         text = {
-          "Scored {C:diamonds}Diamonds{} give {C:mult}+#1#{} Mult",
-          "{C:green}#2# in #3#{} chance this card is",
-          "eaten at end of round",
+          {"Scored {C:diamonds}Diamonds{} give {C:mult}+#1#{} Mult"},
+          {"{C:green}#2# in #3#{} chance this card is",
+          "eaten at end of round"},
         },
       },
       j_paperback_jimbo_adventure = {
@@ -1350,10 +1355,10 @@ return {
       j_paperback_cherry_blossoms = {
         name = "Cherry Blossoms",
         text = {
-          {"{C:hearts}#1#{} give {X:mult,C:white}X#2#{} Mult when scored",
-        "{C:inactive}(Resets after each hand played)"},
+          {"{C:hearts}#1#{} give {X:mult,C:white}X#2#{} Mult when scored",},
           {"Increases by {X:mult,C:white}X#3#{} Mult for each",
-          "consecutively scored {C:hearts}#4#{}"},
+          "consecutively scored {C:hearts}#4#{}",
+          "{C:inactive}(Resets after each hand played)"},
         },
       },
       j_paperback_paranoia = {
@@ -1449,10 +1454,10 @@ return {
       j_paperback_evergreens = {
         name = "Evergreens",
         text = {
-          {"{C:spades}#1#{} give {X:mult,C:white}X#2#{} Mult when scored",
-        "{C:inactive}(Resets after each hand played)"},
+          {"{C:spades}#1#{} give {X:mult,C:white}X#2#{} Mult when scored",},
           {"Increases by {X:mult,C:white}X#3#{} Mult for each",
-          "consecutively scored {C:spades}#4#{}"},
+          "consecutively scored {C:spades}#4#{}",
+          "{C:inactive}(Resets after each hand played)"},
         },
       },
       j_paperback_der_fluschutze = {
@@ -1484,9 +1489,9 @@ return {
       j_paperback_cakepop = {
         name = "Cakepop",
         text = {
-          "Scored {C:hearts}Hearts{} give {C:mult}+#1#{} Mult",
-          "{C:green}#2# in #3#{} chance this card is",
-          "eaten at end of round",
+          {"Scored {C:hearts}Hearts{} give {C:mult}+#1#{} Mult"},
+          {"{C:green}#2# in #3#{} chance this card is",
+          "eaten at end of round"},
         },
       },
       j_paperback_black_rainbows = {

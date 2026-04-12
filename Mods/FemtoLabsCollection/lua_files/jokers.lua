@@ -927,10 +927,10 @@ local cheese = SMODS.Joker({
 	loc_txt = { 
         name = 'Savoury Cheese',
         text = {
-	"{X:mult,C:white}X#1#{} Mult", 
-    "{C:green}#2# in #3#{} chance of being",
-    "eaten on round end",
-    "{C:chips,s:0.8}Art: ABuffZucchini"
+            {"{X:mult,C:white}X#1#{} Mult"}, 
+            {"{C:green}#2# in #3#{} chance of being",
+            "eaten on round end",
+            "{C:chips,s:0.8}Art: ABuffZucchini"}
         }
     },
 	rarity = 1,

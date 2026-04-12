@@ -1343,12 +1343,12 @@ SMODS.Joker{ --Traffic Light
         }
     },
     loc_txt = {
-        ['name'] = 'Traffic Light',
-        ['text'] = {
-            [1] = 'Gives {X:mult,C:white}X#1#{} Mult',
-            [2] = 'Decreases by {X:mult,C:white}X#2#{}',
-            [3] = 'each hand played',
-            [4] = 'Resets after {X:mult,C:white}X0.5{}'
+        name = 'Traffic Light',
+        text = {
+            {'Gives {X:mult,C:white}X#1#{} Mult'},
+            {'Decreases by {X:mult,C:white}X#2#{}',
+            'each hand played'},
+            {'Resets after {X:mult,C:white}X0.5{}'}
         }
     },
     pos = {
@@ -1483,12 +1483,12 @@ SMODS.Joker{ --Alloy
     name = "Alloy",
     key = "alloy",
     loc_txt = {
-        ['name'] = 'Alloy',
-        ['text'] = {
-            [1] = "{C:attention}Gold Cards{} are also ",
-            [2] = "considered {C:attention}Steel Cards{}",
-            [3] = "{C:attention}Steel Cards{} are also ",
-            [4] = "considered {C:attention}Gold Cards{}"
+        name = 'Alloy',
+        text = {
+            {"{C:attention}Gold Cards{} are also ",
+            "considered {C:attention}Steel Cards{}"},
+            {"{C:attention}Steel Cards{} are also",
+            "considered {C:attention}Gold Cards{}"}
         }
     },
     pos = { 

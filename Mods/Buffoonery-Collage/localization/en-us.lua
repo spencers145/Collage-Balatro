@@ -44,16 +44,16 @@ return {
 			},
 			j_buf_argument = {
 				name = "Pertinent Argument",
-				text = {"Converts an unscored",
-						"card into one of",
-						"the scored ones, if",
-						"{C:attention}poker hand{} is a {C:attention}Two Pair{}"
+				text = {
+					"If {C:attention}poker hand{} is {C:attention}Two Pair{},",
+					"convert an unscored card into",
+					"one of the scored ones"
 				}  
 			},
 			j_buf_cashout = {
 				name = "Cashout Voucher",
 				text = {"If {C:attention}winning hand{} triples the Blind's",
-					"score {C:attention}requirement{}, earn 0.4% of it",
+					"score {C:attention}requirement{}, earn {C:white,X:money}0.4%{} of it",
 					"as {C:money}money{} and destroy this Joker",
 					"{C:inactive}(Max of{} {C:money}$50{}{C:inactive}){}"
 				}
@@ -64,7 +64,7 @@ return {
 						"end of round",
 						"if you win in",
 						"exactly {C:attention}#2#{} Hands",
-						"{C:inactive,s:0.7}Changes each round{}"
+						"{C:inactive}(Changes each round){}"
 				}
 			},
 			j_buf_clays = {
@@ -73,7 +73,7 @@ return {
 						"end of round if you",
 						"win in a specified",
 						"number of hands",
-						"{C:inactive,s:0.7}(Changes each round){}"
+						"{C:inactive}(Changes each round){}"
 				}
 			},
 			j_buf_clown = {
@@ -114,10 +114,11 @@ return {
 			},
 			j_buf_dorkshire = {
 				name = "Dorkshire Tea",
-				text = {"All {C:attention}2s{}, {C:attention}3s{} and {C:attention}10s{} become",
-						"{C:attention}Porcelain Cards{} before",
-						"scoring, if {C:attention}poker hand{}",
-						"is a {C:attention}Three of a Kind{}",
+				text = {
+					"If {C:attention}poker hand{} is",
+					"{C:attention}Three of a Kind{}, scoring",
+					"{C:attention}2s{}, {C:attention}3s{} and {C:attention}10s{} become",
+					"{C:attention}Porcelain Cards{} before scoring", 
 				}
 			},
 			j_buf_dorkshire_alt = {
@@ -165,7 +166,7 @@ return {
 				text = {
 					{"On first hand of round,",
 					"this card is {C:red}eaten{}"},
-					{"Convert {C:attention}3 scored cards{}",
+					{"Converts {C:attention}3 scored cards{}",
 					"into {C:strawberry}Strawberry Cards{}"},
 					{"Scored cards give {C:money}$#1#"},
 				}
@@ -243,10 +244,11 @@ return {
 			j_buf_lemmesolo = { 
 				name = "Let Me Solo Her",
 				text = {
-					"{C:mult}+#1#{} Mult, {C:mult}debuffed{} if not alone",
-					"When a {C:attention}Boss Blind{} is defeated,",
+					{"{C:mult}+#1#{} Mult"},
+					{"{C:mult}Debuffed{} if not alone"},
+					{"When a {C:attention}Boss Blind{} is defeated,",
 					"create #2# random Jokers with at",
-					"least #3# {C:mult}Rares{} and destroy this one",
+					"least #3# {C:mult}Rares{} and destroy this one"},
 				},
 			},
 			j_buf_maggit = { 
@@ -272,10 +274,13 @@ return {
 			},
 			j_buf_memcard = {
 				name = "Memory Card",
-				text = {"Memorizes the {C:attention}first{} scored card each {C:attention}round{}",  
-						"up to {C:attention}8{} times. Sell to convert a card in",
-						"hand into each memorized card, {C:attention}in order{}",
-						"{C:inactive}Memorized #1#. Last: #3#{}{C:inactive}#2#{}",
+				text = {{"Memorizes the {C:attention}first{}",
+						"scored card each {C:attention}round{}",  
+						"up to {C:attention}8{} times",
+						"{C:inactive}Memorized #1#. Last: #3#{}{C:inactive}#2#{}"}, 
+						{"Sell to convert a card",
+						"in hand into each memorized",
+						"card, {C:attention}in order{}"},
 						}
 			},
 			j_buf_dxmemcard = { -- Special (Memory Card)
@@ -292,18 +297,19 @@ return {
 			},
 			j_buf_patronizing = {
 				name = "Patronizing Joker",
-				text = {"{X:chips,C:white}X#1#{} Chips",
-						"{C:attention}Forces{} 5 cards to",
-						"always be {C:attention}selected{}",
-						"{C:buf_spc,s:0.7}Wants you to play a #2#{}"
+				text = {{"{X:chips,C:white}X#1#{} Chips"},
+						{"{C:attention}Forces{} 5 cards to",
+						"always be {C:attention}selected{}"},
+						{"{C:buf_spc}Wants you to play",
+						"{C:buf_spc}a #2#"}
 				}
 			},
 			j_buf_supportive = { -- Special (Patronizing Joker)
 				name = "Supportive Joker", 
-				text = {"{X:chips,C:white}X#1#{} Chips",
-						"Tells you the top",
+				text = {{"{X:chips,C:white}X#1#{} Chips"},
+						{"Tells you the top",
 						"3 cards in deck",
-						"during the round"
+						"during the round"}
 				},
 				unlock = {"Solve the {E:1,C:buf_spc}special{}",
 						"requirement of",
@@ -312,16 +318,16 @@ return {
 			},
 			j_buf_supportive_alt = { -- Special (Patronizing Joker)[ALT]
 				name = "Supportive Joker", 
-				text = {"{X:chips,C:white}X#7#{} Chips",
-						"{s:0.8}#1##4#{}",
+				text = {{"{X:chips,C:white}X#7#{} Chips"},
+						{"{s:0.8}#1##4#{}",
 						"{s:0.8}#2##5#{}",
-						"{s:0.8}#3##6#{}",
+						"{s:0.8}#3##6#{}"},
 				}
 			},
 			j_buf_porcelainj = {
 				name = "Porcelain Joker",
-				text = {"Gives {X:chips,C:white}X#2#{} Chips",
-						"for every {C:attention}3 Porcelain Cards{}",
+				text = {"Gives {X:chips,C:white}X#2#{} Chips for",
+						"every {C:attention}3 Porcelain Cards{}",
 						"in your {C:attention}full deck{}",
 						"{C:inactive}(Currently{} {X:chips,C:white}X#1#{} {C:inactive}Chips){}"
 				}
@@ -344,26 +350,26 @@ return {
 			},
 			j_buf_sayajimbo = {
 				name = "Sayajimbo",
-				text = {"{C:chips}+#1#{} Chips",
-						"Score at least {C:attention}#2#{} in one",
+				text = {{"{C:chips}+#1#{} Chips"},
+						{"Score at least {C:attention}#2#{} in one",
 						"hand to {C:attention}transform{}",
-						"{C:inactive}(Next level: {C:mult}+20{C:inactive} Mult)",
+						"{C:inactive}(Next level: {C:mult}+20{C:inactive} Mult)"},
 				}
 			},
 			j_buf_sayajimbo_s1 = {
 				name = "Super Sayajimbo",
-				text = {"{C:mult}+#1#{} Mult",
-						"Score at least {C:attention}#6#{} in one",
+				text = {{"{C:mult}+#1#{} Mult"},
+						{"Score at least {C:attention}#6#{} in one",
 						"hand #5# times to {C:attention}transform{}",
-						"{C:inactive}(#4#/#5#, Next level: {X:mult,C:white}X3{C:inactive} Mult)",
+						"{C:inactive}(#4#/#5#, Next level: {X:mult,C:white}X3{C:inactive} Mult)"},
 				}
 			},
 			j_buf_sayajimbo_s2 = {
 				name = "Super Sayajimbo 2",
-				text = {"{X:mult,C:white}X#2#{} Mult",
-						"Score at least {C:attention}#6#{} in one",
+				text = {{"{X:mult,C:white}X#2#{} Mult"},
+						{"Score at least {C:attention}#6#{} in one",
 						"hand #5# times to {C:attention}transform{}",
-						"{C:inactive}(#4#/#5#, Next level: {X:expmult,C:white}^1.3{C:inactive} Mult)",
+						"{C:inactive}(#4#/#5#, Next level: {X:expmult,C:white}^1.3{C:inactive} Mult)"},
 				}
 			},
 			j_buf_sayajimbo_s3 = {
@@ -382,9 +388,9 @@ return {
 			},
 			j_buf_whitepony = {
 				name = "White Pony",
-				text = {"{C:mult}+#1#{} Mult",
-						"Doubles",
-						"each {C:attention}Ante{}"
+				text = {{"{C:mult}+#1#{} Mult"},
+						{"Doubles",
+						"each {C:attention}Ante{}"}
 				}
 			},
 			j_buf_blackstallion = { -- Special (White Pony)

@@ -42,9 +42,9 @@ return {
       j_RainyDays_cleanslate = {
         name = "Clean Slate",
         text = {
-          "{C:mult}+#1#{} Mult",
-          "Each discard, discard",
-          "your {C:attention}entire{} hand"
+          {"{C:mult}+#1#{} Mult"},
+          {"Each discard, discard",
+          "your {C:attention}entire{} hand"}
         }
       },
       
