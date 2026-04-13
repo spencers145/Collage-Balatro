@@ -3790,8 +3790,9 @@ SMODS.Joker {
 	loc_txt = {
 		name = 'Norm',
 		text = {
-			'Gain {C:blue}+#1#{} hands when {C:attention}Blind{} is selected',
-			'Earn no {C:attention}interest{}',
+			{'Gain {C:blue}+#1#{} hands when',
+			'{C:attention}Blind{} is selected'},
+			{'Earn no {C:attention}interest{}'},
 		}
 	},
 	rarity = 2,

@@ -807,7 +807,7 @@ return {
 					'Upgrade your {C:attention}third-most played',
 					'poker hand when {C:attention}Blind',
 					'is defeated',
-					'{C:inactive,s:0.8}(Currently upgrading #1#)'
+					'{C:inactive}(Currently: #1#)'
 				}
 			},
 			['j_ortalab_cutout'] = {
@@ -1174,7 +1174,7 @@ return {
 				text = {
 					'When {C:attention}sold{}, {C:attention}upgrade{}',
 					'most played poker hand',
-					'{C:inactive,s:0.8}(Currently upgrading #1#)'
+					'{C:inactive}(Currently: #1#)'
 				}
 			},
 			['j_ortalab_mill'] = {
@@ -1830,10 +1830,10 @@ return {
 			j_ortalab_yellow = {
 				name = 'Yellow Joker',
 				text = {
-					'{C:red}+#1#{} Mult for each', 
+					{'{C:red}+#1#{} Mult for each', 
 					'scored or discarded card',
-					'Resets at {C:attention}end of round',
-					'{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)'
+					'{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)'},
+					{'Resets at {C:attention}end of round'},
 				}
 			},
 		},
