@@ -4,23 +4,33 @@ local beanstalk = {
     
     key = "beanstalk",
     config = {
-      
+        extra = {
+            jack_mult = 2,
+        }
     },
     rarity = 1,
     pos = { x = 8, y = 7},
     atlas = 'joker_atlas',
-    cost = 4,
+    cost = 6,
     unlocked = true,
     discovered = false,
     blueprint_compat = false,
     eternal_compat = true,
   
     loc_vars = function(self, info_queue, card)
-  
+        return {
+            vars = {
+                card.ability.extra.jack_mult
+            }
+        }
     end,
   
     calculate = function(self, card, context)
-      
+        if context.individual and context.other_card:get_id() == 11 then
+            return {
+                mult = card.ability.extra.jack_mult
+            }
+        end
     end,
 
     update = function(self, card, dt)

@@ -2292,9 +2292,10 @@ return {
             },
             j_aij_beanstalk = { 
                 name = "Beanstalk", 
-                text = { 
-                    "{C:attention}Jacks{} {C:attention}cannot{} be {C:red}debuffed",
-                    "and {C:attention}always{} score" 
+                text = {
+                    {"Scoring {C:attention}Jacks{} give {C:mult}+#1#{} Mult"},
+                    {"{C:attention}Jacks{} {C:attention}cannot{} be {C:red}debuffed",
+                    "and {C:attention}always{} score"} 
                 } 
             },
             j_aij_phoney_baloney = { name = "Phoney Baloney", text = { "" } },
