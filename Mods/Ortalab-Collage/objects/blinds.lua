@@ -362,7 +362,7 @@ SMODS.Blind({
     atlas = 'ortalab_blinds',
     pos = {x = 0, y = 8},
     dollars = 7,
-    mult = 2,
+    mult = 1.75,
     boss = {min = 2, max = 10},
     discovered = false,
     boss_colour = HEX('5c6e31'),
