@@ -476,6 +476,7 @@ COLLAGE_MODIFIED_TABLE = {
 	"j_aij_bad_apple",
 	"j_aij_bad_guy",
 	"j_aij_baddata",
+    "j_aij_beanstalk",
 	"j_aij_birthday_clown",
 	"j_aij_bonus_bob",
 	"j_aij_bonus_round",
