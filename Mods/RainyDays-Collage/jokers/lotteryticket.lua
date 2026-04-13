@@ -2,8 +2,8 @@ SMODS.Joker {
   key = 'lotteryticket',
   name = 'Lottery Ticket',
   atlas = 'Jokers',
-  rarity = 1,
-  cost = 5,
+  rarity = 2,
+  cost = 6,
   unlocked = true, 
   discovered = false,
   blueprint_compat = true,
@@ -13,8 +13,8 @@ SMODS.Joker {
   config = {
     lottery_string = "",
     extra = {
-      reward_money_start = 1,
-      reward_money = 1,
+      reward_money_start = 2,
+      reward_money = 2,
       payout_increase = 1,
       ranks_played = {}
     }
