@@ -600,6 +600,7 @@ COLLAGE_MODIFIED_TABLE = {
     --"j_losted_schrodinger",
     "j_losted_statue",
     "j_losted_welder",
+    "j_losted_paid_vacation",
 
     "j_mstg_ufo",
     "j_mstg_augment",

@@ -735,9 +735,9 @@ return {
             j_losted_paid_vacation = {
                 name = 'Paid Vacation',
                 text = {
-                    'Earn {C:money}$#1#{} if',
-                    'the blind is defeated',
-                    'using {C:attention}all hands{}'
+                    'Earn {C:money}$#1#{} if Blind',
+                    'is defeated with at most',
+                    '{C:attention}#2# hands{} remaining'
                 }
             },
             j_losted_joke_book = {
