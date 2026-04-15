@@ -6144,7 +6144,7 @@ discovered = false, -- The Umbrella
     atlas = 'bunco_blinds'
 }
 
-SMODS.Blind{
+--[[SMODS.Blind{
 discovered = false, -- The Tine
     key = 'tine',
     boss = {min = 2},
@@ -6171,7 +6171,7 @@ discovered = false, -- The Tine
 
     pos = {y = 2},
     atlas = 'bunco_blinds'
-}
+}]]
 
 SMODS.Blind{
 discovered = false, -- The Swing
