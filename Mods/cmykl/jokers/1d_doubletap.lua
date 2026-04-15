@@ -29,7 +29,7 @@ SMODS.Joker{ --Double Tap
     eternal_compat = true,
     perishable_compat = true,
     unlocked = true,
-    discovered = true,
+    discovered = false,
     atlas = 'CustomJokers',
     config = { extra = { repetitions = 1 } },
     pools = { ["cmykl_cmykl_jokers"] = true },

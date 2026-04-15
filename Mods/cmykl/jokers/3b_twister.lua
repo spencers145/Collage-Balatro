@@ -26,7 +26,7 @@ SMODS.Joker{ --Twister
     eternal_compat = true,
     perishable_compat = true,
     unlocked = true,
-    discovered = true,
+    discovered = false,
     atlas = 'CustomJokers',
     config = { extra = { max = 100, min = 1, odds = 4, dollars = 3} },
     pools = { ["cmykl_cmykl_jokers"] = true },

@@ -37,7 +37,7 @@ SMODS.Joker{ --Scrapbook
     eternal_compat = true,
     perishable_compat = true,
     unlocked = true,
-    discovered = true,
+    discovered = false,
     atlas = 'CustomJokers',
     pools = { ["cmykl_cmykl_jokers"] = true },
 
