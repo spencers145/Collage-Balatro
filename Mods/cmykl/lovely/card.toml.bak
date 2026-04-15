@@ -1,0 +1,12 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "card_character.lua"
+pattern = 'self.children.card.states.visible = false'
+position = "before"
+payload = "self.children.card:set_ability('c_chariot')"
+match_indent = true

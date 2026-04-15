@@ -1,0 +1,17 @@
+{
+  "id": "cmykl",
+  "name": "cmykl",
+  "author": [
+    "comykel"
+  ],
+  "description": "i done fucked up wit this one",
+  "prefix": "cmykl",
+  "main_file": "main.lua",
+  "version": "2.4.3",
+  "priority": 0,
+  "badge_colour": "fd3db5",
+  "badge_text_colour": "ffde21",
+  "dependencies": [
+    "Steamodded (>=1.0.0~BETA-0827c)"
+  ]
+}
