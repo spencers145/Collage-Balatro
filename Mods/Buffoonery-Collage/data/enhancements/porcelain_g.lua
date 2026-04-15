@@ -56,6 +56,7 @@ SMODS.Enhancement {  -- Royal Porcelain Cards
 		if context.remove_playing_cards then
 			for k, val in ipairs(context.removed) do
 				if val==card then
+					unlock_card(G.P_CENTERS.b_ortalab_royal)
 					return {
 						dollars = card.ability.extra.money
 					}
