@@ -469,10 +469,12 @@ return {
             c_artb_art_appraisal = {
                 name = 'Appraisal',
                 text = {
-                    'Gives {C:attention}twice{} the total sell',
+                    {'Gives {C:attention}twice{} the total sell',
                     'value of all held consumables',
-                    '{C:inactive}(currently {C:money}$#1#{}{C:inactive}){}',
-                    '{C:inactive}(max of {C:money}$30{}{C:inactive})',
+                    '{C:inactive}(Currently {C:money}$#1#{}{C:inactive}){}',
+                    '{C:inactive}(Max of {C:money}$30{}{C:inactive})'},
+                    {'{C:green}#2# in #3#{} chance to create',
+                    'a {C:attention}Joker Collectible'}
                 }
             },
 

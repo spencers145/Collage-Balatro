@@ -7,7 +7,9 @@ SMODS.Consumable ({
     config = {
         mod_conv = "c_artb_joker_collectable",
       extra = {
-        money=0
+        money = 0,
+        odds = 4,
+        secret_odds = 4,
       }
     },
 	pos = { x = 1, y = 1 },
@@ -24,14 +26,14 @@ SMODS.Consumable ({
     -- because i mean otherwise its kind of worthless
     -- and it would be pretty bad overall for it to take up an art card slot
     -- since they are less common than tarot packs for example
-    return sell_cost >= 2
+    return sell_cost >= 1
   end,
 	discovered = false,
     can_use = function(self, card)
 		return true
 	end,
     loc_vars = function(self, info_queue, card)
-      --info_queue[#info_queue + 1] = G.P_CENTERS[self.config.mod_conv]
+      info_queue[#info_queue + 1] = G.P_CENTERS['c_artb_joker_collectable']
 
       local sell_cost = 0
       if G.consumeables and G.consumeables.cards then
@@ -45,9 +47,14 @@ SMODS.Consumable ({
       end
       card.ability.extra.money = 2 * sell_cost
     end
+    
+    local n,d = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
+    
     return {
       vars = {
-        card.ability.extra.money
+        card.ability.extra.money,
+        n,
+        d
       }
     }
     end,
@@ -76,18 +83,20 @@ SMODS.Consumable ({
         unlock_card(G.P_CENTERS.b_artb_box)
       end
 
-    --[[G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
-       if pseudorandom("appraisal") < G.GAME.probabilities.normal / card.ability.extra.secret_odds then
-                    local new_card = create_card("collectable", G.consumables, nil, nil, nil, nil, 'c_artb_limited_edition_collectable')
-                  new_card:add_to_deck()
-                  G.consumeables:emplace(new_card)
-                else
-                    local new_card = create_card("collectable", G.consumables, nil, nil, nil, nil, 'c_artb_joker_collectable')
-                  new_card:add_to_deck()
-                  G.consumeables:emplace(new_card)
-                end
+      if SMODS.pseudorandom_probability(card, pseudorandom('art_appraisal'), 1, card.ability.extra.odds, 'art_appraisal') then
+        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
+       if SMODS.pseudorandom_probability(card, pseudorandom('art_appraisal_secret'), 1, card.ability.extra.secret_odds, 'art_appraisal_secret', true) then
+            local new_card = create_card("collectable", G.consumables, nil, nil, nil, nil, 'c_artb_limited_edition_collectable')
+          new_card:add_to_deck()
+          G.consumeables:emplace(new_card)
+        else
+            local new_card = create_card("collectable", G.consumables, nil, nil, nil, nil, 'c_artb_joker_collectable')
+          new_card:add_to_deck()
+          G.consumeables:emplace(new_card)
+        end
+        play_sound('timpani')
        return true end }))
-    ]]
+      end
   end
 
     
