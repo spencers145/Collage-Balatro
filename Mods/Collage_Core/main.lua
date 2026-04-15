@@ -737,7 +737,14 @@ COLLAGE_MODIFIED_TABLE = {
     "j_sins_suppression",
     "j_sins_chastity",
     "j_sins_restraint",
-    "j_sins_obedience"
+    "j_sins_obedience",
+
+    "j_cmykl_companyid",
+    "j_cmykl_cubedjoker",
+    "j_cmykl_thecanyon",
+    "j_cmykl_themountain",
+    "j_cmykl_thedune",
+    "j_cmykl_thevalley",
 }
 
 COLLAGE_ALWAYS_IN_POOL = {
