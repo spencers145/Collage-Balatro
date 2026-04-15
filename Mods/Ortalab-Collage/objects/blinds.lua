@@ -106,15 +106,6 @@ SMODS.Blind({
         G.GAME.blind.effect.extra.hands_removed = 0
     end,
     calculate = function(self, card, context)
-        if context.end_of_round and context.main_eval then
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after', delay = 0.7,
-                func = function()
-                    G.hand:change_size(card.effect.extra.hands_removed)
-                    return true
-                end
-            }))
-        end
         if context.after then
             card.effect.extra.hands_removed = card.effect.extra.hands_removed + card.effect.extra.hand_size
             G.E_MANAGER:add_event(Event({ trigger = 'after', delay = 0.7, func = function()
@@ -134,7 +125,7 @@ SMODS.Blind({
         end
     end,
     defeat = function(self)
-        if not G.GAME.blind.disabled then  end
+        if not G.GAME.blind.disabled then G.hand:change_size(G.GAME.blind.effect.extra.hands_removed) end
     end,
     disable = function(self)
         G.hand:change_size(G.GAME.blind.effect.extra.hands_removed)
