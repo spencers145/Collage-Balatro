@@ -608,7 +608,7 @@ position = 'after'
 match_indent = true
 payload = '''
 if G.GAME.blind.boss and (G.GAME.selected_back.effect.center.key == 'b_black' or G.GAME.selected_sleeve == 'sleeve_casl_black') then
-    add_round_eval_row({dollars = G.jokers.config.card_limits.card_limit - #G.jokers.cards, bonus='true', name='joker_frozen_deck', card={config={center={set='Back', key='b_black'}}, juice_up=function(self) end}, pitch = pitch})
+    add_round_eval_row({dollars = G.jokers.config.card_limits.total_slots - #G.jokers.cards, bonus='true', name='joker_frozen_deck', card={config={center={set='Back', key='b_black'}}, juice_up=function(self) end}, pitch = pitch})
 end
 '''
 
