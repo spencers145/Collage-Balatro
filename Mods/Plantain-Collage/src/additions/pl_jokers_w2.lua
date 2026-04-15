@@ -200,7 +200,10 @@ SMODS.Joker {
   
   config = { extra = { chance = 2 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.chance } }
+    local n,d = SMODS.get_probability_vars(card, 1, card.ability.extra.chance)
+		return {
+			vars = { n, d }
+		}
   end,
 
   blueprint_compat = true,
@@ -215,7 +218,7 @@ SMODS.Joker {
     if context.cardarea == G.play and context.repetition then
       if context.other_card:get_id() == 14 then
         local retriggers = 1
-        if pseudorandom('batteries') < G.GAME.probabilities.normal/card.ability.extra.chance then 
+        if SMODS.pseudorandom_probability(card, pseudorandom('loose_batteries'), 1, card.ability.extra.chance, 'loose_batteries') then 
           retriggers = 2
         end
         return 
