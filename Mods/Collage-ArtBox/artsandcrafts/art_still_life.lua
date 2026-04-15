@@ -22,7 +22,7 @@ SMODS.Consumable ({
 	end,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = {key = "artb_gros_michel_explainer", set = "Other"}
-        local n,d = SMODS.get_probability_vars(card, 1, 6, 'c_artb_art_still_life')
+        local n,d = SMODS.get_probability_vars(card, 1, 4, 'c_artb_art_still_life')
         return {vars = {n,d}}
     end,
 
@@ -42,9 +42,9 @@ SMODS.Consumable ({
       if not next(SMODS.find_card('c_artb_gros_michel_collectable', count_debuffed))
         and not next(SMODS.find_card('c_artb_cavendish_collectable', count_debuffed))
         and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-          if SMODS.pseudorandom_probability(card, pseudorandom('art_still_life'), 1, 5, 'art_still_life') then
+          if SMODS.pseudorandom_probability(card, pseudorandom('art_still_life'), 1, 4, 'art_still_life') then
             G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
-              if SMODS.pseudorandom_probability(card, pseudorandom('art_still_life_cavendish'), 1, 5, 'art_still_life_cavendish', true) then
+              if SMODS.pseudorandom_probability(card, pseudorandom('art_still_life_cavendish'), 1, 4, 'art_still_life_cavendish', true) then
                 local new_card = create_card("collectable", G.consumables, nil, nil, nil, nil, 'c_artb_cavendish_collectable')
                 new_card:add_to_deck()
                 G.consumeables:emplace(new_card)
