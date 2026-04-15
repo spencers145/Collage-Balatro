@@ -813,9 +813,9 @@ return {
 			['j_ortalab_cutout'] = {
 				["name"] = "Cutout Joker",
 				["text"] = {
-					"{X:mult,C:white}X#1#{} Mult",
-					'{C:red,E:2}self destructs{} when a', 
-					'{C:attention}Joker{} is sold'
+					{"{X:mult,C:white}X#1#{} Mult"},
+					{'{C:red,E:2}Self-destructs{} when a',
+					'{C:attention}Joker{} is sold'}
 				}
 			},
 			['j_ortalab_damp'] = {
@@ -1064,11 +1064,12 @@ return {
 			j_ortalab_heresy = {
 				name = 'Heresy',
 				text = {
-					'Gains {C:blue}+#1#{} Chips when a', 
+					{'Gains {C:blue}+#1#{} Chips when a', 
 					'card is {C:attention}added{} to your deck',
-					'Gains {C:red}+#2#{} Mult when a',
+					'{C:inactive}(Currently {C:blue}+#3#{C:inactive} Chips)'},
+					{'Gains {C:red}+#2#{} Mult when a',
 					'card is {C:attention}removed{} from your deck',
-					'{C:inactive}(Currently {C:blue}+#3#{C:inactive} Chips and {C:red}+#4#{C:inactive} Mult)'
+					'{C:inactive}(Currently {C:red}+#4#{C:inactive} Mult)'},
 				}
 			},
 			j_ortalab_hit_the_gym = {
@@ -1649,11 +1650,11 @@ return {
 			['j_ortalab_soil'] = {
 				["name"] = "Soil",
 				["text"] = {
-					'{C:white,X:mult}X#1#{} Mult',
-					'Gains {X:mult,C:white}X#2#{} for each', 
+					{'{C:white,X:mult}X#1#{} Mult'},
+					{'Gains {X:mult,C:white}X#2#{} for each', 
 					'consecutive triggered card',
 					'of the same rank',
-					'{C:inactive}(Resets after each hand)'
+					'{C:inactive}(Resets after each hand)'}
 				}
 			},
 			['j_ortalab_solo'] = {
