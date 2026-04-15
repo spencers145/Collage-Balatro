@@ -3442,8 +3442,8 @@ return {
 			['bl_ortalab_sinker'] = {
 				name = 'The Sinker',
 				text = {
-					'{C:attention}-#1#{} hand size for',
-					'every {C:blue}hand{} you play'
+					'-#1# hand size for',
+					'every hand you play'
 				}
 			},
 			['bl_ortalab_fork'] = {
