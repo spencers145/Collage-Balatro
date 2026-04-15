@@ -1825,7 +1825,7 @@ least_played_poker_hand = 'High Card','''
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
-pattern = "check_and_set_high_score('hand', hand_chips*mult)"
+pattern = "check_and_set_high_score('hand',*"
 position = 'after'
 match_indent = true
 payload = '''
@@ -1836,10 +1836,26 @@ if G.GAME.blind and G.GAME.blind.name == 'bl_bunc_blade' and not G.GAME.blind.di
 
     if type(hand_chips) == 'table' then overscore = to_big(overscore) end
 
-    if (overscore < math.floor(hand_chips*mult) + G.GAME.chips) then
+    if overscore < math.floor(SMODS.calculate_round_score()) then
+
+        local disp_mult = mult
+        local disp_chips = hand_chips
+
+        G.E_MANAGER:add_event(Event({
+            func = (function()  
+                hand_chips = mod_chips(disp_chips)
+                mult = mod_mult(disp_mult)
+                update_hand_text({delay = 0, immediate = true}, {mult = disp_mult, chips = disp_chips, chip_total = math.floor( SMODS.calculate_round_score() ), level = '', handname = ''})
+                mult = mod_mult(0)
+                hand_chips = mod_chips(0)
+                return true 
+            end)
+        }))
 
         mult = mod_mult(0)
         hand_chips = mod_chips(0)
+
+        delay(0.8)
 
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
