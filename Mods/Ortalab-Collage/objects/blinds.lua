@@ -93,7 +93,6 @@ SMODS.Blind({
     dollars = 6,
     mult = 2,
     boss = {min = 1, max = 10},
-    discovered = false,
     boss_colour = HEX('5186A8'),
     config = {extra = {hand_size = 1, hands_removed = 0}},
     artist_credits = {'flare'},
@@ -111,7 +110,7 @@ SMODS.Blind({
             G.E_MANAGER:add_event(Event({
                 trigger = 'after', delay = 0.7,
                 func = function()
-                    G.hand:handle_card_limit(card.effect.extra.hands_removed)
+                    G.hand:change_size(card.effect.extra.hands_removed)
                     return true
                 end
             }))
