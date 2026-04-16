@@ -1526,7 +1526,7 @@ create_joker({ -- Xray
     vars = {{bonus = 0.25}, {xmult = 1}},
     rarity = 'Uncommon', cost = 5,
     blueprint = true, eternal = true, perishable = false,
-    unlocked = false,
+    unlocked = true,
     check_for_unlock = function(self, args)
         if args.type == 'win_challenge' and G.GAME.challenge == 'c_xray_1' then
             self.challenge_bypass = true
@@ -1912,7 +1912,7 @@ create_joker({ -- Fiendish
     end,
     rarity = 'Uncommon', cost = 5,
     blueprint = false, eternal = true,
-    unlocked = false,
+    unlocked = true,
     check_for_unlock = function(self, args)
         if args.type == 'win_challenge' and G.GAME.challenge == 'c_double_nothing_1' then
             self.challenge_bypass = true
@@ -2174,7 +2174,7 @@ create_joker({ -- Registration Plate
     vars = {{combination = {"2", "3", "4", "5", "6"}}, {ranks = {}}},
     rarity = 'Rare', cost = 8,
     blueprint = false, eternal = true,
-    unlocked = false,
+    unlocked = true,
     check_for_unlock = function(self, args)
         if args.type == 'win_challenge' and G.GAME.challenge == 'c_city_1' then
             self.challenge_bypass = true

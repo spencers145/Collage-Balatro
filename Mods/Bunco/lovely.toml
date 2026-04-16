@@ -1295,30 +1295,6 @@ if BUNCOMOD.funcs.astigmatism_check(self, suit) then
 end
 '''
 
-# Challenge cards unlocking 1/2
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = "unlock_achievement('rule_bender')"
-position = 'before'
-match_indent = true
-payload = '''
-
-for i = 1, #G.P_LOCKED do
-    check_for_unlock({type = 'win_challenge'})
-end
-
-'''
-
-# Challenge cards unlocking 2/2
-[[patches]]
-[patches.pattern]
-target = 'functions/common_events.lua'
-pattern = "if not SMODS.config.seeded_unlocks and (G.GAME.seeded or G.GAME.challenge) then return end"
-position = 'at'
-match_indent = true
-payload = '''if not SMODS.config.seeded_unlocks and (G.GAME.seeded or (G.GAME.challenge and not card.challenge_bypass)) then return end'''
-
 # Deck size unlocking (1/2)
 [[patches]]
 [patches.pattern]
