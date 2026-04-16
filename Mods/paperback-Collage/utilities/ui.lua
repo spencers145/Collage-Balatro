@@ -34,21 +34,6 @@ SMODS.current_mod.config_tab = function()
                 label = localize('paperback_ui_enable_blinds'),
                 ref_table = PB_UTIL.config,
                 ref_value = 'blinds_enabled',
-              },
-              create_toggle {
-                label = localize('paperback_ui_enable_vouchers'),
-                ref_table = PB_UTIL.config,
-                ref_value = 'vouchers_enabled'
-              },
-              create_toggle {
-                label = localize('paperback_ui_enable_paperclips'),
-                ref_table = PB_UTIL.config,
-                ref_value = 'paperclips_enabled',
-              },
-              create_toggle {
-                label = localize('paperback_ui_enable_ranks'),
-                ref_table = PB_UTIL.config,
-                ref_value = 'ranks_enabled',
               }
             }
           },
@@ -59,26 +44,6 @@ SMODS.current_mod.config_tab = function()
                 label = localize('paperback_ui_enable_editions'),
                 ref_table = PB_UTIL.config,
                 ref_value = 'editions_enabled'
-              },
-              create_toggle {
-                label = localize('paperback_ui_enable_enhancements'),
-                ref_table = PB_UTIL.config,
-                ref_value = 'enhancements_enabled',
-              },
-              create_toggle {
-                label = localize('paperback_ui_enable_minor_arcana'),
-                ref_table = PB_UTIL.config,
-                ref_value = 'minor_arcana_enabled',
-              },
-              create_toggle {
-                label = localize('paperback_ui_custom_suits_enabled'),
-                ref_table = PB_UTIL.config,
-                ref_value = 'suits_enabled',
-              },
-              create_toggle {
-                label = localize('paperback_ui_enable_spectrals'),
-                ref_table = PB_UTIL.config,
-                ref_value = 'spectrals_enabled'
               }
             }
           }
