@@ -1,76 +1,53 @@
 SMODS.Joker {
   key = 'truffle',
-  name = 'Truffle',
   atlas = 'Jokers',
   pools = { Food = true },
   rarity = 3,
-  cost = 7,
-  unlocked = true, 
-  discovered = false,
-  blueprint_compat = false,
+  cost = 9,
+  unlocked = true,
+  blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = true,
-  pos = GetJokersAtlasTable('truffle'),
+  pos = RainyDays.GetJokersAtlasTable('truffle'),
   config = {
     extra = {
-      amount = 5
+      xmult_amount = 4,
+      xmult_decrease = 0.01
     }
   },
   
   loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.e_foil
     return {
       vars = { 
-        card.ability.extra.amount
+        card.ability.extra.xmult_amount,
+        card.ability.extra.xmult_decrease
       }
     } 
   end,
   
   calculate = function(self, card, context)
-    if context.before and context.cardarea == G.jokers and not context.blueprint then
-      for i = 1, #context.scoring_hand do
-        local scoring_card = context.scoring_hand[i]
-        if scoring_card:is_face() and card.ability.extra.amount > 0 and not scoring_card.edition then
-          card.ability.extra.amount = card.ability.extra.amount - 1
-          scoring_card:set_edition(pseudorandom_element({'e_foil', 'e_holo'}, pseudoseed('rainy_truffle')), true, true)
-          --scoring_card.delay_edition = true
-          G.E_MANAGER:add_event(Event({
-            trigger = 'after', 
-            delay = 0.4, 
-            func = function()
-              --scoring_card.delay_edition = nil
-              scoring_card:juice_up()
-              play_sound('foil1', 1.2, 0.4)
-              return true 
-            end 
-          }))
-          delay(0.3)
+    if context.joker_main then
+      return {
+        xmult = card.ability.extra.xmult_amount
+      }
+    end
+    
+    if context.end_of_round and context.game_over == false and not context.repetition and not context.individual and not context.blueprint then
+      local decrease = card.ability.extra.xmult_decrease * #G.deck.cards
+      if decrease > 0 then
+        card.ability.extra.xmult_amount = card.ability.extra.xmult_amount - decrease
+        if card.ability.extra.xmult_amount <= 1 then
+          SMODS.destroy_cards(card, nil, nil, true)
+          return {
+            message = localize('k_eaten_ex'),
+            colour = G.C.RED
+          }
+        else 
+          return {
+            message = localize { type = 'variable', key = 'a_xmult_minus', vars = { decrease }},
+            colour = G.C.MULT
+          }
         end
-      end
-      
-      if card.ability.extra.amount <= 0 then
-        G.E_MANAGER:add_event(Event({func = function()
-          play_sound('tarot1')
-          card.T.r = -0.2
-          card:juice_up(0.3, 0.4)
-          card.states.drag.is = true
-          card.children.center.pinch.x = true
-          G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.3,
-            blockable = false,
-            func = function()
-              card:remove()
-              return true
-            end
-          }))
-          return true
-          end
-        }))
-        return {
-          message = localize('k_eaten_ex'),
-          colour = G.C.RED
-        }
       end
     end
   end

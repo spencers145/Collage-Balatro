@@ -9,7 +9,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  pos = GetJokersAtlasTable('bankaccount'),
+  pos = RainyDays.GetJokersAtlasTable('bankaccount'),
   config = {
     extra = {
       plus_chips = 100,

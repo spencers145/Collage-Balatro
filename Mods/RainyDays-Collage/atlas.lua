@@ -5,36 +5,103 @@ SMODS.Atlas {
   py = 95 
 }
 
+SMODS.Atlas {
+  key = 'Plump_joker',
+  path = 'Plump_joker.png',
+  px = 80,
+  py = 95 
+}
+
 local JokerAtlasKeys = {
+  'absent_heart',
+  'accountant',
+  'atom',
+  'avocado',
+  'balance',
+  'bankaccount',
+  'bazaar',
+  'beanstalk',
+  'blood_moon',
+  'bonsai',
+  'breakfast_cereal',
   'burdenofgreatness',
+  'catalogue',
+  'checklist',
+  'cleanslate',
   'cloverfield',
-  'flipflop_even',
+  'conga_line',
+  'count_orlok',
+  'dancing_moves',
+  'dealer',
+  'delirium_alt0',
+  'delirium_alt1',
+  'delirium_alt2',
+  'delirium_alt3',
+  'desolate',
+  'equity',
+  'fabergeegg',
+  'fabergeegg_soul',
+  'fan_mail',
+  'feather_marvelous',
   'feather_precious',
   'feather_silky',
-  
   'feather_vibrant',
-  'sediment',
-  'heirloom',
-  'kintsugi',
-  'lotteryticket',
-  
-  'microwave',
-  'bankaccount',
-  'truffle',
-  'cleanslate',
-  'waste_not',
-  
+  'flipflop_even',
   'flipflop_odd',
-  'kintsugi_vase',
-  'fabergeegg',
-  'sextant',
+  'golden_idol',
+  'goldfish',
+  'grapes',
+  'grey_joker',
   'hannysvoorwerp',
-  
-  'sputnik',
-  'breakfast_cereal',
-  'atom',
+  'hecate',
+  'hecate_soul',
+  'heirloom',
+  'joker_reject',
+  'kudzu',
+  'lady_in_waiting',
   'lady_of_the_lake',
-  'kudzu'
+  'lady_of_the_lake_soul',
+  'legions',
+  'lightning',
+  'long_road',
+  'lotteryticket',
+  'membership_card',
+  'metropolis',
+  'minimalist',
+  'mirror_lake',
+  'overflow',
+  'parrot',
+  'prairie',
+  'prehistory',
+  'primality',
+  'purple_card',
+  'recycle',
+  'roller_skates',
+  'self_assembly',
+  'serial',
+  'sextant',
+  'skinner_box',
+  'slashed_joker',  
+  'slashed_joker_soul',
+  'snow_shovel',
+  'spooky_joker',
+  'sputnik',
+  'star_chart',
+  'star_chart_soul',
+  'theater',
+  'throne_active',
+  'throne_inactive',
+  'train_ticket',
+  'truffle',
+  'wanted',
+  'waveform',
+  'waveform_soul',
+  'windowsill',
+  'wishbone',
+  'indicator_hands',
+  'indicator_planets',
+  'indicator_ranks',
+  'microwave',
 }
 
 local JokerAtlasTable = {}
@@ -43,69 +110,7 @@ for i, key in ipairs(JokerAtlasKeys) do
 end
 JokerAtlasKeys = nil
 
-function GetJokersAtlasTable(key)
+function RainyDays.GetJokersAtlasTable(key)
   local pos = JokerAtlasTable[key]
-  return { x = pos % 5, y = math.floor(pos / 5) }
+  return { x = pos % 10, y = math.floor(pos / 10) }
 end
-
-SMODS.Atlas {
-  key = 'Constellations',
-  path = 'Constellations.png',
-  px = 65,
-  py = 95
-}
-
-local ConstellationAtlasKeys = {
-  'aries',
-  'taurus',
-  'gemini',
-  'cancer',
-  'leo',
-  'virgo',
-  
-  'libra',
-  'scorpio',
-  'sagittarius',
-  'capricorn',
-  'aquarius',
-  'pisces',
-  
-  'pegasus',
-  'cetus',
-  'ophiuchus',
-  'orion',
-  'vulpecula',
-  'chamaeleon'
-}
-
-local ConstellationAtlasTable = {}
-for i, key in ipairs(ConstellationAtlasKeys) do
-  ConstellationAtlasTable[key] = i - 1
-end
-ConstellationAtlasKeys = nil
-
-function GetConstellationAtlasTable(key)
-  local pos = ConstellationAtlasTable[key]
-  return { x = pos % 6, y = math.floor(pos / 6) }
-end
-
-SMODS.Atlas {
-  key = 'Seals',
-  path = 'Seals.png',
-  px = 71,
-  py = 95
-}
-
-SMODS.Atlas {
-  key = 'Spectrals',
-  path = 'Spectrals.png',
-  px = 71,
-  py = 95 
-}
-
-SMODS.Atlas {
-  key = 'Tags',
-  path = 'Tags.png',
-  px = 34,
-  py = 34
-}

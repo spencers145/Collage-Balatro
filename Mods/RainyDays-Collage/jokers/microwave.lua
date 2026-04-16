@@ -9,7 +9,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = true,
-  pos = GetJokersAtlasTable('microwave'),
+  pos = RainyDays.GetJokersAtlasTable('microwave'),
   config = {
     extra = {
       plus_mult = 0,

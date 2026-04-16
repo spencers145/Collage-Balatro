@@ -1,0 +1,17 @@
+[manifest]
+version = '1.0.0'
+dump_lua = true
+priority = 0
+
+
+
+#hide changed ranks
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''self:set_sprites(nil, card)'''
+position = 'at'
+match_indent = true
+payload = '''if not self.rainydays_hide_rank_change then
+    self:set_sprites(nil, card)
+end'''

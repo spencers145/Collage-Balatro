@@ -1,0 +1,41 @@
+[manifest]
+version = '1.0.0'
+dump_lua = true
+priority = 0
+
+#cards drawn counter in new contexts
+
+#plump joker consumeable ante count
+[[patches]]
+[patches.pattern]
+target = 'functions/misc_functions.lua'
+pattern = '''G.GAME.consumeable_usage_total.all = G.GAME.consumeable_usage_total.all + 1'''
+position = 'after'
+match_indent = true
+payload = '''G.GAME.rd_consumeable_usage_round = G.GAME.rd_consumeable_usage_round + 1
+G.GAME.rd_consumeable_usage_ante = G.GAME.rd_consumeable_usage_ante + 1'''
+
+
+
+#count ranks played and scored
+[[patches]]
+[patches.pattern]
+target =  'functions/state_events.lua'
+match_indent = true
+pattern = '''G.GAME.hands[text].played = G.GAME.hands[text].played + 1
+G.GAME.hands[text].played_this_round = G.GAME.hands[text].played_this_round + 1
+G.GAME.hands[text].played_this_ante = G.GAME.hands[text].played_this_ante + 1'''
+position = 'after'
+payload = '''G.GAME.rd_ranks_played_this_round = G.GAME.rd_ranks_played_this_round or {}
+for i = 1, #G.play.cards do
+    if not SMODS.has_no_rank(G.play.cards[i]) then
+        G.GAME.rd_ranks_played_this_round[G.play.cards[i]:get_id()] = (G.GAME.rd_ranks_played_this_round[G.play.cards[i]:get_id()] or 0) + 1
+    end
+end
+
+G.GAME.rd_ranks_scored_this_round = G.GAME.rd_ranks_scored_this_round or {}
+for i = 1, #scoring_hand do
+    if not SMODS.has_no_rank(scoring_hand[i]) then
+        G.GAME.rd_ranks_scored_this_round[scoring_hand[i]:get_id()] = (G.GAME.rd_ranks_scored_this_round[scoring_hand[i]:get_id()] or 0) + 1
+    end
+end'''

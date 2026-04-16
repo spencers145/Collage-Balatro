@@ -9,7 +9,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  pos = GetJokersAtlasTable('lotteryticket'),
+  pos = RainyDays.GetJokersAtlasTable('lotteryticket'),
   config = {
     lottery_string = "",
     extra = {
@@ -48,8 +48,8 @@ SMODS.Joker {
     
     --check if rank is special and has been played yet.
     if context.individual and context.cardarea == G.play and not context.other_card.debuff and not SMODS.has_no_rank(context.other_card) then
-      if list_contains(G.GAME.current_round.RD_lotteryticket, context.other_card.base.value) then
-        if not list_contains(card.ability.extra.ranks_played, context.other_card.base.value) then
+      if RainyDays.list_contains(G.GAME.current_round.RD_lotteryticket, context.other_card.base.value) then
+        if not RainyDays.list_contains(card.ability.extra.ranks_played, context.other_card.base.value) then
           card.ability.extra.ranks_played[#card.ability.extra.ranks_played + 1] = context.other_card.base.value
           return {
             func = function()
@@ -92,11 +92,11 @@ function reset_game_globals_lotteryticket()
   for i = 1, #G.GAME.current_round.RD_lotteryticket do
     if ranks_in_deck[1] then
       picked_ranks[i] = pseudorandom_element(ranks_in_deck, pseudoseed('Lottery' .. G.GAME.round_resets.ante))
-      remove_by_value(ranks_in_deck, picked_ranks[i])
-      remove_by_value(unchosen_ranks, picked_ranks[i])
+      RainyDays.remove_by_value(ranks_in_deck, picked_ranks[i])
+      RainyDays.remove_by_value(unchosen_ranks, picked_ranks[i])
     else --If no possible ranks left in deck, pick from all unchosen ranks.
       picked_ranks[i] = pseudorandom_element(unchosen_ranks, pseudoseed('Lottery' .. G.GAME.round_resets.ante))
-      remove_by_value(unchosen_ranks, picked_ranks[i])
+      RainyDays.remove_by_value(unchosen_ranks, picked_ranks[i])
     end
   end
   unchosen_ranks = nil
@@ -124,7 +124,7 @@ end
 function generate_lottery_string(card)
   local string = ""
   for i = 1, #G.GAME.current_round.RD_lotteryticket do
-    if not list_contains(card.ability.extra.ranks_played, G.GAME.current_round.RD_lotteryticket[i]) then
+    if not RainyDays.list_contains(card.ability.extra.ranks_played, G.GAME.current_round.RD_lotteryticket[i]) then
       local sub = string.sub(G.GAME.current_round.RD_lotteryticket[i], 1, 1)
       if sub ~= "1" then
         string = string .. sub

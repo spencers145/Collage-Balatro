@@ -1,65 +1,93 @@
 SMODS.Joker {
   key = 'heirloom',
-  name = 'Heirloom',
   atlas = 'Jokers',
   rarity = 2,
   cost = 5,
-  unlocked = true, 
-  discovered = false,
+  unlocked = true,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
   in_pool = function(self, args) --only appears if player has at least one bonus or mult card in deck.
-    for i = 1, #G.playing_cards do
-      if SMODS.has_enhancement(G.playing_cards[i], 'm_bonus') or SMODS.has_enhancement(G.playing_cards[i], 'm_mult') then
-        return true
+    if G.playing_cards then
+      for i = 1, #G.playing_cards do
+        if SMODS.has_enhancement(G.playing_cards[i], 'm_bonus') or SMODS.has_enhancement(G.playing_cards[i], 'm_mult') then
+          return true
+        end
       end
     end
     return false
   end,
-  pos = GetJokersAtlasTable('heirloom'),  
+  pos = RainyDays.GetJokersAtlasTable('heirloom'),
+  
   config = {
     extra = {
-      chip_bonus = 12,
-      mult_bonus = 1
+      numerator_in = 1,
+      denominator_in = 4
     }
   },
   
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
     info_queue[#info_queue + 1] = G.P_CENTERS.m_mult
+    local numerator_out, denominator_out = SMODS.get_probability_vars(card, card.ability.extra.numerator_in, card.ability.extra.denominator_in)
     return {
-      vars = { 
-        card.ability.extra.chip_bonus,
-        card.ability.extra.mult_bonus
+      vars = {
+        numerator_out,
+        denominator_out
       }
     }
   end,
   
   calculate = function(self, card, context)
-    if context.individual and context.cardarea == G.play then
-      if SMODS.has_enhancement(context.other_card, 'm_bonus') or SMODS.has_enhancement(context.other_card, 'm_mult') then
-        if not context.other_card.debuff and check_card_in_hand(context.other_card, context.scoring_hand) then
-          --find position of this card 
-          local card_pos = nil
-          for i = 1, #context.scoring_hand do
-            if context.scoring_hand[i] == context.other_card then
-              card_pos = i
-              break
-            end
+    if context.before then
+      local possible_bonus = {}
+      local possible_mult = {}
+      for i = 1, #context.full_hand do
+        if context.full_hand[i - 1] then
+          if SMODS.has_enhancement(context.full_hand[i - 1], 'm_bonus') then
+            possible_bonus[context.full_hand[i].ID] = true
           end
-          
-          --if the next card exists, we increase its chip and mult amount.
-          if card_pos and context.scoring_hand[card_pos + 1] then
-            context.scoring_hand[card_pos + 1].ability.perma_bonus = (context.scoring_hand[card_pos + 1].ability.perma_bonus or 0) + card.ability.extra.chip_bonus
-            context.scoring_hand[card_pos + 1].ability.perma_mult = (context.scoring_hand[card_pos + 1].ability.perma_mult or 0) + card.ability.extra.mult_bonus
-            return {
-              message_card = context.scoring_hand[card_pos + 1],
-              message = localize('k_upgrade_ex'),
-              colour = G.C.MULT
-            }
+          if SMODS.has_enhancement(context.full_hand[i - 1], 'm_mult') then
+            possible_mult[context.full_hand[i].ID] = true
           end
         end
+        
+        if context.full_hand[i + 1] then
+          if SMODS.has_enhancement(context.full_hand[i + 1], 'm_bonus') then
+            possible_bonus[context.full_hand[i].ID] = true
+          end
+          if SMODS.has_enhancement(context.full_hand[i + 1], 'm_mult') then
+            possible_mult[context.full_hand[i].ID] = true
+          end
+        end
+      end
+      
+      local enhanced
+      for i = 1, #context.full_hand do
+        if possible_bonus[context.full_hand[i].ID] or possible_mult[context.full_hand[i].ID] then
+          if SMODS.pseudorandom_probability(card, 'heirloom', card.ability.extra.numerator_in, card.ability.extra.denominator_in) then
+            local enhancement
+            if possible_bonus[context.full_hand[i].ID] then
+              if possible_mult[context.full_hand[i].ID] then
+                enhancement = pseudorandom_element({ 'm_bonus', 'm_mult' }, pseudoseed('heirloom' .. G.GAME.round_resets.ante))
+              else
+                enhancement = 'm_bonus'
+              end
+            else
+              enhancement = 'm_mult'
+            end
+            context.full_hand[i]:set_ability(enhancement, nil, true)
+            enhanced = true
+          end
+        end
+      end
+      
+      if enhanced then
+        return {
+          message_card = card,
+          message = localize('rainydays_enhanced'),
+          colour = G.C.FILTER
+        }
       end
     end
   end

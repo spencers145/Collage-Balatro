@@ -12,7 +12,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  pos = GetJokersAtlasTable('feather_vibrant'),
+  pos = RainyDays.GetJokersAtlasTable('feather_vibrant'),
   config = {
     extra = {
       plus_chips = 30

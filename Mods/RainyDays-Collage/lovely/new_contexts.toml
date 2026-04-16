@@ -1,0 +1,39 @@
+[manifest]
+version = '1.0.0'
+dump_lua = true
+priority = 0
+
+
+
+#add draw individual context
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+match_indent = true
+pattern = '''draw_card(G.deck,G.hand, i*100/hand_space,'up', true, cards_to_draw[i])'''
+position = 'after'
+payload = '''local rd_effects = {}
+SMODS.calculate_context({ rd_draw_individual = true, other_card = cards_to_draw[i], full_hand = cards_to_draw }, rd_effects)
+if G.GAME.facing_blind then
+	G.GAME.rd_cards_drawn_this_round = G.GAME.rd_cards_drawn_this_round + 1
+end
+SMODS.trigger_effects(rd_effects)'''
+
+
+
+#retrigger joker react
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+match_indent = true
+pattern = '''context.individual = true'''
+position = 'after'
+payload = '''context.rd_is_repetition = (reps[j] ~= 1)'''
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+match_indent = true
+pattern = '''context.individual = nil'''
+position = 'after'
+payload = '''context.rd_is_repetition = nil'''

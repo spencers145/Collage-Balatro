@@ -1,50 +1,46 @@
----- SMODS.Joker {
-----   key = 'hannysvoorwerp',
-----   name = 'Hanny\'s Voorwerp',
-----   atlas = 'Jokers',
-----   rarity = 2,
-----   cost = 6,
-----   unlocked = true, 
-----   discovered = true,
-----   blueprint_compat = true,
-----   eternal_compat = true,
-----   perishable_compat = true,
-----   pos = GetJokersAtlasTable('hannysvoorwerp'),
+SMODS.Joker {
+  key = 'hannysvoorwerp',
+  atlas = 'Jokers',
+  rarity = 2,
+  cost = 6,
+  unlocked = true,
+  blueprint_compat = true,
+  eternal_compat = true,
+  perishable_compat = false,
+  pos = RainyDays.GetJokersAtlasTable('hannysvoorwerp'),
+  config = {
+    extra = {
+      current_mult = 0,
+      plus_mult = 5
+    }
+  },
   
-----   add_to_deck = function(self, card, from_debuff)
-----     G.GAME.interest_blockers = (G.GAME.interest_blockers or 0) + 1
-----     if not G.GAME.base_interest_state then
-----       G.GAME.base_interest_state = G.GAME.modifiers.no_interest
-----     end
-----     G.GAME.modifiers.no_interest = true
-----   end,
-  
-----   remove_from_deck = function(self, card, from_debuff)
-----     G.GAME.interest_blockers = (G.GAME.interest_blockers or 0) - 1
-----     if G.GAME.interest_blockers <= 0 then
-----       G.GAME.modifiers.no_interest = G.GAME.base_interest_state
-----     end
-----   end,
-  
-----   calculate = function(self, card, context)
-----     if context.end_of_round and not context.repetition and not context.individual then
-----       if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-----         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-----         G.E_MANAGER:add_event(Event({
-----           trigger = 'before',
-----           delay = 0.0,
-----           func = function()
-----             SMODS.add_card({ set = 'Constellation' })
-----             G.GAME.consumeable_buffer = 0
-----             return true
-----           end
-----         }))
+  loc_vars = function(self, info_queue, card)
+    return {
+      vars = {
+        card.ability.extra.plus_mult,
+        card.ability.extra.current_mult
+      }
+    }
+  end,
 
-----         return {
-----           message = localize('rainydays_plus_constellation'), 
-----           colour = G.C.SECONDARY_SET.Constellation 
-----         }
-----       end
-----     end
-----   end
----- }
+  
+  calculate = function(self, card, context)
+    if context.joker_main and card.ability.extra.current_mult > 0 then
+      return {
+        mult = card.ability.extra.current_mult
+      }
+    end
+    
+    if context.selling_card and not context.blueprint then
+      if context.card.ability.set == 'Planet' or (RainyDays.Constellations and context.card.ability.set == 'CN_Constellation') then
+        card.ability.extra.current_mult = card.ability.extra.current_mult + card.ability.extra.plus_mult
+        return {
+          message_card = card,
+          message = localize('k_upgrade_ex'),
+          colour = G.C.MULT
+        }
+      end
+    end
+  end
+}
