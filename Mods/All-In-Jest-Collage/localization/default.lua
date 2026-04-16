@@ -892,7 +892,7 @@ return {
             e_aij_glimmer = {
                 name = "Glimmer",
                 text = {
-                    "{C:aij_plasma}Balances{} {C:attention}#1#%{} of",
+                    "{C:purple}Balances{} {C:white,X:purple}#1#%{} of",
                     "{C:chips}Chips{} and {C:mult}Mult{}"
                 }
             },
@@ -1943,7 +1943,7 @@ return {
             j_aij_cosmological_constant = {
                 name = "Cosmological Constant",
                 text = {
-                    "{C:aij_plasma}Balance{} {C:attention}base{} {C:chips}Chips{} and {C:mult}Mult{}",
+                    "{C:purple}Balance{} {C:attention}base{} {C:chips}Chips{} and {C:mult}Mult{}",
                     "of played {C:attention}poker hand"
                 },
             },
@@ -1988,7 +1988,7 @@ return {
             j_aij_average_joe = {
                  name = "Average Joe", 
                  text = { 
-                    "{C:aij_plasma}Balance{} {C:attention}20%{} of",
+                    "{C:purple}Balance{} {C:white,X:purple}20%{} of",
                     "{C:chips}Chips{} and {C:mult}Mult{}"
                 } 
             },
@@ -2555,8 +2555,8 @@ return {
             j_aij_goofball = { 
                 name = "Goofball", 
                 text = { 
-                    "Scored {C:attention}face{} cards {C:aij_plasma}balance{}",
-                    "{C:attention}#1#%{} of {C:chips}Chips{} and {C:mult}Mult{}"
+                    "Scored {C:attention}face{} cards {C:purple}balance{}",
+                    "{C:white,X:purple}#1#%{} of {C:chips}Chips{} and {C:mult}Mult{}"
                 } 
             },
             j_aij_heyokha = { name = "Heyókȟa", text = { "" } },
@@ -2977,9 +2977,9 @@ return {
             j_aij_candy_floss = { 
                 name = "Candy Floss", 
                 text = { 
-                    "{C:aij_plasma}Balance{} {C:attention}#1#%{} of {C:chips}Chips{}",
-                    "and {C:mult}Mult{}, decreases",
-                    "by {C:attention}#2#%{} at end of round"
+                    "{C:purple}Balance{} {C:white,X:purple}#1#%{} of {C:chips}Chips{}",
+                    "and {C:mult}Mult{}, decreases by",
+                    "{C:white,X:purple}-#2#%{} at end of round"
                 } 
             },
             j_aij_stargazy_pie = { 
@@ -3579,7 +3579,7 @@ return {
             j_aij_biancolelli = { 
                 name = "Biancolelli", 
                 text = { 
-                    "{C:aij_plasma}Balance{} {C:chips}Chips{} and {C:mult}Mult{}", 
+                    "{C:purple}Balance{} {C:chips}Chips{} and {C:mult}Mult{}", 
                     "after scoring finishes"
                 }, 
                 unlock = { 

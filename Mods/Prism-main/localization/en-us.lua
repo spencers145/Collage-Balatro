@@ -139,7 +139,7 @@ return {
             },
             j_prism_plasma_lamp = {
                 name = "Plasma Lamp",
-                text = {"Balance {C:chips}Chips{} and",
+                text = {"{C:purple}Balance{} {C:chips}Chips{} and",
                     "{C:mult}Mult{} if {C:attention}poker hand",
                     "is {C:attention}#1#{}",
                     "or {C:attention}#2#{}",

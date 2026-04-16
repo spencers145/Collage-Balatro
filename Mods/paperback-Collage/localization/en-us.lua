@@ -175,9 +175,9 @@ return {
       j_paperback_milk_tea = {
         name = "Milk Tea",
         text = {
-          {"{C:purple}Balance{} {C:attention}#1#%{} of {C:chips}Chips{} and {C:mult}Mult"},
-          {"Reduces by {C:attention}#2#%{} if after balancing",
-          "{C:mult}Mult{} ended up {C:attention}greater{} than {C:chips}Chips"}
+          {"{C:purple}Balance{} {C:white,X:purple}#1#%{} of {C:chips}Chips{} and {C:mult}Mult"},
+          {"Loses {C:white,X:purple}-#2#%{} if, after balancing, {C:mult}Mult{}",
+          "ended up {C:attention}greater{} than {C:chips}Chips"}
         }
       },
       j_paperback_nichola = {

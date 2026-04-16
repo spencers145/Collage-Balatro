@@ -315,7 +315,7 @@ return {
                 name = "Crystal Geode",
                 text = {
                     "All {C:attention}scored{} Rankless and Suitless cards",
-                    "Balance {C:mult}Mult{} and {C:chips}Chips{} by {C:attention}#1#%{}",
+                    "{C:purple}balance{} {C:mult}Mult{} and {C:chips}Chips{} by {X:purple,C:white}#1#%{}",
                 }
             },
             j_vis_minuteman = {
@@ -338,7 +338,7 @@ return {
                 name = "Conspiracy Theorist",
                 text = {
                     "{C:green}#1# in #2#{} chance",
-                    "to balance out the current",
+                    "to {C:purple}balance{} the current",
                     "{C:mult}Mult{} and {C:chips}Chips{}"
                 }
             },

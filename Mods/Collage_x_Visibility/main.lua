@@ -475,7 +475,7 @@ SMODS.Joker{
             "balance each hand,",
             "{C:money}$#1#{} at a time",
             "{C:inactive}({C:money}$#2#{C:inactive} remaining)"},
-            {"Balances {C:purple}#3#%{} of",
+            {"{C:purple}Balances {C:white,X:purple}#3#%{} of",
             "{C:mult}Mult{} and {C:chips}Chips"},
         }
     },
