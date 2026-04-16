@@ -2,6 +2,8 @@ BUNCOMOD = {vars = {}, funcs = {}, content = SMODS.current_mod}
 local filesystem = NFS or love.filesystem
 
 local config = BUNCOMOD.content.config
+config.gameplay_reworks = true
+config.jokerlike_consumable_editions = true
 
 -- Debug message
 
@@ -220,35 +222,6 @@ function BUNCOMOD.content.config_tab()
                     },
                     nodes = {
                         create_toggle({
-                        label = G.localization.misc.dictionary.bunc_gameplay_reworks,
-                        info = {
-                            G.localization.misc.dictionary.bunc_default_true..', '..G.localization.misc.dictionary.bunc_requires_restart,
-                            '',
-                            G.localization.misc.dictionary.bunc_gameplay_reworks_desc,
-                            G.localization.misc.dictionary.bunc_gameplay_reworks_desc_2
-                        },
-                        ref_table = BUNCOMOD.content.config,
-                        ref_value = 'gameplay_reworks',
-                        callback = function() BUNCOMOD.content:save_config()
-                            if config.gameplay_reworks then
-                                G.P_CENTERS.c_lovers.config.max_highlighted = 2
-                            else
-                                G.P_CENTERS.c_lovers.config.max_highlighted = 1
-                            end
-                        end})
-                    }
-                },
-                {
-                    n = G.UIT.R,
-                    config = {
-                        align = "cm",
-                        r = 0.1,
-                        emboss = 0.1,
-                        outline = 1,
-                        padding = 0.14
-                    },
-                    nodes = {
-                        create_toggle({
                             label = G.localization.misc.dictionary.bunc_fixed_badges,
                             info = {
                                 G.localization.misc.dictionary.bunc_default_false,
@@ -262,30 +235,6 @@ function BUNCOMOD.content.config_tab()
                         end})
                     }
                 },
-                {
-                    n = G.UIT.R,
-                    config = {
-                        align = "cm",
-                        r = 0.1,
-                        emboss = 0.1,
-                        outline = 1,
-                        padding = 0.14
-                    },
-                    nodes = {
-                        create_toggle({
-                            label = G.localization.misc.dictionary.bunc_jokerlike_consumable_editions,
-                            info = {
-                                G.localization.misc.dictionary.bunc_default_false,
-                                '',
-                                G.localization.misc.dictionary.bunc_jokerlike_consumable_editions_desc,
-                                G.localization.misc.dictionary.bunc_jokerlike_consumable_editions_desc_2
-                            },
-                            ref_table = BUNCOMOD.content.config,
-                            ref_value = 'jokerlike_consumable_editions',
-                            callback = function() BUNCOMOD.content:save_config()
-                        end})
-                    }
-                }
             }
         }
     }}
