@@ -13,6 +13,14 @@ SMODS.load_file("content/atlas.lua")()
 -- Load Jokers
 PB_UTIL.register_items(PB_UTIL.ENABLED_JOKERS, "content/joker")
 
+PB_UTIL.config.minor_arcana_enabled = false
+PB_UTIL.config.spectrals_enabled = false
+PB_UTIL.config.enhancements_enabled = false
+PB_UTIL.config.paperclips_enabled = false
+PB_UTIL.config.suits_enabled = false
+PB_UTIL.config.ranks_enabled = false
+PB_UTIL.config.vouchers_enabled = false
+
 -- Load Minor Arcana if they are enabled
 if PB_UTIL.config.minor_arcana_enabled then
   -- Register the consumable type to be used by Minor Arcana
