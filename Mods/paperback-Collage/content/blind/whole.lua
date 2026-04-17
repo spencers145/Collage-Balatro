@@ -1,4 +1,4 @@
-SMODS.Blind {
+--[[SMODS.Blind {
   key = 'whole',
   boss = {
     min = 3
@@ -20,3 +20,4 @@ SMODS.Blind {
     return false
   end
 }
+]]
