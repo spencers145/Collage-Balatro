@@ -2,6 +2,17 @@ Mutils = {}
 Mutils.mod_dir = ''..SMODS.current_mod.path
 Mutils.config = SMODS.current_mod.config
 
+Mutils.config.shop_booster_slots = Mutils.config.shop_booster_slots or 0
+Mutils.config.shop_voucher_slots = Mutils.config.shop_voucher_slots or 0
+
+if Mutils.config.shop_booster_slots < 1 then
+    Mutils.config.shop_booster_slots = 1
+end
+
+if Mutils.config.shop_voucher_slots < 1 then
+    Mutils.config.shop_voucher_slots = 1
+end
+
 
 local igo = Game.init_game_object
 Game.init_game_object = function(self)
@@ -44,8 +55,8 @@ end
 
 local shop_boxes = {
     {ref_value = "shop_joker_slots", label = "glue_settings_shop_joker_slots", min = 0, max = 5},
-    {ref_value = "shop_voucher_slots", label = "glue_settings_voucher_slots", min = 0, max = 5},
-    {ref_value = "shop_booster_slots", label = "glue_settings_booster_slots", min = 0, max = 5}
+    {ref_value = "shop_voucher_slots", label = "glue_settings_voucher_slots", min = 1, max = 5},
+    {ref_value = "shop_booster_slots", label = "glue_settings_booster_slots", min = 1, max = 5}
 }
 
 local card_area_boxes = {
