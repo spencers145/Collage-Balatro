@@ -873,7 +873,7 @@ SMODS.Blind({
 
 SMODS.Sound{key = 'sheep', path = 'sheep.ogg'}
 
-SMODS.Blind({
+--[[SMODS.Blind({
     key = 'lever',
     atlas = 'ortalab_blinds',
     pos = {x = 0, y = 21},
@@ -906,7 +906,7 @@ SMODS.Blind({
             if card.debuff then card:set_debuff() end
         end
     end
-})
+})]]
 
 SMODS.Blind({
     key = 'steel',
