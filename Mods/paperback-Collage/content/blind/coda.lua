@@ -1,7 +1,7 @@
 SMODS.Blind {
   key = 'coda',
   boss = {
-    min = 1,
+    min = 4,
   },
   discovered = false,
   boss_colour = HEX('bea5c4'),
