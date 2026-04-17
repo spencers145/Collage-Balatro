@@ -47,7 +47,7 @@ G.PRISM.Joker({
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = false,
-	config = {extra = {chips = 0, mult = 0,chips_gain = 3, mult_gain = 1}},
+	config = {extra = {chips = 0, mult = 0,chips_gain = 2, mult_gain = 1}},
 	loc_vars = function(self, info_queue, center)
 		return { vars = {center.ability.extra.chips_gain, center.ability.extra.mult_gain, center.ability.extra.chips, center.ability.extra.mult} }
 	end,
