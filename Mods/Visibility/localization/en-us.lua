@@ -86,8 +86,8 @@ return {
             bl_vis_boss_flip = {
                 name = 'The Flip',
                 text = {
-                    "Playing a #1# sets",
-                    "the starting {C:mult}mult{} to {C:mult}0{}",
+                    "#1# has a",
+                    "base Mult of 0",
                 }
             },
             bl_vis_boss_transparent = {
