@@ -3643,27 +3643,27 @@ return {
 			['bl_ortalab_caramel_coin'] = {
 				name = 'Caramel Coin',
 				text = {
-					'{C:attention}-#1#{} hand size'
+					'-#1# hand size'
 				}
 			},
 			['bl_ortalab_saffron_shield'] = {
 				name = 'Saffron Shield',
 				text = {
 					'Poker hand must',
-					'contain {V:1}#1#'
+					'contain #1#'
 				}
 			},
 			['bl_ortalab_rouge_rose'] = {
 				name = 'Rouge Rose',
 				text = {
-					'Shuffle a standard {C:attention}52{} card',
+					'Shuffle a standard 52 card',
 					'deck into your deck'
 				}
 			},
 			['bl_ortalab_silver_sword'] = {
 				name = 'Silver Sword',
 				text = {
-					'Play only {C:attention}#1#{} hand'
+					'Play only #1# hand'
 				}
 			}
 		},
