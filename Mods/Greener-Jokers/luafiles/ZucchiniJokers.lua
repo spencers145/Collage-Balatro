@@ -4432,7 +4432,7 @@ SMODS.Joker {
 			end
 			for i = 1, #context.scoring_hand do
 				if context.scoring_hand[i]:is_suit('Diamonds') then
-					is_first_diamonds = context.scoring_hand[i] == context.other_card
+					is_first_diamond = context.scoring_hand[i] == context.other_card
 					break
 				end
 			end
