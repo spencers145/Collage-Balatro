@@ -6207,7 +6207,7 @@ discovered = false, -- The Flame
     atlas = 'bunco_blinds'
 }
 
-SMODS.Blind{
+--[[SMODS.Blind{
 discovered = false, -- The Mask
     key = 'mask',
     boss = {min = 2},
@@ -6234,7 +6234,7 @@ discovered = false, -- The Mask
 
     pos = {y = 7},
     atlas = 'bunco_blinds'
-}
+}]]
 
 SMODS.Blind{
 discovered = false, -- The Bulwark
