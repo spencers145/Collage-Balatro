@@ -4315,7 +4315,7 @@ SMODS.Joker {
 }
 
 
-SMODS.Joker {
+--[[SMODS.Joker {
 	key = 'comet',
 	blueprint_compat = true,
 	eternal_compat = true,
@@ -4374,7 +4374,7 @@ SMODS.Joker {
 			}
 		end
 	end
-}
+}]]
 SMODS.Joker {
 	key = 'funguy',
 	blueprint_compat = true,
