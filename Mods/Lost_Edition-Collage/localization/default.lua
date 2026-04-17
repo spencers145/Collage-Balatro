@@ -371,10 +371,9 @@ return {
             j_losted_disruption = {
                 name = 'Disruption',
                 text = {
-                    '{X:mult,C:white}X1{} Mult,',
-                    'gains {X:mult,C:white}X#1#{} Mult for each',
-                    'time the {C:attention}poker hand{}',
-                    'has been played this run',
+                    'Gives {X:mult,C:white}X1{} Mult, then {X:mult,C:white}+X#1#{} for',
+                    'each time {C:attention}poker hand{} has',
+                    'been played this run',
                 }
             },
             j_losted_passion_fruit = {
@@ -483,8 +482,8 @@ return {
             j_losted_magic_cube = {
                 name = 'Magic Cube',
                 text = {
-                    'Each played {C:attention}6{} gives {C:mult}+#2#{} Mult,',
-                    'Each played {C:attention}9{} gives {C:chips}+#1#{} Chips',
+                    {'Each played {C:attention}6{} gives {C:mult}+#2#{} Mult'},
+                    {'Each played {C:attention}9{} gives {C:chips}+#1#{} Chips'},
                 }
             },
             j_losted_demoniac_joker = {
@@ -838,10 +837,10 @@ return {
             j_losted_doodle = {
                 name = 'Line Paper Doodle',
                 text = {
-                    'Copies the ability',
-                    'of {C:attention}Joker{} to the left',
-                    '{C:green}#1# in #2#{} chance to be',
-                    'destroyed at the end of the round',
+                    {'Copies the ability',
+                    'of {C:attention}Joker{} to the left'},
+                    {'{C:green}#1# in #2#{} chance to be',
+                    'destroyed at end of round'},
                 }
             },
             j_losted_booster = {
