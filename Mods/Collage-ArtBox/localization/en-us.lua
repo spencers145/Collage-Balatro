@@ -578,8 +578,8 @@ return {
                 text={
                     "{S:0.8}({S:0.8,V:1}lvl.#1#{S:0.8}){} Level up",
                     "{C:attention}Null",
-                    "{C:mult}+3{} Mult and",
-                    "{C:chips}+40{} chips",
+                    "{C:mult}+2{} Mult and",
+                    "{C:chips}+25{} chips",
                 },
             },
         },
