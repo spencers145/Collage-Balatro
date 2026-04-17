@@ -977,7 +977,7 @@
         key = 'WarChant', discovered = false, atlas = 'tma_joker', pos = {x = 6, y = 2}, rarity = 1, cost = 6, blueprint_compat = true,
         config = {
             extra = {
-                mult_stuff = 30,
+                mult_stuff = 25,
                 active = false
             }
         },
