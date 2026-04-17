@@ -6,10 +6,10 @@ local doodle = {
     config = {
       
     },
-    rarity = 3,
+    rarity = 2,
     pos = { x = 24, y = 0 },
     atlas = 'joker_atlas',
-    cost = 10,
+    cost = 8,
     unlocked = true,
     discovered = false,
     blueprint_compat = false,
