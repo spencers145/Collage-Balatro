@@ -26,10 +26,10 @@ return {
       j_RainyDays_avocado = {
         name = "Avocado",
         text = {
-          "{C:mult}+#1#{} Mult",
-          "{C:mult}-#2#{} Mult when any",
+          {"{C:mult}+#1#{} Mult"},
+          {"{C:mult}-#2#{} Mult when any",
           "{C:attention}Booster Pack{} is",
-          "opened"
+          "opened"}
         }
       },
       j_RainyDays_balance = {
@@ -50,19 +50,19 @@ return {
       j_RainyDays_bankaccount = {
         name = "Bank Account",
         text = {
-          "{C:chips}+#1#{} Chips",
-          "When you earn {C:attention}interest{},",
+          {"{C:chips}+#1#{} Chips"},
+          {"When you earn {C:attention}interest{},",
           "add it to this Joker's",
-          "{C:attention}sell value{} instead"
+          "{C:attention}sell value{} instead"}
         }
       },
       j_RainyDays_bazaar = {
         name = "Bazaar",
         text = {
-          "{C:attention}+#1#{} hand size",
-          "Played hands with fewer",
+          {"{C:attention}+#1#{} hand size"},
+          {"Played hands with fewer",
           "than {C:attention}#2#{} scoring cards",
-          "are not scored"
+          "are not scored"}
         }
       },
       j_RainyDays_breakfast_cereal = {
@@ -347,12 +347,12 @@ return {
       j_RainyDays_kudzu = {
         name = "Kudzu",
         text = {
-          "When {C:attention}Blind{} is selected,",
-          "create another {C:attention}Kudzu{}.",
-          "Then this Joker gains",
+          {"When {C:attention}Blind{} is selected,",
+          "create another {C:attention}Kudzu{}",
+          "{C:inactive}(Must have room)"},
+          {"Each round, this Joker gains",
           "{C:mult}+#1#{} Mult for each {C:attention}Kudzu",
-          "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
-          "{C:inactive}(Must have room)"
+          "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)"},
         },
         unlock = {
           "Have at least",
@@ -616,10 +616,10 @@ j_RainyDays_recycle = {
       j_RainyDays_truffle = {
         name = "Truffle",
         text = {
-          "{X:mult,C:white}X#1#{} Mult,",
-          "loses {X:mult,C:white}X#2#{} Mult for",
+          {"{X:mult,C:white}X#1#{} Mult"},
+          {"Loses {X:mult,C:white}X#2#{} Mult for",
           "each card {C:attention}remaining{} in",
-          "{C:attention}deck{} at end of round"
+          "{C:attention}deck{} at end of round"}
         }
       },
       
