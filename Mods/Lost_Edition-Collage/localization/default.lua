@@ -411,8 +411,8 @@ return {
             j_losted_rule_book = {
                 name = 'Rule Book',
                 text = {
-                    'The {C:attention}last scoring card{} in the hand',
-                    'gives {X:mult,C:white}X#1#{} Mult',
+                    'The {C:attention}last card{} in scoring',
+                    'hand gives {X:mult,C:white}X#1#{} Mult',
                 }
             },
             j_losted_toc_toc = {
