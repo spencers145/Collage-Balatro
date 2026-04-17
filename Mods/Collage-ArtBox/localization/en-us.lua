@@ -78,12 +78,12 @@ return {
                 text = {
                     {
                         "Played cards with",
-                        "{C:clubs}♣Club{} suit give",
+                        "{C:clubs}Club{} suit give",
                         "{C:mult}+#2#{} Mult when scored",
                     },
                     {
                         "Played cards with",
-                        "{C:spades}♠Spade{} suit give",
+                        "{C:spades}Spade{} suit give",
                         "{C:chips}+#1#{} Chips when scored",
                     }
                 }
