@@ -3007,3 +3007,4 @@ if card.ability.bunc_hindered then
     ret[SMODS.Stickers.bunc_hindered] = card:calculate_sticker(context, 'bunc_hindered')
     return ret, {}
 end
+'''
