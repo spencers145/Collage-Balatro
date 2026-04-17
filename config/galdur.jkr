@@ -1,8 +1,0 @@
-return {
-	["animation"] = true,
-	["use"] = true,
-	["stake_select"] = 1,
-	["stake_colour"] = 1,
-	["unlock_all"] = true,
-	["reduce"] = false,
-}
