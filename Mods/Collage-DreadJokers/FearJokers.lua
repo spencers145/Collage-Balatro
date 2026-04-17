@@ -2078,7 +2078,7 @@
                 --print(inspect(card))
                 local wilds = {}
                 for k, v in ipairs(context.scoring_hand) do
-                    if SMODS.pseudorandom_probability(card, pseudoseed('tma_morph_wilds'), 1, 2, 'tma_morph_wilds', true) then 
+                    if SMODS.pseudorandom_probability(card, pseudoseed('tma_morph_wilds'), 2, 3, 'tma_morph_wilds', true) then 
                         wilds[#wilds+1] = v
                         v:set_ability(G.P_CENTERS.m_wild, nil, true)
                         G.E_MANAGER:add_event(Event({

@@ -160,7 +160,7 @@ return {
 				["name"] = "Morph",
 				["text"] = {
 					"When {C:attention}active{},",
-					"{C:attention}half{} of scored cards",
+					"{C:attention}two-thirds{} of scoring cards",
 					"become {C:attention}Wild{} cards",
 				},
 			},
