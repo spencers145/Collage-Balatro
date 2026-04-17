@@ -52,7 +52,7 @@ pattern = '''if self.ability.perishable and self.ability.perish_tally <= 0 then'
 match_indent = true
 position = 'before'
 payload = '''
-if next(SMODS.find_card('j_tma_Lighthouse')) and self.ability.effect ~= "Base" then
+if next(SMODS.find_card('j_tma_Lighthouse')) and self.ability.effect == "Enhanced" then
     self.debuff = false
     return
 end
