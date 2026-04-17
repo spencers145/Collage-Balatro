@@ -1,7 +1,7 @@
 SMODS.Joker {
     key = "flat_earth",
     rarity = 1,
-    cost = 6,
+    cost = 5,
     unlocked = true,
     discovered = false,
     eternal_compat = true,
@@ -11,7 +11,7 @@ SMODS.Joker {
     credits = {
         developer = true,
     },
-    config = { extra = { mult = 3 } },
+    config = { extra = { mult = 5 } },
     
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.mult } }
