@@ -6559,12 +6559,13 @@ SMODS.Blind{
 discovered = false, -- The Depths
     key = 'depths',
     boss = {min = 4},
-    dollars = 4,
+    dollars = 3,
 
     press_play = function(self)
         if not G.GAME.blind.disabled then
             local stickers = {'tag_bunc_eternal', 'tag_bunc_perishable', 'tag_bunc_scattering'}
 
+            add_tag(Tag(stickers[math.random(#stickers)]))
             add_tag(Tag(stickers[math.random(#stickers)]))
 
             G.GAME.blind:wiggle()
@@ -6591,12 +6592,13 @@ SMODS.Blind{
     discovered = false, -- The Chasm
     key = 'chasm',
     boss = {min = 4},
-    dollars = 4,
+    dollars = 3,
 
     press_play = function(self)
         if not G.GAME.blind.disabled then
             local stickers = {'tag_bunc_hindered', 'tag_bunc_reactive', 'tag_bunc_rental'}
 
+            add_tag(Tag(stickers[math.random(#stickers)]))
             add_tag(Tag(stickers[math.random(#stickers)]))
 
             G.GAME.blind:wiggle()

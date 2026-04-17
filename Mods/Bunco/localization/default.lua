@@ -1555,15 +1555,15 @@ return {
             bl_bunc_depths = {
                 ['name'] = 'The Depths',
                 ['text'] = {
-                    [1] = 'After Play, gain Eternal,',
-                    [2] = 'Perishable, or Scattering tag'
+                    [1] = 'After Play, gain 2 Eternal,',
+                    [2] = 'Perishable, or Scattering tags'
                 }
             },
             bl_bunc_chasm = {
                 ['name'] = 'The Chasm',
                 ['text'] = {
-                    [1] = 'After Play, gain Hindered,',
-                    [2] = 'Reactive, or Rental tag'
+                    [1] = 'After Play, gain 2 Hindered,',
+                    [2] = 'Reactive, or Rental tags'
                 }
             },
 
