@@ -2676,6 +2676,53 @@ function SMODS.localize_box(lines, args)
         local desc_scale = (thunk.font or G.LANG.font).DESCSCALE
         if G.F_MOBILE_UI then desc_scale = desc_scale*1.5 end
         
+        -- bunco start
+
+        local function add_symbol(text, symbol)
+            local leading_spaces = string.match(text, "^%s*")
+
+            _, word_amount = text:gsub("%S+","")
+
+            if word_amount == 1 and string.sub(string.sub(text, #leading_spaces + 1), 1, #symbol) ~= symbol then
+                if #leading_spaces > 0 then
+                    return leading_spaces..symbol..string.sub(text, #leading_spaces + 1)
+                else
+                    return symbol..text
+                end
+            else
+                return text
+            end
+        end
+
+        local suit_symbols = {
+            Diamonds = '♦',
+            Hearts = '♥',
+            Spades = '♠',
+            Clubs = '♣',
+            bunc_Fleurons = '✤',
+            bunc_Halberds = '✠',
+            paperback_Crowns = '♛',
+            paperback_Stars = '★',
+        }
+        local found_strings = {}
+
+        -- Ordering the symbol insertion so that symbols appear in the order the words appear in the text
+        for key, symbol in pairs(suit_symbols) do
+            local result = string.find(assembled_string, localize(key, 'suits_singular')) or string.find(assembled_string, localize(key, 'suits_plural'))
+            if result then
+                table.insert(found_strings, {result, symbol})
+            end
+        end
+        table.sort(found_strings, function(a, b)
+            return a[1] > b[1]
+        end)
+
+        for _, v in ipairs(found_strings) do
+            assembled_string = add_symbol(assembled_string, v[2])
+        end
+
+        -- bunco end
+
         if args.type == 'name' then
             local final_name_assembled_string = ''
             for _, part in ipairs(lines) do
