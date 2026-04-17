@@ -6741,7 +6741,7 @@ discovered = false, -- Indigo Tower
     atlas = 'bunco_blinds_finisher'
 }
 
-SMODS.Blind{
+--[[SMODS.Blind{
 discovered = false, -- Magenta Dagger
     key = 'final_dagger',
     boss = {showdown = true, min = 10, max = 10},
@@ -6752,7 +6752,7 @@ discovered = false, -- Magenta Dagger
 
     pos = {y = 3},
     atlas = 'bunco_blinds_finisher'
-}
+}]]
 
 SMODS.Blind{
 discovered = false, -- Turquoise Shield
