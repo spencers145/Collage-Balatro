@@ -2275,7 +2275,7 @@
         end,
         calculate = function(self, card, context)
             if context.discard and card.ability.extra.active then
-                if SMODS.pseudorandom_probability(card, pseudoseed('tma_indulgence'), 1, 3, 'tma_indulgence', true) then 
+                if SMODS.pseudorandom_probability(card, pseudoseed('tma_indulgence'), 1, 2, 'tma_indulgence', true) then 
                     context.other_card:set_ability(G.P_CENTERS.m_bunc_cracker, nil, true)
                     return {
                         message = "Indulgent!",

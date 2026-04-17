@@ -191,7 +191,7 @@ return {
 				["name"] = "Indulgence",
 				["text"] = {
 					"When {C:attention}active{},",
-					"a {C:attention}third{} of discarded cards",
+					"{C:attention}half{} of discarded cards",
 					"become {C:attention}Cracker Cards{}"
 				},
 			},
