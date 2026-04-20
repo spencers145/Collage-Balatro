@@ -39,7 +39,7 @@ SMODS.Booster{
     end,
 
     create_card = function(self, card, i)
-        local _types = get_all_unbanned_consumable_sets()
+        local _types = get_all_illegal_consumable_sets()
         if #_types == 0 then
             -- What are we supposed to do if there are no unbanned sets?
             -- Let's just let Jimbo shine
@@ -61,7 +61,7 @@ SMODS.Booster{
     select_card = (G.pack_cards and G.pack_cards.cards and G.pack_cards.highlighted[1].set == "Joker") and "joker" or 'consumeables',
 
     in_pool = function()
-        return #get_all_unbanned_consumable_sets() ~= 0
+        return #get_all_illegal_consumable_sets() ~= 0
     end
 }
 
@@ -90,7 +90,7 @@ SMODS.Booster{
     end,
 
     create_card = function(self, card, i)
-        local _types = get_all_unbanned_consumable_sets()
+        local _types = get_all_illegal_consumable_sets()
         if #_types == 0 then
             -- What are we supposed to do if there are no unbanned sets?
             -- Let's just let Jimbo shine
@@ -112,7 +112,7 @@ SMODS.Booster{
     select_card = 'consumeables',
 
     in_pool = function() 
-        return #get_all_unbanned_consumable_sets() ~= 0
+        return #get_all_illegal_consumable_sets() ~= 0
     end
 }
 
@@ -141,7 +141,7 @@ SMODS.Booster{
     end,
 
     create_card = function(self, card, i)
-        local _types = get_all_unbanned_consumable_sets()
+        local _types = get_all_illegal_consumable_sets()
         if #_types == 0 then
             -- What are we supposed to do if there are no unbanned sets?
             -- Let's just let Jimbo shine
@@ -163,7 +163,7 @@ SMODS.Booster{
     select_card = 'consumeables',
 
     in_pool = function() 
-        return #get_all_unbanned_consumable_sets() ~= 0
+        return #get_all_illegal_consumable_sets() ~= 0
     end
 }
 

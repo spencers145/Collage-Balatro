@@ -1,3 +1,8 @@
+function get_all_illegal_consumable_sets()
+    return {"Minor Arcana", "Black Market"}
+end
+
+
 function get_all_unbanned_consumable_sets()
     local _types = {}
     for k, v in ipairs(SMODS.ConsumableType.ctype_buffer) do

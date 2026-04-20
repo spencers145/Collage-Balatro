@@ -738,21 +738,21 @@ return {
                 name = 'Black Market Pack',
                 text = { 
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2# {V:1}Consumable{} cards",
+                    "{C:attention}#2# {C:black}Illegal{} {V:1}Consumable{} cards",
                 },
             },
             p_vis_black_market_jumbo_1 = {
                 name = 'Jumbo Black Market Pack',
                 text = { 
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2# {V:1}Consumable{} cards",
+                    "{C:attention}#2# {C:black}Illegal{} {V:1}Consumable{} cards",
                 },
             },
             p_vis_black_market_mega_1 = {
                 name = 'Mega Black Market Pack',
                 text = { 
                     "Choose {C:attention}#1#{} of up to",
-                    "{C:attention}#2# {V:1}Consumable{} cards",
+                    "{C:attention}#2# {C:black}Illegal{} {V:1}Consumable{} cards",
                 },
             },
             p_vis_divine_normal_1 = {
