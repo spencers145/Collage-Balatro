@@ -748,6 +748,8 @@ COLLAGE_MODIFIED_TABLE = {
 
     "j_bof_a_wonderous_bread",
     "j_bof_a_jelly_beans",
+    "j_bof_n_eraser",
+    "j_bof_n_passport",
 }
 
 COLLAGE_ALWAYS_IN_POOL = {
