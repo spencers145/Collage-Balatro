@@ -1970,6 +1970,9 @@ if G.GAME.jest_change_booster_options.trigger or G.GAME.jest_change_booster_opti
 end
 '''
 
+# Electric Snow (1/2)
+# Prevent round from ending after hand is played (unless final hand is played)
+# Game:update_hand_played()
 [[patches]]
 [patches.pattern]
 target = "game.lua"
@@ -1982,9 +1985,33 @@ if next(SMODS.find_card("j_aij_electric_snow")) and not (G.GAME.current_round.ha
     G.STATE_COMPLETE = false
     return true
 end
+if G.STATE == G.STATES.NEW_ROUND then
+    return true
+end
 '''
-
-#Talisman (why tho)
+# Electric Snow (2/2)
+# Prevent round from ending after boss is disabled (unless final hand is played)
+# Blind:disable()
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = "if self.boss and G.GAME.chips - G.GAME.blind.chips >= 0 then"
+position = "before"
+match_indent = true
+payload = '''
+if next(SMODS.find_card("j_aij_electric_snow")) and not (G.GAME.current_round.hands_left < 1) then
+    G.STATE = G.STATES.DRAW_TO_HAND
+    G.STATE_COMPLETE = false
+    return true
+end
+if G.STATE == G.STATES.NEW_ROUND then
+    return true
+end
+'''
+# Electric Snow + Taslisman (1/2)
+# Prevent round from ending after hand is played (unless final hand is played)
+# As above, but with a pattern for talisman
+# Game:update_hand_played()
 [[patches]]
 [patches.pattern]
 target = "game.lua"
@@ -1995,6 +2022,29 @@ payload = '''
 if next(SMODS.find_card("j_aij_electric_snow")) and not (G.GAME.current_round.hands_left < 1) then
     G.STATE = G.STATES.DRAW_TO_HAND
     G.STATE_COMPLETE = false
+    return true
+end
+if G.STATE == G.STATES.NEW_ROUND then
+    return true
+end
+'''
+# Electric Snow (2/2)
+# Prevent round from ending after boss is disabled (unless final hand is played)
+# As above, but with a pattern for talisman
+# Blind:disable()
+[[patches]]
+[patches.pattern]
+target = "blind.lua"
+pattern = "if self.boss and to_big(G.GAME.chips) - G.GAME.blind.chips >= to_big(0) then"
+position = "before"
+match_indent = true
+payload = '''
+if next(SMODS.find_card("j_aij_electric_snow")) and not (G.GAME.current_round.hands_left < 1) then
+    G.STATE = G.STATES.DRAW_TO_HAND
+    G.STATE_COMPLETE = false
+    return true
+end
+if G.STATE == G.STATES.NEW_ROUND then
     return true
 end
 '''
