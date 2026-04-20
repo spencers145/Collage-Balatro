@@ -47,7 +47,7 @@ for i, key in ipairs(small_boosters.keys) do
     booster_args.key = key
     booster_args.pos = { x = i - 1, y = 0 }
     booster_args.ortalab_type = 'ortalab_loteria'
-    SMODS.Booster(booster_args)
+    --SMODS.Booster(booster_args)
 end
 
 local mid_boosters = {keys = {'mid_loteria_1', 'mid_loteria_2'}, info = {
@@ -90,7 +90,7 @@ for i, key in ipairs(mid_boosters.keys) do
     booster_args.key = key
     booster_args.pos = { x = i - 1, y = 1 }
     booster_args.ortalab_type = 'ortalab_loteria'
-    SMODS.Booster(booster_args)
+    --SMODS.Booster(booster_args)
 end
 
 local large_boosters = {keys = {'big_loteria_1', 'big_loteria_2'}, info = {
@@ -133,5 +133,5 @@ for i, key in ipairs(large_boosters.keys) do
     booster_args.key = key
     booster_args.pos = { x = i + 1, y = 1 }
     booster_args.ortalab_type = 'ortalab_loteria'
-    SMODS.Booster(booster_args)
+    --SMODS.Booster(booster_args)
 end
