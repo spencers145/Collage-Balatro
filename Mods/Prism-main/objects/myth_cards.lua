@@ -14,8 +14,7 @@ SMODS.ConsumableType({
     key = "Myth",
     primary_colour = G.PRISM.C.myth_1,
     secondary_colour = G.PRISM.C.myth_2,
-    collection_rows = {4, 4},
-    shop_rate = 0.7,
+    collection_rows = {4, 3},
     default = 'c_prism_myth_gnome'
 })
 SMODS.UndiscoveredSprite({
