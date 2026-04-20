@@ -21,6 +21,7 @@ SMODS.ConsumableType({
     default = 'c_ortalab_lot_rooster'
 })
 
+--[[
 SMODS.Consumable({
     key = 'lot_rooster',
     set = 'ortalab_loteria',
@@ -58,7 +59,7 @@ SMODS.Consumable({
         end
         G.GAME.consumeable_buffer = G.GAME.consumeable_buffer - 1
     end
-})
+})]]
 
 SMODS.Consumable({
     key = 'lot_melon',
@@ -84,6 +85,7 @@ SMODS.Consumable({
     end
 })
 
+--[[
 SMODS.Consumable({
     key = 'lot_scorpion',
     set = 'ortalab_loteria',
@@ -105,7 +107,7 @@ SMODS.Consumable({
         track_usage(card.config.center.set, card.config.center_key)
         create_consumables(card)
     end
-})
+})]]
 
 SMODS.Consumable({
     key = 'lot_umbrella',
@@ -250,6 +252,7 @@ SMODS.Consumable({
     end
 })
 
+--[[
 SMODS.Consumable({
     key = 'lot_bonnet',
     set = 'ortalab_loteria',
@@ -273,8 +276,9 @@ SMODS.Consumable({
         local money = pseudorandom(pseudoseed('bonnet'), card.ability.extra.min * doubled, card.ability.extra.max * doubled)
         ease_dollars(money)
     end
-})
+})]]
 
+--[[
 SMODS.Consumable({
     key = 'lot_pear',
     set = 'ortalab_loteria',
@@ -335,8 +339,9 @@ SMODS.Consumable({
             return true end }))
         end
     end
-})
+})]]
 
+--[[
 SMODS.Consumable({
     key = 'lot_flag',
     set = 'ortalab_loteria',
@@ -382,8 +387,9 @@ SMODS.Consumable({
         G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2,func = function() G.hand:unhighlight_all(); return true end }))
         delay(0.5)
     end
-})
+})]]
 
+--[[
 SMODS.Consumable({
     key = 'lot_bottle',
     set = 'ortalab_loteria',
@@ -457,8 +463,9 @@ SMODS.Consumable({
             return true
         end}))
     end
-})
+})]]
 
+--[[
 SMODS.Consumable({
     key = 'lot_harp',
     set = 'ortalab_loteria',
@@ -556,7 +563,7 @@ SMODS.Consumable({
             return true
         end}))
     end
-})
+})]]
 
 local function count_possessed()
     local count = 0
@@ -566,6 +573,7 @@ local function count_possessed()
     return count
 end
 
+--[[
 SMODS.Consumable({
     key = 'lot_heron',
     set = 'ortalab_loteria',
@@ -637,7 +645,7 @@ SMODS.Consumable({
             return true
         end}))
     end
-})
+})]]
 
 function get_chips_from_edition(card)
     if not card.edition then return 0 end
@@ -705,6 +713,7 @@ SMODS.Consumable({
     end
 })
 
+--[[
 SMODS.Consumable({
     key = 'lot_boot',
     set = 'ortalab_loteria',
@@ -715,7 +724,7 @@ SMODS.Consumable({
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.selected + (G.GAME and G.GAME.ortalab.vouchers.tabla), localize(card.ability.extra.suits[1], 'suits_plural'), localize(card.ability.extra.suits[2], 'suits_plural'),
-        colours = {G.C.SUITS[card.ability.extra.suits[1]], G.C.SUITS[card.ability.extra.suits[2]]}}}
+        colours = {G.C.SUITS[card.ability.extra.suits[1]]--[[, G.C.SUITS[card.ability.extra.suits[2]]--[[}}}
     end,
     can_use = function(self, card)
         return selected_use(self, card)
@@ -741,7 +750,7 @@ SMODS.Consumable({
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.selected + (G.GAME and G.GAME.ortalab.vouchers.tabla), localize(card.ability.extra.suits[1], 'suits_plural'), localize(card.ability.extra.suits[2], 'suits_plural'),
-        colours = {G.C.SUITS[card.ability.extra.suits[1]], G.C.SUITS[card.ability.extra.suits[2]]}}}
+        colours = {G.C.SUITS[card.ability.extra.suits[1]]--[[, G.C.SUITS[card.ability.extra.suits[2]]--[[}}}
     end,
     can_use = function(self, card)
         return selected_use(self, card)
@@ -767,7 +776,7 @@ SMODS.Consumable({
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.selected + (G.GAME and G.GAME.ortalab.vouchers.tabla), localize(card.ability.extra.suits[1], 'suits_plural'), localize(card.ability.extra.suits[2], 'suits_plural'),
-        colours = {G.C.SUITS[card.ability.extra.suits[1]], G.C.SUITS[card.ability.extra.suits[2]]}}}
+        colours = {G.C.SUITS[card.ability.extra.suits[1]]--[[, G.C.SUITS[card.ability.extra.suits[2]]--[[}}}
     end,
     can_use = function(self, card)
         return selected_use(self, card)
@@ -872,7 +881,7 @@ SMODS.Consumable({
             return true
         end}))
     end
-})
+})]]
 
 function Card:check_chameleon()
     if self.config.center_key == 'j_ortalab_chameleon' then
@@ -883,7 +892,7 @@ function Card:check_chameleon()
         self.config.center_key = 'old chameleon'
     end
 end
-
+--[[
 SMODS.Consumable({
     key = 'lot_tree',
     set = 'ortalab_loteria',
@@ -894,7 +903,7 @@ SMODS.Consumable({
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.selected + (G.GAME and G.GAME.ortalab.vouchers.tabla), localize(card.ability.extra.suits[1], 'suits_plural'), localize(card.ability.extra.suits[2], 'suits_plural'),
-        colours = {G.C.SUITS[card.ability.extra.suits[1]], G.C.SUITS[card.ability.extra.suits[2]]}}}
+        colours = {G.C.SUITS[card.ability.extra.suits[1]]--[[, G.C.SUITS[card.ability.extra.suits[2]]--[[}}}
     end,
     can_use = function(self, card)
         return selected_use(self, card)
@@ -909,6 +918,7 @@ SMODS.Consumable({
         G.hand.config.highlighted_limit = card.ability.extra.highlight_limit or 5
     end
 })
+]]
 
 local ortalab_sell = Card.sell_card
 function Card:sell_card()
