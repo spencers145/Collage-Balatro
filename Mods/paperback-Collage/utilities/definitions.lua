@@ -1,9 +1,9 @@
 -- Load mod config
 PB_UTIL.config = SMODS.current_mod.config
 
-PB_UTIL.config.minor_arcana_enabled = false
+PB_UTIL.config.minor_arcana_enabled = true
 PB_UTIL.config.spectrals_enabled = false
-PB_UTIL.config.enhancements_enabled = false
+PB_UTIL.config.enhancements_enabled = true
 PB_UTIL.config.paperclips_enabled = true
 PB_UTIL.config.suits_enabled = false
 PB_UTIL.config.ranks_enabled = false
