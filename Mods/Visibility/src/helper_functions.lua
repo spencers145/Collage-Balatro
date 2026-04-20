@@ -1,5 +1,5 @@
 function get_all_illegal_consumable_sets()
-    return {"Minor Arcana", "Black Market"}
+    return {"paperback_minor_arcana", "BlackMarket"}
 end
 
 
