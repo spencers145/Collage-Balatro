@@ -579,6 +579,7 @@ SMODS.Consumable({
 })
 
 --Boosters
+--[[
 SMODS.Booster({
     key = 'small_myth_1',
     atlas = 'prismboosters',
@@ -723,7 +724,7 @@ SMODS.Booster({
         G.booster_pack_sparkles:fade(1, 0)
     end,
 })
-
+]]
 --Djinn
 G.PRISM.FUNCS.find_card = function(entered_text)
 	local function clean_string(str)
