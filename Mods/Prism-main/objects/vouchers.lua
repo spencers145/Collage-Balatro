@@ -10,7 +10,7 @@ function G.PRISM.Voucher(table)
 	end
 end
 
-G.PRISM.Voucher({
+--[[G.PRISM.Voucher({
 	dependency = G.PRISM.config.myth_enabled,
     key = "myth_merchant",
 	atlas = "prismvouchers",
@@ -56,4 +56,4 @@ G.PRISM.Voucher({
             end,
 	    }))
 	end
-})
+})]]
