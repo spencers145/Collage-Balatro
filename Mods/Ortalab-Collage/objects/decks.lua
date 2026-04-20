@@ -365,7 +365,7 @@ SMODS.Back({
     unlocked = false,
     calculate = function(self, card, context)
         if context.final_scoring_step then
-            if G.GAME.current_round.hands_played <= 1 then
+            if G.GAME.current_round.hands_played == 0 then
                 G.GAME.modifiers.frozen_deck = true
             else
                 G.GAME.modifiers.frozen_deck = false
