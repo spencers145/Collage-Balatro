@@ -1,0 +1,46 @@
+SMODS.Joker {
+
+    discovered = true,
+    key = 'plort_market',
+    blueprint_compat = true,
+    config = {
+        extra = {
+            min_value = 1,
+            max_value = 4,
+            value = 4
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+
+        return {
+            vars = {card.ability.extra.value}
+        }
+    end,
+    rarity = 2,
+    atlas = 'sarcpot_atlas',
+    pos = {
+        x = 6,
+        y = 1
+    },
+    cost = 6,
+
+    calculate = function(self, card, context)
+        if context.ending_shop and not context.blueprint then
+            card.ability.extra.value = math.random(card.ability.extra.min_value, card.ability.extra.max_value)
+            SMODS.calculate_effect({
+                message = localize("sarc_stonks"),
+                color = G.C.YELLOW
+
+            }, card)
+        end
+        if context.using_consumeable and G.GAME.blind.in_blind then
+            SMODS.calculate_effect({
+                message = "+$" .. card.ability.extra.value,
+                color = G.C.YELLOW
+
+            }, card)
+            ease_dollars(card.ability.extra.value)
+        end
+    end
+}
+

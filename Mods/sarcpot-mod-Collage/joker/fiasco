@@ -1,0 +1,70 @@
+SMODS.Joker {
+    key = "fiasco",
+    config = {
+        extra = {
+            n = 1,
+            d = 8,
+            chance_increase = 1
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        local n, d = SMODS.get_probability_vars(card, card.ability.extra.n, card.ability.extra.d, 'fiasco')
+        return {
+            vars = {n, d, card.ability.extra.chance_increase}
+        }
+    end,
+    rarity = 3,
+    pos = {
+        x = 6,
+        y = 0
+    },
+    atlas = 'sarcpot_atlas',
+    cost = 8,
+    unlocked = true,
+    discovered = false,
+    blueprint_compat = false,
+    eternal_compat = false,
+    soul_pos = nil,
+
+    in_pool = function(self, args)
+        return true
+    end,
+    add_to_deck = function(self, card, from_debuff)
+
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                for k, v in pairs(G.I.CARD) do
+                    if v.set_cost then
+                        v:set_cost()
+                    end
+                end
+                return true
+            end
+        }))
+
+    end,
+    calculate = function(self, card, context)
+        -- Code in Fiasco lovely patch
+
+        if context.end_of_round and not context.repetition and context.game_over == false and not context.blueprint then
+
+            if SMODS.pseudorandom_probability(card, 'fiasco', card.ability.extra.n, card.ability.extra.d, 'garlic_bread') then
+
+                SMODS.destroy_cards(card, nil, nil, true)
+
+                return {
+                    message = localize('sarc_went_under'),
+                    color = G.C.RED
+                }
+            else
+                card.ability.extra.n = card.ability.extra.n + card.ability.extra.chance_increase
+                return {
+                    card = card,
+                    message = localize('sarc_efficient')
+
+                }
+            end
+        end
+    end
+}
+

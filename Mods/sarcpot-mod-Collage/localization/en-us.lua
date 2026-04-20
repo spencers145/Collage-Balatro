@@ -108,14 +108,12 @@ return {
                 name = 'Soulless Marketing',
                 text = {
                     {"Create a {C:attention}Voucher Tag{}"},
-                    {"Gain {C:money}+#1#${}"}
                 }
             },
             c_sarc_greenpath = {
                 name = '"View from Greenpath"',
-                text = {
-                    "Create an {C:uncommon}Uncommon Tag{}",
-                }
+                text = {{"Create an {C:uncommon}Uncommon Tag{}"},
+                {"Gain {C:money}+#1#${}"}}
             },
             c_sarc_haven= {
                 name = 'Rusted Poster',
@@ -142,11 +140,10 @@ return {
             c_sarc_loop_hero = {
                 name = 'Memory of a Road',
                 text = {
+                    {"Select up to",
+                    "{C:attention}#2#{} cards"},
                     {"Destroys up to {C:attention}#1#{}",
-                    "random cards in hand"},
-                    {"Immediately draw",
-                    "replacements from",
-                    "the deck"}
+                    "unselected cards"},
                 }
             },
             c_sarc_magic_survival = {
@@ -256,6 +253,41 @@ return {
             }
         },
         Joker = {
+            j_sarc_monarchs_crown = {
+                name = "Monarch's Crown",
+                text = {"When you gain", "{C:money}$#1#{} or more at once,", "create {C:tarot}The Emperor{}",
+                        "{C:inactive}(Must have room){}"}
+            },
+            j_sarc_lumin_lantern = {
+                name = "Lumin Lantern",
+                text = {"{C:attention}Luminice{} cards also upgrade", "cards held in hand"}
+            },
+            j_sarc_plort_market = {
+                name = 'Plort Market',
+                text = {{"Gain {C:money}+$#1#{} when using", "a {C:attention}consumable{} during a round"},
+                        {"Value {C:attention}changes{} every round"}}
+            },
+            j_sarc_still_free = {
+                name = 'Still Free',
+                text = {"Scored {C:blue}Flow{} cards have a", "{C:green}#1# in #2#{} chance to create the",
+                        "{C:planet}Planet{} card for the played hand"}
+            },
+            j_sarc_fiasco = {
+                name = 'Fiasco',
+                text = {{"{C:attention}Vouchers{} are {C:attention}free{}"},
+                        {"{C:green}#1# in #2#{} chance to be {C:red}destroyed{}",
+                        "at the end of the round"},
+                        {"Chance increases by",
+                        "{C:white,X:green}+#3#{} each round"}}
+            },
+            j_sarc_autopilot = {
+                name = 'Autopilot',
+                text = {{"When playing a hand,",
+                        "remove {C:attention}ALL{} hand levels"},
+                        {"This joker gains {C:chips}+#1#{} chips", "for every level removed",
+                        "{C:inactive}(Currently {C:chips}+#2#{} {C:inactive}Chips){}"}
+                }
+            },
             j_sarc_garlic_bread = {
                 name = 'Garlic Bread',
                 text = {

@@ -1,0 +1,14 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if self.ability.rental then self.cost = 1 end"
+position = "after"
+match_indent = true
+payload = '''
+if self.ability.set == 'Voucher' and #SMODS.find_card('j_sarc_fiasco') > 0 then self.cost = 0 end
+'''

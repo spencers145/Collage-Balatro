@@ -1,0 +1,47 @@
+SMODS.Joker {
+    discovered = true,
+    key = 'monarchs_crown',
+
+    config = {
+        extra = {
+            limit = 10
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.c_emperor
+        return {
+
+            vars = {card.ability.extra.limit}
+        }
+    end,
+    rarity = 2,
+    atlas = 'sarcpot_atlas',
+    pos = {
+        x = 4,
+        y = 1
+    },
+    cost = 7,
+    calculate = function(self, card, context)
+        if context.money_altered and context.amount >= card.ability.extra.limit then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                blockable = true,
+                delay = 0.2,
+                func = function()
+                    if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                        play_sound('tarot1')
+                        card:juice_up()
+                        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                        local consumable = create_card('Tarot', G.consumeables, nil, nil, false, nil, 'c_emperor')
+                        consumable:add_to_deck()
+                        G.consumeables:emplace(consumable)
+                        G.GAME.consumeable_buffer = 0
+                    end
+
+                    return true
+                end
+            }))
+
+        end
+    end
+}

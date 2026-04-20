@@ -1,0 +1,38 @@
+SMODS.Joker {
+    key = "lumin_lantern",
+    config = {
+        extra = {}
+    },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_sarc_luminice
+        return {
+            vars = {}
+        }
+    end,
+    rarity = 1,
+    pos = {
+        x = 5,
+        y = 0
+    },
+    atlas = 'sarcpot_atlas',
+    cost = 5,
+    unlocked = true,
+    discovered = false,
+    blueprint_compat = false,
+    eternal_compat = true,
+    soul_pos = nil,
+
+    in_pool = function(self, args)
+        if G.playing_cards then
+            for i = 1, #G.playing_cards do
+                if SMODS.has_enhancement(G.playing_cards[i], 'm_sarc_luminice') then
+                    return true
+                end
+            end
+        end
+    end,
+    calculate = function(self, card, context)
+        -- Code in Luminice enhancement
+    end
+}
+

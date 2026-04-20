@@ -2,30 +2,52 @@ SMODS.Consumable({
     key = 'greenpath',
     set = 'travel',
     atlas = 'consumables',
-    pos = { x = 2, y = 0 },
+    pos = {
+        x = 2,
+        y = 0
+    },
     discovered = false,
-    config = {},
+    config = {
+        money = 6
+    },
     loc_vars = function(self, info_queue)
-        info_queue[#info_queue+1] = {key = 'tag_uncommon', set = 'Tag'}
-        return { vars = {} }
+        info_queue[#info_queue + 1] = {
+            key = 'tag_uncommon',
+            set = 'Tag'
+        }
+        return {
+            vars = {self.config.money}
+        }
     end,
     cost = 3,
     calculate = function(self, card, context)
     end,
     can_use = function(self, card)
         return true
-        --return G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer)>=1
+        -- return G.jokers.config.card_limit - (#G.jokers.cards + G.GAME.joker_buffer)>=1
     end,
 
     use = function(self, card, area, copier)
-        G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.4,func = function()
-            play_sound('generic1', 0.9 + math.random()*0.1, 0.8)
-			play_sound('holo1', 1.2 + math.random()*0.1, 0.4)
-            card:juice_up(0.3, 0.5)
-            add_tag(Tag('tag_uncommon'))
-        return true end }))
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('generic1', 0.9 + math.random() * 0.1, 0.8)
+                play_sound('holo1', 1.2 + math.random() * 0.1, 0.4)
+                card:juice_up(0.3, 0.5)
+                add_tag(Tag('tag_uncommon'))
+                return true
+            end
+        }))
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                ease_dollars(self.config.money)
+                return true
+            end
+        }))
     end
-
 
     --[[use = function(self, card, area, copier)
         G.E_MANAGER:add_event(Event({

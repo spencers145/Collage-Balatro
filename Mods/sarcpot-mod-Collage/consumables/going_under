@@ -32,11 +32,5 @@ SMODS.Consumable({
             card:juice_up(0.3, 0.5)
             add_tag(Tag('tag_voucher'))
         return true end }))
-        G.E_MANAGER:add_event(Event({
-        trigger = 'after',
-        delay = 0.4,
-        func = function()
-            ease_dollars(self.config.money)
-        return true end }))
     end
 })

@@ -1,0 +1,79 @@
+SMODS.Joker {
+
+    discovered = true,
+    key = 'still_free',
+
+    config = {
+        extra = {
+            n = 1,
+            d = 5
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_sarc_flow
+        local n, d = SMODS.get_probability_vars(card, card.ability.extra.n, card.ability.extra.d, 'still_free')
+        return {
+            vars = {n, d}
+        }
+    end,
+    rarity = 2,
+    atlas = 'sarcpot_atlas',
+    pos = {
+        x = 5,
+        y = 1
+    },
+    cost = 6,
+    blueprint_compat = true,
+    eternal_compat = false,
+    in_pool = function(self, args)
+        if G.playing_cards then
+            for i = 1, #G.playing_cards do
+                if SMODS.has_enhancement(G.playing_cards[i], 'm_sarc_flow') then
+                    return true
+                end
+            end
+        end
+    end,
+
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and
+            SMODS.has_enhancement(context.other_card, 'm_sarc_flow') then
+            if SMODS.pseudorandom_probability(card, 'still_free', card.ability.extra.n, card.ability.extra.d,
+                'still_free') then
+                SMODS.calculate_effect({
+                    message = localize('sarc_flow'),
+                    colour = G.C.BLUE
+                }, card)
+
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.1,
+                    blockable = true,
+                    func = function()
+
+                        if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+                            local new_planet = nil
+                            for k, v in pairs(G.P_CENTER_POOLS.Planet) do
+                                if v.config.hand_type == G.GAME.last_hand_played then
+                                    new_planet = v.key
+                                end
+                            end
+                            play_sound('tarot1')
+                            card:juice_up()
+
+                            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+                            local consumable = create_card('Planet', G.consumeables, nil, nil, false, nil, new_planet)
+                            consumable:add_to_deck()
+                            G.consumeables:emplace(consumable)
+                            G.GAME.consumeable_buffer = 0
+                        end
+                        return true
+                    end
+                }))
+
+            end
+
+        end
+    end
+
+}

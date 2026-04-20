@@ -25,10 +25,16 @@ SMODS.Enhancement({
     end,
 
     calculate = function(self, card, context)
-        if context.cardarea == G.play and context.after and not context.debuffed_hand and card.config.center ==
-            G.P_CENTERS.m_sarc_luminice then
+        if context.cardarea == G.play and context.after and not context.debuffed_hand and card.config.center == G.P_CENTERS.m_sarc_luminice then
+            local pool = context.scoring_hand
 
-            for k, v in ipairs(context.scoring_hand) do
+            if #SMODS.find_card('j_sarc_lumin_lantern') > 0 then
+                for key, value in pairs(G.hand.cards) do
+                    table.insert(pool, value)
+                end
+            end
+            
+            for k, v in ipairs(pool) do
                 if v.config.center ~= G.P_CENTERS.m_sarc_luminice then
                     G.E_MANAGER:add_event(Event({
                         trigger = 'after',
@@ -60,7 +66,6 @@ SMODS.Enhancement({
                     }))
                 end
             end
-
         end
 
     end
