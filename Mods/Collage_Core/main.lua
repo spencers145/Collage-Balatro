@@ -745,6 +745,9 @@ COLLAGE_MODIFIED_TABLE = {
     "j_cmykl_themountain",
     "j_cmykl_thedune",
     "j_cmykl_thevalley",
+
+    "j_bof_a_wonderous_bread",
+    "j_bof_a_jelly_beans",
 }
 
 COLLAGE_ALWAYS_IN_POOL = {
