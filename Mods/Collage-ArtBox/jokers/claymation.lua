@@ -5,7 +5,7 @@ SMODS.Joker {
       chosen_card = nil
     }
   },
-  rarity = 3,
+  rarity = 2,
   pos = { x = 5, y = 6 },
   atlas = 'joker_atlas',
   cost = 6,
