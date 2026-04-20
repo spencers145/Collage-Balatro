@@ -44,7 +44,7 @@ if PB_UTIL.config.minor_arcana_enabled then
   PB_UTIL.register_items(PB_UTIL.ENABLED_MINOR_ARCANA, "content/minor_arcana")
 
   -- Register Minor Arcana boosters
-  PB_UTIL.register_items(PB_UTIL.ENABLED_MINOR_ARCANA_BOOSTERS, "content/booster")
+  --PB_UTIL.register_items(PB_UTIL.ENABLED_MINOR_ARCANA_BOOSTERS, "content/booster")
 
   -- Register music for Minor Arcana boosters
   SMODS.Sound {
