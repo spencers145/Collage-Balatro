@@ -20,7 +20,10 @@ return {
             artb_fill= "Fill!",
             artb_empty= "Empty",
             artb_fired= "Fired!",
-            artb_wood = "Chipped!"
+            artb_wood = "Chipped!",
+            artb_bug= "Bug!",
+            artb_molded= "Clay!",
+            artb_stained="Stained!"
         },
         labels = {
             artb_ouroboros_seal = "Ouroboros Seal",
@@ -60,7 +63,7 @@ return {
                     {"{C:mult}+#1#{} Mult"},
                     {"When {C:attention}blind{} is selected,",
                     "creates a copy of this Joker",
-                    "{C:inactive}(Must have room)"},
+                    "{C:inactive}(Must have room){}"},
                 }
             },
 
@@ -343,8 +346,49 @@ return {
                 }}
             },
 
+            j_artb_bug = {
+                name = 'Hey Check Out This Cool Bug',
+                text = {{
+                    "{C:attention}???{} when scored hand contains {C:attention}???{}",
+                }}
+            },
 
+            j_artb_recursion = {
+                name = 'Recursion',
+                text = {{
+                    "Creates an {C:attention}Recursive Tag{}",
+                    "when {C:attention}Boss Blind{} is defeated"
+                }}
+            },
 
+            j_artb_claymation = {
+                name = 'Claymation',
+                text = {{
+                    "Draw a {C:attention}Clay Card{}",
+                    "from your {C:attention}deck{}",
+                    "at the begining of round"
+                }}
+            },
+
+            j_artb_stained_joker = {
+                name = 'Stained Joker',
+                text = {{
+                    "If {C:attention}first discard{} of round",
+                    "has only {C:attention}1{} card, enhance",
+                    "it into a {C:attention}Stained Card{}",
+                }}
+            },
+
+            j_artb_scalper = {
+                name = 'Scalper',
+                text = {
+                    {"When entering shop,",
+                    "reduces money to {C:money}$10{}"},
+                    {"Creates a",
+                    "{C:attention}Joker Collectable{}",
+                    "for every {C:money}$#1#{} lost"}
+                }
+            },
         },
         collectable = {
             c_artb_joker_collectable = {
@@ -417,6 +461,15 @@ return {
                     "Gives a free",
                     "Mega Arts & Crafts Pack"
                 }
+            },
+            tag_artb_recursive = {
+                name = "Recursive Tag",
+                text = {
+                    "Gives a random {C:attention}Tag{}",
+                    "per {C:attention}Recursive Tag{}",
+                    "obtained this run",
+                    "{C:inactive}(Will give{} {C:attention}#1#{}{C:inactive}){}"
+                }
             }
         },
         art = {
@@ -432,8 +485,8 @@ return {
                 name = 'Art Block',
                 text = {
                     "Enchances {C:attention}#1#{}",
-                    "selected cards to",
-                    "{C:attention}Stained Cards{}",
+                    "selected card to",
+                    "{C:attention}Stained Card{}",
                 }
             },
             c_artb_art_glitter = {
