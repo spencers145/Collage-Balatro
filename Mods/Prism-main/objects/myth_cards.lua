@@ -85,6 +85,7 @@ SMODS.Consumable({
 	end,
 
 })
+--[[
 SMODS.Consumable({
     key = 'myth_egg',
     set = 'Myth',
@@ -141,7 +142,7 @@ SMODS.Consumable({
         end
     end
 
-}) 
+}) ]]
 SMODS.Consumable({
     key = 'myth_mirror',
     set = 'Myth',
@@ -196,7 +197,8 @@ SMODS.Consumable({
         
     end
 
-}) 
+})
+--[[
 SMODS.Consumable({
     key = 'myth_druid',
     set = 'Myth',
@@ -240,8 +242,8 @@ SMODS.Consumable({
         end
         G.E_MANAGER:add_event(Event({trigger = 'after',func = function() G.hand:unhighlight_all(); return true end}))
     end
-})
-SMODS.Consumable({
+})]]
+--[[SMODS.Consumable({
     key = 'myth_beast',
     set = 'Myth',
     atlas = 'prismmyth',
@@ -288,7 +290,8 @@ config = {odds = 2},
         
 
     end
-})
+})]]
+--[[
 SMODS.Consumable({
     key = 'myth_wizard',
     set = 'Myth',
@@ -325,7 +328,8 @@ SMODS.Consumable({
         end
         G.E_MANAGER:add_event(Event({trigger = 'after',func = function() G.hand:unhighlight_all(); return true end}))
     end
-}) 
+})]]
+--[[
 SMODS.Consumable({
     key = 'myth_treant',
     set = 'Myth',
@@ -362,7 +366,7 @@ SMODS.Consumable({
         end
         G.E_MANAGER:add_event(Event({trigger = 'after',func = function() G.hand:unhighlight_all(); return true end}))
     end
-})
+})]]
 SMODS.Consumable({
     key = 'myth_ooze',
     set = 'Myth',
@@ -414,7 +418,8 @@ SMODS.Consumable({
         return true end }))
     end
 
-}) 
+})
+--[[
 SMODS.Consumable({
     key = 'myth_gnome',
     set = 'Myth',
@@ -436,8 +441,8 @@ SMODS.Consumable({
         return true end }))
     end
 
-})
-
+})]]
+--[[
 SMODS.Consumable({
     key = 'myth_kraken',
     set = 'Myth',
@@ -458,7 +463,8 @@ SMODS.Consumable({
             add_tag(Tag('tag_juggle'))
         return true end }))
     end
-})
+})]]
+--[[
 SMODS.Consumable({
     key = 'myth_roc',
     set = 'Myth',
@@ -479,7 +485,8 @@ SMODS.Consumable({
             add_tag(Tag('tag_double'))
         return true end }))
     end
-})
+})]]
+--[[
 SMODS.Consumable({
     key = 'myth_ghoul',
     set = 'Myth',
@@ -541,10 +548,12 @@ SMODS.Consumable({
             local percent = 0.85 + (i-0.999)/(#G.hand.highlighted-0.998)*0.3
             G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() G.hand.highlighted[i]:flip();play_sound('tarot2', percent, 0.6);G.hand.highlighted[i]:juice_up(0.3, 0.3);return true end }))
         end
-        G.E_MANAGER:add_event(Event({trigger = 'after',func = function() G.hand:unhighlight_all(); return true end})) ]]
+        G.E_MANAGER:add_event(Event({trigger = 'after',func = function() G.hand:unhighlight_all(); return true end})) ]] --[[
     end
 
-})
+})]]
+
+--[[
 SMODS.Consumable({
     key = 'spectral_djinn',
     set = 'Spectral',
@@ -577,7 +586,7 @@ SMODS.Consumable({
         return true end }))
     end
 })
-
+]]
 --Boosters
 --[[
 SMODS.Booster({
