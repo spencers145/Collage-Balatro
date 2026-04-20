@@ -10,16 +10,30 @@ SMODS.Joker {
   pos = { x = 6, y = 0 },
   atlas = 'jokers_atlas',
   cost = 6,
-  unlocked = true,
+  unlocked = false,
   discovered = false,
   blueprint_compat = false,
   eternal_compat = false,
   soul_pos = nil,
   yes_pool_flag = "quick_fix_can_spawn",
 
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
+
   set_ability = function(self, card, initial, delay_sprites)
     card.ability.h_size = card.ability.extra.h_size or 0
     card.ability.extra.odds = card.ability.extra.odds or 1
+  end,
+
+  check_for_unlock = function(self, args)
+    return args.type == 'min_hand_size' and G.hand and G.hand.config.card_limit >= 10
+  end,
+
+  locked_loc_vars = function(self, info_queue, card)
+    return {
+      vars = { 10 }
+    }
   end,
 
   loc_vars = function(self, info_queue, card)

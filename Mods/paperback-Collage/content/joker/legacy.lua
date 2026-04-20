@@ -12,13 +12,18 @@
 ----   pos = { x = 5, y = 7 },
 ----   atlas = 'jokers_atlas',
 ----   cost = 8,
-----   unlocked = true,
+----   unlocked = false,
 ----   discovered = false,
 ----   blueprint_compat = true,
 ----   eternal_compat = true,
 ----   perishable_compat = false,
 ----   soul_pos = { x = 6, y = 7 },
 ----   yes_pool_flag = 'paperback_legacy_can_spawn',
+----   paperback_secret_unlock = true,
+
+----   paperback_credit = {
+----     coder = { 'srockw' },
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
 ----     return {
@@ -26,6 +31,10 @@
 ----         card.ability.extra.mult
 ----       }
 ----     }
+----   end,
+
+----   locked_loc_vars = function(self, info_queue, card)
+----     return { vars = { G.localization.descriptions.Joker.j_paperback_alert.name } }
 ----   end,
 
 ----   calculate = function(self, card, context)
@@ -57,5 +66,15 @@
 ----         mult = card.ability.extra.mult
 ----       }
 ----     end
-----   end
+----   end,
+
+----   joker_display_def = function(JokerDisplay)
+----     return {
+----       text = {
+----         { text = "+" },
+----         { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
+----       },
+----       text_config = { colour = G.C.MULT },
+----     }
+----   end,
 ---- }

@@ -9,14 +9,18 @@
 ----   pos = { x = 18, y = 0 },
 ----   atlas = 'jokers_atlas',
 ----   cost = 6,
-----   unlocked = true,
+----   unlocked = false,
 ----   discovered = false,
 ----   blueprint_compat = false,
-----   eternal_compat = false,
+----   eternal_compat = true,
 ----   soul_pos = nil,
 ----   enhancement_gate = "m_paperback_stained",
 ----   paperback = {
 ----     requires_enhancements = true
+----   },
+
+----   paperback_credit = {
+----     coder = { 'dowfrin' }
 ----   },
 
 ----   loc_vars = function(self, info_queue, card)
@@ -30,6 +34,17 @@
 ----         },
 ----       }
 ----     }
+----   end,
+
+----   check_for_unlock = function(self, args)
+----     if args.type == 'hand_contents' then
+----       for j = 1, #args.cards do
+----         if SMODS.has_enhancement(args.cards[j], 'm_paperback_stained') and args.cards[j]:get_seal() == "Red" then
+----           return true
+----         end
+----       end
+----     end
+----     return false
 ----   end,
 
 ----   calculate = function(self, card, context)

@@ -18,6 +18,10 @@
 ----   eternal_compat = true,
 ----   enhancement_gate = 'm_wild',
 
+----   paperback_credit = {
+----     coder = { 'oppositewolf' }
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
 
@@ -29,6 +33,11 @@
 ----         n1, d1, n2, d2,
 ----         SMODS.signed_dollars(card.ability.extra.a_money_low),
 ----         card.ability.extra.a_money_high,
+----         localize {
+----           type = 'name_text',
+----           set = 'Enhanced',
+----           key = 'm_wild'
+----         },
 ----       }
 ----     }
 ----   end,

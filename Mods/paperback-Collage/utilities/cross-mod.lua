@@ -48,6 +48,7 @@ if next(SMODS.find_mod('CardSleeves')) then
     'dreamer',
     'antique',
     'passionate',
+    -- 'shimmering',
   }
 
   PB_UTIL.Sleeve = CardSleeves.Sleeve:extend {
@@ -121,13 +122,19 @@ if JokerDisplay then
       if index then
         local left = area_cards[index - 1]
         local right = area_cards[index + 1]
+        local adjacents = {}
+        if left then table.insert(adjacents, left) end
+        if right then table.insert(adjacents, right) end
 
-        if left and SMODS.has_enhancement(left, 'm_paperback_bandaged') then
-          triggers = triggers + 1 + G.GAME.paperback.bandaged_inc
-        end
-
-        if right and SMODS.has_enhancement(right, 'm_paperback_bandaged') then
-          triggers = triggers + 1 + G.GAME.paperback.bandaged_inc
+        for _, adj_c in ipairs(adjacents) do
+          if adj_c then
+            if SMODS.has_enhancement(adj_c, 'm_paperback_bandaged') then
+              triggers = triggers + 1 + G.GAME.paperback.bandaged_inc
+            end
+            if adj_c.ability.paperback_purple_clip and PB_UTIL.has_paperclip(card) then
+              triggers = triggers + 1
+            end
+          end
         end
       end
     end

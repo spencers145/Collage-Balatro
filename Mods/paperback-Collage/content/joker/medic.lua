@@ -19,6 +19,10 @@
 ----   },
 ----   enhancement_gate = 'm_paperback_bandaged',
 
+----   paperback_credit = {
+----     coder = { 'srockw' },
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     info_queue[#info_queue + 1] = G.P_CENTERS.m_paperback_bandaged
 

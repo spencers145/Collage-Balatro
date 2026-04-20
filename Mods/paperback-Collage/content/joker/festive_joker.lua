@@ -18,6 +18,10 @@
 ----   paperback = {
 ----     requires_enhancements = true,
 ----   },
+----   paperback_credit = {
+----     coder = { 'srockw' },
+----   },
+
 ----   enhancement_gate = 'm_paperback_wrapped',
 
 ----   loc_vars = function(self, info_queue, card)

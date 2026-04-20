@@ -6,6 +6,10 @@ if PB_UTIL.config.suits_enabled then
     paperback = {
       create_crowns = true,
       create_stars = true
-    }
+    },
+    unlocked = false,
+    check_for_unlock = function(self, args)
+      return PB_UTIL.spectrum_played()
+    end,
   }
 end

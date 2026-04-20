@@ -19,12 +19,16 @@
 ----   pools = {
 ----     Food = true
 ----   },
+----   paperback_credit = {
+----     coder = { 'srockw' },
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
 ----     return {
 ----       vars = {
 ----         card.ability.extra.money,
-----         card.ability.extra.rounds
+----         card.ability.extra.rounds,
+----         card.ability.extra.rounds == 1 and "" or "s"
 ----       }
 ----     }
 ----   end,
@@ -72,11 +76,11 @@
 ----   joker_display_def = function(JokerDisplay)
 ----     return {
 ----       reminder_text = {
-----         { text = '(',                       colour = G.C.UI.TEXT_INACTIVE },
-----         { ref_table = 'card.ability.extra', ref_value = 'rounds',         colour = G.C.IMPORTANT },
-----         { text = '/',                       colour = G.C.UI.TEXT_INACTIVE },
-----         { ref_table = 'card.ability.extra', ref_value = 'rounds_reset',   colour = G.C.UI.TEXT_INACTIVE },
-----         { text = ')',                       colour = G.C.UI.TEXT_INACTIVE },
+----         { text = '(', colour = G.C.UI.TEXT_INACTIVE },
+----         { ref_table = 'card.ability.extra', ref_value = 'rounds', colour = G.C.IMPORTANT },
+----         { text = '/', colour = G.C.UI.TEXT_INACTIVE },
+----         { ref_table = 'card.ability.extra', ref_value = 'rounds_reset', colour = G.C.UI.TEXT_INACTIVE },
+----         { text = ')', colour = G.C.UI.TEXT_INACTIVE },
 ----       }
 ----     }
 ----   end

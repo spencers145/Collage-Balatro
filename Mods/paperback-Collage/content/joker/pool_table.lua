@@ -11,6 +11,16 @@
 ----   eternal_compat = true,
 ----   soul_pos = nil,
 
+----   paperback_credit = {
+----     coder = { 'oppositewolf' }
+----   },
+
+----   loc_vars = function (self, info_queue, card)
+----     return {
+----       vars = { localize('k_planet') }
+----     }
+----   end,
+
 ----   -- Calculate function for the Joker
 ----   calculate = function(self, card, context)
 ----     if context.before then
@@ -30,7 +40,7 @@
 ----             func = function()
 ----               local _planet = 0
 ----               for k, v in pairs(G.P_CENTER_POOLS.Planet) do
-----                 if v.config.hand_type == context.scoring_name then
+----                 if v.config.hand_type == context.scoring_name and not v.config.moon then
 ----                   _planet = v.key
 ----                 end
 ----               end

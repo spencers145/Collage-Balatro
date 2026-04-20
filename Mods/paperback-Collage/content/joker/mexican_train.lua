@@ -5,16 +5,20 @@
 ----       dollars = 1,
 ----     }
 ----   },
-----   rarity = 2,
+----   rarity = 1,
 ----   pos = { x = 17, y = 10 },
 ----   atlas = "jokers_atlas",
-----   cost = 8,
+----   cost = 6,
 ----   blueprint_compat = false,
 ----   eternal_compat = true,
 ----   perishable_compat = true,
 ----   enhancement_gate = 'm_paperback_domino',
 ----   paperback = {
 ----     requires_enhancements = true
+----   },
+
+----   paperback_credit = {
+----     coder = { 'dowfrin' },
 ----   },
 
 ----   loc_vars = function(self, info_queue, card)

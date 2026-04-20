@@ -7,6 +7,9 @@ PB_UTIL.MinorArcana {
     cost_per_joker = 5,
     min_jokers = 5,
   },
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
 
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_TAGS.tag_negative

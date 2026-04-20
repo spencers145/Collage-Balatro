@@ -13,8 +13,11 @@ SMODS.Joker {
   cost = 9,
   blueprint_compat = true,
   eternal_compat = true,
-  perishable_compat = true,
   discovered = false,
+  perishable_compat = false,
+  paperback_credit = {
+    coder = { 'aa7' },
+  },
 
   loc_vars = function(self, info_queue, card)
     return {
@@ -53,5 +56,18 @@ SMODS.Joker {
         x_mult = card.ability.extra.x_mult,
       }
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        {
+          border_nodes = {
+            { text = "X" },
+            { ref_table = "card.ability.extra", ref_value = "x_mult", retrigger_type = "exp" }
+          }
+        }
+      },
+    }
+  end,
 }

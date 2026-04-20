@@ -16,6 +16,10 @@
 ----   eternal_compat = true,
 ----   perishable_compat = true,
 
+----   paperback_credit = {
+----     coder = { 'dowfrin' },
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     local sell_cost = 0
 
@@ -49,5 +53,26 @@
 ----         chips = math.max(0, sell_cost * card.ability.extra.scaling)
 ----       }
 ----     end
-----   end
+----   end,
+
+----   joker_display_def = function(JokerDisplay)
+----     return {
+----       text = {
+----         { text = "+" },
+----         { ref_table = "card.joker_display_values", ref_value = "chips", retrigger_type = "mult" }
+----       },
+----       text_config = { colour = G.C.CHIPS },
+----       calc_function = function(card)
+----         local sell_cost = 0
+----         if G.jokers then
+----           for _, v in ipairs(G.jokers.cards) do
+----             if v ~= card then
+----               sell_cost = sell_cost + v.sell_cost
+----             end
+----           end
+----         end
+----         card.joker_display_values.chips = math.max(0, sell_cost * card.ability.extra.scaling)
+----       end
+----     }
+----   end,
 ---- }

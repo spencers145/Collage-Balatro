@@ -9,6 +9,18 @@ if PB_UTIL.config.spectrals_enabled then
         'c_paperback_apostle_of_wands'
       }
     },
+    unlocked = false,
+    locked_loc_vars = function(self, info_queue, back)
+      return {
+        vars = {
+          localize { type = 'name_text', set = 'Stake', key = 'stake_gold' },
+          colours = { get_stake_col(8) }
+        }
+      }
+    end,
+    check_for_unlock = function(self, args)
+      return args.type == 'win_stake' and get_deck_win_stake() >= 8
+    end,
 
     loc_vars = function(self)
       return {

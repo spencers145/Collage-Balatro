@@ -4,20 +4,25 @@ SMODS.Joker {
     extra = {
       unique_suits = 2,
       x_mult = 2,
-      hands = 2,
-      hands_remaining = 0
+      hands = 3,
+      hands_remaining = 0,
+      suit = "Hearts"
     }
   },
   rarity = 2,
   pos = { x = 6, y = 2 },
   atlas = 'jokers_atlas',
   cost = 7,
-  unlocked = true,
+  unlocked = false,
   discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
   soul_pos = nil,
+
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
 
   loc_vars = function(self, info_queue, card)
     return {
@@ -25,9 +30,20 @@ SMODS.Joker {
         card.ability.extra.unique_suits,
         card.ability.extra.x_mult,
         math.max(0, card.ability.extra.hands - 1),
-        card.ability.extra.hands_remaining
+        card.ability.extra.hands_remaining,
+        localize(card.ability.extra.suit, 'suits_singular')
       }
     }
+  end,
+
+  locked_loc_vars = function(self, info_queue, card)
+    return { vars = { 4 } }
+  end,
+
+  check_for_unlock = function(self, args)
+    if args.type == 'hand' then
+      return PB_UTIL.get_unique_suits(args.scoring_hand, nil, true) >= 4
+    end
   end,
 
   calculate = function(self, card, context)
@@ -35,11 +51,11 @@ SMODS.Joker {
     if not card.debuff then
       -- Check if the card is being calculated before the scoring hand is scored and not blueprinted
       if context.before and not context.blueprint then
-        local unique_suits = PB_UTIL.get_unique_suits(context.scoring_hand)
+        local unique_suits = PB_UTIL.get_unique_suits(context.scoring_hand, true)
 
         local heart_found = false
         for i = 1, #context.scoring_hand do
-          if context.scoring_hand[i]:is_suit("Hearts") then
+          if context.scoring_hand[i]:is_suit(card.ability.extra.suit, false, true) then
             heart_found = true
             break
           end

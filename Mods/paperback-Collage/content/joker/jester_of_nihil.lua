@@ -11,37 +11,37 @@
 ----   pos = { x = 2, y = 6 },
 ----   atlas = 'jokers_atlas',
 ----   cost = 7,
-----   unlocked = true,
+----   unlocked = false,
 ----   discovered = false,
 ----   blueprint_compat = true,
 ----   eternal_compat = true,
-----   soul_pos = nil,
 
-----   set_ability = function(self, card, initial, delay_sprites)
-----     if G.STAGE == G.STAGES.RUN then
-----       -- When first created, check if the player already owns this joker
-----       local others = SMODS.find_card('j_paperback_jester_of_nihil')
+----   paperback_credit = {
+----     coder = { 'srockw' },
+----   },
 
-----       if #others > 0 then
-----         -- If they do, copy the suit of the other joker to this new one
-----         card.ability.extra.suit = others[1].ability.extra.suit
-----       else
-----         -- If they do not, select a random suit to debuff
-----         local cards = {}
-
-----         for k, v in ipairs(G.playing_cards) do
-----           if not SMODS.has_no_suit(v) then
-----             cards[#cards + 1] = v
-----           end
-----         end
-
-----         local selected = pseudorandom_element(cards, pseudoseed('jester_of_nihil'))
-
-----         if selected then
-----           card.ability.extra.suit = selected.base.suit
+----   locked_loc_vars = function(self, info_queue, card)
+----     return {
+----       vars = { 4 }
+----     }
+----   end,
+----   -- Unlock taken from Bunco
+----   check_for_unlock = function(self, args)
+----     if args.type == 'hand_contents' then
+----       local tally = 0
+----       for j = 1, #args.cards do
+----         if args.cards[j].debuff then
+----           tally = tally + 1
 ----         end
 ----       end
+----       if tally >= 4 then
+----         return true
+----       end
 ----     end
+----   end,
+
+----   set_ability = function(self, card, initial, delay_sprites)
+----     card.ability.extra.suit = G.GAME.paperback.last_scored_suit
 ----   end,
 
 ----   add_to_deck = function(self, card, from_debuff)
@@ -85,23 +85,10 @@
 ----   end,
 
 ----   calculate = function(self, card, context)
-----     -- If possible, swap suits after a hand is played
 ----     if not context.blueprint and context.after and context.cardarea == G.jokers then
-----       local last_scored = nil
-
-----       -- Only consider the last card with a suit
-----       for i = #context.scoring_hand, 1, -1 do
-----         local c = context.scoring_hand[i]
-----         if not SMODS.has_no_suit(c) then
-----           last_scored = c
-----           break
-----         end
-----       end
-
 ----       -- Only update the suit if it's a different suit
-----       if last_scored and last_scored.base.suit ~= card.ability.extra.suit then
-----         card.ability.extra.suit = last_scored.base.suit
-
+----       if G.GAME.paperback.last_scored_suit ~= card.ability.extra.suit then
+----         card.ability.extra.suit = G.GAME.paperback.last_scored_suit
 ----         G.E_MANAGER:add_event(Event {
 ----           func = function()
 ----             -- Update the debuff of all playing cards when swapping suits
@@ -125,7 +112,17 @@
 ----         mult = card.ability.extra.mult
 ----       }
 ----     end
-----   end
+----   end,
+
+----   joker_display_def = function(JokerDisplay)
+----     return {
+----       text = {
+----         { text = "+" },
+----         { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
+----       },
+----       text_config = { colour = G.C.MULT },
+----     }
+----   end,
 ---- }
 
 ---- -- We hook into the vanilla function used to update the debuffed status of cards
@@ -135,7 +132,7 @@
 
 ----   if card.area ~= G.jokers then
 ----     for k, v in ipairs(SMODS.find_card('j_paperback_jester_of_nihil')) do
-----       if card:is_suit(v.ability.extra.suit) then
+----       if card:is_suit(v.ability.extra.suit, true) then
 ----         card:set_debuff(true)
 ----         if card.debuff then card.debuffed_by_blind = true end
 ----       end

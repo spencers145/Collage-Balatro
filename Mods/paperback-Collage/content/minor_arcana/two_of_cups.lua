@@ -2,6 +2,9 @@ PB_UTIL.MinorArcana {
   key = 'two_of_cups',
   atlas = 'minor_arcana_atlas',
   pos = { x = 1, y = 0 },
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
 
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_TAGS.tag_polychrome

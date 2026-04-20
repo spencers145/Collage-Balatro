@@ -2,6 +2,9 @@ PB_UTIL.MinorArcana {
   key = 'two_of_wands',
   atlas = 'minor_arcana_atlas',
   pos = { x = 1, y = 2 },
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
 
   can_use = function(self, card)
     return true

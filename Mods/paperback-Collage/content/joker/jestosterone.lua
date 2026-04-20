@@ -13,6 +13,10 @@ SMODS.Joker {
   blueprint_compat = false,
   discovered = false,
 
+  paperback_credit = {
+    coder = { 'infinityplus' },
+  },
+
   in_pool = function(self, args)
     return not next(SMODS.find_card('j_paperback_jestrogen'))
   end,
@@ -26,7 +30,7 @@ SMODS.Joker {
   end,
 
   calculate = function(self, card, context)
-    if context.final_scoring_step and context.cardarea == G.jokers and not context.blueprint then
+    if context.after and context.cardarea == G.jokers and not context.blueprint then
       local cracked_eggs = {}
       for _, v in ipairs(context.scoring_hand) do
         if v:get_id() == card.ability.extra.checked_rank then

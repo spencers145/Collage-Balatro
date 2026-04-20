@@ -23,6 +23,10 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
 
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
+
   calculate = function(self, card, context)
     if not context.blueprint and context.open_booster and card.ability.extra.packs[context.card.config.center.kind] then
       G.E_MANAGER:add_event(Event {

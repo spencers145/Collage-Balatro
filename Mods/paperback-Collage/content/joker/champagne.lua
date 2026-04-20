@@ -3,7 +3,6 @@ SMODS.Joker {
   config = {
     extra = {
       money = 1,
-      a_money = 1,
       rounds_left = 3
     }
   },
@@ -18,6 +17,9 @@ SMODS.Joker {
   pools = {
     Food = true
   },
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
 
   loc_vars = function(self, info_queue, card)
     return {
@@ -31,8 +33,7 @@ SMODS.Joker {
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play and G.GAME.blind.boss then
       return {
-        dollars = card.ability.extra.money *
-            (context.other_card.seal and (card.ability.extra.a_money * 2) or card.ability.extra.a_money),
+        dollars = context.other_card.seal and (card.ability.extra.money * 2) or card.ability.extra.money,
         card = card
       }
     end
@@ -61,18 +62,15 @@ SMODS.Joker {
   joker_display_def = function(JokerDisplay)
     return {
       text = {
-        { text = '+$',                             colour = G.C.MONEY },
+        { text = '+$', colour = G.C.MONEY },
         { ref_table = 'card.joker_display_values', ref_value = 'money', colour = G.C.MONEY },
       },
-      -- text_confg = {
-      --   colour = G.C.MONEY
-      -- },
 
       extra = {
         {
-          { text = '(',                        colour = G.C.UI.TEXT_INACTIVE },
-          { ref_table = 'card.ability.extra.', ref_value = 'rounds_left',    colour = G.C.IMPORTANT },
-          { text = ')',                        colour = G.C.UI.TEXT_INACTIVE },
+          { text = '(', colour = G.C.UI.TEXT_INACTIVE },
+          { ref_table = 'card.ability.extra.', ref_value = 'rounds_left', colour = G.C.IMPORTANT },
+          { text = ')', colour = G.C.UI.TEXT_INACTIVE },
         }
       },
       extra_config = {
@@ -92,7 +90,7 @@ SMODS.Joker {
             local triggers = JokerDisplay.calculate_card_triggers(v, scoring_hand)
 
             for i = 1, triggers do
-              money = money + (v.seal and (card.ability.extra.a_money * 2) or card.ability.extra.a_money)
+              money = money + (v.seal and (card.ability.extra.money * 2) or card.ability.extra.money)
             end
           end
         end
@@ -104,7 +102,7 @@ SMODS.Joker {
       style_function = function(card, text, reminder_text, extra)
         if reminder_text and reminder_text.children[1] then
           reminder_text.children[1].config.colour = card.joker_display_values.active == localize('k_active') and
-          G.C.GREEN or G.C.UI.TEXT_INACTIVE
+              G.C.GREEN or G.C.UI.TEXT_INACTIVE
         end
       end
     }

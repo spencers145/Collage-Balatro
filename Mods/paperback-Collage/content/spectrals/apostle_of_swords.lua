@@ -33,6 +33,9 @@ SMODS.Consumable {
     PB_UTIL.destroy_joker(joker, function()
       card:juice_up()
       ease_ante(card.ability.extra.ante_mod)
+      if card.ability.extra.ante_mod < 0 then
+        card.ability.extra.ante_mod = card.ability.extra.ante_mod + 1
+      end
     end)
   end
 }

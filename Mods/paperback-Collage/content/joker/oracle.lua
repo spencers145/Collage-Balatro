@@ -2,7 +2,7 @@
 ----   key = "oracle",
 ----   config = {
 ----     extra = {
-----       Xchip_mod = 0.15,
+----       Xchip_mod = 0.1,
 ----       Xchip = 1
 ----     }
 ----   },
@@ -18,13 +18,18 @@
 ----     requires_minor_arcana = true
 ----   },
 
+----   paperback_credit = {
+----     coder = { 'dowfrin' }
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     card.ability.extra.Xchip = 1 + (PB_UTIL.count_used_consumables("paperback_minor_arcana", false))
 ----         * card.ability.extra.Xchip_mod
 ----     return {
 ----       vars = {
 ----         card.ability.extra.Xchip_mod,
-----         card.ability.extra.Xchip
+----         card.ability.extra.Xchip,
+----         localize('k_paperback_minor_arcana')
 ----       }
 ----     }
 ----   end,
@@ -39,9 +44,13 @@
 ----       }
 ----     end
 
-----     if context.using_consumeable and context.consumeable.ability.set == 'paperback_minor_arcana' and G.GAME.consumeable_usage[context.consumeable.config.center_key].count == 1 then
+----     if not context.blueprint and context.using_consumeable and context.consumeable.ability.set == 'paperback_minor_arcana' and G.GAME.consumeable_usage[context.consumeable.config.center_key].count == 1 then
 ----       return {
-----         message = localize('k_upgrade_ex')
+----         message = localize {
+----           type = 'variable',
+----           key = 'a_xchips',
+----           vars = { card.ability.extra.Xchip }
+----         },
 ----       }
 ----     end
 ----   end,
@@ -53,7 +62,8 @@
 ----           border_nodes = {
 ----             { text = 'X' },
 ----             { ref_table = 'card.ability.extra', ref_value = 'Xchip' }
-----           }
+----           },
+----           border_colour = G.C.CHIPS
 ----         }
 ----       },
 ----     }

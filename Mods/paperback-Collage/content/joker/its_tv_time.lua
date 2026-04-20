@@ -5,31 +5,35 @@
 
 ---- SMODS.Joker {
 ----   key = "its_tv_time",
-----   rarity = 2,
+----   rarity = 1,
 ----   pos = { x = 18, y = 7 },
 ----   atlas = "jokers_atlas",
-----   cost = 7,
-----   blueprint_compat = false,
+----   cost = 5,
+----   config = {
+----     extra = {
+----       chips = 30,
+----       suit = 'paperback_Stars'
+----     }
+----   },
+----   blueprint_compat = true,
 ----   eternal_compat = true,
 ----   perishable_compat = true,
 ----   paperback = {
-----     requires_custom_suits = true
+----     requires_stars = true
 ----   },
 
-----   in_pool = function()
-----     if G.playing_cards then
-----       for _, v in pairs(G.playing_cards) do
-----         if SMODS.has_enhancement(v, 'm_bonus') or
-----             (not SMODS.has_no_suit(v) and v.base.suit == 'paperback_Stars') then
-----           return true
-----         end
-----       end
-----     end
-----     return false
-----   end,
+
+----   paperback_credit = {
+----     coder = { 'infinityplus' },
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
-----     info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
+----     return {
+----       vars = {
+----         localize(card.ability.extra.suit, 'suits_plural'),
+----         card.ability.extra.chips
+----       }
+----     }
 ----   end,
 
 ----   add_to_deck = function(self, card, from_debuff)
@@ -39,9 +43,10 @@
 ----   end,
 
 ----   calculate = function(self, card, context)
-----     if context.check_enhancement and (context.other_card.base.suit == "paperback_Stars"
-----           or context.other_card.config.center_key == 'm_wild' or context.other_card.config.center.any_suit) then
-----       return { m_bonus = true }
+----     if context.individual and context.other_card:is_suit(card.ability.extra.suit) and (context.cardarea == G.play) then
+----       return {
+----         chips = card.ability.extra.chips
+----       }
 ----     end
 ----   end
 ---- }

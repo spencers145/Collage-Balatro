@@ -19,6 +19,9 @@
 ----   paperback = {
 ----     ignores_the_world = true
 ----   },
+----   paperback_credit = {
+----     coder = { 'srockw' }
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
 ----     return {
@@ -38,7 +41,7 @@
 ----           key = 'a_hands',
 ----           vars = { card.ability.extra.hands }
 ----         },
-----         colour = G.C.CHIPS
+----         colour = G.C.BLUE
 ----       }
 ----     end
 

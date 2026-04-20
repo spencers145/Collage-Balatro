@@ -8,6 +8,10 @@ PB_UTIL.MinorArcana {
   pos = { x = 1, y = 3 },
   unlocked = true,
   discovered = false,
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
+
   paperback = {
     requires_enhancements = true
   }

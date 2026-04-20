@@ -8,6 +8,9 @@ PB_UTIL.MinorArcana {
   paperback = {
     requires_paperclips = true
   },
+  paperback_credit = {
+    coder = { 'dowfrin' }
+  },
 
   loc_vars = function(self, info_queue, card)
     return {

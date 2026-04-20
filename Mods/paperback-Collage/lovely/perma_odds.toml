@@ -1,0 +1,61 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = """        perma_h_dollars = self.ability and self.ability.perma_h_dollars or 0,"""
+position = "after"
+payload = """perma_paperback_plus_odds = self.ability and self.ability.perma_paperback_plus_odds or 0,
+perma_paperback_h_plus_odds = self.ability and self.ability.perma_paperback_h_plus_odds or 0,
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = """                    bonus_x_chips = self.ability.perma_x_chips ~= 0 and (self.ability.perma_x_chips + 1) or nil,"""
+position = "after"
+payload = """perma_paperback_plus_odds = self.ability.perma_paperback_plus_odds ~= 0 and (self.ability.perma_paperback_plus_odds) or nil,
+perma_paperback_h_plus_odds = self.ability.perma_paperback_h_plus_odds ~= 0 and (self.ability.perma_paperback_h_plus_odds) or nil,
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = """    if specific_vars and specific_vars.bonus_h_dollars then
+        localize{type = 'other', key = 'card_extra_h_dollars', nodes = desc_nodes, vars = {SMODS.signed_dollars(specific_vars.bonus_h_dollars)}}
+    end"""
+position = "after"
+payload = """
+if specific_vars and specific_vars.perma_paperback_plus_odds then
+    localize { type = "other", key = "perma_paperback_plus_odds", nodes = desc_nodes, vars = { SMODS.signed(specific_vars.perma_paperback_plus_odds) } }
+end
+if specific_vars and specific_vars.perma_paperback_h_plus_odds then
+    localize { type = "other", key = "perma_paperback_h_plus_odds", nodes = desc_nodes, vars = { SMODS.signed(specific_vars.perma_paperback_h_plus_odds) } }
+end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/game_object.lua"]'
+pattern = """            if specific_vars and specific_vars.bonus_h_dollars then
+                localize{type = 'other', key = 'card_extra_h_dollars', nodes = desc_nodes, vars = {SMODS.signed_dollars(specific_vars.bonus_h_dollars)}}
+            end"""
+position = "after"
+payload = """
+if specific_vars and specific_vars.perma_paperback_plus_odds then
+    localize { type = "other", key = "perma_paperback_plus_odds", nodes = desc_nodes, vars = { SMODS.signed(specific_vars.perma_paperback_plus_odds) } }
+end
+if specific_vars and specific_vars.perma_paperback_h_plus_odds then
+    localize { type = "other", key = "perma_paperback_h_plus_odds", nodes = desc_nodes, vars = { SMODS.signed(specific_vars.perma_paperback_h_plus_odds) } }
+end
+"""
+overwrite = true
+match_indent = true

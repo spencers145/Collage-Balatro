@@ -15,6 +15,9 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = false,
   soul_pos = nil,
+  paperback_credit = {
+    coder = { 'oppositewolf' },
+  },
 
   no_pool_flag = "soft_taco_can_spawn",
   pools = {

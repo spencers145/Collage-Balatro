@@ -18,6 +18,10 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
 
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
+
   calculate = function(self, card, context)
     if context.retrigger_joker_check and PB_UTIL.is_card(context.other_card) then
       if context.other_card.config.center.rarity == card.ability.extra.rarity then
@@ -26,5 +30,13 @@ SMODS.Joker {
         }
       end
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      retrigger_joker_function = function(card, retrigger_joker)
+        return card.config.center.rarity == retrigger_joker.ability.extra.rarity and 1 or 0
+      end
+    }
+  end,
 }

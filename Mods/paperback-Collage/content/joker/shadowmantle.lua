@@ -17,6 +17,10 @@
 ----     requires_stars = true
 ----   },
 
+----   paperback_credit = {
+----     coder = { 'dowfrin' }
+----   },
+
 ----   in_pool = function(self, args)
 ----     -- Only in pool if you have a Star or Wild in deck
 ----     return PB_UTIL.has_suit_in_deck(self.config.extra.suit, false)

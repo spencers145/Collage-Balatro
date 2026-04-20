@@ -8,6 +8,9 @@ SMODS.Joker {
   discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
 
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.p_buffoon_normal_1

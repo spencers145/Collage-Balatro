@@ -7,6 +7,9 @@ PB_UTIL.MinorArcana {
   },
   atlas = 'minor_arcana_atlas',
   pos = { x = 1, y = 1 },
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
 
   can_use = function(self, card)
     -- Prevent changing eternal jokers

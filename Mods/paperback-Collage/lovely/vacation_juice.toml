@@ -1,0 +1,43 @@
+[manifest]
+version = "1.0.0"
+priority = -2
+
+# end_round()
+# Prevent logic for advancing to next Blind
+# if G.GAME.paperback.vacation_juice_trigger is true.
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.GAME.voucher_restock = nil"
+position = "before"
+match_indent = true
+payload = "if not G.GAME.paperback.vacation_juice_trigger then"
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.FUNCS.draw_from_discard_to_deck()"
+position = "before"
+match_indent = true
+payload = "end"
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''if G.GAME.round_resets.blind == G.P_BLINDS.bl_small then
+G.GAME.round_resets.blind_states.Small = 'Defeated'
+'''
+position = "before"
+match_indent = true
+payload = "if not G.GAME.paperback.vacation_juice_trigger then"
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = '''
+if G.GAME.round_resets.temp_handsize then G.hand:change_size(-G.GAME.round_resets.temp_handsize); G.GAME.round_resets.temp_handsize = nil end
+'''
+position = "before"
+match_indent = true
+payload = "end"

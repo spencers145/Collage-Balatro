@@ -2,7 +2,7 @@
 ----   key = 'moribund',
 ----   config = {
 ----     extra = {
-----       a_mult = 7,
+----       a_mult = 5,
 ----       mult = 0,
 ----     }
 ----   },
@@ -17,6 +17,10 @@
 ----   perishable_compat = false,
 ----   soul_pos = nil,
 
+----   paperback_credit = {
+----     coder = { 'oppositewolf' },
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     return {
 ----       vars = {
@@ -29,9 +33,9 @@
 ----   calculate = function(self, card, context)
 ----     -- Prevent Blueprint or Brainstorm from copying these effects
 ----     if not context.blueprint then
-----       if context.end_of_round then
+----       if context.end_of_round and context.main_eval then
 ----         -- If blind not cleared, double current mult
-----         if context.game_over then
+----         if to_big(G.GAME.chips - G.GAME.blind.chips) < to_big(0) then
 ----           card.ability.extra.mult = card.ability.extra.mult * 2
 
 ----           return {
@@ -39,10 +43,8 @@
 ----             colour = G.C.MULT,
 ----             card = card
 ----           }
-----         end
-
-----         -- If blind cleared and 0 hands left, upgrade joker
-----         if G.GAME.current_round.hands_left == 0 and context.main_eval then
+----         elseif G.GAME.current_round.hands_left == 0 then
+----           -- If blind cleared and 0 hands left, upgrade joker
 ----           card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.a_mult
 
 ----           return {
@@ -62,5 +64,15 @@
 ----         }
 ----       end
 ----     end
-----   end
+----   end,
+
+----   joker_display_def = function(JokerDisplay)
+----     return {
+----       text = {
+----         { text = "+" },
+----         { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
+----       },
+----       text_config = { colour = G.C.MULT },
+----     }
+----   end,
 ---- }

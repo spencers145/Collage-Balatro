@@ -14,15 +14,21 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   soul_pos = nil,
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
 
   enhancement_gate = "m_wild",
 
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
-
     return {
       vars = {
-        card.ability.extra.x_mult
+        localize {
+          type = 'name_text',
+          set = 'Enhanced',
+          key = 'm_wild'
+        },
       }
     }
   end,
@@ -33,7 +39,6 @@ SMODS.Joker {
         if context.other_card.ability.name == 'Wild Card' then
           return {
             mult = context.other_card:get_chip_bonus(),
-            x_mult = card.ability.extra.x_mult,
             card = card
           }
         end
@@ -44,15 +49,8 @@ SMODS.Joker {
   joker_display_def = function(JokerDisplay)
     return {
       text = {
-        { text = "+",                              colour = G.C.MULT },
+        { text = "+", colour = G.C.MULT },
         { ref_table = "card.joker_display_values", ref_value = "mult", colour = G.C.MULT },
-        { text = " " },
-        {
-          border_nodes = {
-            { text = 'X' },
-            { ref_table = 'card.joker_display_values', ref_value = 'xMult' }
-          }
-        }
       },
 
 
@@ -71,20 +69,17 @@ SMODS.Joker {
       calc_function = function(card)
         local text, _, scoring_hand = JokerDisplay.evaluate_hand()
         local total_mult = 0
-        local total_xMult = 1
 
         for k, v in pairs(scoring_hand) do
           if v.ability.name == "Wild Card" then
             local triggers = JokerDisplay.calculate_card_triggers(v, scoring_hand)
             for _ = 1, triggers do
               total_mult = total_mult + v:get_chip_bonus()
-              total_xMult = total_xMult * card.ability.extra.x_mult
             end
           end
         end
 
         card.joker_display_values.mult = total_mult
-        card.joker_display_values.xMult = total_xMult
         card.joker_display_values.localized_text = localize { type = 'name_text', key = 'm_wild', set = 'Enhanced' }
       end
     }

@@ -10,6 +10,10 @@ SMODS.Joker {
   eternal_compat = true,
   soul_pos = nil,
 
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
+
   -- On Joker spawn, add additional slot in shop
   add_to_deck = function(self, card, from_debuff)
     G.E_MANAGER:add_event(Event({

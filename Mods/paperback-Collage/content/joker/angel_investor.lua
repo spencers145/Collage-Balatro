@@ -16,6 +16,9 @@
 ----   paperback = {
 ----     requires_tags = true,
 ----   },
+----   paperback_credit = {
+----     coder = { 'srockw' }
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
 ----     info_queue[#info_queue + 1] = G.P_TAGS.tag_paperback_angel_investment

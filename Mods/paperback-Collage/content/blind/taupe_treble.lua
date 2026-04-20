@@ -4,6 +4,7 @@ SMODS.Blind {
     showdown = true, min = 1
   },
   discovered = false,
+  dollars = 8,
   in_pool = function(self)
     if G.playing_cards then
       local count = 0
@@ -20,14 +21,10 @@ SMODS.Blind {
   atlas = 'music_blinds_atlas',
   pos = { y = 13 },
 
-  debuff_hand = function(self, cards, hand, handname, check)
-    if cards then
-      for _, v in ipairs(cards) do
-        if next(SMODS.get_enhancements(v)) then
-          return false
-        end
-      end
-      return true
+  recalc_debuff = function(self, card, from_blind)
+    if next(SMODS.get_enhancements(card)) then
+      return false
     end
+    return true
   end
 }

@@ -9,11 +9,13 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
   discovered = false,
-  unlocked = false,
-  unlock_condition = {hidden = true},
+  paperback_credit = {
+    coder = { 'srockw' },
+    artist = { 'nevernamed' }
+  },
 
   calculate = function(self, card, context)
-    if context.end_of_round and context.main_eval and (G.GAME.blind.boss or G.GAME.blind.name == "Big Blind") then
+    if context.end_of_round and context.main_eval and (G.GAME.blind.boss or G.GAME.blind:get_type() == "Big") then
       local money = 0
 
       for _, v in ipairs(G.jokers.cards) do

@@ -7,6 +7,9 @@ PB_UTIL.MinorArcana {
   pos = { x = 0, y = 1 },
   unlocked = true,
   discovered = false,
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
 
   loc_vars = function(self, info_queue, card)
     return {

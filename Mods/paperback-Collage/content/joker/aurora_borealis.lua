@@ -9,11 +9,19 @@ SMODS.Joker {
   pos = { x = 15, y = 10 },
   atlas = 'jokers_atlas',
   cost = 6,
-  unlocked = true,
+  unlocked = false,
   discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
   soul_pos = nil,
+  paperback_credit = {
+    coder = { 'dowfrin' }
+  },
+
+  locked_loc_vars = function(self, info_queue, card)
+    return { vars = { 3 } }
+  end,
+  unlock_condition = { type = 'modify_jokers', extra = { polychrome = true, count = 3 } },
 
   loc_vars = function(self, info_queue, card)
     local xmult
@@ -48,5 +56,31 @@ SMODS.Joker {
         xmult = xmult
       }
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        {
+          border_nodes = {
+            { text = "X" },
+            { ref_table = "card.joker_display_values", ref_value = "xmult", retrigger_type = "exp" }
+          }
+        }
+      },
+      calc_function = function(card)
+        local xmult = 1
+        if G.jokers then
+          local count = 0
+          for k, v in ipairs(G.jokers.cards) do
+            if v.edition and not v.edition.negative then
+              count = count + 1
+            end
+          end
+          xmult = 1 + (count * card.ability.extra.a_xmult)
+        end
+        card.joker_display_values.xmult = xmult
+      end
+    }
+  end,
 }

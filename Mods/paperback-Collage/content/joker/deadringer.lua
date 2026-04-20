@@ -10,7 +10,7 @@
 ----   pools = {
 ----     Music = true
 ----   },
-----   rarity = 2,
+----   rarity = 3,
 ----   pos = { x = 4, y = 8 },
 ----   atlas = 'jokers_atlas',
 ----   cost = 7,
@@ -18,6 +18,9 @@
 ----   discovered = false,
 ----   blueprint_compat = true,
 ----   eternal_compat = true,
+----   paperback_credit = {
+----     coder = { 'srockw' },
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
 ----     return {
@@ -40,13 +43,13 @@
 ----   joker_display_def = function(JokerDisplay)
 ----     return {
 ----       reminder_text = {
-----         { text = '(',   colour = G.C.UI.TEXT_INACTIVE },
+----         { text = '(', colour = G.C.UI.TEXT_INACTIVE },
 ----         { text = 'Ace', colour = G.C.IMPORTANT },
-----         { text = ', ',  colour = G.C.UI.TEXT_INACTIVE },
-----         { text = '7',   colour = G.C.IMPORTANT },
-----         { text = ', ',  colour = G.C.UI.TEXT_INACTIVE },
-----         { text = '9',   colour = G.C.IMPORTANT },
-----         { text = ')',   colour = G.C.UI.TEXT_INACTIVE },
+----         { text = ', ', colour = G.C.UI.TEXT_INACTIVE },
+----         { text = '7', colour = G.C.IMPORTANT },
+----         { text = ', ', colour = G.C.UI.TEXT_INACTIVE },
+----         { text = '9', colour = G.C.IMPORTANT },
+----         { text = 'x2)', colour = G.C.UI.TEXT_INACTIVE },
 ----       },
 ----     }
 ----   end,

@@ -15,6 +15,10 @@ SMODS.Joker {
   eternal_compat = false,
   discovered = false,
 
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
+
   loc_vars = function(self, info_queue, card)
     return {
       vars = {

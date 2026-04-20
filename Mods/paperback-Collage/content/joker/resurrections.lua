@@ -19,6 +19,10 @@
 ----   blueprint_compat = false,
 ----   eternal_compat = false,
 
+----   paperback_credit = {
+----     coder = { 'srockw' }
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
 ----     local numerator, denominator = PB_UTIL.chance_vars(card, nil, card.ability.extra.chance_mult)
@@ -63,5 +67,27 @@
 ----         card.ability.extra.chance_mult = card.ability.extra.chance_mult + 1
 ----       end
 ----     end
-----   end
+----   end,
+
+----   joker_display_def = function(JokerDisplay)
+----     return {
+----       extra = {
+----         {
+----           { text = '(' },
+----           { ref_table = 'card.joker_display_values', ref_value = 'odds' },
+----           { text = ')' },
+----         },
+----       },
+----       extra_config = {
+----         colour = G.C.GREEN,
+----         scale = 0.3,
+----       },
+----       calc_function = function(card)
+----         card.joker_display_values.odds = localize {
+----           type = 'variable', key = "jdis_odds",
+----           vars = { PB_UTIL.chance_vars(card, nil, card.ability.extra.chance_mult) }
+----         }
+----       end
+----     }
+----   end,
 ---- }

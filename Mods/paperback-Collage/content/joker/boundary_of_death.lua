@@ -6,7 +6,7 @@
 ----       mult = 46
 ----     }
 ----   },
-----   rarity = 3,
+----   rarity = 2,
 ----   pos = { x = 11, y = 2 },
 ----   atlas = "jokers_atlas",
 ----   cost = 8,
@@ -14,6 +14,9 @@
 ----   eternal_compat = true,
 ----   perishable_compat = true,
 ----   enhancement_gate = 'm_mult',
+----   paperback_credit = {
+----     coder = { 'srockw' }
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
 ----     info_queue[#info_queue + 1] = G.P_CENTERS.m_mult
@@ -35,6 +38,13 @@
 
 ----   joker_display_def = function(JokerDisplay)
 ----     return {
+----       text = {
+----         { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" },
+----         { text = "x", scale = 0.35 },
+----         { text = "+", colour = G.C.MULT },
+----         { ref_table = "card.ability.extra", ref_value = "mult", colour = G.C.MULT }
+----       },
+
 ----       reminder_text = {
 ----         { text = "(" },
 ----         {
@@ -59,6 +69,19 @@
 ----       },
 
 ----       calc_function = function(card)
+----         local count = 0
+----         if G.play then
+----           local text, _, scoring_hand = JokerDisplay.evaluate_hand()
+----           if text ~= 'Unknown' then
+----             for _, scoring_card in pairs(scoring_hand) do
+----               if SMODS.has_enhancement(scoring_card, "m_mult") then
+----                 count = count + JokerDisplay.calculate_card_triggers(scoring_card, scoring_hand)
+----               end
+----             end
+----           end
+----         end
+----         card.joker_display_values.count = count
+
 ----         card.joker_display_values.odds = localize {
 ----           type = 'variable',
 ----           key = 'jdis_odds',

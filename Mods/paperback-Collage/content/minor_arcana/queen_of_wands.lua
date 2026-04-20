@@ -7,6 +7,9 @@ PB_UTIL.MinorArcana {
       odds = 3
     }
   },
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
   paperback = {
     requires_editions = true
   },

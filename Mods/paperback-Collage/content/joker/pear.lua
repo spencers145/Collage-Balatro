@@ -15,8 +15,14 @@ SMODS.Joker {
   discovered = false,
   blueprint_compat = true,
   eternal_compat = false,
+  perishable_compat = false,
   pools = {
     Food = true
+  },
+
+
+  paperback_credit = {
+    coder = { 'metanite' }
   },
 
   loc_vars = function(self, info_queue, card)
@@ -65,5 +71,15 @@ SMODS.Joker {
         chips = card.ability.extra.chips
       }
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        { text = "+" },
+        { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" }
+      },
+      text_config = { colour = G.C.CHIPS },
+    }
+  end,
 }

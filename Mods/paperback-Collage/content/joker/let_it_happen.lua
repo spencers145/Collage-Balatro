@@ -12,11 +12,34 @@ SMODS.Joker {
   pos = { x = 7, y = 2 },
   atlas = "jokers_atlas",
   cost = 8,
-  unlocked = true,
+  unlocked = false,
   discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
   soul_pos = nil,
+
+  paperback_credit = {
+    coder = { 'oppositewolf' },
+  },
+
+  locked_loc_vars = function(self, info_queue, card)
+    local other_name = localize('k_unknown')
+    if G.P_CENTERS['b_plasma'].unlocked then
+      other_name = localize { type = 'name_text', set = 'Back', key = 'b_plasma' }
+    end
+
+    return {
+      vars = {
+        other_name,
+        localize { type = 'name_text', set = 'Stake', key = 'stake_purple' },
+        colours = { get_stake_col(6) }
+      }
+    }
+  end,
+
+  check_for_unlock = function(self, args)
+    return args.type == 'win' and G.GAME.selected_back.effect.center.key == 'b_plasma' and G.GAME.stake >= 6
+  end,
 
   loc_vars = function(self, info_queue, card)
     local hands_played_string = ""
@@ -57,6 +80,11 @@ SMODS.Joker {
           func = function()
             PB_UTIL.apply_plasma_effect(context.blueprint_card or card)
             table.insert(card.ability.extra.hands_played_this_ante, context.scoring_name)
+            table.sort(card.ability.extra.hands_played_this_ante,
+              function(a, b)
+                return SMODS.PokerHands[a].order > SMODS.PokerHands[b].order
+              end
+            )
           end
         }
       end
@@ -72,5 +100,33 @@ SMODS.Joker {
         colour = { 0.8, 0.45, 0.85, 1 }
       }
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        { ref_table = "card.joker_display_values", ref_value = "text" },
+      },
+      text_config = { colour = G.C.PURPLE },
+      calc_function = function(card)
+        local scoring_name, _, _ = JokerDisplay.evaluate_hand()
+        card.joker_display_values.will_trigger = true
+        -- No trigger if hand has been played this ante
+        for i = 1, #card.ability.extra.hands_played_this_ante do
+          if scoring_name == card.ability.extra.hands_played_this_ante[i] then
+            card.joker_display_values.will_trigger = false
+            break
+          end
+        end
+        card.joker_display_values.text = card.joker_display_values.will_trigger and "Balance" or "-"
+      end,
+      style_function = function(card, text, reminder_text, extra)
+        if text and text.children[1] then
+          text.children[1].config.colour = card.joker_display_values.will_trigger and G.C.PURPLE or
+              G.C.UI.TEXT_INACTIVE
+        end
+        return false
+      end
+    }
+  end,
 }

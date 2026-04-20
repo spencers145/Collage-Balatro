@@ -2,7 +2,7 @@
 ----   key = 'full_moon',
 ----   config = {
 ----     extra = {
-----       odds = 3
+----       odds = 2
 ----     }
 ----   },
 ----   rarity = 2,
@@ -13,6 +13,9 @@
 ----   discovered = false,
 ----   blueprint_compat = true,
 ----   eternal_compat = true,
+----   paperback_credit = {
+----     coder = { 'srockw' },
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
 ----     local numerator, denominator = PB_UTIL.chance_vars(card)
@@ -59,5 +62,24 @@
 ----         return nil, true
 ----       end
 ----     end
-----   end
+----   end,
+
+----   joker_display_def = function(JokerDisplay)
+----     return {
+----       extra = {
+----         {
+----           { text = '(' },
+----           { ref_table = 'card.joker_display_values', ref_value = 'odds' },
+----           { text = ')' },
+----         },
+----       },
+----       extra_config = {
+----         colour = G.C.GREEN,
+----         scale = 0.3,
+----       },
+----       calc_function = function(card)
+----         card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { PB_UTIL.chance_vars(card) } }
+----       end
+----     }
+----   end,
 ---- }

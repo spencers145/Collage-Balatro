@@ -21,6 +21,10 @@
 ----     requires_enhancements = true
 ----   },
 
+----   paperback_credit = {
+----     coder = { 'srockw' }
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     info_queue[#info_queue + 1] = G.P_CENTERS.m_paperback_stained
 
@@ -50,7 +54,8 @@
 ----   end,
 
 ----   calculate = function(self, card, context)
-----     if context.individual and context.cardarea == G.hand and not context.blueprint then
+----     if context.individual and context.cardarea == G.hand and not context.blueprint
+----     and not context.end_of_round then
 ----       if SMODS.has_enhancement(context.other_card, 'm_paperback_stained') and card.ability.extra.remaining > 0 then
 ----         card.ability.extra.remaining = card.ability.extra.remaining - 1
 

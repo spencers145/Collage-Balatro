@@ -14,6 +14,10 @@
 ----   blueprint_compat = false,
 ----   eternal_compat = true,
 
+----   paperback_credit = {
+----     coder = { 'oppositewolf' },
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     return {
 ----       vars = {
@@ -23,9 +27,9 @@
 ----   end,
 
 ----   calculate = function(self, card, context)
-----     -- Double all sell values at end of round and if hands played == 1
+----     -- Double all sell values at end of round and if hands played <= 1
 ----     if context.end_of_round and context.main_eval and not context.blueprint then
-----       if G.GAME.current_round.hands_played == 1 then
+----       if G.GAME.current_round.hands_played <= 1 then
 ----         -- Double all Joker sell values
 ----         for _, v in ipairs(G.jokers.cards) do
 ----           PB_UTIL.modify_sell_value(v, math.min(v.sell_cost, card.ability.extra.money_max))

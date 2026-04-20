@@ -4,18 +4,20 @@
 ----   atlas     = 'card_sleeves_atlas',
 ----   pos       = { x = 0, y = 0 },
 
-----   loc_vars  = function(self)
-----     return {
-----       key = self:loc_key(),
-----       vars = {
-----         localize {
-----           type = 'name_text',
-----           set = 'Joker',
-----           key = 'j_paperback_shopping_center'
-----         }
-----       }
-----     }
-----   end,
+----  loc_vars  = function(self)
+----    return {
+----      key = self:loc_key(),
+----      vars = {
+----        localize {
+----          type = 'name_text',
+----          set = 'Joker',
+----          key = 'j_paperback_shopping_center'
+----        }
+----      }
+----    }
+----  end,
+----  unlocked = false,
+----  unlock_condition = { deck = "b_paperback_paper", stake = "stake_red" },
 
 ----   apply     = function(self, sleeve)
 ----     if self:is_buffed() then

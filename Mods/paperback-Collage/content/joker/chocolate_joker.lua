@@ -14,6 +14,9 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   soul_pos = nil,
+  paperback_credit = {
+    coder = { 'dowfrin' },
+  },
 
   loc_vars = function(self, info_queue, card)
     local xchips
@@ -32,5 +35,24 @@ SMODS.Joker {
         xchips = 1 + (#G.jokers.cards * card.ability.extra.a_xchips)
       }
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        {
+          border_nodes = {
+            { text = "X" },
+            { ref_table = "card.joker_display_values", ref_value = "xchips", retrigger_type = "exp" }
+          },
+          border_colour = G.C.CHIPS
+        }
+      },
+      calc_function = function(card)
+        local xchips = 1
+        if G.jokers then xchips = 1 + (#G.jokers.cards * card.ability.extra.a_xchips) end
+        card.joker_display_values.xchips = xchips
+      end
+    }
+  end,
 }

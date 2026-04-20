@@ -3,7 +3,6 @@
 ----   config = {
 ----     extra = {
 ----       xmult_mod = 0.1,
-----       xmult_red = 0.1,
 ----       xmult = 1,
 ----     }
 ----   },
@@ -15,11 +14,15 @@
 ----   discovered = false,
 ----   blueprint_compat = true,
 ----   eternal_compat = true,
-----   perishable_compat = true,
+----   perishable_compat = false,
 ----   paperback = {
 ----     requires_enhancements = true
 ----   },
 ----   enhancement_gate = 'm_paperback_domino',
+
+----   paperback_credit = {
+----     coder = { 'dowfrin' }
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
 ----     info_queue[#info_queue + 1] = G.P_CENTERS.m_paperback_domino
@@ -32,7 +35,6 @@
 ----           set = 'Enhanced',
 ----           key = 'm_paperback_domino'
 ----         },
-----         card.ability.extra.xmult_red,
 ----         card.ability.extra.xmult,
 ----       }
 ----     }
@@ -40,18 +42,16 @@
 
 ----   calculate = function(self, card, context)
 ----     if context.before and not context.blueprint then
+----       local upgraded
 ----       for _, v in ipairs(context.scoring_hand) do
 ----         if SMODS.has_enhancement(v, 'm_paperback_domino') then
 ----           card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_mod
-----           return {
-----             message = localize('k_upgrade_ex'),
-----           }
+----           upgraded = true
 ----         end
 ----       end
-----       if card.ability.extra.xmult - card.ability.extra.xmult_red > 1 then
-----         card.ability.extra.xmult = card.ability.extra.xmult - card.ability.extra.xmult_red
+----       if upgraded then
 ----         return {
-----           message = localize('paperback_downgrade_ex'),
+----           message = localize('k_upgrade_ex'),
 ----         }
 ----       end
 ----     end
@@ -62,5 +62,18 @@
 ----         x_mult = card.ability.extra.xmult,
 ----       }
 ----     end
+----   end,
+
+----   joker_display_def = function(JokerDisplay)
+----     return {
+----       text = {
+----         {
+----           border_nodes = {
+----             { text = "X" },
+----             { ref_table = "card.ability.extra", ref_value = "xmult", retrigger_type = "exp" }
+----           }
+----         }
+----       },
+----     }
 ----   end,
 ---- }

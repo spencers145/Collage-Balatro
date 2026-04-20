@@ -1,3 +1,13 @@
+-- Literally just an implementation of table.find since this version of lua doesn't have one by default
+function PB_UTIL.find(table, value)
+  for i, v in ipairs(table) do
+    if v == value then
+      return i
+    end
+  end
+  return nil
+end
+
 -- Initialize Food pool if not existing, which may be created by other mods.
 -- Any joker can add itself to this pool by adding a pools table to its definition
 -- Credits to Cryptid for the idea
@@ -5,23 +15,36 @@ if not SMODS.ObjectTypes.Food then
   SMODS.ObjectType {
     key = 'Food',
     default = 'j_egg',
-    cards = {},
-    inject = function(self)
-      SMODS.ObjectType.inject(self)
-      -- Insert base game food jokers
-      for k, _ in pairs(PB_UTIL.vanilla_food) do
-        self:inject_card(G.P_CENTERS[k])
+    cards = copy_table(PB_UTIL.vanilla_food),
+  }
+end
+
+--- Initialize ObjectTypes for Minor Arcana suits
+if PB_UTIL.config.minor_arcana_enabled then
+  for _, suit in ipairs { "cups", "wands", "swords", "pentacles" } do
+    local cards = {}
+
+    for _, v in ipairs(PB_UTIL.ENABLED_MINOR_ARCANA) do
+      -- Checks if the string ends in "_of_pentacles" for example
+      if v:match(".*_of_" .. suit .. "$") then
+        cards['c_paperback_' .. v] = true
       end
     end
-  }
+
+    SMODS.ObjectType {
+      key = "paperback_minor_arcana_" .. suit,
+      default = 'c_paperback_ace_of_' .. suit,
+      cards = cards
+    }
+  end
 end
 
 ---Checks if a string is a valid paperclip key
 ---@param str string
 ---@return boolean
 function PB_UTIL.is_paperclip(str)
-  for _, v in ipairs(PB_UTIL.ENABLED_PAPERCLIPS) do
-    if 'paperback_' .. v == str then
+  for _, v in ipairs(PB_UTIL.Paperclips) do
+    if v == str then
       return true
     end
   end
@@ -47,14 +70,18 @@ end
 --- @return integer
 function PB_UTIL.count_paperclips(args)
   local clips = 0
-
-  for _, v in ipairs(args.area and args.area.cards or {}) do
+  if not args.area then return 0 end
+  for _, v in ipairs(args.area.cards or args.area) do
     local debuff_check = args.allow_debuff or not v.debuff
     local highlighted_check = not args.exclude_highlighted or not v.highlighted
 
     if PB_UTIL.has_paperclip(v) and debuff_check and highlighted_check then
       clips = clips + 1
     end
+  end
+
+  for i, v in ipairs(SMODS.find_card('j_paperback_clothespin', args.allow_debuff)) do
+    clips = clips + 1
   end
 
   return clips
@@ -73,10 +100,8 @@ end
 ---Applies a paperclip with provided type to the provided card.
 ---A playing card can only have a single paperclip.
 ---@param card table
----@param type Paperclip
-function PB_UTIL.set_paperclip(card, type)
-  local key = 'paperback_' .. type .. '_clip'
-
+---@param key string
+function PB_UTIL.set_paperclip(card, key)
   if card and PB_UTIL.is_paperclip(key) then
     PB_UTIL.remove_paperclip(card)
     SMODS.Stickers[key]:apply(card, true)
@@ -85,10 +110,20 @@ end
 
 ---Fetches a random paperclip type using a given seed
 ---@param seed string
-function PB_UTIL.poll_paperclip(seed)
-  local clip = pseudorandom_element(PB_UTIL.ENABLED_PAPERCLIPS, pseudoseed(seed))
-  clip = string.sub(clip, 1, #clip - 5)
+---@param include_special boolean? if true, special clips such as Platinum Clips are allowed be polled
+---@return string
+function PB_UTIL.poll_paperclip(seed, include_special)
+  local clip = pseudorandom_element(PB_UTIL.Paperclips, pseudoseed(seed))
+  while not include_special and PB_UTIL.is_special_clip(clip) do
+    clip = pseudorandom_element(PB_UTIL.Paperclips, pseudoseed(seed))
+  end
   return clip
+end
+
+---Checks if a clip is a Special Paperclip
+---@param clip string
+function PB_UTIL.is_special_clip(clip)
+  return PB_UTIL.is_paperclip(clip) and SMODS.Stickers[clip].special
 end
 
 ---Checks if a provided card is classified as a "Food Joker"
@@ -205,7 +240,7 @@ end
 function PB_UTIL.set_sell_value(card, amount)
   if not card.set_cost then return end
   card.ability.paperback_forced_base_sell_cost = amount
-  card.ability.extra_value = nil
+  card.ability.extra_value = 0
   card:set_cost()
 end
 
@@ -213,7 +248,8 @@ end
 ---@param card table
 ---@return number
 function PB_UTIL.calculate_stick_xMult(card)
-  local xMult = card.ability.extra.xMult
+  local xMult = card.ability.extra.xMult or 1
+  local other_sticks = 0
 
   -- Only calculate the xMult if the G.jokers cardarea exists
   if G.jokers and G.jokers.cards then
@@ -224,13 +260,21 @@ function PB_UTIL.calculate_stick_xMult(card)
     end
   end
 
+  if card.ability.extra.xMult_if_stick and other_sticks >= 1 then
+    xMult = card.ability.extra.xMult_if_stick
+  end
+  if card.ability.extra.xMult then
+    xMult = xMult + card.ability.extra.xMult * other_sticks
+  end
+
   return xMult
 end
 
 ---Gets the number of unique suits in a provided scoring hand
 ---@param scoring_hand table
 ---@param bypass_debuff boolean?
----@param flush_calc boolean?
+---@param flush_calc boolean? Usually use this instead of bypass_debuff for Jokers:
+--- debuffed wild cards are considered their original suit only
 ---@return integer
 function PB_UTIL.get_unique_suits(scoring_hand, bypass_debuff, flush_calc)
   -- Set each suit's count to 0
@@ -239,6 +283,11 @@ function PB_UTIL.get_unique_suits(scoring_hand, bypass_debuff, flush_calc)
   for k, _ in pairs(SMODS.Suits) do
     suits[k] = 0
   end
+
+  -- NOTE greedy algorithm is technically wrong for cards with weird suit combos,
+  -- for example a card with suit A+B might count for A, blocking another card
+  -- that can only be A
+  -- (a bipartite matching algorithm would work)
 
   -- First we cover all the non Wild Cards in the hand
   for _, card in ipairs(scoring_hand) do
@@ -295,9 +344,11 @@ end
 --- Creates and redeems the specified voucher
 ---@param key string
 function PB_UTIL.redeem_voucher(key)
+  local x = G.shop_vouchers and (G.shop_vouchers.T.x + G.shop_vouchers.T.w / 2) or G.hand.T.x
+  local y = G.shop_vouchers and G.shop_vouchers.T.y or (G.hand.T.y + G.ROOM.T.y + 9)
+
   local voucher = Card(
-    G.shop_vouchers.T.x + G.shop_vouchers.T.w / 2,
-    G.shop_vouchers.T.y,
+    x, y,
     G.CARD_W, G.CARD_H, G.P_CARDS.empty,
     G.P_CENTERS[key],
     { bypass_discovery_center = true, bypass_discovery_ui = true }
@@ -737,12 +788,49 @@ end
 ---Used to check whether a card is a light or dark suit
 ---@param card table
 ---@param type 'light' | 'dark'
+---@param bypass_debuff boolean?
+---@param flush_calc boolean? Usually use this instead of bypass_debuff for Jokers:
+--- debuffed wild cards are considered their original suit only
 ---@return boolean
-function PB_UTIL.is_suit(card, type)
+function PB_UTIL.is_suit(card, type, bypass_debuff, flush_calc)
+  assert(type == 'light' or type == 'dark')
   for _, v in ipairs(type == 'light' and PB_UTIL.light_suits or PB_UTIL.dark_suits) do
-    if card:is_suit(v) then return true end
+    if card:is_suit(v, bypass_debuff, flush_calc) then return true end
   end
   return false
+end
+
+--- PB_UTIL.is_non_suit(card, X) checks if `card` specifically can only be a non-X suit.
+--- Usually used to check for a negative effect happening, like
+--- in Derecho: if the hand contains a non-dark -> no upgrade.
+---
+--- Works with edge cases:
+--- - Stones return false (not a suit)
+--- - Wilds return false (can always count as an X)
+--- - Debuffed cards with a base suit of non-X return false,
+---   if bypass_debuff and flush_calc are both false
+---   (debuffed cards are non-scoring)
+---
+--- These edge cases are also why this should generally be used for negative effects only.
+---
+---@param card table
+---@param type 'string' 'light', 'dark', or a suit key
+---@param bypass_debuff boolean?
+---@param flush_calc boolean? Usually use this instead of bypass_debuff for Jokers:
+--- debuffed wild cards are considered their original suit only
+---@return boolean
+function PB_UTIL.is_non_suit(card, type, bypass_debuff, flush_calc)
+  local suit_arr = (
+    type == 'light' and PB_UTIL.light_suits
+    or type == 'dark' and PB_UTIL.dark_suits
+    or { type }
+  )
+  for _, v in ipairs(suit_arr) do
+    if card:is_suit(v, bypass_debuff, flush_calc) then return false end
+  end
+  if SMODS.has_no_suit(card) then return false end
+  if card.debuff and not bypass_debuff and not flush_calc then return false end
+  return true
 end
 
 ---Checks if the provided suit is currently in the deck
@@ -804,15 +892,29 @@ function PB_UTIL.has_modded_suit_in_deck()
   return false
 end
 
+-- Balance a fraction of chips and mult. Return the new values.
+-- This just does the math, no side effects
+---@param chips number
+---@param mult number
+---@param frac number? -- Defaults to 1
+---@return number
+---@return number
+function PB_UTIL.calculate_balance_frac(chips, mult, frac)
+  if not frac then frac = 1 end
+  local tot = (chips + mult) * frac
+  return math.floor(chips * (1 - frac) + tot / 2), math.floor(mult * (1 - frac) + tot / 2)
+end
+
 --- Balances chips and shows the cosmetic effects just like Plasma deck
 ---@param card (table|Card)?
 ---@param only_visual boolean whether to only do the visual effects
-function PB_UTIL.apply_plasma_effect(card, only_visual)
+---@param frac -- Fraction of chips and mult to balance
+function PB_UTIL.apply_plasma_effect(card, only_visual, frac)
   -- Actually balance the chips and mult
   if not only_visual then
-    local tot = hand_chips + mult
-    hand_chips = mod_chips(math.floor(tot / 2))
-    mult = mod_mult(math.floor(tot / 2))
+    local new_chips, new_mult = PB_UTIL.calculate_balance_frac(hand_chips, mult, frac)
+    hand_chips = mod_chips(new_chips)
+    mult = mod_mult(new_mult)
   end
 
   update_hand_text({ delay = 0 }, { mult = mult, chips = hand_chips })
@@ -831,7 +933,7 @@ function PB_UTIL.apply_plasma_effect(card, only_visual)
       if card then
         SMODS.calculate_effect({
           message = localize('k_balanced'),
-          colour  = { 0.8, 0.45, 0.85, 1 },
+          colour = { 0.8, 0.45, 0.85, 1 },
           instant = true
         }, card)
       end
@@ -868,6 +970,14 @@ function PB_UTIL.apply_plasma_effect(card, only_visual)
   }))
 
   delay(0.6)
+end
+
+--- Convert number to string, ensuring either `+` or `-` is put in front
+--- (SMODS.signed will leave 0 as is)
+--- @param val number
+--- @return string
+function PB_UTIL.force_signed(val)
+  return (val >= 0 and '+' or '') .. val
 end
 
 --- Logic for the Panorama Jokers
@@ -1063,31 +1173,34 @@ end
 ---@param seed string|number
 ---@param base_numerator number|nil -- If skipped, defaults to 1
 ---@param base_denominator number|nil -- If skipped, tries to access `obj.ability.extra.odds`
----@param key string|nil -- If skipped, sets to `"paperback_" .. seed`
+---@param identifier string|nil -- If skipped, sets to `"paperback_" .. seed`
 ---@return boolean
-function PB_UTIL.chance(obj, seed, base_numerator, base_denominator, key)
+function PB_UTIL.chance(obj, seed, base_numerator, base_denominator, identifier)
   return SMODS.pseudorandom_probability(
     obj,
     seed,
     base_numerator or 1,
     base_denominator or (obj.ability and obj.ability.extra and obj.ability.extra.odds),
-    key or ('paperback_' .. seed)
+    identifier or ('paperback_' .. seed)
   )
 end
 
 --- Wrapper function around SMODS.get_probability_vars
----@param obj Card|table
----@param key string|nil -- If skipped, tries to set it to `obj.config.center_key`
+---@param obj? Card|table
+---@param identifier? string -- If skipped, tries to set it to `obj.config.center_key`
 ---@param base_numerator number|nil -- If skipped, defaults to 1
 ---@param base_denominator number|nil -- If skipped, tries to access `obj.ability.extra.odds`
 ---@return number numerator
 ---@return number denominator
-function PB_UTIL.chance_vars(obj, key, base_numerator, base_denominator)
+function PB_UTIL.chance_vars(obj, identifier, base_numerator, base_denominator)
+  -- todo: many calls to PB_UTIL.chance_vars don't use the same identifier
+  -- as the corresponding PB_UTIL.chance
+  -- (this doesn't matter much, we don't use identifiers)
   return SMODS.get_probability_vars(
     obj,
     base_numerator or 1,
-    base_denominator or (obj.ability and obj.ability.extra and obj.ability.extra.odds),
-    key or (obj.config and obj.config.center_key),
+    base_denominator or (obj and obj.ability and obj.ability.extra and obj.ability.extra.odds),
+    identifier or (obj and obj.config and obj.config.center_key),
     false
   )
 end
@@ -1097,4 +1210,194 @@ end
 ---@return boolean
 function PB_UTIL.is_card(c)
   return c and type(c) == "table" and c.is and type(c.is) == "function" and c:is(Card)
+end
+
+--- Whether this center is considered banned, either through:
+--- - banned_keys from the base game
+--- - banned_run_keys from paperback
+--- - due to missing paperback setting requirements
+---@param center table any table under G.P_CENTERS or SMODS.Centers
+---@return boolean
+function PB_UTIL.is_banned(center)
+  if G.GAME.banned_keys[center.key] or G.GAME.paperback.banned_run_keys[center.key] then
+    return true
+  end
+
+  for _, v in pairs(center.paperback and center.paperback.requirements or {}) do
+    if not PB_UTIL.config[v.setting] then
+      return true
+    end
+  end
+
+  return false
+end
+
+-- Returns a table of all the unique special effects in the deck
+---@param check_for_enhancements boolean
+---@param check_for_seals boolean
+---@return integer
+function PB_UTIL.special_cards_in_deck(check_for_enhancements, check_for_seals)
+  local enhancements, seals = {}, {}
+  check_for_enhancements = check_for_enhancements or false
+  check_for_seals = check_for_seals or false
+
+  if G.playing_cards then
+    for _, v in pairs(G.playing_cards) do
+      -- Check for an enhancement
+      if check_for_enhancements then
+        for k, _ in pairs(SMODS.get_enhancements(v)) do
+          PB_UTIL.add_unique_value(enhancements, k)
+        end
+      end
+
+      -- Check for a seal
+      if check_for_seals then
+        if v.Mid.seal then
+          PB_UTIL.add_unique_value(seals, v.Mid.seal)
+        end
+      end
+    end
+  end
+
+  local total =
+      (enhancements and #enhancements or 0)
+      + (seals and #seals or 0)
+
+  return total
+end
+
+---@param tbl table
+---@param value any
+function PB_UTIL.add_unique_value(tbl, value)
+  for _, v in pairs(tbl) do
+    if v == value then
+      return
+    end
+  end
+
+  table.insert(tbl, value)
+end
+
+-- Return true if `card` is an EGO Gift.
+---@param card Card
+---@return boolean
+function PB_UTIL.is_ego_gift(card)
+  return card.ability.set == "paperback_ego_gift" or card.config.center_key == "c_paperback_golden_bough"
+end
+
+-- Returns the number of things destroyed in `context`.
+---@param context CalcContext
+---@return number
+function PB_UTIL.count_destroyed_things(context)
+  if context.remove_playing_cards then return #context.removed end
+  if context.paperback and context.paperback.destroying_non_playing_card then return 1 end
+  return 0
+end
+
+-- Returns true if a jimbocards is at 0 hands left
+---@return boolean
+function PB_UTIL.check_jimbocards_at_0()
+  for _, v in ipairs(SMODS.find_card('j_paperback_jimbocards')) do
+    if v.ability.extra.hands_to_death <= 0 then
+      return true
+    end
+  end
+  return false
+end
+
+-- Creates an array of card prototypes that are valid for creating challenge decks
+---@param t { suits: string[], ranks: string[] }
+---@return { s:string, r:string }[]
+function PB_UTIL.create_deck(t)
+  local cards = {}
+  local suits = t.suits or {}
+  local ranks = t.ranks or {}
+
+  for _, suit in ipairs(suits) do
+    for _, rank in ipairs(ranks) do
+      if SMODS.Suits[suit] and SMODS.Ranks[rank] then
+        cards[#cards + 1] = {
+          s = SMODS.Suits[suit].card_key,
+          r = SMODS.Ranks[rank].card_key
+        }
+      end
+    end
+  end
+
+  return cards
+end
+
+-- Returns a function meant to be used for banned_cards inside
+-- a challenge that handles keys that might not exist
+---@param list string[]
+---@return fun(): {id:string}[]
+function PB_UTIL.banned_challenge_centers(list)
+  return function()
+    local banned = {}
+
+    for _, v in ipairs(list) do
+      if G.P_CENTERS[v] then
+        banned[#banned + 1] = { id = v }
+      end
+    end
+
+    return banned
+  end
+end
+
+--- Calculate function for the Suit Drink Jokers
+--- @param self (SMODS.Center)
+--- @param card (Card)
+--- @param context (CalcContext)
+function PB_UTIL.suit_drink_calculate(self, card, context)
+  if context.individual and context.cardarea == G.play then
+    if context.other_card:is_suit(card.ability.extra.suit) then
+      if card.ability.extra.remaining > 0 then
+        context.other_card.ability[card.ability.extra.upgrade] =
+            (context.other_card.ability[card.ability.extra.upgrade] or 1) + card.ability.extra.amount
+
+        if not context.blueprint then
+          card.ability.extra.remaining = card.ability.extra.remaining - 1
+        end
+
+        return {
+          message = localize('k_upgrade_ex'),
+          colour = G.C.SUITS[card.ability.extra.suit],
+        }
+      end
+    end
+  end
+
+  if context.after and not context.blueprint and card.ability.extra.remaining == 0 then
+    PB_UTIL.destroy_joker(card)
+
+    return {
+      message = localize('paperback_consumed_ex'),
+      colour = G.C.RED,
+      message_card = card
+    }
+  end
+end
+
+--- Loc Vars function for the Suit Drink Jokers
+--- @param self (SMODS.Center)
+--- @param card (Card)
+--- @param context (CalcContext)
+function PB_UTIL.suit_drink_loc_vars(self, info_queue, card)
+  return {
+    vars = {
+      card.ability.extra.remaining,
+      localize(card.ability.extra.suit, 'suits_plural'),
+      card.ability.extra.amount,
+      colours = { G.C.SUITS[card.ability.extra.suit] }
+    },
+  }
+end
+
+--- Count the number of entries in a table not in a sequence
+--- @param table (table)
+function PB_UTIL.count_entries(table)
+  local count = 0
+  for _ in pairs(table) do count = count + 1 end
+  return count
 end

@@ -18,6 +18,10 @@
 ----     requires_crowns = true
 ----   },
 
+----   paperback_credit = {
+----     coder = { 'srockw' }
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     local xMult = PB_UTIL.calculate_stick_xMult(card)
 

@@ -19,6 +19,9 @@
 ----   blueprint_compat = false,
 ----   eternal_compat = true,
 ----   soul_pos = nil,
+----   paperback_credit = {
+----     coder = { 'oppositewolf' }
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
 ----     info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
@@ -27,7 +30,9 @@
 ----     return {
 ----       vars = {
 ----         numerator,
-----         denominator
+----         denominator,
+----         localize(card.ability.extra.suit1, 'suits_plural'),
+----         localize(card.ability.extra.suit2, 'suits_plural')
 ----       }
 ----     }
 ----   end,
@@ -40,7 +45,7 @@
 
 ----       -- Go through each card in the scoring hand and check if it is a valid card
 ----       for k, v in pairs(ctx.scoring_hand) do
-----         if (v:is_suit(card.ability.extra.suit1) or v:is_suit(card.ability.extra.suit2)) and not v.debuff and not v.edition then
+----         if (v:is_suit(card.ability.extra.suit1) or v:is_suit(card.ability.extra.suit2)) and not v.edition then
 ----           -- If the odds succeed, set the card's edition to polychrome
 ----           if PB_UTIL.chance(card, "black_rainbows") then
 ----             polychrome_triggered = true

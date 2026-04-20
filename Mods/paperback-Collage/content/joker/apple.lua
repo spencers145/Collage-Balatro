@@ -2,7 +2,8 @@ SMODS.Joker {
   key = "apple",
   config = {
     extra = {
-      odds = 4,
+      odds = 3,
+      break_odds = 6
     }
   },
   rarity = 1,
@@ -18,15 +19,20 @@ SMODS.Joker {
   pools = {
     Food = true
   },
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
 
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
     local numerator, denominator = PB_UTIL.chance_vars(card)
-
+    local num_break, dem_break = PB_UTIL.chance_vars(card, "apple_destruction", 1, card.ability.extra.break_odds)
     return {
       vars = {
         numerator,
-        denominator
+        denominator,
+        num_break,
+        dem_break
       }
     }
   end,
@@ -36,28 +42,32 @@ SMODS.Joker {
     if context.buying_card and context.card.ability.consumeable then
       local bought_card = context.card
 
-      if PB_UTIL.chance(card, 'apple_creation') then
+      if PB_UTIL.chance(card, 'apple_creation', 1, card.ability.extra.odds) then
         -- Copy the consumable
         G.E_MANAGER:add_event(Event({
           trigger = 'after',
+          delay = 0.5,
+          blocking = false,
           func = function()
             -- Give the negative consumable
-            local copy = copy_card(bought_card)
-            copy:add_to_deck()
-            copy:set_edition('e_negative', true)
-            G.consumeables:emplace(copy)
+            if G.STATE ~= G.STATES.PLAY_TAROT then
+              local copy = copy_card(bought_card)
+              copy:add_to_deck()
+              copy:set_edition('e_negative', true)
+              G.consumeables:emplace(copy)
 
-            return true
+              return true
+            end
           end
         }))
 
         -- Don't destroy the joker if it was triggered due to blueprint
-        if not context.blueprint then
+        if not context.blueprint and PB_UTIL.chance(card, 'apple_destruction', 1, card.ability.extra.break_odds) then
           PB_UTIL.destroy_joker(card)
 
           return {
             message = localize('paperback_destroyed_ex'),
-            colour = G.C.MULT
+            colour = G.C.RED
           }
         end
 

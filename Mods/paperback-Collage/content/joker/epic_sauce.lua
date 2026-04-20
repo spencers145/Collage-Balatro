@@ -17,6 +17,9 @@ SMODS.Joker {
   pools = {
     Food = true
   },
+  paperback_credit = {
+    coder = { 'srockw' },
+  },
 
   loc_vars = function(self, info_queue, card)
     return {
@@ -50,10 +53,23 @@ SMODS.Joker {
 
           return {
             message = localize('paperback_too_hot_ex'),
-            colour = G.C.MULT
+            colour = G.C.RED
           }
         end
       end
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        {
+          border_nodes = {
+            { text = "X" },
+            { ref_table = "card.ability.extra", ref_value = "x_mult", retrigger_type = "exp" }
+          }
+        }
+      },
+    }
+  end,
 }

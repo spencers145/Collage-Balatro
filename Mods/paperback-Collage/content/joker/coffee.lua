@@ -2,9 +2,9 @@ SMODS.Joker {
   key = "coffee",
   config = {
     extra = {
-      hand_size = 0,
+      hand_size = 1,
       increase = 1,
-      odds = 5
+      odds = 6
     }
   },
   rarity = 2,
@@ -15,9 +15,13 @@ SMODS.Joker {
   discovered = false,
   blueprint_compat = false,
   eternal_compat = false,
+  perishable_compat = false,
   soul_pos = nil,
   pools = {
     Food = true
+  },
+  paperback_credit = {
+    coder = { 'srockw' },
   },
 
   loc_vars = function(self, info_queue, card)
@@ -31,6 +35,14 @@ SMODS.Joker {
         denominator
       }
     }
+  end,
+
+  add_to_deck = function(self, card, from_debuff)
+    G.hand:change_size(card.ability.extra.hand_size)
+  end,
+
+  remove_from_deck = function(self, card, from_debuff)
+    G.hand:change_size(-card.ability.extra.hand_size)
   end,
 
   calculate = function(self, card, context)
@@ -49,9 +61,6 @@ SMODS.Joker {
     if context.setting_blind and not context.blind.boss then
       if PB_UTIL.chance(card, 'coffee') then
         PB_UTIL.destroy_joker(card)
-
-        -- Revert all the hand size increase when eaten
-        G.hand:change_size(-card.ability.extra.hand_size)
 
         return {
           message = localize('paperback_consumed_ex'),

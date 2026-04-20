@@ -3,7 +3,7 @@ PB_UTIL.Paperclip {
   atlas = 'paperclips_atlas',
   pos = { x = 0, y = 1 },
   badge_colour = G.C.YELLOW,
-  badge_text_colour = G.C.PAPERBACK_BLACK,
+  text_colour = G.C.PAPERBACK_BLACK,
   config = {
     dollar_odds = 3,
     dollars = 3,

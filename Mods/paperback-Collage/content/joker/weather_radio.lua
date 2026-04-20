@@ -16,6 +16,11 @@ SMODS.Joker {
   discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
+  perishable_compat = false,
+
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
 
   loc_vars = function(self, info_queue, card)
     local hand = G.GAME.paperback.weather_radio_hand
@@ -64,6 +69,27 @@ SMODS.Joker {
 
         G.GAME.blind:disable()
 
+        attention_text {
+          text = localize("paperback_warning_ex"),
+          scale = 1,
+          hold = 0.75 * 1.25 - 0.2,
+          backdrop_colour = G.C.RED,
+          align = "bm",
+          major = card,
+          offset = { x = 0, y = 0.05 * card.T.h }
+        }
+
+        for i = 1, 15 do
+          G.E_MANAGER:add_event(Event({
+            trigger = "after",
+            delay = 0.1 * (i % 3 + 1),
+            func = function()
+              play_sound("tarot1", 0.9 + 0.2 * pseudorandom("weather_sfx"))
+              card:juice_up(0.8, 0.5)
+              return true
+            end
+          }))
+        end
         return {
           message = localize('ph_boss_disabled')
         }
@@ -73,6 +99,13 @@ SMODS.Joker {
     if context.joker_main then
       return {
         x_mult = card.ability.extra.x_mult
+      }
+    end
+
+    if context.end_of_round and context.main_eval and not context.blueprint then
+      return {
+        message = localize("paperback_watch_ex"),
+        colour = G.C.BLUE
       }
     end
   end

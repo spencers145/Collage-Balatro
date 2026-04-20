@@ -16,6 +16,10 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = true,
 
+  paperback_credit = {
+    coder = { 'srockw' },
+  },
+
   loc_vars = function(self, info_queue, card)
     local numerator, denominator = PB_UTIL.chance_vars(card)
 
@@ -39,5 +43,27 @@ SMODS.Joker {
         end
       end
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        { text = "+" },
+        { ref_table = "card.joker_display_values", ref_value = "count", retrigger_type = "mult" },
+      },
+      text_config = { colour = G.C.SECONDARY_SET.Planet },
+      extra = {
+        {
+          { text = "(" },
+          { ref_table = "card.joker_display_values", ref_value = "odds" },
+          { text = ")" },
+        }
+      },
+      extra_config = { colour = G.C.GREEN, scale = 0.3 },
+      calc_function = function(card)
+        card.joker_display_values.count = #G.hand.highlighted == card.ability.extra.cards and 1 or 0
+        card.joker_display_values.odds = localize { type = 'variable', key = "jdis_odds", vars = { PB_UTIL.chance_vars(card) } }
+      end
+    }
+  end,
 }

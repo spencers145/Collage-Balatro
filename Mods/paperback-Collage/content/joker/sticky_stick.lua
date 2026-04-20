@@ -2,7 +2,7 @@ SMODS.Joker {
   key = 'sticky_stick',
   config = {
     extra = {
-      xMult = 1
+      xMult_if_stick = 2
     }
   },
   rarity = 1,
@@ -16,12 +16,16 @@ SMODS.Joker {
   soul_pos = nil,
   yes_pool_flag = "sticks_can_spawn",
 
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
+
   loc_vars = function(self, info_queue, card)
     local xMult = PB_UTIL.calculate_stick_xMult(card)
 
     return {
       vars = {
-        card.ability.extra.xMult,
+        card.ability.extra.xMult_if_stick,
         xMult
       }
     }

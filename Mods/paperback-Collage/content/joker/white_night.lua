@@ -16,11 +16,17 @@
 ----   eternal_compat = true,
 ----   perishable_compat = false,
 ----   paperback = {
-----     requires_ranks = true
+----     requires_ranks = true,
+----     permanently_eternal = true,
+----     indestructible = true,
 ----   },
 
 ----   specific_vars = {
 ----     not_hidden = true
+----   },
+
+----   paperback_credit = {
+----     coder = { 'metanite' }
 ----   },
 
 ----   loc_vars = function(self, info_queue, card)

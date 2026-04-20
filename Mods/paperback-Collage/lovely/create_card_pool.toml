@@ -1,0 +1,29 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# In create_card(), remove EGO Gifts from pool
+# if the card is created directly in the consumable area
+
+# This only catches some cases where EGO Gifts are directly spawned.
+# See also: hooks.lua: pseudorandom_select() special case
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "local _pool, _pool_key = get_current_pool(_type, _rarity, legendary, key_append)"
+position = "before"
+match_indent = true
+payload = '''
+if area == G.consumeables then
+    PB_UTIL.create_card_in_consumable_area = true
+end
+'''
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "local _pool, _pool_key = get_current_pool(_type, _rarity, legendary, key_append)"
+position = "after"
+match_indent = true
+payload = '''
+PB_UTIL.create_card_in_consumable_area = nil
+'''

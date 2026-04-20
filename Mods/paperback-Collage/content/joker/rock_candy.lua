@@ -24,6 +24,10 @@
 ----     requires_stars = true
 ----   },
 
+----   paperback_credit = {
+----     coder = { 'srockw' }
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     local numerator, denominator = PB_UTIL.chance_vars(card)
 
@@ -31,7 +35,8 @@
 ----       vars = {
 ----         card.ability.extra.mult,
 ----         numerator,
-----         denominator
+----         denominator,
+----         localize(card.ability.extra.suit, 'suits_plural')
 ----       }
 ----     }
 ----   end,

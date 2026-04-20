@@ -5,6 +5,9 @@ PB_UTIL.MinorArcana {
   },
   atlas = 'minor_arcana_atlas',
   pos = { x = 2, y = 5 },
+  paperback_credit = {
+    coder = { 'dowfrin' }
+  },
 
   use = function(self, card, area)
     PB_UTIL.use_consumable_animation(card, G.hand.highlighted, function()

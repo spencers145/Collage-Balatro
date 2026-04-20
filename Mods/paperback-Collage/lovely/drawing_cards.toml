@@ -6,10 +6,11 @@ priority = 0
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = "local flags = SMODS.calculate_context({drawing_cards = true, amount = hand_space})"
+pattern = "for i=1, hand_space do --draw cards from deckL"
 position = "before"
 match_indent = true
 payload = '''
+
 local paperback_ret = {}
 SMODS.calculate_context({
   paperback = {
@@ -24,4 +25,5 @@ for _, v in ipairs(paperback_ret) do
     end
   end
 end
+
 '''

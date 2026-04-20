@@ -20,6 +20,10 @@
 ----     requires_ranks = true
 ----   },
 
+----   paperback_credit = {
+----     coder = { 'dowfrin' }
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     if not card.ability.extra.fed then
 ----       return {

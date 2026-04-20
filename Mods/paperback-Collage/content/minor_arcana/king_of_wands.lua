@@ -2,6 +2,9 @@ PB_UTIL.MinorArcana {
   key = 'king_of_wands',
   atlas = 'minor_arcana_atlas',
   pos = { x = 6, y = 3 },
+  paperback_credit = {
+    coder = { 'srockw' }
+  },
 
   can_use = function(self, card)
     return G.jokers and #G.jokers.cards < G.jokers.config.card_limit

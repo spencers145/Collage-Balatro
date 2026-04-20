@@ -1,0 +1,24 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if self.playing_card and not initial then check_for_unlock({type = 'modify_deck'}) end"
+position = "after"
+match_indent = true
+payload = '''
+  self.modified = true
+'''
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "self.added_to_deck = nil"
+position = "after"
+match_indent = true
+payload = '''
+  self.modified = nil
+'''

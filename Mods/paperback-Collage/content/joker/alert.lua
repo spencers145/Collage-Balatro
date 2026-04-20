@@ -19,6 +19,9 @@
 ----   eternal_compat = false,
 ----   soul_pos = { x = 4, y = 7 },
 ----   yes_pool_flag = 'paperback_alert_can_spawn',
+----   paperback_credit = {
+----     coder = { 'srockw' }
+----   },
 
 ----   loc_vars = function(self, info_queue, card)
 ----     return {

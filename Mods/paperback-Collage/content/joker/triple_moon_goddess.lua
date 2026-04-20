@@ -1,10 +1,10 @@
 ---- if PB_UTIL.config.minor_arcana_enabled then
 ----   SMODS.Joker {
-----     key = 'triple_moon_goddess_minor_arcana',
+----     key = 'triple_moon_goddess',
 ----     config = {
 ----       extra = {
-----         tarot_odds = 3,
-----         minor_arcana_odds = 6
+----         tarot_odds = 2,
+----         minor_arcana_odds = 4
 ----       }
 ----     },
 ----     rarity = 2,
@@ -17,6 +17,10 @@
 ----     eternal_compat = true,
 ----     perishable_compat = true,
 
+----     paperback_credit = {
+----       coder = { 'srockw' }
+----     },
+
 ----     loc_vars = function(self, info_queue, card)
 ----       local n1, d1 = PB_UTIL.chance_vars(card, nil, nil, card.ability.extra.tarot_odds)
 ----       local n2, d2 = PB_UTIL.chance_vars(card, nil, nil, card.ability.extra.minor_arcana_odds)
@@ -25,7 +29,8 @@
 ----         vars = {
 ----           n1, d1,
 ----           n2, d2
-----         }
+----         },
+----         key = "j_paperback_triple_moon_goddess_minor_arcana"
 ----       }
 ----     end,
 
@@ -71,7 +76,8 @@
 ----       extra = {
 ----         planet_odds = 3,
 ----         tarot_odds = 3,
-----       }
+----       },
+----       key = "j_paperback_triple_moon_goddess"
 ----     },
 ----     rarity = 2,
 ----     pos = { x = 5, y = 4 },
@@ -83,6 +89,10 @@
 ----     eternal_compat = true,
 ----     perishable_compat = true,
 ----     soul_pos = nil,
+
+----     paperback_credit = {
+----       coder = { 'srockw' }
+----     },
 
 ----     loc_vars = function(self, info_queue, card)
 ----       local n1, d1 = PB_UTIL.chance_vars(card, nil, nil, card.ability.extra.planet_odds)

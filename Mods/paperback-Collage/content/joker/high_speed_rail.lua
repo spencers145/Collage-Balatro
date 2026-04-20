@@ -14,6 +14,10 @@ SMODS.Joker {
   perishable_compat = false,
   discovered = false,
 
+  paperback_credit = {
+    coder = { 'srockw' },
+  },
+
   loc_vars = function(self, info_queue, card)
     return {
       vars = {
@@ -69,5 +73,15 @@ SMODS.Joker {
         mult = card.ability.extra.mult
       }
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        { text = "+" },
+        { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
+      },
+      text_config = { colour = G.C.MULT },
+    }
+  end,
 }

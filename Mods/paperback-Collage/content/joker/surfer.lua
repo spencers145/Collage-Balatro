@@ -18,11 +18,14 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = false,
 
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
+
   loc_vars = function(self, info_queue, card)
     return {
       vars = {
         card.ability.extra.a_mult_held,
-        --card.ability.extra.a_chips_scored,
         localize(card.ability.extra.rank, 'ranks'),
         card.ability.extra.mult,
       }
@@ -48,29 +51,21 @@ SMODS.Joker {
       end
     end
 
-    -- Gains +5 chips for each 10 scored
-    --[[if context.individual and context.cardarea == G.play and not context.blueprint then
-      if PB_UTIL.is_rank(context.other_card, card.ability.extra.rank) then
-        card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.a_chips_scored
-
-        return {
-          message = localize {
-            type = 'variable',
-            key = 'a_chips',
-            vars = { card.ability.extra.a_chips_scored }
-          },
-          colour = G.C.CHIPS,
-          juice_card = context.other_card,
-          message_card = card,
-        }
-      end
-    end]]
-
     -- Give chips during scoring
     if context.joker_main then
       return {
         mult = card.ability.extra.mult
       }
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        { text = "+" },
+        { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" }
+      },
+      text_config = { colour = G.C.CHIPS },
+    }
+  end,
 }

@@ -2,50 +2,115 @@ SMODS.Joker {
   key = "solar_system",
   config = {
     extra = {
-      x_mult_mod = 2,
-      x_mult = 1
+      x_mult_mod = 1.5,
+      x_mult = 1.5,
     }
   },
-  rarity = 3,
+  rarity = 2,
   pos = { x = 7, y = 0 },
   atlas = "jokers_atlas",
   cost = 8,
-  unlocked = true,
+  unlocked = false,
   discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
-  soul_pos = nil,
+  paperback = {
+    extra_button = {
+      text = 'paperback_ui_info',
+      colour = G.C.PAPERBACK_MAIN_COLOR,
+      click = function(self, card)
+        card.paperback_show_hands = not card.paperback_show_hands
+        self.text = card.paperback_show_hands and 'paperback_ui_info_expanded' or 'paperback_ui_info'
+      end,
+      should_show = function(self, card)
+        return card.area == G.jokers
+      end
+    }
+  },
 
-  set_ability = function(self, card, initial, delay_sprites)
-    PB_UTIL.update_solar_system(card)
-  end,
+  paperback_credit = {
+    coder = { 'oppositewolf' }
+  },
 
   loc_vars = function(self, info_queue, card)
+    local x_mult = card.ability.extra.x_mult_mod * G.GAME.paperback.solar_system_ct
+
     return {
       vars = {
         card.ability.extra.x_mult_mod,
-        card.ability.extra.x_mult
-      }
+        x_mult,
+        localize('k_planet')
+      },
+      main_end = card.paperback_show_hands and PB_UTIL.create_base_remaining_hands_ui(function(hand)
+        return hand.level <= G.GAME.paperback.solar_system_ct
+      end)
+    }
+  end,
+
+  check_for_unlock = function(self, args)
+    local planets_used = 0
+    for k, v in pairs(G.GAME.consumeable_usage) do
+      if v.set == 'Planet' then planets_used = planets_used + 1 end
+    end
+    return planets_used >= 9
+  end,
+
+  locked_loc_vars = function(self, info_queue, card)
+    return {
+      vars = { 9, localize('k_planet') }
     }
   end,
 
   calculate = function(self, card, context)
     -- If a hand is being leveled up, recalculate the xMult bonus
-    if context.paperback and context.paperback.level_up_hand then
+    -- The last two contexts are failsafes in case a hand is leveled up in an unorthodox way which paperback.level_up_hand doesn't catch
+    if not context.blueprint and ((context.paperback and context.paperback.level_up_hand) or context.before or context.ending_shop) then
       PB_UTIL.update_solar_system(card)
+      if card.ability.extra.message_flag then
+        card.ability.extra.message_flag = nil
+        SMODS.calculate_effect({
+          message = localize('k_upgrade_ex'),
+          colour = G.C.MULT,
+        }, card)
+      end
     end
 
     -- Gives the xMult during play
     if context.joker_main then
+      local x_mult = card.ability.extra.x_mult_mod * G.GAME.paperback.solar_system_ct
       return {
-        x_mult = card.ability.extra.x_mult,
+        x_mult = x_mult,
         card = card
       }
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        {
+          border_nodes = {
+            { text = "X" },
+            { ref_table = "card.joker_display_values", ref_value = "x_mult", retrigger_type = "exp" }
+          }
+        }
+      },
+      calc_function = function(card)
+        card.joker_display_values.x_mult = card.ability.extra.x_mult_mod * G.GAME.paperback.solar_system_ct
+      end,
+    }
+  end,
 }
 
+-- Update global information for Solar System.
+--
+-- Implementation notes: If a Solar System is owned, this function is called by its
+-- calculate() function, in time for message_flag to work.
+-- If no Solar System is owned, we also call this function in
+-- mod-global calculate to keep it updated.
+-- That means this function is redundantly called in both places, which is awkward
 function PB_UTIL.update_solar_system(card)
+  local old = G.GAME.paperback.solar_system_ct
   local hands = G.GAME.hands
 
   -- set the minimum level to the first planet in the subset
@@ -61,6 +126,11 @@ function PB_UTIL.update_solar_system(card)
     end
   end
 
-  -- set the card's x_mult to a value depending on the minimum level
-  card.ability.extra.x_mult = card.ability.extra.x_mult_mod * math.max(1, to_number(min_level)) - 1
+  -- set global to minimum level
+  G.GAME.paperback.solar_system_ct = math.max(1, to_number(min_level))
+  if old < G.GAME.paperback.solar_system_ct then
+    for _, v in ipairs(SMODS.find_card('j_paperback_solar_system')) do
+      v.ability.extra.message_flag = true
+    end
+  end
 end

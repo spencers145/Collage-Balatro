@@ -21,6 +21,10 @@
 ----   },
 ----   enhancement_gate = 'm_paperback_ceramic',
 
+----   paperback_credit = {
+----     coder = { 'srockw' },
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     return {
 ----       vars = {
@@ -36,9 +40,7 @@
 ----   end,
 
 ----   add_to_deck = function(self, card, from_debuff)
-----     if from_debuff then
-----       G.GAME.paperback.ceramic_inc = G.GAME.paperback.ceramic_inc + card.ability.extra.total
-----     end
+----     G.GAME.paperback.ceramic_inc = G.GAME.paperback.ceramic_inc + card.ability.extra.total
 ----   end,
 
 ----   remove_from_deck = function(self, card, from_debuff)

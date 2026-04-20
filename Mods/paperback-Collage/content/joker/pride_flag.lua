@@ -1,6 +1,6 @@
 if PB_UTIL.config.suits_enabled then
   SMODS.Joker {
-    key = 'pride_flag_spectrums',
+    key = 'pride_flag',
     config = {
       extra = {
         a_chips = 12,
@@ -11,7 +11,7 @@ if PB_UTIL.config.suits_enabled then
     pos = { x = 3, y = 0 },
     atlas = 'jokers_atlas',
     cost = 6,
-    unlocked = true,
+    unlocked = false,
     discovered = false,
     blueprint_compat = true,
     eternal_compat = true,
@@ -20,13 +20,25 @@ if PB_UTIL.config.suits_enabled then
       requires_spectrum_or_suit = true
     },
 
+    paperback_credit = {
+      coder = { 'oppositewolf' }
+    },
+
     loc_vars = function(self, info_queue, card)
       return {
         vars = {
           card.ability.extra.a_chips,
           card.ability.extra.chips
-        }
+        },
+        key = "j_paperback_pride_flag_spectrums"
       }
+    end,
+
+    check_for_unlock = function(self, args)
+      return PB_UTIL.spectrum_played()
+    end,
+    locked_loc_vars = function(self, info_queue, card)
+      return { key = "j_paperback_pride_flag_spectrums" }
     end,
 
     -- Calculate function for the Joker
@@ -39,13 +51,11 @@ if PB_UTIL.config.suits_enabled then
 
           SMODS.calculate_effect {
             message = localize('k_reset'),
-            colour = G.C.MULT,
+            colour = G.C.RED,
             card = card,
           }
-        end
-
-        -- Give chips if hand contains a Spectrum
-        if PB_UTIL.get_unique_suits(context.scoring_hand, nil, true) >= 5 then
+          -- Give chips if hand contains a Spectrum
+        elseif PB_UTIL.get_unique_suits(context.full_hand, nil, true) >= 5 then
           card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.a_chips
 
           SMODS.calculate_effect {
@@ -62,11 +72,21 @@ if PB_UTIL.config.suits_enabled then
           chips = card.ability.extra.chips
         }
       end
-    end
+    end,
+
+    joker_display_def = function(JokerDisplay)
+      return {
+        text = {
+          { text = "+" },
+          { ref_table = "card.ability.extra", ref_value = "chips", retrigger_type = "mult" }
+        },
+        text_config = { colour = G.C.CHIPS },
+      }
+    end,
   }
 else
   SMODS.Joker {
-    key = 'pride_flag_no_spectrums',
+    key = 'pride_flag',
     config = {
       extra = {
         a_mult = 2,
@@ -77,20 +97,49 @@ else
     pos = { x = 3, y = 0 },
     atlas = 'jokers_atlas',
     cost = 6,
-    unlocked = true,
+    unlocked = false,
     discovered = false,
     blueprint_compat = true,
     eternal_compat = true,
     perishable_compat = false,
     soul_pos = nil,
 
+    paperback_credit = {
+      coder = { 'oppositewolf' }
+    },
     loc_vars = function(self, info_queue, card)
       return {
         vars = {
           card.ability.extra.a_mult,
           card.ability.extra.mult
-        }
+        },
+        key = "j_paperback_pride_flag_no_spectrums"
       }
+    end,
+
+    locked_loc_vars = function(self, info_queue, card)
+      return {
+        vars = {
+          4
+        },
+        key = "j_paperback_pride_flag_no_spectrums"
+      }
+    end,
+
+    check_for_unlock = function(self, args)
+      if args.type == 'hand' then
+        local new_cards = {}
+        local wild_check = false
+
+        for _, card in ipairs(args.scoring_hand) do
+          if SMODS.has_any_suit(card) and not wild_check then
+            wild_check = true
+          else
+            table.insert(new_cards, card)
+          end
+        end
+        return wild_check and PB_UTIL.get_unique_suits(new_cards, nil, true) >= 4
+      end
     end,
 
     -- Calculate function for the Joker
@@ -118,6 +167,16 @@ else
           mult = card.ability.extra.mult
         }
       end
-    end
+    end,
+
+    joker_display_def = function(JokerDisplay)
+      return {
+        text = {
+          { text = "+" },
+          { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
+        },
+        text_config = { colour = G.C.MULT },
+      }
+    end,
   }
 end

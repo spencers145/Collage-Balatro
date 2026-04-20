@@ -4,7 +4,8 @@ SMODS.Joker {
     extra = {
       mult = 0,
       increase = 1,
-      scored = false
+      scored = false,
+      rank = "8"
     }
   },
   rarity = 1,
@@ -17,11 +18,16 @@ SMODS.Joker {
   eternal_compat = true,
   perishable_compat = false,
 
+  paperback_credit = {
+    coder = { 'srockw' },
+  },
+
   loc_vars = function(self, info_queue, card)
     return {
       vars = {
         card.ability.extra.increase,
         card.ability.extra.mult,
+        card.ability.extra.rank
       }
     }
   end,
@@ -36,7 +42,7 @@ SMODS.Joker {
 
     -- Upgrade this Joker for every scored 8
     if not context.blueprint and context.individual and context.cardarea == G.play then
-      if context.other_card:get_id() == 8 then
+      if PB_UTIL.is_rank(context.other_card, card.ability.extra.rank) then
         card.ability.extra.scored = true
         card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.increase
 
@@ -65,5 +71,15 @@ SMODS.Joker {
       -- Reset the scored flag after round ends
       card.ability.extra.scored = false
     end
-  end
+  end,
+
+  joker_display_def = function(JokerDisplay)
+    return {
+      text = {
+        { text = "+" },
+        { ref_table = "card.ability.extra", ref_value = "mult", retrigger_type = "mult" }
+      },
+      text_config = { colour = G.C.MULT },
+    }
+  end,
 }

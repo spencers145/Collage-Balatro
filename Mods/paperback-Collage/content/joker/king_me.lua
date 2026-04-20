@@ -17,6 +17,10 @@
 ----     requires_crowns = true
 ----   },
 
+----   paperback_credit = {
+----     coder = { 'srockw' },
+----   },
+
 ----   loc_vars = function(self, info_queue, card)
 ----     return {
 ----       vars = {
@@ -34,7 +38,7 @@
 ----       local cards = {}
 
 ----       for _, v in ipairs(context.scoring_hand) do
-----         if v:is_suit(card.ability.extra.suit) then
+----         if v:is_suit(card.ability.extra.suit) and v:get_id() ~= 13 then
 ----           cards[#cards + 1] = v
 ----         end
 ----       end

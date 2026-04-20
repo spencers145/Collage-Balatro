@@ -8,6 +8,9 @@ SMODS.Joker {
   discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
+  paperback_credit = {
+    coder = { 'infinityplus' },
+  },
 
   loc_vars = function(self, info_queue, center)
     info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
@@ -15,7 +18,7 @@ SMODS.Joker {
 
   calculate = function(self, card, context)
     if context.end_of_round and context.game_over == false and
-        context.main_eval and G.GAME.blind.boss then
+    context.main_eval and G.GAME.blind.boss then
       G.E_MANAGER:add_event(Event({
         func = function()
           SMODS.add_card {
@@ -35,10 +38,9 @@ SMODS.Joker {
 
   check_for_unlock = function(self, args)
     if args.type == 'modify_jokers' and G.jokers then
-      local count = 0
       for _, joker in ipairs(G.jokers.cards) do
         if joker.ability.set == 'Joker' and joker.edition and joker.edition.negative
-            and PB_UTIL.is_food(joker) then
+        and PB_UTIL.is_food(joker) then
           return true
         end
       end

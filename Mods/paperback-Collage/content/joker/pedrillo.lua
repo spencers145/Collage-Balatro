@@ -11,24 +11,42 @@ SMODS.Joker {
   soul_pos = { x = 13, y = 3 },
   atlas = "jokers_atlas",
   cost = 20,
-  unlocked = true,
+  unlocked = false,
   discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
+  paperback_credit = {
+    coder = { 'dowfrin' },
+    artist = { 'nevernamed' }
+  },
 
   calculate = function(self, card, context)
-    if context.before then
-      -- Check scoring hand for any Queen
-      for _, v in ipairs(context.scoring_hand) do
-        if PB_UTIL.is_rank(v, card.ability.extra.rank) then
-          -- Level up
-          return {
-            card = card,
-            level_up = true,
-            message = localize('k_level_up_ex')
-          }
-        end
+    if context.individual and context.cardarea == G.play then
+      -- Check if each card is a queen
+      if PB_UTIL.is_rank(context.other_card, card.ability.extra.rank) and (#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit) then
+        -- Add the planet corresponding to the played hand type
+        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+        G.E_MANAGER:add_event(Event({
+          trigger = 'before',
+          delay = 0.0,
+          func = function()
+            if G.GAME.last_hand_played then
+              local planets = {}
+              for k, v in pairs(G.P_CENTER_POOLS.Planet) do
+                if v.config.hand_type == G.GAME.last_hand_played then
+                  planets[#planets + 1] = v.key
+                end
+              end
+              if #planets > 0 then
+                SMODS.add_card({ key = pseudorandom_element(planets, "pedrillo_planet") })
+              end
+              G.GAME.consumeable_buffer = 0
+            end
+            return true
+          end
+        }))
+        return { message = localize('k_plus_planet'), colour = G.C.SECONDARY_SET.Planet }
       end
     end
   end,

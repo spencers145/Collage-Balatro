@@ -9,6 +9,9 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
+  paperback_credit = {
+    coder = { 'metanite' },
+  },
 
   check_for_unlock = function(self, args)
     if args.type == 'win' then
