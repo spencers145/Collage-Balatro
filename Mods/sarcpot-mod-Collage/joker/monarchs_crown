@@ -1,5 +1,5 @@
 SMODS.Joker {
-    discovered = true,
+    discovered = false,
     key = 'monarchs_crown',
 
     config = {

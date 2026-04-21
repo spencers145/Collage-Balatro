@@ -1,6 +1,5 @@
 SMODS.Joker {
-
-    discovered = true,
+    discovered = false,
     key = 'still_free',
 
     config = {
