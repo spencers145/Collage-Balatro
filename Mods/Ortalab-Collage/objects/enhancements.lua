@@ -10,7 +10,7 @@ SMODS.Enhancement({
     atlas = "ortalab_enhanced",
     pos = {x = 0, y = 0},
     discovered = false,
-    config = {extra = {hand_chips = 10}},
+    config = {extra = {hand_chips = 12}},
     artist_credits = {'notmario'},
     loc_vars = function(self, info_queue, card)
         return {
@@ -52,7 +52,7 @@ SMODS.Enhancement({
     atlas = "ortalab_enhanced",
     pos = {x = 1, y = 0},
     discovered = false,
-    config = {extra = {hand_mult = 2}},
+    config = {extra = {hand_mult = 3}},
     artist_credits = {'gappie'},
     loc_vars = function(self, info_queue, card)
         return {
@@ -118,7 +118,7 @@ SMODS.Enhancement({
     key = "sand",
     atlas = "ortalab_enhanced",
     pos = {x = 3, y = 0},
-    config = {extra = {x_mult = 2.0, change=0.25}},
+    config = {extra = {x_mult = 2.5, change=0.25}},
     artist_credits = {'gappie'},
     loc_vars = function(self, info_queue, card)
         return {
