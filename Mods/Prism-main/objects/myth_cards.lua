@@ -30,7 +30,7 @@ SMODS.Consumable({
     atlas = 'prismmyth',
     pos = {x=1, y=0},
     discovered = true,
-    config = {mod_conv = "m_prism_crystal", max_highlighted = 2},
+    config = {mod_conv = "m_prism_crystal", max_highlighted = 3},
     effect = 'Enhance',
     loc_vars = function(self, info_queue)
 		info_queue[#info_queue + 1] = G.P_CENTERS[self.config.mod_conv]
@@ -45,7 +45,7 @@ SMODS.Consumable({
     atlas = 'prismmyth',
     pos = {x=2, y=0},
     discovered = true,
-    config = {mod_conv = "m_prism_burnt", max_highlighted = 2},
+    config = {mod_conv = "m_prism_burnt", max_highlighted = 3},
     effect = 'Enhance',
     loc_vars = function(self, info_queue)
 		info_queue[#info_queue + 1] = G.P_CENTERS[self.config.mod_conv]
@@ -60,7 +60,7 @@ SMODS.Consumable({
     atlas = 'prismmyth',
     pos = {x=6, y=1},
     discovered = true,
-    config = {mod_conv = "m_prism_echo", max_highlighted = 2},
+    config = {mod_conv = "m_prism_echo", max_highlighted = 3},
     effect = 'Enhance',
     loc_vars = function(self, info_queue)
 		info_queue[#info_queue + 1] = G.P_CENTERS[self.config.mod_conv]
@@ -75,7 +75,7 @@ SMODS.Consumable({
     atlas = 'prismmyth',
     pos = {x=8, y=1},
     discovered = true,
-    config = {mod_conv = "m_prism_ice", max_highlighted = 2},
+    config = {mod_conv = "m_prism_ice", max_highlighted = 3},
     effect = 'Enhance',
     loc_vars = function(self, info_queue)
 		info_queue[#info_queue + 1] = G.P_CENTERS[self.config.mod_conv]
