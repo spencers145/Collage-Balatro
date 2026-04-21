@@ -55,7 +55,7 @@ SMODS.Enhancement({
                                 local pool = get_current_pool('Seal')
                                 local final_pool = {}
                                 for k, value in pairs(pool) do
-                                  if value ~= "UNAVAILABLE" and value ~= "vis_wooden" and value ~= "vis_mitosis" and value ~= "artb_ouroboros" then final_pool[k] = value end
+                                  if value ~= "UNAVAILABLE" and value ~= "vis_indigo" and value ~= "vis_wooden" and value ~= "vis_mitosis" and value ~= "artb_ouroboros" then final_pool[k] = value end
                                 end
                                 --print(final_pool)
 
