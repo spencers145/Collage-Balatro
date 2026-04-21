@@ -16,8 +16,8 @@ SMODS.ConsumableType({
     key = "ortalab_loteria",
     primary_colour = HEX("CC56CC"),
     secondary_colour = HEX("A85D7C"),
-    collection_rows = {6, 5},
-    shop_rate = 2,
+    collection_rows = {5, 5},
+    shop_rate = 0,
     default = 'c_ortalab_lot_rooster'
 })
 
