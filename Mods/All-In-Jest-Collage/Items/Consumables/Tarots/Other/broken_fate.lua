@@ -2,7 +2,7 @@
 ----     object_type = "Consumable",
 ---- 	key = 'broken_fate',
 ----     ignore = true,
----- 	set = 'Tarot',
+---- 	set = 'Thoth_Tarot',
 ---- 	pos = { x = 6, y = 5 },
 ----     set_card_type_badge = function(self, card, badges)
 ---- 		badges[#badges+1] = create_badge(localize('k_tarot_q'), G.C.SECONDARY_SET.Tarot, G.C.WHITE, 1.2 )

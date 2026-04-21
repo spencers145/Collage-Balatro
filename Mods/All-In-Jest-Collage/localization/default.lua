@@ -1,6 +1,7 @@
 return {
     misc = {
         dictionary = {
+            k_thoth_tarot = "Thoth Tarot",
             k_coder_badge = "Coder",
             k_artist_badge = "Artist",
             k_moon = "Moon",
@@ -4572,7 +4573,7 @@ return {
                 }
             },
         },
-        Tarot = {
+        Thoth_Tarot = {
             c_aij_magus = {
                 name = 'The Magus',
                 text = {

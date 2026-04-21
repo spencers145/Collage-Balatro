@@ -307,3 +307,19 @@ end
 function All_in_Jest.set_ability_reset_keys()
     return {'jest_charged_applied'}
 end
+
+SMODS.ConsumableType {
+    key = 'Thoth_Tarot',
+    default = 'c_aij_osiris',
+    collection_rows = { 3, 3 },
+    cards = {},
+    loc_txt = {
+        undiscovered = {
+            name = 'Unknown Thoth Tarot',
+            text = {'Find this card in an unseeded', 'run to find out what it does'}
+        }
+    },
+    shop_rate = 0,
+    primary_colour = HEX("BfB584"),
+    secondary_colour = HEX("918754"),
+}
