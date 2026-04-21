@@ -9,7 +9,7 @@ SMODS.Enhancement({
     atlas = "prismenhanced",
     pos = {x = 0, y = 0},
     discovered = true,
-    config = {extra = {x_mult = 1,x_gain = 0.25}},
+    config = {extra = {x_mult = 1,x_gain = 0.3}},
     effect = "Glass Card",
     loc_vars = function(self, info_queue, card)
         local card_ability = card and card.ability or self.config
@@ -82,7 +82,7 @@ SMODS.Enhancement({
     pos = {x = 0, y = 2},
     discovered = true,
     effect = "Glass Card",
-    config = {extra = {chips = 8}},
+    config = {extra = {chips = 10}},
     loc_vars = function(self, info_queue, card)
         local card_ability = card and card.ability or self.config
         return {

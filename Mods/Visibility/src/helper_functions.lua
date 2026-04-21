@@ -1,5 +1,5 @@
 function get_all_illegal_consumable_sets()
-    return {"Myth", "ortalab_loteria", "paperback_minor_arcana", "BlackMarket"}
+    return {"Myth", "ortalab_loteria", "paperback_minor_arcana", "paperback_minor_arcana", "BlackMarket"}
 end
 
 
