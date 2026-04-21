@@ -1,6 +1,6 @@
 SMODS.Joker {
 
-    discovered = true,
+    discovered = false,
     key = 'plort_market',
     blueprint_compat = true,
     config = {
