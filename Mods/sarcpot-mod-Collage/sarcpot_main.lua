@@ -204,8 +204,6 @@ end
 
 function SARC.level_up(card, hand, levels)
     -- print(G.GAME.brittle_hollow_count)
-    print(hand)
-    print(levels)
     levels = levels or 1
     update_hand_text({
         sound = 'button',
