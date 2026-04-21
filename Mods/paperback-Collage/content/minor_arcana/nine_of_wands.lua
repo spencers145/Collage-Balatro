@@ -1,7 +1,7 @@
 PB_UTIL.MinorArcana {
   key = 'nine_of_wands',
   config = {
-    max_highlighted = 2,
+    max_highlighted = 3,
     mod_conv = 'm_paperback_bandaged'
   },
   atlas = 'minor_arcana_atlas',

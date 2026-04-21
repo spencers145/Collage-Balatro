@@ -1,7 +1,7 @@
 PB_UTIL.MinorArcana {
   key = 'five_of_pentacles',
   config = {
-    max_highlighted = 1,
+    max_highlighted = 2,
     mod_conv = 'm_paperback_antique'
   },
   atlas = 'minor_arcana_atlas',

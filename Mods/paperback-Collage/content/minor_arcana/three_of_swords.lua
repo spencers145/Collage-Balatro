@@ -1,7 +1,7 @@
 PB_UTIL.MinorArcana {
   key = 'three_of_swords',
   config = {
-    max_highlighted = 2,
+    max_highlighted = 3,
     mod_conv = 'm_paperback_stained'
   },
   atlas = 'minor_arcana_atlas',

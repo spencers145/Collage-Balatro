@@ -1,7 +1,7 @@
 PB_UTIL.MinorArcana {
   key = 'page_of_pentacles',
   config = {
-    max_highlighted = 2,
+    max_highlighted = 3,
     mod_conv = 'm_paperback_sleeved'
   },
   atlas = 'minor_arcana_atlas',
