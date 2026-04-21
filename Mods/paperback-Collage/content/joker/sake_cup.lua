@@ -37,7 +37,7 @@ SMODS.Joker {
   end,
   check_for_unlock = function(self, args)
     if args.type == 'upgrade_hand' then
-      return args.level >= 9
+      return to_big(args.level) >= to_big(9)
     end
   end,
 
