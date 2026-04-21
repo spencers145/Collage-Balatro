@@ -79,6 +79,7 @@ SMODS.Consumable({
                     end
                 end
             end
+            print(random_hands)
             SARC.level_up_multiple(card, random_hands, 1)
             G.GAME.brittle_hollow_count = G.GAME.brittle_hollow_count + 1
         end

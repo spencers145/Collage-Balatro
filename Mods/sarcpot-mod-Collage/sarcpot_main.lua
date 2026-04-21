@@ -204,6 +204,8 @@ end
 
 function SARC.level_up(card, hand, levels)
     -- print(G.GAME.brittle_hollow_count)
+    print(hand)
+    print(levels)
     levels = levels or 1
     update_hand_text({
         sound = 'button',
@@ -331,91 +333,13 @@ function SARC.get_rand_hand_index(amount, exclude, exclude_enhancement, exclude_
     end
     return random_indexes
 end
-function SARC.level_up_multiple(card, hand_list, custom_hand_text, levels)
-    levels = levels or 1
-    update_hand_text({
-        sound = 'button',
-        volume = 0.7,
-        pitch = 0.8,
-        delay = 0.3
-    }, {
-        handname = custom_hand_text,
-        chips = "...",
-        mult = "...",
-        level = "..."
-    })
-    for i = 1, #hand_list do
-        level_up_hand(nil, hand_list[i], true, levels)
 
+function SARC.level_up_multiple(card, hand_list, custom_hand_text, levels)
+    for i = 1, #hand_list do
+        SARC.level_up(card, hand_list[i], levels)
     end
-    G.E_MANAGER:add_event(Event({
-        trigger = 'after',
-        delay = 0.2,
-        func = function()
-            play_sound('tarot1')
-            if card then
-                card:juice_up(0.8, 0.5)
-            end
-            G.TAROT_INTERRUPT_PULSE = true
-            return true
-        end
-    }))
-    update_hand_text({
-        delay = 0
-    }, {
-        mult = "+",
-        StatusText = true
-    })
-    G.E_MANAGER:add_event(Event({
-        trigger = 'after',
-        delay = 0.9,
-        func = function()
-            play_sound('tarot1')
-            if card then
-                card:juice_up(0.8, 0.5)
-            end
-            return true
-        end
-    }))
-    update_hand_text({
-        delay = 0
-    }, {
-        chips = "+",
-        StatusText = true
-    })
-    G.E_MANAGER:add_event(Event({
-        trigger = 'after',
-        delay = 0.9,
-        func = function()
-            play_sound('tarot1')
-            if card then
-                card:juice_up(0.8, 0.5)
-            end
-            G.TAROT_INTERRUPT_PULSE = nil
-            return true
-        end
-    }))
-    update_hand_text({
-        sound = 'button',
-        volume = 0.7,
-        pitch = 0.9,
-        delay = 0
-    }, {
-        level = "+" .. levels
-    })
-    delay(1.3)
-    update_hand_text({
-        sound = 'button',
-        volume = 0.7,
-        pitch = 1.1,
-        delay = 0
-    }, {
-        mult = 0,
-        chips = 0,
-        handname = '',
-        level = ''
-    })
 end
+
 function SARC.get_available_suits()
     local suits = {}
     for _, v in ipairs(G.playing_cards) do
