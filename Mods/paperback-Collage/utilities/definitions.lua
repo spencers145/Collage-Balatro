@@ -1049,7 +1049,8 @@ if PB_UTIL.config.paperclips_enabled then
   }
 
   -- allow paperclips to appear in standard packs
-  local create_card_ref = G.P_CENTERS.p_standard_normal_1.create_card
+  -- do not allow in 1.4
+  --[[local create_card_ref = G.P_CENTERS.p_standard_normal_1.create_card
   SMODS.Booster:take_ownership_by_kind("Standard", {
     create_card = function(self, card, i)
       local _card = SMODS.create_card(create_card_ref(self, card, i))
@@ -1058,7 +1059,7 @@ if PB_UTIL.config.paperclips_enabled then
       if clip then PB_UTIL.set_paperclip(_card, clip) end
       return _card
     end
-  }, true)
+  }, true)]]
 
   -- explain that Illusion also adds paperclips in shop
   SMODS.Voucher:take_ownership("illusion", {
