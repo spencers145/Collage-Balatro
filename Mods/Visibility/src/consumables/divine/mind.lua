@@ -1,4 +1,4 @@
-SMODS.Consumable {
+--[[SMODS.Consumable {
     key = 'mind',
     set = 'Divine',
     atlas = "TextureAtlasConsumables",
@@ -56,4 +56,4 @@ SMODS.Consumable {
     can_use = function(self, card)
         return G.GAME.last_divine and G.GAME.last_divine ~= 'c_vis_mind'
     end
-}
+}]]
