@@ -975,7 +975,7 @@ return {
                 name = 'Mint',
                 text = {
                     "Gives {C:gold}money{} equal to",
-                    "a {C:attention}sixth{} of all {C:chips}Chips{}",
+                    "a {C:attention}fifth{} of all {C:chips}Chips{}",
                     "on cards held in hand",
                     "{C:inactive}(Currently: {C:gold}$#1#{C:inactive}, Max: {C:gold}$#2#{C:inactive})"
                 }

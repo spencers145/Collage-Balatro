@@ -37,7 +37,7 @@ SMODS.Consumable {
             ::continue::
         end
         ::no_hand::
-        card.ability.extra.current = math.min(math.floor(total_chips/6), card.ability.extra.max)
+        card.ability.extra.current = math.min(math.floor(total_chips/5), card.ability.extra.max)
     end,
     use = function(self, card, area, copier)
         -- Loop through all cards in hand
@@ -61,7 +61,7 @@ SMODS.Consumable {
             func = function()
                 play_sound('timpani')
                 card:juice_up(0.3, 0.5)
-                ease_dollars(math.min(math.floor(total_chips/6), card.ability.extra.max), true)
+                ease_dollars(math.min(math.floor(total_chips/5), card.ability.extra.max), true)
                 return true
             end
         }))
