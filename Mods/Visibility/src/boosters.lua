@@ -30,7 +30,7 @@ SMODS.Booster{
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("bdc3c7") }} }
     end,
-    weight = 0.20,
+    weight = 0.6,
     cost = 6,
     kind = "VisibilityPack",
 
@@ -81,7 +81,7 @@ SMODS.Booster{
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("bdc3c7") } } }
     end,
-    weight = 0.10,
+    weight = 0.3,
     cost = 8,
     kind = "VisibilityPack",
 
@@ -132,7 +132,7 @@ SMODS.Booster{
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("bdc3c7") } } }
     end,
-    weight = 0.05,
+    weight = 0.15,
     cost = 10,
     kind = "VisibilityPack",
 
@@ -167,7 +167,7 @@ SMODS.Booster{
     end
 }
 
-SMODS.Booster{
+--[[SMODS.Booster{
     key = 'divine_normal_1',
     atlas = 'TextureAtlasConsumables',
     group_key = "k_divine_pack",
@@ -330,4 +330,4 @@ SMODS.Booster{
     in_pool = function() 
         return not is_set_banned("Divine")
     end
-}
+}]]
