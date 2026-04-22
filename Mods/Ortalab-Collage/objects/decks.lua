@@ -100,7 +100,7 @@ function poll_edition(key, _mod, _no_neg, _guaranteed, options)
     return ortalab_poll_edition(key, _mod, _no_neg, _guaranteed, options)
 end
 
-local ortalab_card_for_shop = create_card_for_shop
+--[[local ortalab_card_for_shop = create_card_for_shop
 function create_card_for_shop(area)
     local card = ortalab_card_for_shop(area)
     if G.GAME.modifiers.neon_deck and card.edition then
@@ -114,7 +114,7 @@ function create_card_for_shop(area)
     end
     
     return card
-end
+end]]
 
 SMODS.Voucher:take_ownership('v_seed_money', {loc_vars = function(self, info_queue, card) return {vars = {self.config.extra/5 * G.GAME.interest_amount}} end}, true)
 SMODS.Voucher:take_ownership('v_money_tree', {loc_vars = function(self, info_queue, card) return {vars = {self.config.extra/5 * G.GAME.interest_amount}} end}, true)
