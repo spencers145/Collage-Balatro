@@ -2660,10 +2660,9 @@ return {
       j_paperback_shuttle = {
         name = "Shuttle",
         text = {
-          "The {C:attention}first{} played hand of round",
-          "gives {C:money}money{} equal to",
-          "{C:attention}double{} the played hand's level",
-          "{C:inactive}(Max of {C:money}$#1#{C:inactive})"
+          "Gives {C:money}money{} equal to",
+          "{C:attention}double{} the level of {C:attention}first{}",
+          "poker hand played each round"
         }
       },
       j_paperback_loaded_dice = {
