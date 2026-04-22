@@ -1,7 +1,7 @@
 SMODS.ConsumableType {
     key = 'Divine',
     default = 'c_vis_shore',
-    collection_rows = { 6, 5 },
+    collection_rows = { 5, 5 },
     cards = {},
     loc_txt = {
         undiscovered = {
