@@ -13,6 +13,12 @@ SMODS.Consumable ({
 	unlocked = true,
 	discovered = false,
 
+	loc_vars = function ()
+		return {
+			key = PB_UTIL.count_paperclips({area = G.playing_cards}) > 0 and 'c_artb_art_pclip_blend' or 'c_artb_art_blend'
+		}
+	end,
+
     use = function(self, card, area)
       local left = G.hand.highlighted[1]
       local right = G.hand.highlighted[2]
@@ -52,6 +58,22 @@ SMODS.Consumable ({
 			total = total + 1
 			G.hand.highlighted[1]:set_ability(G.hand.highlighted[2].config.center.key)
 			G.hand.highlighted[1].ability.extra=G.hand.highlighted[2].ability.extra
+		end
+	  end
+
+	  if (PB_UTIL.has_paperclip(left) and not PB_UTIL.has_paperclip(right)) then
+		PB_UTIL.set_paperclip(right, PB_UTIL.has_paperclip(left))
+		for key, value in pairs(left.ability) do
+			if PB_UTIL.is_paperclip(key) then
+				right.ability[key] = left.ability[key]
+			end
+		end
+	  elseif (PB_UTIL.has_paperclip(right) and not PB_UTIL.has_paperclip(left)) then
+		PB_UTIL.set_paperclip(left, PB_UTIL.has_paperclip(right))
+		for key, value in pairs(right.ability) do
+			if PB_UTIL.is_paperclip(key) then
+				left.ability[key] = right.ability[key]
+			end
 		end
 	  end
 	  return true end }))

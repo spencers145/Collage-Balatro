@@ -507,7 +507,16 @@ return {
                     '{C:inactive}(if they do not have one already){}'
                 }
             },
-
+            c_artb_art_pclip_blend = {
+                name = 'Blend',
+                text = {
+                    'Select {C:attention}2{} cards,',
+                    'they copy each others',
+                    '{C:attention}enhancements{}, {C:attention}seals{},',
+                    '{C:attention}editions{}, and {C:attention}clips{}',
+                    '{C:inactive}(If they do not have one already){}'
+                }
+            },
             c_artb_art_auction = {
                 name = 'Auction',
                 text = {
