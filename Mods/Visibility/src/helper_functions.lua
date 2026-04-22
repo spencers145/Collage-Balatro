@@ -4,6 +4,9 @@ function get_all_illegal_consumable_sets()
         --"Myth",
         "Divine",
         "Divine",
+        "Statement",
+        "Statement",
+        "Statement",
         --"ortalab_loteria", -- maximum laziness pool weighting solution
         --"ortalab_loteria",
         --"paperback_minor_arcana",

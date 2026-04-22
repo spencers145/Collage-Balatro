@@ -1409,7 +1409,7 @@
         collection_rows = {4, 4},
         shop_rate = 0
     }
-
+--[[
     SMODS.Booster{
         key = 'audio_basic1',
         config = {extra = 3, choose = 1},
@@ -1505,7 +1505,7 @@
         end,
         group_key = "k_tma_audio_pack",
     }
-
+]]
     -- Nightfall
     SMODS.Consumable {
         set = 'Statement', atlas = 'tma_tarot', key = 'nightfall',
