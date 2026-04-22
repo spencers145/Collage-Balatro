@@ -1,4 +1,4 @@
-local simulated = {
+--[[local simulated = {
     object_type = "Enhancement",
     key = 'simulated',
     atlas = 'enhancements_atlas',
@@ -32,4 +32,4 @@ local simulated = {
         end
     end
 }
-return {name = {"Enhance+ents"}, items = {simulated}}
+return {name = {"Enhance+ents"}, items = {simulated}}]]

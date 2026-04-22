@@ -1,4 +1,4 @@
-local sphinx = {
+--[[local sphinx = {
     object_type = "Consumable",
 	key = 'sphinx',
 	set = 'Thoth_Tarot',
@@ -19,4 +19,4 @@ local sphinx = {
 		}
 	end,
 }
-return {name = {"Tarots"}, items = {sphinx}}
+return {name = {"Tarots"}, items = {sphinx}}]]

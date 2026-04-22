@@ -1,4 +1,4 @@
-local veiled_lamp = {
+--[[local veiled_lamp = {
     object_type = "Consumable",
 	key = 'veiled_lamp',
 	set = 'Thoth_Tarot',
@@ -20,4 +20,4 @@ local veiled_lamp = {
 		}
 	end,
 }
-return {name = {"Tarots"}, items = {veiled_lamp}}
+return {name = {"Tarots"}, items = {veiled_lamp}}]]

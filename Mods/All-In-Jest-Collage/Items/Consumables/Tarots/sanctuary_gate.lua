@@ -1,4 +1,4 @@
-local sanctuary_gate = {
+--[[local sanctuary_gate = {
     object_type = "Consumable",
 	key = 'sanctuary_gate',
 	set = 'Thoth_Tarot',
@@ -20,4 +20,4 @@ local sanctuary_gate = {
 		}
 	end,
 }
-return {name = {"Tarots"}, items = {sanctuary_gate}}
+return {name = {"Tarots"}, items = {sanctuary_gate}}]]

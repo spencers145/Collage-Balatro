@@ -1,4 +1,4 @@
-local ice = {
+--[[local ice = {
     object_type = "Enhancement",
     key = 'ice',
     atlas = 'enhancements_atlas',
@@ -14,4 +14,4 @@ local ice = {
         return { vars = {text} }
     end,
 }
-return {name = {"Enhancements"}, items = {ice}}
+return {name = {"Enhancements"}, items = {ice}}]]

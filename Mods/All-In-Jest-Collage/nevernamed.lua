@@ -308,7 +308,7 @@ function All_in_Jest.set_ability_reset_keys()
     return {'jest_charged_applied'}
 end
 
-SMODS.ConsumableType {
+--[[SMODS.ConsumableType {
     key = 'Thoth_Tarot',
     default = 'c_aij_osiris',
     collection_rows = { 3, 3 },
@@ -322,4 +322,4 @@ SMODS.ConsumableType {
     shop_rate = 0,
     primary_colour = HEX("BfB584"),
     secondary_colour = HEX("918754"),
-}
+}]]

@@ -1,4 +1,4 @@
-local canvas = {
+--[[local canvas = {
     object_type = "Enhancement",
     key = 'canvas',
     atlas = 'enhancements_atlas',
@@ -70,4 +70,4 @@ local canvas = {
         end
     end,
 }
-return {name = {"Enhancements"}, items = {canvas}}
+return {name = {"Enhancements"}, items = {canvas}}]]

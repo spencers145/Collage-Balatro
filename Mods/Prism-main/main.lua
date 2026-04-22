@@ -73,7 +73,7 @@ function SMODS.current_mod.reset_game_globals(run_start)
 	end
 end
 
-G.PRISM.config.myth_enabled = true
+G.PRISM.config.myth_enabled = false
 
 if G.PRISM.config.jokers_enabled then  SMODS.load_file('objects/jokers.lua')() end
 if G.PRISM.config.myth_enabled then SMODS.load_file('objects/enhancements.lua')() end

@@ -1,4 +1,4 @@
-local magus_tarot = {
+--[[local magus_tarot = {
     object_type = "Consumable",
 	key = 'magus',
 	set = 'Thoth_Tarot',
@@ -19,4 +19,4 @@ local magus_tarot = {
 		}
 	end,
 }
-return {name = {"Tarots"}, items = {magus_tarot}}
+return {name = {"Tarots"}, items = {magus_tarot}}]]

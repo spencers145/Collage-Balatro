@@ -1,22 +1,22 @@
 function get_all_illegal_consumable_sets()
     return {
-        "Myth",
-        "Myth",
+        --"Myth",
+        --"Myth",
         "Divine",
         "Divine",
-        "ortalab_loteria", -- maximum laziness pool weighting solution
-        "ortalab_loteria",
-        "paperback_minor_arcana",
-        "paperback_minor_arcana",
-        "paperback_minor_arcana",
-        "paperback_minor_arcana",
+        --"ortalab_loteria", -- maximum laziness pool weighting solution
+        --"ortalab_loteria",
+        --"paperback_minor_arcana",
+        --"paperback_minor_arcana",
+        --"paperback_minor_arcana",
+        --"paperback_minor_arcana",
         "paperback_minor_arcana",
         "paperback_minor_arcana",
         "paperback_minor_arcana",
         "paperback_minor_arcana",
         "BlackMarket",
-        "Thoth_Tarot",
-        "Thoth_Tarot"
+        --"Thoth_Tarot",
+        --"Thoth_Tarot"
     }
 end
 

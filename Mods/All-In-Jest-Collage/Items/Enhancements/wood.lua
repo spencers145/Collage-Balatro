@@ -1,4 +1,4 @@
-local wood_shader = {
+--[[local wood_shader = {
     object_type = "Shader",
     key = 'wood', 
     path = 'wood.fs',
@@ -41,4 +41,4 @@ local wood = {
         end
     end
 }
-return {name = {"Enhancements"}, items = {wood, wood_shader, semitrasparent_shader}}
+return {name = {"Enhancements"}, items = {wood, wood_shader, semitrasparent_shader}}]]
