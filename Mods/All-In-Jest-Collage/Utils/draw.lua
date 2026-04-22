@@ -14,6 +14,7 @@ SMODS.DrawStep {
     end,
     conditions = { vortex = false, facing = 'front' },
 }
+--[[
 SMODS.DrawStep {
     key = 'temp_patches',
     order = 21,
@@ -39,7 +40,8 @@ SMODS.DrawStep {
 		end
     end,
     conditions = { vortex = false, facing = 'front' },
-} 
+}
+]]
 SMODS.DrawStep {
     key = 'wireframe_floating_sprite',
     order = 61,
