@@ -643,6 +643,7 @@ COLLAGE_MODIFIED_TABLE = {
 	"j_paperback_surfer",
 	"j_paperback_the_sun",
 	"j_paperback_unholy_alliance",
+    "j_paperback_jimbos_inferno",
 
     "j_pl_plantain",
 	"j_pl_postcard",

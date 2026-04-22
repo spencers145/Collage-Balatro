@@ -2,13 +2,13 @@ SMODS.Joker {
   key = 'jimbos_inferno',
   config = {
     extra = {
-      mult_per_dark = 2,
+      mult_per_dark = 3,
     }
   },
-  rarity = 1,
+  rarity = 2,
   pos = { x = 19, y = 8 },
   atlas = "jokers_atlas",
-  cost = 5,
+  cost = 7,
   unlocked = true,
   discovered = false,
   blueprint_compat = true,

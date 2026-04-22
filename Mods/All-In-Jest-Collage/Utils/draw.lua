@@ -1,4 +1,4 @@
-SMODS.DrawStep {
+--[[SMODS.DrawStep {
     key = 'chaotic_shader',
     order = 15,
     func = function(self, layer)
@@ -13,7 +13,8 @@ SMODS.DrawStep {
         end
     end,
     conditions = { vortex = false, facing = 'front' },
-}
+}]]
+--[[
 SMODS.DrawStep {
     key = 'temp_patches',
     order = 21,
@@ -39,7 +40,9 @@ SMODS.DrawStep {
 		end
     end,
     conditions = { vortex = false, facing = 'front' },
-} 
+}
+]]
+--[[
 SMODS.DrawStep {
     key = 'wireframe_floating_sprite',
     order = 61,
@@ -58,7 +61,7 @@ SMODS.DrawStep {
         end
     end,
     conditions = { vortex = false, facing = 'front' },
-}
+}]]
 SMODS.DrawStep({
 	key = "aij_extra_floating_sprites",
 	order = 61,

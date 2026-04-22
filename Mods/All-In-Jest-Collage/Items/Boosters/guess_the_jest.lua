@@ -64,7 +64,6 @@ SMODS.DrawStep {
     key = 'guess_the_jest_background',
     order = 2,
     func = function(self, layer)
-        
         if self.ability.set == 'Joker' and self.ability.from_guess_the_jest then
         G.AIJ.shared_mystery_sprites['bg'..self.ability.background].role.draw_major = self
         G.AIJ.shared_mystery_sprites['bg'..self.ability.background]:draw_shader('dissolve', nil, nil, nil, self.children.center)
@@ -76,9 +75,9 @@ SMODS.DrawStep {
     key = 'silhouette',
     order = 65,
     func = function(self, layer)
-        local scale_mod = 0.07 + 0.02*math.sin(1.8*G.TIMERS.REAL) + 0.00*math.sin((G.TIMERS.REAL - math.floor(G.TIMERS.REAL))*math.pi*14)*(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL)))^3
-            local rotate_mod = 0.05*math.sin(1.219*G.TIMERS.REAL) + 0.00*math.sin((G.TIMERS.REAL)*math.pi*5)*(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL)))^2
         if self.config.center.soul_pos and self.ability.from_guess_the_jest then
+            local scale_mod = 0.07 + 0.02*math.sin(1.8*G.TIMERS.REAL) + 0.00*math.sin((G.TIMERS.REAL - math.floor(G.TIMERS.REAL))*math.pi*14)*(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL)))^3
+            local rotate_mod = 0.05*math.sin(1.219*G.TIMERS.REAL) + 0.00*math.sin((G.TIMERS.REAL)*math.pi*5)*(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL)))^2
             self.children.floating_sprite:draw_shader('aij_silhouette', nil, self.ARGS.send_to_shader, nil, self.children.center, scale_mod, rotate_mod)
         end
     end,
