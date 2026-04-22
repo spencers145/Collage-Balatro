@@ -1,4 +1,4 @@
-if PB_UTIL.config.minor_arcana_enabled then
+--[[if PB_UTIL.config.minor_arcana_enabled then
   PB_UTIL.Sleeve {
     key = 'antique',
     deck_buff = 'b_paperback_antique',
@@ -20,3 +20,4 @@ if PB_UTIL.config.minor_arcana_enabled then
     end
   }
 end
+]]

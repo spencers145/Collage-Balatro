@@ -1,4 +1,4 @@
-if PB_UTIL.config.minor_arcana_enabled then
+--[[if PB_UTIL.config.minor_arcana_enabled then
   SMODS.Back {
     key = 'antique',
     atlas = 'decks_atlas',
@@ -22,3 +22,4 @@ if PB_UTIL.config.minor_arcana_enabled then
     end
   }
 end
+]]
