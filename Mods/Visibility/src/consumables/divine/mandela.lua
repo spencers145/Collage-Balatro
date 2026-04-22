@@ -14,7 +14,7 @@ SMODS.Consumable {
         art = "WarpedCloset",
         remix = "Monachrome"
     },
-    config = { max_highlighted = 3, extra = { seal = 'vis_indigo' } },
+    config = { max_highlighted = 4, extra = { seal = 'vis_indigo' } },
     use = function (self, card, area, copier)
         G.E_MANAGER:add_event(Event({
             func = function()
