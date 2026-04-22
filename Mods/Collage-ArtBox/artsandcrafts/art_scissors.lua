@@ -23,6 +23,26 @@ SMODS.Consumable({
 		local selected = G.hand.highlighted[1]
 		local slots = G.consumeables.config.card_limit - #G.consumeables.cards
 
+		if PB_UTIL.has_paperclip(selected) and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+			G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
+
+			local clip = nil
+			for key, value in pairs(selected.ability) do
+				if PB_UTIL.is_paperclip(key) then
+					clip = key
+					break
+				end
+			end
+
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					ArtBox.create_collectable(clip)
+					G.GAME.consumeable_buffer = 0
+					return true
+				end
+			}))
+		end
+
 		if selected.edition and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
 			G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
 

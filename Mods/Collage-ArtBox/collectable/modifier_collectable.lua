@@ -24,6 +24,9 @@ SMODS.Consumable({
     elseif card.ability.extra.edition then
       info_queue[#info_queue + 1] = G.P_CENTERS[card.ability.extra.edition]
       return { vars = { localize { type = 'name_text', key = card.ability.extra.edition, set = 'Edition' }, } }
+    elseif card.ability.extra.clip then
+      info_queue[#info_queue + 1] = PB_UTIL.paperclip_tooltip(card.ability.extra.clip)
+      return { vars = { localize { type = 'name_text', key = card.ability.extra.clip, set = 'Other' }, } }
     end
     return { key = self.key .. '_empty' }
   end,
@@ -62,6 +65,8 @@ SMODS.Consumable({
           mod_card:set_ability(card.ability.extra.enhancement)
         elseif card.ability.extra.edition then
           mod_card:set_edition(card.ability.extra.edition)
+        elseif card.ability.extra.clip then
+          PB_UTIL.set_paperclip(mod_card, card.ability.extra.clip)
         end
         return true
       end
