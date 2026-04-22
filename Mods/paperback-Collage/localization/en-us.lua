@@ -1436,11 +1436,12 @@ return {
       j_paperback_da_capo = {
         name = "Da Capo",
         text = {
-          "{X:mult,C:white}X#1#{} Mult",
-          "{C:red}Debuffs{} all but one {C:attention}suit{}",
+          {"{X:mult,C:white}X#1#{} Mult"},
+          {"{C:red}Debuffs{} all but one {C:attention}suit{}",
           "every {C:attention}hand{}, in order:",
-          "{C:clubs}Clubs{}, {C:spades}Spades{}, {C:diamonds}Diamonds{}, {C:hearts}Hearts{}, {C:inactive}None{}",
-          "{C:inactive}(Currently: {V:1}#2#{C:inactive}){}",
+          "{C:clubs}Clubs{}, {C:spades}Spades{}, {C:diamonds}Diamonds{},",
+          "{C:hearts}Hearts{}, {C:inactive}None{}",
+          "{C:inactive}(Currently: {V:1}#2#{C:inactive}){}"},
         }
       },
       j_paperback_complete_breakfast = {
