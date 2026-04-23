@@ -39,16 +39,16 @@ SMODS.Back {
     config = {},
     --unlock_condition = {type = 'discover_amount', amount = 500},
     apply = function(self, back)
-        --[[G.E_MANAGER:add_event(Event({
+        G.E_MANAGER:add_event(Event({
             func = function()
                 for k, v in pairs(G.playing_cards) do
-                    if v.base.suit == 'Spades' or v.base.suit == 'Hearts' then
+                    if v:get_id() <= 6 then
                         v:remove()
                     end
                 end
                 return true
             end
-        }))]]
+        }))
     end,
     after_round = function(self, args)
         if args.context == 'eval' and #G.deck.cards > 0 then
