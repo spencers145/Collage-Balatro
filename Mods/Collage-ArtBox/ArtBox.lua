@@ -110,6 +110,13 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+    key = "collectable_atlas_3",
+    path = "collectable_3.png",
+    px = 71,
+    py = 95
+}
+
+SMODS.Atlas {
     key = "spectral_atlas",
     path = "spectrals.png",
     px = 71,
@@ -387,6 +394,19 @@ ArtBox.Collectables = {
     ['e_akyrs_noire'] = { atlas = 'artb_collectable_atlas_2', pos = { x = 7, y = 4 }, soul_pos = { x = 7, y = 5 }, shader = 'akyrs_noire', },
     ['e_akyrs_sliced'] = { atlas = 'artb_collectable_atlas_2', pos = { x = 8, y = 4 }, soul_pos = { x = 8, y = 5 } },
     ['e_akyrs_burnt'] = { atlas = 'artb_collectable_atlas_2', pos = { x = 9, y = 4 }, soul_pos = { x = 9, y = 5 } },
+
+    -- paperclips
+    ['paperback_white_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 0, y = 0 }, soul_pos = { x = 0, y = 1 } },
+    ['paperback_black_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 1, y = 0 }, soul_pos = { x = 1, y = 1 } },
+    ['paperback_gold_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 2, y = 0 }, soul_pos = { x = 2, y = 1 } },
+    ['paperback_red_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 3, y = 0 }, soul_pos = { x = 3, y = 1 } },
+    ['paperback_orange_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 4, y = 0 }, soul_pos = { x = 4, y = 1 } },
+    ['paperback_platinum_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 5, y = 0 }, soul_pos = { x = 5, y = 1 } },
+    ['paperback_yellow_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 6, y = 0 }, soul_pos = { x = 6, y = 1 } },
+    ['paperback_green_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 7, y = 0 }, soul_pos = { x = 7, y = 1 } },
+    ['paperback_blue_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 8, y = 0 }, soul_pos = { x = 8, y = 1 } },
+    ['paperback_purple_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 9, y = 0 }, soul_pos = { x = 9, y = 1 } },
+    ['paperback_pink_clip'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 0, y = 2 }, soul_pos = { x = 0, y = 3 } },
 }
 
 function ArtBox.add_collectible(key, args)
