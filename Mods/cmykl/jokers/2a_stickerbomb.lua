@@ -8,7 +8,7 @@ SMODS.Joker{ --Sticker Bomb
     loc_txt = {
         ['name'] = 'Sticker Bomb',
         ['text'] = {
-            'Scored Cards has',
+            'Scored Cards have',
             'a {C:green}#1# in #2#{} chance',
             'of getting a',
             '{C:attention}random seal{} applied'

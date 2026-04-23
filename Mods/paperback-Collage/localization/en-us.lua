@@ -3790,7 +3790,7 @@ return {
         text = {
           "{C:green}#1# in #2#{} chance to create",
           "a random {C:attention}Tarot{} card",
-          "when {C:attention}held in hand{}.",
+          "when {C:attention}held in hand{}",
           "Odds increase by {C:attention}#3#{}",
           "for each scored {C:attention}Clip{}",
           "{C:inactive}(Resets after played hand){}"
