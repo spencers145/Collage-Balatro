@@ -38,12 +38,12 @@ return {
                 name = "Gardening Deck",
                 text = {
                     "At end of round,",
-                    "{C:attention}copy{} the leftmost card held",
-                    "in hand and add a random,",
-                    "{C:red}debuffed{} card to the deck",
+                    "{C:attention}copy{} the leftmost card ",
+                    "held in hand and create a",
+                    "random, {C:red}debuffed{} card",
                     "{s:0.2} {}",
                     "Start with no {C:attention}2s{},",
-                    "{C:attention}3s{}, {C:attention}4s{}, {C:attention}5s{} or {C:attention}6s{}",
+                    "{C:attention}3s{}, {C:attention}4s{}, or {C:attention}5s{}",
                 },
                 unlock = {
                     "Redeem the",

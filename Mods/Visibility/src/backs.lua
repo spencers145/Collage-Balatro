@@ -42,10 +42,20 @@ SMODS.Back {
         G.E_MANAGER:add_event(Event({
             func = function()
                 for k, v in pairs(G.playing_cards) do
-                    if v:get_id() <= 6 then
-                        v:remove()
+                    if v:get_id() <= 5 then 
+                        v.to_remove = true
                     end
                 end
+                local i = 1
+                while i <= #G.playing_cards do
+                    if G.playing_cards[i].to_remove then
+                        G.playing_cards[i]:remove()
+                    else
+                        i = i + 1
+                    end
+                end
+                G.GAME.starting_deck_size = #G.playing_cards
+                G.deck.config.true_card_limit = #G.playing_cards
                 return true
             end
         }))
