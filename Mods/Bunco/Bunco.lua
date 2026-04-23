@@ -8086,6 +8086,8 @@ function calculate_cracker_cards(context)
                     end
                 end
             end
+
+            cracker_card.marked_cracker = nil
         end
         if #crackers_total > 0 then
             if #crackers_total >= 3 then
