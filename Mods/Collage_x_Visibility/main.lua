@@ -541,7 +541,7 @@ SMODS.Joker{
         code = "base4",
         concept = "base4 & Monachrome"
     },
-	config = { extra = { xmult = 1.5 } },
+	config = { extra = { xmult = 1.75 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult, card.ability.extra.xmultbefore } }
 	end,
