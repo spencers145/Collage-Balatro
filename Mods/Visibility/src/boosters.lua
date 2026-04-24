@@ -30,7 +30,7 @@ SMODS.Booster{
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("bdc3c7") }} }
     end,
-    weight = 0.9,
+    weight = 1,
     cost = 6,
     kind = "VisibilityPack",
 
@@ -81,7 +81,7 @@ SMODS.Booster{
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("bdc3c7") } } }
     end,
-    weight = 0.45,
+    weight = 0.5,
     cost = 8,
     kind = "VisibilityPack",
 
@@ -132,7 +132,7 @@ SMODS.Booster{
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("bdc3c7") } } }
     end,
-    weight = 0.225,
+    weight = 0.25,
     cost = 10,
     kind = "VisibilityPack",
 
