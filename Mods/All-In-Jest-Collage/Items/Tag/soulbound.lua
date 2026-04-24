@@ -34,7 +34,7 @@ local soulbound_tag = {
             function() 
                 return G.jokers and #G.jokers.cards < G.jokers.config.card_limit
             end)
-            tag.triggered = true
+            tag.triggered = G.jokers and #G.jokers.cards < G.jokers.config.card_limit
             return true
         end
     end,
