@@ -1,4 +1,4 @@
-SMODS.Joker {
+--[[SMODS.Joker {
     key = "roulette",
     name = "Russian Roulette",
     atlas = 'rouletteatlas',
@@ -86,4 +86,4 @@ SMODS.Joker {
 			end
 		end
 	end
-}
+}]]
