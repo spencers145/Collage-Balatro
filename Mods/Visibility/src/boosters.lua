@@ -35,7 +35,7 @@ SMODS.Booster{
     kind = "VisibilityPack",
 
     get_weight = function(self)
-        return collage_ease_weight(60, 100, 0.9, 10, 5)
+        return collage_ease_weight(60, 100, 0.8, 10, 5)
     end,
 
     create_card = function(self, card, i)
@@ -81,12 +81,12 @@ SMODS.Booster{
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("bdc3c7") } } }
     end,
-    weight = 0.5,
+    weight = 0.45,
     cost = 8,
     kind = "VisibilityPack",
 
     get_weight = function(self)
-        return collage_ease_weight(60, 100, 0.45, 10, 5)
+        return collage_ease_weight(60, 100, 0.4, 10, 5)
     end,
 
     create_card = function(self, card, i)
@@ -132,12 +132,12 @@ SMODS.Booster{
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.choose, card.ability.extra, colours = { HEX("bdc3c7") } } }
     end,
-    weight = 0.25,
+    weight = 0.225,
     cost = 10,
     kind = "VisibilityPack",
 
     get_weight = function(self)
-        return collage_ease_weight(60, 100, 0.225, 10, 5)
+        return collage_ease_weight(60, 100, 0.2, 10, 5)
     end,
 
     create_card = function(self, card, i)
