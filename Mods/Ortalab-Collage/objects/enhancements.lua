@@ -17,6 +17,9 @@ SMODS.Enhancement({
             vars = { card and card.ability.extra.hand_chips or self.config.extra.hand_chips }
         }
     end,
+    in_pool = function (self, args)
+        return false
+    end,
     calculate = function(self, card, context)
         if context.heron_check then
             return { chips = (#G.hand.cards - #G.hand.highlighted) * card.ability.extra.hand_chips }
@@ -59,6 +62,9 @@ SMODS.Enhancement({
             vars = { card and card.ability.extra.hand_mult or self.config.extra.hand_mult }
         }
     end,
+    in_pool = function (self, args)
+        return false
+    end,
     calculate = function(self, card, context, effect)
         if context.cardarea == G.play and context.main_scoring then
             local mult_return = 0
@@ -94,6 +100,9 @@ SMODS.Enhancement({
     discovered = false,
     config = {extra = {index_state = 'MID'}},
     artist_credits = {'luna'},
+    in_pool = function (self, args)
+        return false
+    end,
     set_sprites = function(self, card, front)
         if card.ability and card.ability.extra and type(card.ability.extra) == 'table' and card.ability.index_state then 
             if card.ability.index_state == 'MID' then card.children.center:set_sprite_pos({x = 2, y = 0}) 
@@ -124,6 +133,9 @@ SMODS.Enhancement({
         return {
             vars = { card and card.ability.extra.x_mult or self.config.extra.x_mult, card and card.ability.extra.change or self.config.extra.change }
         }
+    end,
+    in_pool = function (self, args)
+        return false
     end,
     calculate = function(self, card, context)
         if context.cardarea == G.play and context.main_scoring and card.ability.extra.x_mult > 1 then
@@ -193,6 +205,9 @@ SMODS.Enhancement({
             vars = { card_ability.extra.base_x, card_ability.extra.x_gain }
         }
     end,
+    in_pool = function (self, args)
+        return false
+    end,
     calculate = function(self, card, context)
         if context.cardarea == G.hand and context.main_scoring then
             local rusty_in_hand = 0
@@ -260,6 +275,9 @@ SMODS.Enhancement({
             vars = { card.ability.extra.mult }
         }
     end,
+    in_pool = function (self, args)
+        return false
+    end,
     calculate = function(self, card, context)
         if context.main_scoring and context.cardarea == G.play then
             return {
@@ -285,6 +303,9 @@ SMODS.Enhancement({
         return {
             vars = { card and card.ability.extra.level_up or self.config.extra.level_up }
         }
+    end,
+    in_pool = function (self, args)
+        return false
     end,
     calculate = function(self, card, context)
         if context.before and context.cardarea == G.play then
@@ -313,6 +334,9 @@ SMODS.Enhancement({
         return {
             vars = { a, b, c, d, card.ability.extra.chips}
         }
+    end,
+    in_pool = function (self, args)
+        return false
     end,
     calculate = function(self, card, context)
         if context.cardarea == G.play and context.main_scoring then
