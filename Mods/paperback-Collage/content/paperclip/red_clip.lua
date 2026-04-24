@@ -4,7 +4,7 @@ PB_UTIL.Paperclip {
   pos = { x = 3, y = 0 },
   badge_colour = G.C.MULT,
   config = {
-    mult_mod = 5
+    mult_mod = 3
   },
 
   loc_vars = function(self, info_queue, card)

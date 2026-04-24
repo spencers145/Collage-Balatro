@@ -1,7 +1,7 @@
 PB_UTIL.MinorArcana {
   key = 'nine_of_pentacles',
   config = {
-    max_highlighted = 2,
+    max_highlighted = 4,
     paperclip = 'paperback_purple_clip'
   },
   atlas = 'minor_arcana_atlas',

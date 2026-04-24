@@ -2,7 +2,7 @@ PB_UTIL.MinorArcana {
   key = 'page_of_wands',
   config = {
     paperclip = 'paperback_orange_clip',
-    max_highlighted = 4
+    max_highlighted = 5
   },
   atlas = 'minor_arcana_atlas',
   pos = { x = 3, y = 3 },

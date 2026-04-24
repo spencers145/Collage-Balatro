@@ -3735,8 +3735,8 @@ return {
       paperback_black_clip = {
         name = "Black Clip",
         text = {
-          "Retriggers when {C:attention}scored{}",
-          "if a {C:attention}Clip{} is held in hand",
+          "Retriggers when {C:attention}scored{} if at",
+          "least {C:attention}2 Clips{} are held in hand",
         }
       },
       paperback_yellow_clip = {
@@ -3753,8 +3753,8 @@ return {
         name = "Gold Clip",
         text = {
           "If {C:attention}held in hand{} at {C:attention}end of round{},",
-          "earn {C:money}$#1#{} for each",
-          "{C:attention}Clip{} scored this round",
+          "earn {C:money}$#1#{} for every {C:attention}2 Clips{}",
+          "scored this round",
           "{C:inactive}(Currently {C:money}$#2#{C:inactive}/$#3# max)"
         }
       },
@@ -3790,7 +3790,8 @@ return {
         text = {
           "{C:green}#1# in #2#{} chance to create",
           "a random {C:attention}Tarot{} card",
-          "when {C:attention}held in hand{}",
+          "when {C:attention}held in hand{}.",
+          "{s:0.2} {}",
           "Odds increase by {C:attention}#3#{}",
           "for each scored {C:attention}Clip{}",
           "{C:inactive}(Resets after played hand){}"

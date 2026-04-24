@@ -5,7 +5,7 @@ PB_UTIL.Paperclip {
   badge_colour = G.C.PAPERBACK_PINK,
   config = {
     x_mult = 1,
-    x_mult_mod = 0.1
+    x_mult_mod = 0.05
   },
 
   loc_vars = function(self, info_queue, card)

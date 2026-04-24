@@ -6,7 +6,7 @@ PB_UTIL.Paperclip {
 
   calculate = function(self, card, context)
     if context.repetition and context.cardarea == G.play and not context.platinum_trigger then
-      if PB_UTIL.count_paperclips { area = G.hand } > 0 then
+      if PB_UTIL.count_paperclips { area = G.hand } >= 2 then
         return {
           repetitions = 1
         }
