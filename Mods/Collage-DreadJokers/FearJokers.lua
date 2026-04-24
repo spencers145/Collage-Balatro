@@ -462,6 +462,32 @@
                 end
             )}))
             return true
+        elseif consumable_card.ability.set == 'Loteria' and consumable_card.config.center.key ~= "c_ortalab_lot_barrel" then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'before',
+                delay = 0.3,
+                func = (function()
+                    if not silent then card_eval_status_text(consumable_card, 'extra', nil, nil, nil, {message = localize('k_rotten_ex'), colour = G.C.PURPLE, card = consumable_card}) end
+                    consumable_card:juice_up(0.8, 0.8)
+                    source_card:juice_up()
+                    consumable_card:set_ability(G.P_CENTERS["c_ortalab_lot_barrel"])
+                    return true
+                end
+            )}))
+            return true
+        elseif consumable_card.ability.set == 'Divine' and consumable_card.config.center.key ~= "c_paperback_eight_of_swords" then
+            G.E_MANAGER:add_event(Event({
+                trigger = 'before',
+                delay = 0.3,
+                func = (function()
+                    if not silent then card_eval_status_text(consumable_card, 'extra', nil, nil, nil, {message = localize('k_rotten_ex'), colour = G.C.PURPLE, card = consumable_card}) end
+                    consumable_card:juice_up(0.8, 0.8)
+                    source_card:juice_up()
+                    consumable_card:set_ability(G.P_CENTERS["c_paperback_eight_of_swords"])
+                    return true
+                end
+            )}))
+            return true
         end
     end
 
