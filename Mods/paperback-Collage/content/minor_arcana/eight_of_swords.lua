@@ -1,7 +1,7 @@
 PB_UTIL.MinorArcana {
   key = 'eight_of_swords',
   config = {
-    max_highlighted = 6,
+    max_highlighted = 5,
   },
   atlas = 'minor_arcana_atlas',
   pos = { x = 0, y = 5 },
