@@ -176,8 +176,7 @@ SMODS.Joker{
         text = {
             {"Scored {C:attention}Queens{} have a",
             "{C:green}#1# in #2#{} chance to",
-            "create an {C:art}Art Card{}",
-            "{C:inactive,s:0.8}(Who does this represent?)"},
+            "create an {C:art}Art Card{}"},
         }
     },
 	unlocked = true,
