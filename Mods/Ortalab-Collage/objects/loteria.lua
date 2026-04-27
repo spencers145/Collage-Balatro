@@ -1177,7 +1177,7 @@ function bottle_randomise(card)
     --     enhance = pseudorandom_element(get_current_pool('Enhanced'), pseudoseed('bottle_enhancement'))
     -- end
     local enhance = SMODS.poll_enhancement({key = 'bottle_enhance', guaranteed = true})
-    local seal = SMODS.poll_seal({key = 'bottle_seal', mod = modifier})
+    local seal = pseudorandom_element({'Red', 'Blue', 'Purple', 'Gold'}, pseudoseed('bottle_seal'))
     card:set_edition(edition, true, true)
     card:set_ability(G.P_CENTERS[enhance])
     card:set_seal(seal, true, true)
