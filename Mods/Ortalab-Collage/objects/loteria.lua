@@ -288,6 +288,7 @@ SMODS.Consumable({
     config = {extra = {chance = 3, amount = 1}},
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS['e_ortalab_anaglyphic']
         return {vars = {SMODS.get_probability_vars(card, 1, card.ability.extra.chance)}}
     end,
     can_use = function(self, card)
