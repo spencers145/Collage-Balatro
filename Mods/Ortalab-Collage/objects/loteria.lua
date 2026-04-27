@@ -67,7 +67,7 @@ SMODS.Consumable({
     atlas = 'loteria_cards',
     pos = {x=3, y=4},
     discovered = false,
-    config = {extra = {key = 'm_ortalab_recycled', amount = 3}},
+    config = {extra = {key = 'm_ortalab_recycled', amount = 4}},
     artist_credits = {'kosze'},
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS[self.config.extra.key]
@@ -186,7 +186,7 @@ SMODS.Consumable({
     atlas = 'loteria_cards',
     pos = {x=1, y=1},
     discovered = false,
-    config = {extra = {key = 'm_ortalab_index', amount = 3}},
+    config = {extra = {key = 'm_ortalab_index', amount = 4}},
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS[self.config.extra.key]
@@ -210,7 +210,7 @@ SMODS.Consumable({
     atlas = 'loteria_cards',
     pos = {x=2, y=0},
     discovered = false,
-    config = {extra = {key = 'm_ortalab_rusty', amount = 3}},
+    config = {extra = {key = 'm_ortalab_rusty', amount = 4}},
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS[self.config.extra.key]
@@ -234,7 +234,7 @@ SMODS.Consumable({
     atlas = 'loteria_cards',
     pos = {x=2, y=3},
     discovered = false,
-    config = {extra = {key = 'm_ortalab_sand', amount = 3}},
+    config = {extra = {key = 'm_ortalab_sand', amount = 4}},
     artist_credits = {'kosze'},
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS[self.config.extra.key]
@@ -671,7 +671,7 @@ SMODS.Consumable({
     atlas = 'loteria_cards',
     pos = {x=1, y=4},
     discovered = false,
-    config = {extra = {key = 'm_ortalab_iou', amount = 3}},
+    config = {extra = {key = 'm_ortalab_iou', amount = 4}},
     artist_credits = {'kosze'},
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS[self.config.extra.key]
@@ -695,7 +695,7 @@ SMODS.Consumable({
     atlas = 'loteria_cards',
     pos = {x=2, y=2},
     discovered = false,
-    config = {extra = {key = 'm_ortalab_ore', amount = 3}},
+    config = {extra = {key = 'm_ortalab_ore', amount = 4}},
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS[self.config.extra.key]
