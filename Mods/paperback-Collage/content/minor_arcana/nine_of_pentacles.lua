@@ -10,6 +10,9 @@ PB_UTIL.MinorArcana {
     artist = { 'ari' },
     coder = { 'metanite' }
   },
+  in_pool = function ()
+    return false
+  end,
 
   paperback = {
     requires_paperclips = true

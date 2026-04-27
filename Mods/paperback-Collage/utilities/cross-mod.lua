@@ -297,3 +297,20 @@ for mod, jokers in pairs(PB_UTIL.ENABLED_CROSS_MOD_JOKERS) do
     end
   end
 end
+
+PB_UTIL.PAPERCLIP_MINOR_ARCANA_CATEGORIES = {
+  ['scoring'] = {
+    'c_paperback_ace_of_cups',
+    'c_paperback_three_of_cups',
+    'c_paperback_ace_of_wands',
+    'c_paperback_page_of_wands',
+    'c_paperback_six_of_swords',
+    'c_paperback_seven_of_pentacles'
+  },
+  ['held_in_hand'] = {
+    'c_paperback_page_of_cups',
+    'c_paperback_four_of_wands',
+    'c_paperback_seven_of_swords',
+    'c_paperback_nine_of_pentacles'
+  }
+}

@@ -9,6 +9,9 @@ PB_UTIL.MinorArcana {
   paperback_credit = {
     coder = { 'srockw' }
   },
+  in_pool = function ()
+    return false
+  end,
 
   paperback = {
     requires_paperclips = true

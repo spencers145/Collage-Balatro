@@ -590,7 +590,7 @@ PB_UTIL.ENABLED_MINOR_ARCANA = {
   "page_of_cups",
   ---"knight_of_cups",
   -------"queen_of_cups",
-  ---"king_of_cups", -- CUPS
+  "king_of_cups", -- CUPS
   "ace_of_wands",
   --"two_of_wands",
   ---"three_of_wands",

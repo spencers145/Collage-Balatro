@@ -2859,9 +2859,9 @@ return {
       c_paperback_king_of_cups = {
         name = "King of Cups",
         text = {
-          "Earn {C:money}$#1#{} for each suit with all",
-          "13 {C:attention}base ranks{} that you have",
-          "{C:inactive}(Currently {C:money}$#2#{C:inactive})"
+          "Creates {C:attention}2{} Minor Arcana cards,",
+          "one giving {C:attention}scoring{} Clips, and",
+          "one giving {C:attention}held in hand{} Clips"
         }
       },
       c_paperback_ace_of_wands = {

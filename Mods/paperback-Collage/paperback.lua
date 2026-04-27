@@ -29,7 +29,7 @@ if PB_UTIL.config.minor_arcana_enabled then
     secondary_colour = G.C.PAPERBACK_MINOR_ARCANA, -- Color of the collection button and badge
     shop_rate = 0,                                 -- These will not appear in the shop
     default = 'c_paperback_ace_of_cups',           -- Card to spawn if pool is empty
-    collection_rows = { 7, 7 }
+    collection_rows = { 4, 4 }
   }
 
   -- Register the sprite for undiscovered Minor Arcana

@@ -1,41 +1,47 @@
 PB_UTIL.MinorArcana {
   key = 'king_of_cups',
-  config = {
-    extra = {
-      money = 5,
-    }
-  },
   atlas = 'minor_arcana_atlas',
   pos = { x = 6, y = 1 },
   paperback_credit = {
     coder = { 'srockw' }
   },
 
-  loc_vars = function(self, info_queue, card)
-    return {
-      vars = {
-        card.ability.extra.money,
-        PB_UTIL.get_complete_suits(true) * card.ability.extra.money
-      }
-    }
-  end,
-
   can_use = function(self, card)
     return true
   end,
 
   use = function(self, card, area)
-    local amount = PB_UTIL.get_complete_suits(true)
-
-    G.E_MANAGER:add_event(Event {
-      trigger = 'after',
-      delay = 0.4,
-      func = function()
-        if amount > 0 then
-          ease_dollars(amount * card.ability.extra.money)
+    G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.2,
+        func = function()
+            play_sound("tarot1")
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.2,
+                func = function()
+                    if #G.consumeables.cards < G.consumeables.config.card_limit then
+                        local the_card = pseudorandom_element(PB_UTIL.PAPERCLIP_MINOR_ARCANA_CATEGORIES.scoring, pseudoseed('king_of_cups_scoring'..G.GAME.round_resets.ante))
+                        SMODS.add_card({key = the_card})
+                        play_sound("card1")
+                    end
+                    return true
+                end
+            }))
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.2,
+                func = function()
+                    if #G.consumeables.cards < G.consumeables.config.card_limit then
+                        local the_card = pseudorandom_element(PB_UTIL.PAPERCLIP_MINOR_ARCANA_CATEGORIES.held_in_hand, pseudoseed('king_of_cups_held'..G.GAME.round_resets.ante))
+                        SMODS.add_card({key = the_card})
+                        play_sound("card1")
+                    end
+                    return true
+                end
+            }))
+            return true
         end
-        return true
-      end
-    })
+    }))
   end
 }
