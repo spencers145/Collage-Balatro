@@ -389,14 +389,13 @@ SMODS.Consumable({
     end
 })]]
 
---[[
 SMODS.Consumable({
     key = 'lot_bottle',
     set = 'ortalab_loteria',
     atlas = 'loteria_cards',
     pos = {x=3, y=2},
     discovered = false,
-    config = {extra = {amount = 2, selected = 2}},
+    config = {extra = {amount = 2, selected = 4}},
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
         return {vars = {card.ability.extra.amount + (G.GAME and G.GAME.ortalab.vouchers.tabla)}}
@@ -463,7 +462,7 @@ SMODS.Consumable({
             return true
         end}))
     end
-})]]
+})
 
 --[[
 SMODS.Consumable({
