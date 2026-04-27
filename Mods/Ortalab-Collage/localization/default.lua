@@ -2002,7 +2002,7 @@ return {
 				["text"] = {
 					{"Destroy up to {C:attention}#1#",
 					"selected cards",},
-					{"Create {C:attention}#1# modified",
+					{"Create {C:attention}#2# modified",
 					"cards in your hand"}
 				},
 			},

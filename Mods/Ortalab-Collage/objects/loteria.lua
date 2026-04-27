@@ -398,7 +398,7 @@ SMODS.Consumable({
     config = {extra = {amount = 2, selected = 4}},
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
-        return {vars = {card.ability.extra.amount + (G.GAME and G.GAME.ortalab.vouchers.tabla)}}
+        return {vars = {card.ability.extra.selected, card.ability.extra.amount + (G.GAME and G.GAME.ortalab.vouchers.tabla)}}
     end,
     can_use = function(self, card)
         return selected_use(self, card)
