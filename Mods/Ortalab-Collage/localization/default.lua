@@ -1928,9 +1928,8 @@ return {
 				["name"] = "The Pear",
 				["text"] = {
 					"{C:green}#1# in #2#{} chance to add",
-                    "{C:dark_edition}Anaglyphic{}, {C:dark_edition}Fluorescent{},",
-                    "{C:dark_edition}Greyscale{} or {C:dark_edition}Overexposed{}",
-                    "edition to a random {C:attention}Joker"
+                    "{C:dark_edition}Anaglyphic{} edition to a",
+					"random {C:attention}Joker"
 				},
 			},
             ["c_ortalab_lot_parrot"] = {

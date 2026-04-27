@@ -278,14 +278,14 @@ SMODS.Consumable({
     end
 })]]
 
---[[
+
 SMODS.Consumable({
     key = 'lot_pear',
     set = 'ortalab_loteria',
     atlas = 'loteria_cards',
     pos = {x=4, y=0},
     discovered = false,
-    config = {extra = {chance = 4, amount = 1}},
+    config = {extra = {chance = 3, amount = 1}},
     artist_credits = {'parchment'},
     loc_vars = function(self, info_queue, card)
         return {vars = {SMODS.get_probability_vars(card, 1, card.ability.extra.chance)}}
@@ -314,7 +314,7 @@ SMODS.Consumable({
             G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
                 local over = false
                 local eligible_card = pseudorandom_element(eligible_jokers, pseudoseed('pear_select'))
-                local edition = poll_edition('pear_poll', nil, nil, true, {'e_ortalab_anaglyphic', 'e_ortalab_greyscale', 'e_ortalab_fluorescent', 'e_ortalab_overexposed'})
+                local edition = poll_edition('pear_poll', nil, nil, true, {'e_ortalab_anaglyphic'})
                 eligible_card:set_edition(edition, true)
                 check_for_unlock({type = 'have_edition'})
                 card:juice_up(0.3, 0.5)
@@ -339,7 +339,7 @@ SMODS.Consumable({
             return true end }))
         end
     end
-})]]
+})
 
 --[[
 SMODS.Consumable({
