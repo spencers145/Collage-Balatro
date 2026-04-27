@@ -199,7 +199,9 @@ SMODS.Joker{
         concept = "base4"
     },
 	calculate = function(self, card, context)
-		if context.individual and context.other_card:get_id() == 12 and SMODS.pseudorandom_probability(card, pseudoseed('collage_sunflower'), 1, card.ability.extra.odds, 'collage_sunflower') then
+		if context.individual and context.cardarea == G.play and not context.end_of_round
+        and context.other_card:get_id() == 12
+        and SMODS.pseudorandom_probability(card, pseudoseed('collage_sunflower'), 1, card.ability.extra.odds, 'collage_sunflower') then
             if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
                 G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
                 return {
