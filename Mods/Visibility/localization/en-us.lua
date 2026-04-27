@@ -1048,7 +1048,7 @@ return {
                 name = "Mandela",
                 text = {
                     "Add an {V:1}Indigo Seal{}",
-                    "to {C:attention}3{} selected",
+                    "to {C:attention}4{} selected",
                     "cards in your hand",
                 }
             },
