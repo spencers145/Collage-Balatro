@@ -2180,6 +2180,7 @@ return {
 				["name"] = "Ore Card",
 				["text"] = {
 					"{C:mult}+#1#{} Mult",
+					"{C:money}+$#2#{} when scored",
 					"no rank or suit"
 				}
 			},

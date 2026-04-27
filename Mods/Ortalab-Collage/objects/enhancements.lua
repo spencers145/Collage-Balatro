@@ -268,11 +268,11 @@ SMODS.Enhancement({
     no_suit = true,
     replace_base_card = true,
     always_scores = true,
-    config = {extra = {mult = 15}},
+    config = {extra = {mult = 15, dollars = 2}},
     artist_credits = {'eremel'},
     loc_vars = function(self, info_queue, card)
         return {
-            vars = { card.ability.extra.mult }
+            vars = { card.ability.extra.mult, card.ability.extra.dollars }
         }
     end,
     in_pool = function (self, args)
@@ -281,7 +281,8 @@ SMODS.Enhancement({
     calculate = function(self, card, context)
         if context.main_scoring and context.cardarea == G.play then
             return {
-                mult = card.ability.extra.mult
+                mult = card.ability.extra.mult,
+                dollars = card.ability.extra.dollars
             }
         end
     end
@@ -297,7 +298,7 @@ SMODS.Enhancement({
     atlas = "ortalab_enhanced",
     pos = {x = 2, y = 1},
     discovered = false,
-    config = {extra = {level_up = 1}},
+    config = {extra = {level_up = 2}},
     artist_credits = {'gappie'},
     loc_vars = function(self, info_queue, card)
         return {
