@@ -30,11 +30,7 @@ SMODS.Consumable({
 			elseif random_roll<0.3 then
 				G.E_MANAGER:add_event(Event({
 				  func = function()
-					local valid_keys = {}
-                    for _, seal_center in pairs(G.P_CENTER_POOLS["Seal"]) do
-                      valid_keys[#valid_keys + 1] = seal_center.key
-                    end
-		            ArtBox.create_collectable(pseudorandom_element(valid_keys, pseudoseed("mystery")))
+		            ArtBox.create_collectable(pseudorandom_element({'Red', 'Blue', 'Purple', 'Gold'}, pseudoseed("mystery")))
 					G.GAME.consumeable_buffer = 0
 					return true
 				  end
