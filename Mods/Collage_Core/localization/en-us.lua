@@ -33,6 +33,24 @@ return {
 				}
 			}
 		},
+		Voucher = {
+			v_magic_trick = {
+				name = "Magic Trick",
+				text = {
+					"{C:attention}Modifier Collectibles{} for",
+					"{C:attention}Enhancements{} and {C:attention}Seals{} may",
+					"appear in the shop"
+				}
+			},
+			v_illusion = {
+				name = "Illusion",
+				text = {
+					"{C:attention}Modifier Collectibles{} for",
+					"{C:attention}Editions{} may appear in the shop,",
+					"and {C:attention}Seals{} appear more often"
+				}
+			},
+		},
 		art = {
 			c_collage_art_blank = {
                 name = 'Blank',
