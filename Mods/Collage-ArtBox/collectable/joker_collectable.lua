@@ -5,6 +5,9 @@ SMODS.Consumable({
     pos = {x=2, y=0},
     soul_pos = {x=2, y=1},
     discovered = false,
+    in_pool = function()
+      return false
+    end,
     config = {
        extra = { 
         added_value = 4,

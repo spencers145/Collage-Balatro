@@ -95,9 +95,6 @@ SMODS.Consumable({
 
     }))
   end,
-  in_pool = function(self, args)
-    return false
-  end,
   set_sprites = function(self, card, front)
     local key = card.ability and card.ability.extra and
         (card.ability.extra.enhancement or card.ability.extra.seal or card.ability.extra.edition) or nil

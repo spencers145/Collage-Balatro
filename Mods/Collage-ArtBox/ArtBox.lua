@@ -266,8 +266,8 @@ SMODS.ConsumableType({
         }
     },
     collection_rows = { 3, 3 },
-    shop_rate = 0.01,
-    default = 'c_artb_joker_collectable'
+    shop_rate = 0,
+    default = 'c_artb_mod_collectable'
 })
 
 ArtBox.Collectables = {
@@ -452,6 +452,36 @@ function ArtBox.create_collectable(key)
     return collectable
 end
 
+function ArtBox.set_collectible(collectable, key)
+    if G.P_SEALS[key] then
+        collectable.ability.extra.seal = key
+    end
+
+    if G.P_CENTERS[key] then
+        if key:sub(1, 2) == 'm_' then
+            collectable.ability.extra.enhancement = key
+        elseif key:sub(1, 2) == 'e_' then
+            collectable.ability.extra.edition = key
+        end
+    end
+
+    local ref_values = ArtBox.Collectables[key]
+    if ref_values then
+        collectable.children.center.atlas = G.ASSET_ATLAS[ref_values.atlas]
+        collectable.children.center:set_sprite_pos(ref_values.pos)
+
+        collectable.children.floating_sprite = Sprite(collectable.T.x, collectable.T.y, collectable.T.w, collectable.T.h,
+            G.ASSET_ATLAS[ref_values.atlas], ref_values.soul_pos)
+        collectable.children.floating_sprite.role.draw_major = collectable
+        collectable.children.floating_sprite.states.hover.can = false
+        collectable.children.floating_sprite.states.click.can = false
+
+        collectable.ability.extra.shader = ref_values.shader
+    end
+
+    return collectable
+end
+
 SMODS.DrawStep {
     key = 'collectable_shaders',
     order = 61,
@@ -479,6 +509,37 @@ SMODS.DrawStep {
     conditions = { vortex = false, facing = 'front' },
 }
 
+local create_card_for_shop_ref = create_card_for_shop
+create_card_for_shop = function(area)
+    local card = create_card_for_shop_ref(area)
+    if card.config.center.key == 'c_artb_mod_collectable' then
+        if G.GAME.used_vouchers['v_illusion'] then
+            local type = pseudorandom_element({'enhancement', 'seal', 'edition'}, pseudoseed('v_magic_trick'))
+            if type == 'enhancement' then
+                local enhancement = SMODS.poll_enhancement({guaranteed = true, key = 'v_magic_trick'})
+                ArtBox.set_collectible(card, enhancement)
+            elseif type == 'seal' then
+                local seal = pseudorandom_element({'Red', 'Blue', 'Gold', 'Purple'}, pseudoseed('v_magic_trick'))
+                ArtBox.set_collectible(card, seal)
+            elseif type == 'edition' then
+                local edition = poll_edition('v_magic_trick', nil, true, true)
+                ArtBox.set_collectible(card, edition)
+            end
+        else
+            local type = pseudorandom_element({'enhancement', 'enhancement', 'enhancement', 'enhancement', 'seal'}, pseudoseed('v_magic_trick'))
+            if type == 'enhancement' then
+                local enhancement = SMODS.poll_enhancement({guaranteed = true, key = 'v_magic_trick'})
+                ArtBox.set_collectible(card, enhancement)
+            elseif type == 'seal' then
+                local seal = pseudorandom_element({'Red', 'Blue', 'Gold', 'Purple'}, pseudoseed('v_magic_trick'))
+                ArtBox.set_collectible(card, seal)
+            end
+
+        end
+    end
+
+    return card
+end
 --#endregion
 
 --#region Art Card stuff

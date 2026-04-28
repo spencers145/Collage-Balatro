@@ -640,6 +640,15 @@ payload = '''if G.P_CENTERS[key].set == 'Joker' then return end'''
 
 
 
+# magic trick sets collectible rate instead of card rate
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''G.GAME.playing_card_rate = center_table.extra'''
+position = 'at'
+match_indent = true
+payload = '''G.GAME.collectable_rate = center_table.extra'''
+
 
 
 

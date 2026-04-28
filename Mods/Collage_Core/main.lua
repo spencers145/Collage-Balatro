@@ -1018,3 +1018,15 @@ SMODS.Consumable ({
 		end
 	end
 })
+
+SMODS.Voucher:take_ownership('v_magic_trick', {
+    loc_vars = function(_, info_queue)
+        info_queue[#info_queue + 1] = {key = 'artb_mod_collectable_explain', set = 'Other'}
+    end
+})
+
+SMODS.Voucher:take_ownership('v_illusion', {
+    loc_vars = function(_, info_queue)
+        info_queue[#info_queue + 1] = {key = 'artb_mod_collectable_explain', set = 'Other'}
+    end
+})
