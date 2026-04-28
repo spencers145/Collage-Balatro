@@ -2187,8 +2187,8 @@ return {
 			["m_ortalab_iou"] = {
 				["name"] = "Cosmic Card",
 				["text"] = {
-					"{C:attention}Temporarily{} increase",
-					"hand level by {C:attention}#1#"
+					"Before hand scores, gives",
+					"{C:white,X:mult}X#1#{} Mult and {C:white,X:chips}X#2#{} Chips"
 				}
 			},
 		},

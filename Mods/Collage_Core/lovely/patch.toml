@@ -666,3 +666,23 @@ payload = '''elseif v.set == 'Joker' and (not v.enhancement_gate or collage_ease
     else
         add = true
     end'''
+
+
+# stop cosmic card / iou card from triggering a wiggle
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''local modded = false'''
+position = 'before'
+match_indent = true
+payload = '''local old_mult = mult
+local old_chips = hand_chips'''
+
+# stop cosmic card / iou card from triggering a wiggle
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''if modded then update_hand_text({sound = 'chips2', modded = modded}, {chips = hand_chips, mult = mult}) end'''
+position = 'before'
+match_indent = true
+payload = '''modded = modded and (old_mult > mult or old_chips > hand_chips)'''

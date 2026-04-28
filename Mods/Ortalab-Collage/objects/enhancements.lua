@@ -298,26 +298,25 @@ SMODS.Enhancement({
     atlas = "ortalab_enhanced",
     pos = {x = 2, y = 1},
     discovered = false,
-    config = {extra = {level_up = 2}},
+    config = {extra = {xmult = 1.25, xchips = 1.25}},
     artist_credits = {'gappie'},
     loc_vars = function(self, info_queue, card)
         return {
-            vars = { card and card.ability.extra.level_up or self.config.extra.level_up }
+            vars = {
+                card.ability.extra.xmult,
+                card.ability.extra.xchips
+            }
         }
     end,
     in_pool = function (self, args)
         return false
     end,
     calculate = function(self, card, context)
-        if context.before and context.cardarea == G.play then
-            Ortalab.modify_temp_levels(card.ability.extra.level_up, context.scoring_name)
+        if context.modify_hand and context.cardarea == G.play then
             return {
-                message = localize('ortalab_level_up'),
-                colour = G.C.PURPLE,
-                sound = 'ortalab_cosmic',
-                pitch =  0.8+ (0.9 + 0.2*math.random())*0.2,
-                volume = 0.5
-            }     
+                xmult = card.ability.extra.xmult,
+                xchips = card.ability.extra.xchips,
+            }
         end
     end
 })
