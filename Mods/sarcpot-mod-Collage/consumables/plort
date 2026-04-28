@@ -28,7 +28,8 @@ SMODS.Consumable({
             trigger = "after",
             delay = 0.5,
             func = function ()
-                ease_dollars(self.config.dollars)
+                card.config.center:use()
+                SMODS.calculate_context({using_consumeable = true, consumeable = card, area = G.consumeables})
                 play_sound('sarc_sell_plort', 0.9 + 0.2*math.random(), 0.5)
                 --card:start_dissolve(nil, true)
                 card.T.r = -0.2
