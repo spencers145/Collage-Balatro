@@ -26,6 +26,9 @@ return {
             sarc_active = "Active",
             sarc_inactive = "Inactive",
             sarc_disabled = "Disabled!",
+            sarc_went_under = "Went Under!",
+            sarc_stonks = "Stonks!",
+            sarc_flow = "~Flow~",
 
             sarc_requires_restart = "Restart the game to apply changes",
             sarc_enable_vouchers = "Enable Vouchers",
