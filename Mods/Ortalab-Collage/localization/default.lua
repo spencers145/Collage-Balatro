@@ -2187,8 +2187,9 @@ return {
 			["m_ortalab_iou"] = {
 				["name"] = "Cosmic Card",
 				["text"] = {
-					"Before hand scores, gives",
-					"{C:white,X:mult}X#1#{} Mult and {C:white,X:chips}X#2#{} Chips"
+					"Gives the {C:chips}Chips{} and {C:mult}Mult{}",
+					"of the {C:planet}Planet{} for the",
+					"played {C:attention}Poker Hand{}"
 				}
 			},
 		},

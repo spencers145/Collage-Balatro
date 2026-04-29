@@ -298,7 +298,7 @@ SMODS.Enhancement({
     atlas = "ortalab_enhanced",
     pos = {x = 2, y = 1},
     discovered = false,
-    config = {extra = {xmult = 1.25, xchips = 1.25}},
+    config = {extra = {mult = 4, chips = 30}},
     artist_credits = {'gappie'},
     loc_vars = function(self, info_queue, card)
         return {
@@ -312,10 +312,11 @@ SMODS.Enhancement({
         return false
     end,
     calculate = function(self, card, context)
-        if context.modify_hand and context.cardarea == G.play then
+        if context.cardarea == G.play and context.main_scoring then
+            local hand = G.GAME.hands[context.scoring_name]
             return {
-                xmult = card.ability.extra.xmult,
-                xchips = card.ability.extra.xchips,
+                mult = hand.l_mult,
+                chips = hand.l_chips,
             }
         end
     end
