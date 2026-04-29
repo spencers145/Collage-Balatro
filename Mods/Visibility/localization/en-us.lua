@@ -959,8 +959,8 @@ return {
             c_vis_coupon = {
                 name="Coupon",
                 text={
-                    "Your current reroll",
-                    "cost is set to {C:money}$0{}",
+                    "Creates a",
+                    "{C:attention}Coupon Tag{}"
                 },
             },
         },
