@@ -19,6 +19,13 @@ SMODS.Consumable({
             G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
 			local random_roll = pseudorandom("box")
 
+			local player_has_paperclips = false
+			for key, value in pairs(G.playing_cards) do
+				if PB_UTIL.has_paperclip(value) then
+				player_has_paperclips = true
+				end
+			end
+
 			if random_roll<0.05 then
 				G.E_MANAGER:add_event(Event({
 				  func = function()
@@ -36,13 +43,23 @@ SMODS.Consumable({
 				  end
 			    }))
 			else
-				G.E_MANAGER:add_event(Event({
-				  func = function()
-					ArtBox.create_collectable(SMODS.poll_enhancement({guaranteed = true, key = 'mystery'}))
-					G.GAME.consumeable_buffer = 0
-					return true
-				  end
-			    }))
+				if player_has_paperclips and pseudorandom(pseudoseed("mystery_box_clip" .. G.GAME.round_resets.ante)) > 0.5 then
+					G.E_MANAGER:add_event(Event({
+					func = function()
+						ArtBox.create_collectable(PB_UTIL.poll_paperclip('mystery'))
+						G.GAME.consumeable_buffer = 0
+						return true
+					end
+					}))
+				else
+					G.E_MANAGER:add_event(Event({
+					func = function()
+						ArtBox.create_collectable(SMODS.poll_enhancement({guaranteed = true, key = 'mystery'}))
+						G.GAME.consumeable_buffer = 0
+						return true
+					end
+					}))
+				end
 			end
         end
 	end,
