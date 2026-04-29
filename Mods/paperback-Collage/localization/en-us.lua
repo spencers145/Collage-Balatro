@@ -3755,7 +3755,7 @@ return {
           "If {C:attention}held in hand{} at {C:attention}end of round{},",
           "earn {C:money}$#1#{} for every {C:attention}2 Clips{}",
           "scored this round",
-          "{C:inactive}(Currently {C:money}$#2#{C:inactive}/$#3# max)"
+          "{C:inactive}(Currently {C:money}$#2#{C:inactive})"
         }
       },
       paperback_white_clip = {

@@ -14,10 +14,7 @@ PB_UTIL.Paperclip {
     return {
       vars = {
         card.ability[self.key].money,
-        math.min(
-          card.ability[self.key].money * math.floor((G.GAME.paperback.round.scored_clips or 0)/2),
-          card.ability[self.key].max_money),
-        card.ability[self.key].max_money
+        card.ability[self.key].money * math.floor((G.GAME.paperback.round.scored_clips or 0)/2),
       }
     }
   end,
@@ -26,9 +23,8 @@ PB_UTIL.Paperclip {
     if context.playing_card_end_of_round then
       if context.cardarea == G.hand and not context.repetition and not context.individual and G.GAME.paperback.round.scored_clips > 0 then
         return {
-          dollars = math.min(
-            card.ability[self.key].money * math.floor((G.GAME.paperback.round.scored_clips or 0)/2),
-            card.ability[self.key].max_money)
+          dollars =
+            card.ability[self.key].money * math.floor((G.GAME.paperback.round.scored_clips or 0)/2)
         }
       end
     end
