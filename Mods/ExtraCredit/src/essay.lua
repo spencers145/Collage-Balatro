@@ -660,9 +660,9 @@ SMODS.Joker{ --Tuxedo
     loc_txt = {
         ['name'] = 'Tuxedo',
         ['text'] = {
-            [1] = '{C:attention}Retrigger{} all cards',
-            [2] = 'with {V:1}#1#{} suit',
-            [3] = "{s:0.8}suit changes at end of round"
+            {'{C:attention}Retrigger{} all cards',
+            'with {V:1}#1#{} suit'},
+            {'Suit changes at end of round'}
         }
     },
     pos = {
@@ -718,7 +718,7 @@ SMODS.Joker{ --Farmer
             {'Cards with {V:1}#2#{} suit',
             'held in hand give {C:money}$#1#',
             'at end of round'},
-            {'Suit changes after',
+            {'Suit changes at',
             'end of round'}
         }
     },
