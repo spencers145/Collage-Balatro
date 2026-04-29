@@ -322,7 +322,7 @@ SMODS.Enhancement({
     atlas = "ortalab_enhanced",
     pos = {x = 3, y = 1},
     discovered = false,
-    config = {extra = {discard_chance = 5, tag_chance = 15, tags = 1, chips = 125}},
+    config = {extra = {discard_chance = 3, tag_chance = 12, tags = 1, chips = 100}},
     artist_credits = {'kosze', 'gappie'},
     loc_vars = function(self, info_queue, card)
         local a, b = SMODS.get_probability_vars(card, 1, card.ability.extra.discard_chance)
