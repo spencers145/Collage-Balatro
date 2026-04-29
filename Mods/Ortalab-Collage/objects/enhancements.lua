@@ -263,7 +263,7 @@ SMODS.Enhancement({
     no_suit = true,
     replace_base_card = true,
     always_scores = true,
-    config = {extra = {mult = 15, dollars = 2}},
+    config = {extra = {mult = 15, dollars = 1}},
     artist_credits = {'eremel'},
     loc_vars = function(self, info_queue, card)
         return {
