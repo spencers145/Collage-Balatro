@@ -31,7 +31,7 @@ SMODS.Joker {
       }
     end
     
-    if context.setting_ability and not context.blueprint and context.old ~= context.new and context.new ~= 'c_base' then
+    if context.setting_ability and context.other_card.config.center.set ~= 'Voucher' and not context.blueprint and context.old ~= context.new and context.new ~= 'c_base' then
       card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
       card.ability.extra.trigger = (card.ability.extra.trigger or 0) + 1
       
