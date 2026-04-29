@@ -2131,9 +2131,9 @@ return {
 				["name"] = "Sand Card",
 				["text"] = {
 					{"{X:mult,C:white}X#1#{} Mult",},
-                    {"Loses {X:mult,C:white}X#2#{} Mult when", 
-					"scored or held in hand",
-                    "{C:inactive,s:0.7}(Destroyed after {X:mult,C:white,s:0.7}X1{C:inactive,s:0.7} Mult)",}
+                    {"{C:green}#2# in #3#{} chance to",
+					"self-destruct when",
+					"held in hand",}
 				},
 			},
 			["m_ortalab_rusty"] = {

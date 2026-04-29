@@ -127,11 +127,12 @@ SMODS.Enhancement({
     key = "sand",
     atlas = "ortalab_enhanced",
     pos = {x = 3, y = 0},
-    config = {extra = {x_mult = 2.5, change=0.25}},
+    config = {extra = {x_mult = 1.75, odds = 3}},
     artist_credits = {'gappie'},
     loc_vars = function(self, info_queue, card)
+        local n, d = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
         return {
-            vars = { card and card.ability.extra.x_mult or self.config.extra.x_mult, card and card.ability.extra.change or self.config.extra.change }
+            vars = { card and card.ability.extra.x_mult or self.config.extra.x_mult, n, d }
         }
     end,
     in_pool = function (self, args)
@@ -143,46 +144,40 @@ SMODS.Enhancement({
                 xmult = card.ability.extra.x_mult
             }
         end
-        if context.final_scoring_step and (context.cardarea == G.hand or context.cardarea == G.play) and not next(SMODS.find_card('j_ortalab_sandstone')) then
-            card.ability.extra.x_mult = card.ability.extra.x_mult - card.ability.extra.change
-            G.E_MANAGER:add_event(Event({
-                trigger = 'immediate',
-                func = function()
-                    card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('ortalab_sand_crumble'), colour = G.C.GOLD, instant = true})
-                    play_sound('ortalab_sand', 0.8+ (0.9 + 0.2*math.random())*0.2, 0.5)
-                    if card.ability.extra.x_mult and card.ability.extra.x_mult < 1 then
+        if context.final_scoring_step and (context.cardarea == G.hand) and not next(SMODS.find_card('j_ortalab_sandstone')) then
+            if SMODS.pseudorandom_probability(card, pseudoseed('ort_sand'), 1, card.ability.extra.odds) then
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'immediate',
+                    func = function()
+                        card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('ortalab_sand_crumble'), colour = G.C.GOLD, instant = true})
+                        play_sound('ortalab_sand', 0.8+ (0.9 + 0.2*math.random())*0.2, 0.5)
                         SMODS.destroy_cards(card)
+                        card.particles = Particles(1, 1, 0,0, {
+                            timer = 0.015,
+                            scale = 0.3,
+                            initialize = true,
+                            lifespan = 1,
+                            speed = 3,
+                            padding = -1,
+                            attach = card,
+                            colours = {G.C.GOLD, lighten(G.C.GOLD, 0.4), lighten(G.C.GOLD, 0.2), darken(G.C.GOLD, 0.2)},
+                            fill = true
+                        })
+                        card.particles.fade_alpha = 1
+                        card.particles:fade(1, 0)
+                        
+                        return true
                     end
-                    card.particles = Particles(1, 1, 0,0, {
-                        timer = 0.015,
-                        scale = 0.3,
-                        initialize = true,
-                        lifespan = 1,
-                        speed = 3,
-                        padding = -1,
-                        attach = card,
-                        colours = {G.C.GOLD, lighten(G.C.GOLD, 0.4), lighten(G.C.GOLD, 0.2), darken(G.C.GOLD, 0.2)},
-                        fill = true
-                    })
-                    card.particles.fade_alpha = 1
-                    card.particles:fade(1, 0)
-                    
-                    return true
-                end
-            }))  
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 1,
-                func = function()
-                    card.particles:remove()
-                    return true
-                end
-            }))
-        end
-        if context.destroying_card and context.destroying_card == card and card.ability.extra.x_mult < 1 then
-            return {
-                remove = true
-            }
+                }))  
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 1,
+                    func = function()
+                        card.particles:remove()
+                        return true
+                    end
+                }))
+            end
         end
     end
 })
