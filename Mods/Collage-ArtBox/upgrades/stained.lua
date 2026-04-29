@@ -16,7 +16,7 @@ SMODS.Enhancement({
   end,
   loc_vars = function(self, info_queue, card)
 		local player_has_paperclips = false
-		for key, value in pairs(G.playing_cards) do
+		for key, value in pairs(G.playing_cards.cards) do
 			if PB_UTIL.has_paperclip(value) then
 			player_has_paperclips = true
 			end
