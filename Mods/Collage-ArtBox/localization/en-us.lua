@@ -807,6 +807,17 @@ return {
                 }
             },
 
+            artb_mod_collectable_clips_explain = {
+                name = 'Modifier Collectable',
+                text = {
+                    "Contains an {C:attention}Enhancement{},",
+                    "{C:attention}Seal{}, {C:dark_edition}Edition{}, or {C:attention}Clip",
+                    "{s:0.2} {}",
+                    "{C:attention}Use{} to apply it to",
+                    "a selected {C:attention}playing card"
+                }
+            },
+
             artb_ouroboros_seal = {
                 name = 'Ouroboros Seal',
                 text = {

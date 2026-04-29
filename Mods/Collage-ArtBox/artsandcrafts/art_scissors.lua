@@ -16,7 +16,18 @@ SMODS.Consumable({
 	end,
 
 	loc_vars = function (self, info_queue, card)
-		info_queue[#info_queue + 1] = {key = 'artb_mod_collectable_explain', set = 'Other'}
+		local player_has_paperclips = false
+		for key, value in pairs(G.playing_cards) do
+			if PB_UTIL.has_paperclip(value) then
+			player_has_paperclips = true
+			end
+		end
+
+		if player_has_paperclips then
+			info_queue[#info_queue + 1] = {key = 'artb_mod_collectable_clips_explain', set = 'Other'}
+		else
+			info_queue[#info_queue + 1] = {key = 'artb_mod_collectable_explain', set = 'Other'}
+		end
 	end,
 
 	use = function(self, card, area)
