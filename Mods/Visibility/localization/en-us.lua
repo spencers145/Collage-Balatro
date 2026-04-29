@@ -793,9 +793,9 @@ return {
             vis_wooden_seal = {
                 name = "Wooden Seal",
                 text = {
-                    "{X:chips,C:white} X#1# {} Chips",
+                    "{X:chips,C:white}X#1#{} Chips",
                     "{C:green}#2# in #3#{} chance to",
-                    "destroy card when played",
+                    "destroy seal when played",
                 },
             },
             vis_mitosis_seal = {

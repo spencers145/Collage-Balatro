@@ -32,11 +32,20 @@ SMODS.Seal {
     end,
     badge_colour = HEX('623938'),
     calculate = function(self, card, context)
-        if context.destroy_card and context.cardarea == G.play and context.destroy_card == card
+        if context.after and context.cardarea == G.play
             and SMODS.pseudorandom_probability(card, pseudoseed('wooden_seal'), 1, card.ability.seal.extra.odds, 'wooden_seal') then
             return {
                 message = "Cracked!",
-                remove = true
+                func = G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.5,
+                    func = function()
+                        play_sound("cardFan2", 0.9, 1.1)
+                        card:juice_up(0.3, 0.3)
+                        card.seal = nil
+                        return true
+                    end
+                }))
             }
         end
         if context.main_scoring and context.cardarea == G.play then
