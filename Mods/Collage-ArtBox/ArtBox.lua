@@ -514,7 +514,18 @@ create_card_for_shop = function(area)
     local card = create_card_for_shop_ref(area)
     if card.config.center.key == 'c_artb_mod_collectable' then
         if G.GAME.used_vouchers['v_illusion'] then
-            local type = pseudorandom_element({'enhancement', 'seal', 'edition'}, pseudoseed('v_magic_trick'))
+            local player_has_paperclips = false
+			for key, value in pairs(G.playing_cards) do
+				if PB_UTIL.has_paperclip(value) then
+				player_has_paperclips = true
+				end
+			end
+            
+            local pool = {'enhancement', 'seal', 'edition'}
+            if player_has_paperclips then
+                table.insert(pool, 'paperclip')
+            end
+            local type = pseudorandom_element(pool, pseudoseed('v_magic_trick'))
             if type == 'enhancement' then
                 local enhancement = SMODS.poll_enhancement({guaranteed = true, key = 'v_magic_trick'})
                 ArtBox.set_collectible(card, enhancement)
@@ -524,15 +535,36 @@ create_card_for_shop = function(area)
             elseif type == 'edition' then
                 local edition = poll_edition('v_magic_trick', nil, true, true)
                 ArtBox.set_collectible(card, edition)
+            elseif type == 'paperclip' then
+                local clip = PB_UTIL.poll_paperclip('v_magic_trick')
+                ArtBox.set_collectible(card, clip)
             end
         else
-            local type = pseudorandom_element({'enhancement', 'enhancement', 'enhancement', 'enhancement', 'seal'}, pseudoseed('v_magic_trick'))
+            local player_has_paperclips = false
+			for key, value in pairs(G.playing_cards) do
+				if PB_UTIL.has_paperclip(value) then
+				player_has_paperclips = true
+				end
+			end
+            
+            local pool = {'enhancement', 'enhancement', 'seal'}
+            if player_has_paperclips then
+                table.insert(pool, 'paperclip')
+                table.insert(pool, 'paperclip')
+            else
+                table.insert(pool, 'enhancement')
+                table.insert(pool, 'enhancement')
+            end
+            local type = pseudorandom_element(pool, pseudoseed('v_magic_trick'))
             if type == 'enhancement' then
                 local enhancement = SMODS.poll_enhancement({guaranteed = true, key = 'v_magic_trick'})
                 ArtBox.set_collectible(card, enhancement)
             elseif type == 'seal' then
                 local seal = pseudorandom_element({'Red', 'Blue', 'Gold', 'Purple'}, pseudoseed('v_magic_trick'))
                 ArtBox.set_collectible(card, seal)
+            elseif type == 'paperclip' then
+                local clip = PB_UTIL.poll_paperclip('v_magic_trick')
+                ArtBox.set_collectible(card, clip)
             end
 
         end
