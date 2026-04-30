@@ -30,8 +30,11 @@ SMODS.Joker {
   end,
   
   calculate = function(self, card, context)
-    if context.cardarea == G.jokers and context.joker_main then
+    if context.before and not context.blueprint then
       card.ability.extra.plus_mult = card.ability.extra.plus_mult + card.ability.extra.plus_mult_add
+    end
+
+    if context.cardarea == G.jokers and context.joker_main then
       return {
         mult_mod =  card.ability.extra.plus_mult,
         message = localize {
@@ -43,7 +46,7 @@ SMODS.Joker {
       }
     end
 
-    if context.after then
+    if context.after and not context.blueprint then
         if card.ability.extra.plus_mult >= card.ability.extra.plus_mult_border then
           card:flip()
           return {
@@ -87,7 +90,7 @@ SMODS.Joker {
         end
     end
 
-    if context.pre_discard and card.ability.extra.ikeeptrackofdiscards ~= G.GAME.current_round.discards_left then
+    if context.pre_discard and not context.blueprint and card.ability.extra.ikeeptrackofdiscards ~= G.GAME.current_round.discards_left then
       card.ability.extra.plus_mult = card.ability.extra.plus_mult + card.ability.extra.plus_mult_add
       if card.ability.extra.plus_mult >= card.ability.extra.plus_mult_border then
         card:flip()
@@ -132,7 +135,7 @@ SMODS.Joker {
       end
     end
 
-    if context.pre_discard then
+    if context.pre_discard and not context.blueprint then
         card.ability.extra.ikeeptrackofdiscards = G.GAME.current_round.discards_left
     end
   end
