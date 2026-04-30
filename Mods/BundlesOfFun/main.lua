@@ -84,7 +84,7 @@ local files = {
     },
     fables = {
         list = {
-            "narr",
+            --"narr",
             "manqian",
             "turold",
             --"taillefer",
