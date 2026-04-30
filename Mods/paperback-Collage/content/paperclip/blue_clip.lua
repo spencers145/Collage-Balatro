@@ -5,7 +5,7 @@ PB_UTIL.Paperclip {
   badge_colour = G.C.CHIPS,
   config = {
     x_chips_base = 1,
-    x_chips_mod = 0.075
+    x_chips_mod = 0.08
   },
 
   loc_vars = function(self, info_queue, card)
