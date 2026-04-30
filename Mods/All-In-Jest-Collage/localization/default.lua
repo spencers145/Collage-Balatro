@@ -1123,8 +1123,8 @@ return {
                 name = "Imageboard", 
                 text = { 
                     "{C:attention}Scoring{} cards give {C:mult}Mult{}",
-                    "equal to the amount of",
-                    "times their {C:attention}rank{} has been",
+                    "equal to twice the amount",
+                    "of times their {C:attention}rank{} has been",
                     "{C:attention}scored{} this hand" 
                 } 
             },

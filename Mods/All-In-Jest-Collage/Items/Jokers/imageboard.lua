@@ -11,7 +11,7 @@ local imageboard = {
     rarity = 1,
     pos = { x = 20, y = 0 },
     atlas = 'joker_atlas',
-    cost = 4,
+    cost = 7,
     unlocked = true,
     discovered = false,
     blueprint_compat = true,
@@ -29,7 +29,7 @@ local imageboard = {
             card.ability.extra.has_been_played[compare_id] = card.ability.extra.has_been_played[compare_id] or 0
             card.ability.extra.has_been_played[compare_id] = card.ability.extra.has_been_played[compare_id] + 1
             return {
-                mult = card.ability.extra.has_been_played[compare_id]
+                mult = card.ability.extra.has_been_played[compare_id] * 2
             }
         end
         if context.after then
