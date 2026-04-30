@@ -488,6 +488,7 @@ match_indent = true
 payload = '''
 if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and type(card.ability) == 'table' and card.ability.group then
     localize{type = 'other', key = card.greyed and 'bunc_drawn_linked_cards' or 'bunc_linked_cards', nodes = desc_nodes, vars = {}}
+    G.bunc_selecting_linked_card = true
     if not (card.area.config.type == 'title' and card.greyed) then
         main_end = main_end or {}
         local all_cards_from_group = {}
@@ -538,6 +539,7 @@ if (_c.set == 'Default' or _c.set == 'Enhanced') and card and card.ability and t
         }})
         info_queue[#info_queue+1] = {set = 'Other', key = 'bunc_linked_group'}
     end
+    G.bunc_selecting_linked_card = nil
 end'''
 
 # Linked cards undiscovered sprite
