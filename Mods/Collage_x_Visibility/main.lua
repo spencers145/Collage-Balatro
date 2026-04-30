@@ -699,7 +699,9 @@ SMODS.Joker{
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main and card.ability.extra.timer <= 1 then
-            card.ability.extra.timer = 8
+            if not context.blueprint_card then
+                card.ability.extra.timer = 8
+            end
             return {
                 xmult = card.ability.extra.xmult
             }
