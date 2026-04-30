@@ -2093,21 +2093,10 @@ create_joker({ -- Nil Bill
     blueprint = true, eternal = true,
     unlocked = true,
     calculate = function(self, card, context)
-        if context.after then
-            local unfortunate_victim = pseudorandom_element(G.hand, 'bunc_nil_bill')
-            G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2, func = function()
-                if unfortunate_victim then
-                    unfortunate_victim:start_dissolve()
-                    ease_dollars(card.ability.extra.bonus)
-                    forced_message('$'..card.ability.extra.bonus, card, G.C.MONEY)
-                end
-            return true end }))
-            
-        end
-        --[[if context.remove_playing_cards then
+        if context.remove_playing_cards then
             ease_dollars(card.ability.extra.bonus * #context.removed)
             forced_message('$'..card.ability.extra.bonus * #context.removed, card, G.C.MONEY)
-        end]]
+        end
     end
 })
 
