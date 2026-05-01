@@ -1,7 +1,7 @@
 function get_all_illegal_consumable_sets()
     return {
-        --"Myth",
-        --"Myth",
+        "Myth",
+        "Myth",
         "Divine",
         "Divine",
         --"Statement",
