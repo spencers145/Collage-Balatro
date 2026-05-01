@@ -7,7 +7,7 @@ SMODS.Consumable({
         y = 3
     },
     discovered = false,
-    config = {max_highlighted = 4, money = 3},
+    config = {max_highlighted = 5, money = 3},
     keep_on_use = function(self, card)
         return false
     end,
@@ -34,6 +34,10 @@ SMODS.Consumable({
         if #G.hand.highlighted <= suits_size then
             selected_suit_array = suits
             --print('Deck suits')
+        elseif #G.hand.highlighted > suits_size then
+            selected_suit_array = suits
+            local the_suit = pseudorandom_element({'bunc_Halberds', 'bunc_Fleurons'}, pseudoseed('chicory'))
+            selected_suit_array[the_suit] = true
         else
             selected_suit_array = base_suits
             --print('Base suits')
