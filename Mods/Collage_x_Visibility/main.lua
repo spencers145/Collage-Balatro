@@ -699,11 +699,10 @@ SMODS.Joker{
 	end,
 	calculate = function(self, card, context)
 		if context.joker_main and card.ability.extra.timer <= 1 then
-            card.ability.extra.timer = 8
             return {
                 xmult = card.ability.extra.xmult
             }
-        elseif context.joker_main or context.pre_discard then
+        elseif context.joker_main or context.pre_discard and not context.blueprint then
             card.ability.extra.timer = card.ability.extra.timer - 1
             if card.ability.extra.timer == 1 then
                 juice_card_until(card, function() return card.ability.extra.timer > 1 end)
@@ -711,6 +710,8 @@ SMODS.Joker{
                     message = "Active!"
                 }
             end
+        elseif context.after and card.ability.extra.timer <= 1 and not context.blueprint then
+            card.ability.extra.timer = 8
         end
 	end
 }

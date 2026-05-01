@@ -4,7 +4,7 @@ SMODS.Joker {
     extra = {
       mult = 5,
       chips = 50,
-      odds = 8,
+      odds = 20,
       chance_multiplier = 1
     }
   },
