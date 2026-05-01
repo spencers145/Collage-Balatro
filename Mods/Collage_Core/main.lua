@@ -468,6 +468,13 @@ COLLAGE_MODIFIED_TABLE_MAJOR = {
 }
 
 COLLAGE_MODIFIED_TABLE = {
+    "m_ortalab_recycled",
+    "m_ortalab_post",
+    "m_ortalab_bent",
+    "m_ortalab_sand",
+    "m_ortalab_iou",
+    "m_ortalab_ore",
+
 	"j_aij_a_young_hamlet",
 	"j_aij_alexandre",
 	"j_aij_alien_joker",
@@ -1022,11 +1029,14 @@ SMODS.Consumable ({
 SMODS.Voucher:take_ownership('v_magic_trick', {
     loc_vars = function(_, info_queue)
 		local player_has_paperclips = false
-		for key, value in pairs(G.playing_cards) do
-			if PB_UTIL.has_paperclip(value) then
-			player_has_paperclips = true
-			end
-		end
+        if G.playing_cards then
+            for key, value in pairs(G.playing_cards) do
+                if PB_UTIL.has_paperclip(value) then
+                player_has_paperclips = true
+                end
+            end
+        end
+		
 
 		if player_has_paperclips then
 			info_queue[#info_queue + 1] = {key = 'artb_mod_collectable_clips_explain', set = 'Other'}
@@ -1039,11 +1049,13 @@ SMODS.Voucher:take_ownership('v_magic_trick', {
 SMODS.Voucher:take_ownership('v_illusion', {
     loc_vars = function(_, info_queue)
 		local player_has_paperclips = false
-		for key, value in pairs(G.playing_cards) do
-			if PB_UTIL.has_paperclip(value) then
-			player_has_paperclips = true
-			end
-		end
+        if G.playing_cards then
+            for key, value in pairs(G.playing_cards) do
+                if PB_UTIL.has_paperclip(value) then
+                player_has_paperclips = true
+                end
+            end
+        end
 
 		if player_has_paperclips then
 			info_queue[#info_queue + 1] = {key = 'artb_mod_collectable_clips_explain', set = 'Other'}
