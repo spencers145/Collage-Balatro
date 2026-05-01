@@ -493,10 +493,10 @@ return {
             m_prism_crystal = {
                 name = "Crystal Card",
                 text = {"{X:mult,C:white} X#1#{} Mult",
+                    "{s:0.2} {}",
                     "Gains {X:mult,C:white} X#2#{} Mult if held in",
                     "hand at end of round"
                 }
-
             },
             m_prism_burnt = {
                 name = "Burnt Card",
@@ -651,7 +651,7 @@ return {
             c_prism_myth_opus = {
                 name = "Magnum Opus",
                 text = {"Enhances {C:attention}#1#{} selected",
-                    "card to the {C:attention}most common",
+                    "cards to the {C:attention}most common",
                     "{C:enhanced}Enhancement{} in full deck"
                 }
             },
