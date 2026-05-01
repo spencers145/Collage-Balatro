@@ -206,14 +206,13 @@ SMODS.Seal({
     badge_colour = HEX('86ADB3'),
     config = {extra = {odds = 3}},
     loc_vars = function(self, info_queue, card)
+        local n, d = SMODS.get_probability_vars(self,1,self.config.extra.odds,"moon")
         return {
-            vars = {
-                "" .. (G.GAME and G.GAME.probabilities.normal or 1),
-                self.config.extra.odds}
+            vars = {n,d}
         }
     end,
     calculate = function(self, card, context)
-        if context.cardarea == G.play and context.before and context.scoring_hand and pseudorandom('moon') < G.GAME.probabilities.normal / self.config.extra.odds then
+        if context.cardarea == G.play and context.before and context.scoring_hand and SMODS.pseudorandom_probability(card,"moon",1,self.config.extra.odds) then
             level_up_hand(card,G.GAME.last_hand_played)
         end
     end

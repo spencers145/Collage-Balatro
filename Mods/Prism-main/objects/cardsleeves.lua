@@ -141,4 +141,37 @@ end
         end
         return {key = key}
     end,
-})]]
+})
+G.PRISM.Sleeve({
+    key = "alchemysleeve",
+	atlas = "prismsleeves",
+	pos = {x = 3, y = 0},
+    unlocked = false,
+    unlock_condition = {deck = "b_prism_alchemy", stake = "stake_purple"},
+    loc_vars = function(self)
+        local key
+        if self.get_current_deck_key() ~= "b_prism_alchemy" then
+            key = self.key
+        else
+            key = self.key .. "_alt"
+            self.config = { vouchers = { "v_crystal_ball",}}
+        end
+        return {key = key}
+    end,
+    apply = function(self)
+        G.GAME.modifiers.alchemy_deck = true
+        if self.config.vouchers then
+            for k, v in pairs(self.config.vouchers) do
+                G.GAME.used_vouchers[v] = true
+                G.GAME.starting_voucher_count = (G.GAME.starting_voucher_count or 0) + 1
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        Card.apply_to_run(nil, G.P_CENTERS[v])
+                        return true
+                    end
+                }))
+            end
+        end
+    end,
+})
+]]

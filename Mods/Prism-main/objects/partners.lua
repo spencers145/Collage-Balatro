@@ -25,7 +25,7 @@ Partner_API.Partner{
         return { key = key}
     end,
     calculate = function(self, card, context)
-		if context.partner_end_of_round then
+		if context.end_of_round and not context.individual and not context.repetition then
             local link_level = self:get_link_level()
             if (G.GAME.blind and (G.GAME.blind:get_type() == 'Boss')) or link_level == 1 then
                 local tags = {"tag_holo","tag_foil","tag_polychrome"}

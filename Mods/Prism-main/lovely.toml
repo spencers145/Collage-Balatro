@@ -8,10 +8,11 @@ priority = 12
 [patches.pattern]
 target = '''functions/state_events.lua'''
 pattern = "for i=1, hand_space do*"
-position = "before"
+position = "at"
 payload = '''
-hand_space = hand_space + (G.GAME.prism_extra_draw or 0)
+local draw = hand_space + (G.GAME.prism_extra_draw or 0)
 G.GAME.prism_extra_draw = 0
+for i=1, draw do
 '''
 match_indent = true
 
@@ -86,6 +87,16 @@ payload = '''
 '''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "challenges.lua"
+pattern = "{id = 'tag_buffoon'},"
+position = "after"
+payload = '''
+{id = 'tag_prism_gold_foil'},
+'''
+match_indent = true
+
 #ban enhancers from fragile challenge
 [[patches]]
 [patches.pattern]
@@ -95,7 +106,7 @@ position = "after"
 payload = '''
 {id = 'c_prism_myth_dwarf'},
 {id = 'c_prism_myth_dragon'},
-{id = 'c_prism_myth_twin'},
+{id = 'c_prism_myth_yeti'},
 {id = 'c_prism_myth_siren'},
 '''
 match_indent = true
@@ -107,6 +118,7 @@ pattern = "{id = 'j_marble'},"
 position = "after"
 payload = '''
 {id = 'j_prism_medusa'},
+{id = 'j_prism_geo_hammer'},
 '''
 match_indent = true
 
@@ -278,5 +290,24 @@ target = 'functions/common_events.lua'
 position = 'after'
 pattern = 'new_card:set_edition(other.edition or {}, nil, true)'
 payload = '''G.GAME.prism_shork_copy = nil
+'''
+match_indent = true
+
+#alchemy deck
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+position = 'after'
+pattern = '''
+for i = 1, G.GAME.shop.joker_max - #G.shop_jokers.cards do
+	G.shop_jokers:emplace(create_card_for_shop(G.shop_jokers))
+end
+'''
+payload = ''' 
+if G.GAME.modifiers.alchemy_deck then
+	local opus = create_card("Myth",G.shop_jokers,nil,nil,false,false,"c_prism_myth_opus")
+	G.shop_jokers:emplace(opus)
+	create_shop_card_ui(opus)
+end
 '''
 match_indent = true

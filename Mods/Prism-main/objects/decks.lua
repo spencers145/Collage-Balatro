@@ -64,4 +64,33 @@ G.PRISM.Back({
     unlocked = false,
     unlock_condition = {type = 'win_stake', stake=8}
 })
-]]
+G.PRISM.Back({
+	key = "alchemy", 
+	atlas = "prismdecks",
+	pos = {x = 3, y = 0},
+    unlocked = false,
+	apply = function(self)
+		G.GAME.modifiers.alchemy_deck = true
+	end,
+    unlock_condition = {type = 'win_deck', deck = 'b_prism_ancient'},
+})]]
+
+--[[ local orig_update_shop = Game.update_shop
+function Game:update_shop(dt) 
+	orig_update_shop(self,dt)
+	if G.GAME.prism_opus_in_shop and G.STATE_COMPLETE then
+		G.GAME.prism_opus_in_shop = false
+		G.E_MANAGER:add_event(Event({
+			trigger = 'after',
+			delay = 0.2,
+			blockable = false,
+			func = function()
+				local opus = create_card("Myth",G.shop_jokers,nil,nil,true,false,"c_prism_myth_opus")
+				G.shop_jokers:emplace(opus)
+				create_shop_card_ui(opus)
+				opus:start_materialize()
+				return true 
+			end
+		}))
+	end
+end ]]
