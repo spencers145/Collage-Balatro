@@ -181,6 +181,18 @@ return {
     },
     descriptions = {
         Other = {
+            bunc_halberds_count_as = {
+                text = {
+                    'Counts as {C:clubs}Clubs',
+                    'and {C:spades}Spades'
+                }
+            },
+            bunc_fleurons_count_as = {
+                text = {
+                    'Counts as {C:hearts}Hearts',
+                    'and {C:diamonds}Diamonds'
+                }
+            },
             bunc_temporary_extra_chips = {['text'] = {[1] = '{C:chips}+#1#{} extra chips this round'}},
             bunc_linked_cards = {['text'] = {[1] = '{C:linked_group,E:1}Linked{} in this group:'}},
             bunc_linked_group = {
