@@ -41,7 +41,7 @@ SMODS.Consumable({
       end
     }))
 
-    if card.ability.extra.enhancement then
+    if card.ability.extra.enhancement or card.ability.extra.clip then
       G.E_MANAGER:add_event(Event({
         trigger = 'after',
         delay = 0.15,
@@ -72,7 +72,7 @@ SMODS.Consumable({
       end
     }))
 
-    if card.ability.extra.enhancement then
+    if card.ability.extra.enhancement or card.ability.extra.clip then
       G.E_MANAGER:add_event(Event({
         trigger = 'after',
         delay = 0.15,
