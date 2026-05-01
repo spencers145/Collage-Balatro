@@ -463,6 +463,8 @@ function ArtBox.set_collectible(collectable, key)
         elseif key:sub(1, 2) == 'e_' then
             collectable.ability.extra.edition = key
         end
+    elseif PB_UTIL.is_paperclip(key) then
+        collectable.ability.extra.clip = key
     end
 
     local ref_values = ArtBox.Collectables[key]
