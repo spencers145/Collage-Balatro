@@ -3031,7 +3031,7 @@ return {
         name = "Eight of Swords",
         text = {
           "Adds random {C:attention}Clips{} to",
-          "up to {C:attention}#1#{} selected cards"
+          "all cards {C:attention}held in hand"
         }
       },
       c_paperback_nine_of_swords = {

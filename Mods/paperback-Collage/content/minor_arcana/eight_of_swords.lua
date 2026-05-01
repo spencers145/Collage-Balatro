@@ -11,6 +11,9 @@ PB_UTIL.MinorArcana {
   paperback_credit = {
     coder = { 'dowfrin' }
   },
+  can_use = function ()
+    return G.hand and G.hand.cards and #G.hand.cards > 0
+  end,
 
   loc_vars = function(self, info_queue, card)
     return {
@@ -21,10 +24,12 @@ PB_UTIL.MinorArcana {
   end,
 
   use = function(self, card, area)
-    PB_UTIL.use_consumable_animation(card, G.hand.highlighted, function()
-      for _, v in ipairs(G.hand.highlighted) do
-        local clip = PB_UTIL.poll_paperclip('eight_of_swords')
-        PB_UTIL.set_paperclip(v, clip)
+    local clip1 = PB_UTIL.poll_paperclip('eight_of_swords')
+    local clip2 = PB_UTIL.poll_paperclip('eight_of_swords')
+    local clip3 = PB_UTIL.poll_paperclip('eight_of_swords')
+    PB_UTIL.use_consumable_animation(card, G.hand.cards, function()
+      for _, v in ipairs(G.hand.cards) do
+        PB_UTIL.set_paperclip(v, pseudorandom_element({clip1, clip2, clip3}, pseudoseed('eight_of_swords')))
       end
     end)
   end
