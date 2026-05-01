@@ -224,7 +224,8 @@ return {
                     'Cards with',
                     '{C:bunc_fleurons}Fleuron{} or {C:bunc_halberds}Halberd{} suit',
                     '{s:0.2} {}',
-                    'Exotic cards give',
+                    'Exotic cards count as',
+                    'several suits and give',
                     '{C:chips}+10{} extra chips'
                 }
             },

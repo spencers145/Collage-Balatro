@@ -100,6 +100,19 @@ BUNCOMOD.funcs.exotic_in_pool = function()
     return spectrum_played
 end
 
+-- Halberd and Fleuron Unique Suit Calc
+
+local orig_is_suit = Card.is_suit
+function Card.is_suit(self, suit, bypass_debuff, flush_calc)
+	if self.base.suit == 'bunc_Fleurons' and (suit == 'Diamonds' or suit == 'Hearts') then
+        return orig_is_suit(self, 'bunc_Fleurons', bypass_debuff, flush_calc)
+	end
+    if self.base.suit == 'bunc_Halberds' and (suit == 'Clubs' or suit == 'Spades') then
+        return orig_is_suit(self, 'bunc_Halberds', bypass_debuff, flush_calc)
+	end
+    return orig_is_suit(self, suit, bypass_debuff, flush_calc)
+end
+
 -- Dictionary wrapper
 
 function BUNCOMOD.content.process_loc_text()

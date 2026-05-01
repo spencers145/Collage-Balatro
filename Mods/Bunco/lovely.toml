@@ -19,6 +19,22 @@ end
 
 '''
 
+# Exotics card suit descriptions
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = 'SMODS.localize_perma_bonuses(specific_vars, desc_nodes)'
+position = 'before'
+match_indent = true
+payload = '''
+if card and card.is_suit and card:is_suit('bunc_Fleurons') then
+    localize{type = 'other', key = 'bunc_fleurons_count_as', nodes = desc_nodes}
+end
+if card and card.is_suit and card:is_suit('bunc_Halberds') then
+    localize{type = 'other', key = 'bunc_halberds_count_as', nodes = desc_nodes}
+end
+'''
+
 # Exotic color, part 1/2
 [[patches]]
 [patches.pattern]
