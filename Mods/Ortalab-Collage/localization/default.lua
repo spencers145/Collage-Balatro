@@ -1392,9 +1392,9 @@ return {
 			['j_ortalab_popcorn_bag'] = {
 				["name"] = "Picnic Basket",
 				["text"] = {
-					"{C:mult}+#1#{} Mult",
-					"{C:mult}+#2#{} Mult per round played",
-					"Expires when greater than {C:mult}+#3#{}",
+					{"{C:mult}+#1#{} Mult"},
+					{"{C:mult}+#2#{} Mult per round played and",
+					"expires when greater than {C:mult}+#3#{}"}
 				}
 			},
 			['j_ortalab_prediction_dice'] = {
