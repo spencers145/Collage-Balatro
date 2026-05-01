@@ -15,7 +15,7 @@ SMODS.ConsumableType({
     primary_colour = G.PRISM.C.myth_1,
     secondary_colour = G.PRISM.C.myth_2,
     collection_rows = {4, 5},
-    shop_rate = 2,
+    shop_rate = 0,
     default = 'c_prism_myth_gnome'
 })
 SMODS.UndiscoveredSprite({
@@ -473,7 +473,6 @@ G.PRISM.Consumable({
         G.E_MANAGER:add_event(Event({trigger = 'after',func = function() G.hand:unhighlight_all(); return true end}))
     end
 })]]
---[[
 G.PRISM.Consumable({
     key = 'myth_ooze',
     set = 'Myth',
@@ -481,7 +480,7 @@ G.PRISM.Consumable({
     pos = {x=5, y=0},
     cost = 4,
     discovered = false,
-    config = {seal_conv = G.PRISM.config.old_green and "prism_green_old" or "prism_green", max_highlighted = 1},
+    config = {seal_conv = G.PRISM.config.old_green and "prism_green_old" or "prism_green", max_highlighted = 2},
     loc_vars = function(self, info_queue)
 		info_queue[#info_queue + 1] = G.P_SEALS[self.config.seal_conv]
 
@@ -500,7 +499,6 @@ G.PRISM.Consumable({
         return true end }))
     end
 })
-
 G.PRISM.Consumable({
     key = 'myth_colossus',
     set = 'Myth',
@@ -508,7 +506,7 @@ G.PRISM.Consumable({
     pos = {x=4, y=1},
     cost = 4,
     discovered = false,
-    config = {seal_conv = "prism_moon", max_highlighted = 1},
+    config = {seal_conv = "prism_moon", max_highlighted = 2},
     loc_vars = function(self, info_queue)
 		info_queue[#info_queue + 1] = G.P_SEALS[self.config.seal_conv]
 
@@ -528,7 +526,7 @@ G.PRISM.Consumable({
     end
 
 }) 
-
+--[[
 G.PRISM.Consumable({
     key = 'myth_gnome',
     set = 'Myth',
