@@ -23,7 +23,7 @@ SMODS.Booster{
 
     draw_hand = false,
     config = {
-        extra = 5,
+        extra = 4,
         choose = 1,
     },
 
@@ -74,7 +74,7 @@ SMODS.Booster{
 
     draw_hand = false,
     config = {
-        extra = 7,
+        extra = 6,
         choose = 1,
     },
 
@@ -125,7 +125,7 @@ SMODS.Booster{
 
     draw_hand = false,
     config = {
-        extra = 7,
+        extra = 6,
         choose = 2,
     },
 
