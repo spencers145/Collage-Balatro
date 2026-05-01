@@ -468,6 +468,13 @@ COLLAGE_MODIFIED_TABLE_MAJOR = {
 }
 
 COLLAGE_MODIFIED_TABLE = {
+    "m_ortalab_recycled",
+    "m_ortalab_post",
+    "m_ortalab_bent",
+    "m_ortalab_sand",
+    "m_ortalab_iou",
+    "m_ortalab_ore",
+
 	"j_aij_a_young_hamlet",
 	"j_aij_alexandre",
 	"j_aij_alien_joker",
