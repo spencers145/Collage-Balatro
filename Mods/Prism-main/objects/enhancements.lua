@@ -11,6 +11,9 @@ SMODS.Enhancement({
     discovered = true,
     config = {extra = {x_mult = 1,x_gain = 0.25}},
     effect = "Glass Card",
+    in_pool = function ()
+        return false
+    end,
     loc_vars = function(self, info_queue, card)
         local card_ability = card and card.ability or self.config
         return {
@@ -40,6 +43,9 @@ SMODS.Enhancement({
     pos = {x = 0, y = 1},
     discovered = true,
     config = {extra = 2},
+    in_pool = function ()
+        return false
+    end,
     loc_vars = function(self, info_queue, card)
         local card_ability = card and card.ability or self.config
         return {
@@ -57,6 +63,9 @@ SMODS.Enhancement({
     atlas = "prismenhanced",
     pos = {x = 1, y = 2},
     discovered = true,
+    in_pool = function ()
+        return false
+    end,
     calculate = function(self, card, context)
         if context.repetition and context.cardarea == G.play then
             local retrig = 0
@@ -81,6 +90,9 @@ SMODS.Enhancement({
     atlas = "prismenhanced",
     pos = {x = 0, y = 2},
     discovered = true,
+    in_pool = function ()
+        return false
+    end,
     effect = "Glass Card",
     config = {extra = {chips = 10}},
     loc_vars = function(self, info_queue, card)
