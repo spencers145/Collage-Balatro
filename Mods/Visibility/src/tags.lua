@@ -25,7 +25,7 @@
     end
 }]]
 
-SMODS.Tag {
+--[[SMODS.Tag {
     key = "divine",
     atlas = "TextureAtlasTags",
     pos = { x = 2, y = 0 },
@@ -49,7 +49,7 @@ SMODS.Tag {
             return true
         end
     end
-}
+}]]
 
 SMODS.Tag {
     key = "black_market",
