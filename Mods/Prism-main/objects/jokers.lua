@@ -382,6 +382,7 @@ G.PRISM.Joker({
 		end
 	end
 })
+--[[
 G.PRISM.Joker({
 	dependency = G.PRISM.config.myth_enabled,
 	key = "elf",
@@ -448,7 +449,7 @@ G.PRISM.Joker({
 			}
 		end
     end
-})
+})]]
 
 --[[G.PRISM.Joker({
 	key = "vaquero",
@@ -544,7 +545,7 @@ G.PRISM.Joker({
     end
 	
 })
-
+--[[
 G.PRISM.Joker({
 	dependency = G.PRISM.config.enhance_enabled,
 	key = "amethyst",
@@ -587,7 +588,9 @@ G.PRISM.Joker({
         end
     end
 	
-})
+})]]
+
+--[[
 G.PRISM.Joker({
 	dependency = G.PRISM.config.myth_enabled,
 	key = "minstrel",
@@ -609,7 +612,7 @@ G.PRISM.Joker({
 			return {}
 		end
 	end
-})
+})]]
 G.PRISM.Joker({
 	key = "whale",
 	atlas = "jokers",
@@ -713,7 +716,7 @@ G.PRISM.Joker({
 	end
 
 })
-
+--[[
 G.PRISM.Joker({
 	dependency = G.PRISM.config.myth_enabled,
 	key = "romantic",
@@ -757,7 +760,7 @@ G.PRISM.Joker({
 			end
 		end
 	end
-})
+})]]
 G.PRISM.Joker({
 	key = "pie",
 	atlas = "jokers",
@@ -953,6 +956,7 @@ G.PRISM.Joker({
     end
 	
 })
+--[[
 G.PRISM.Joker({
 	key = "monkey_paw",
 	atlas = "jokers",
@@ -987,7 +991,7 @@ G.PRISM.Joker({
 		}))
 		end
 	end
-}) 
+}) ]]
 
 G.PRISM.Joker({
 	key = "hypercube",
