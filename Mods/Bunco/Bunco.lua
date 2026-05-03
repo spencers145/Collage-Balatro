@@ -3108,7 +3108,7 @@ create_joker({ -- On Broadway
 
 create_joker({ -- Rasta
     name = 'Rasta', position = 48,
-    vars = {{mult = 12}},
+    vars = {{mult = 15}},
     rarity = 'Common', cost = 5,
     blueprint = true, eternal = true,
     unlocked = false,
