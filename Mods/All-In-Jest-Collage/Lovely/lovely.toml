@@ -136,6 +136,10 @@ if jest_to_hand ~= {} then
             trigger = true
         end
     end
+    if v.seal == "prism_green" and not v.ability.greened then
+        trigger = true
+        v.ability.greened = true
+    end
     if trigger then
         draw_card(G.play,G.hand, it*100/play_count,'up', true, v)
     else
