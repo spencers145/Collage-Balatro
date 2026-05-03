@@ -46,6 +46,7 @@ G.FUNCS.can_discard = function(e)
         e.config.button = nil
 	end
 end
+--[[
 G.PRISM.Back({
 	dependency = G.PRISM.config.myth_enabled,
 	key = "ancient", 
@@ -54,7 +55,7 @@ G.PRISM.Back({
 	config = { vouchers = { "v_prism_myth_merchant","v_prism_booster_box"}},
     unlocked = false,
     unlock_condition = {type = 'win_stake', stake=6}
-})
+})]]
 --[[
 G.PRISM.Back({
 	key = "market", 

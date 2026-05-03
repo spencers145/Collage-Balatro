@@ -57,6 +57,7 @@ G.PRISM.Sleeve({
         
     end,
 })
+--[[
 G.PRISM.Sleeve({
     dependency = G.PRISM.config.myth_enabled,
     key = "ancientsleeve",
@@ -90,7 +91,7 @@ G.PRISM.Sleeve({
             end
         end
     end,
-})
+})]]
 local orig_get_pack = get_pack
 function get_pack(_key, _type)
     if G.GAME.modifiers.myth_always_in_shop and not G.GAME.prism_shop_legend and G.GAME.first_shop_buffoon and not(
