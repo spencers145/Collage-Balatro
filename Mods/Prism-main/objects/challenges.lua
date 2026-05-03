@@ -41,7 +41,7 @@ end
 		type = "Challenge Deck",
 	},
 })]]
-G.PRISM.Challenge({
+--[[G.PRISM.Challenge({
 	key = "mvp",
 	rules = {
 		custom = {
@@ -73,4 +73,4 @@ G.PRISM.Challenge({
 			{id = 'bl_final_leaf', type = 'blind'}
 		},
 	},
-})
+})]]
