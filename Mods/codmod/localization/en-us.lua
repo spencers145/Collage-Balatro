@@ -546,7 +546,8 @@ return {
                 text = {
                     "When round begins,",
                     "add {C:attention}#1#{} random {C:attention}playing",
-                    "{C:attention}cards{} to your hand",
+                    "{C:attention}card{} to your hand",
+                    "and gain {C:attention}1{} random {C:attention}Tag"
                 },
             },
             j_cod_cantrip = {
@@ -646,7 +647,8 @@ return {
                 name = "Tapas",
                 text = {
                     {"{V:1,B:2}#1#{} #2#"},
-                    {"Lose {C:red}1{} effect each round",}
+                    {"Lose {C:red}1{} effect when",
+                    "{C:attention}Boss Blind{} is defeated"}
                 },
             },
             j_cod_tapas_2 = {
@@ -654,7 +656,8 @@ return {
                 text = {
                     {"{V:1,B:2}#1#{} #2#",
                     "{V:3,B:4}#3#{} #4#"},
-                    {"Lose {C:red}1{} effect each round",}
+                    {"Lose {C:red}1{} effect when",
+                    "{C:attention}Boss Blind{} is defeated"}
                 },
             },
             j_cod_tapas_3 = {
@@ -663,7 +666,8 @@ return {
                     {"{V:1,B:2}#1#{} #2#",
                     "{V:3,B:4}#3#{} #4#",
                     "{V:5,B:6}#5#{} #6#"},
-                    {"Lose {C:red}1{} effect each round",}
+                    {"Lose {C:red}1{} effect when",
+                    "{C:attention}Boss Blind{} is defeated"}
                 },
             },
             j_cod_tapas_4 = {
@@ -673,7 +677,8 @@ return {
                     "{V:3,B:4}#3#{} #4#",
                     "{V:5,B:6}#5#{} #6#",
                     "{V:7,B:8}#7#{} #8#"},
-                    {"Lose {C:red}1{} effect each round",}
+                    {"Lose {C:red}1{} effect when",
+                    "{C:attention}Boss Blind{} is defeated"}
                 },
             },
             j_cod_stargazer = {
@@ -924,9 +929,9 @@ return {
             j_cod_tornado = {
                 name = "Tornado",
                 text = {
-                    "{C:attention}+#1#{} hand size",
-                    "Discards held cards when",
-                    "hand is played",
+                    {"{C:attention}+#1#{} hand size"},
+                    {"Discards held cards when",
+                    "hand is played"},
                 },
                 unlock = {
                     "Discard a total of",
@@ -944,9 +949,9 @@ return {
             j_cod_cryptogram = {
                 name = "Cryptogram",
                 text = {
-                    "{C:attention}+#1#{} hand size",
-                    "First hand is",
-                    "drawn face down",
+                    {"{C:attention}+#1#{} hand size"},
+                    {"First hand is",
+                    "drawn face down",}
                 },
             },
             j_cod_cipher_wheel = {
@@ -1361,7 +1366,7 @@ return {
             clemens_ban="Banned!",
             death_star_destroy="Obliterate!",
             infrastructure_build="Improve",
-            printer_print="Print",
+            printer_print="Printed!",
             sun_upgrade="Sizzle",
             dormant_awaken="Wake",
             gambler_ruined="Ruined!",
@@ -1374,7 +1379,7 @@ return {
             coloring_color_in="Splash!",
             rorschach_test_modify="See?",
             penrose_steps_step="Step",
-            dyson_sphere_redirect="Siphon",
+            dyson_sphere_redirect="Siphoned!",
             tornado_swish="Swish!",
             book_of_the_dead_judge="Judged!",
             bone_tag_saved="Saved by Bone Tag",
@@ -1383,11 +1388,11 @@ return {
             horror_deck_used="Used",
             marshmallow_burnt="Burnt!",
             piggy_bank_break="Broken!",
-            cod_restart_required="Restart required",
-            cod_reverse_card_swap="Swap",
-            cod_open_chest="Open",
-            cod_artifact_activate="Create",
-            cod_clean_tag_done="Done",
+            cod_restart_required="Restart required...",
+            cod_reverse_card_swap="Swap!",
+            cod_open_chest="Open!",
+            cod_artifact_activate="Create!",
+            cod_clean_tag_done="Done!",
         },
         high_scores={},
         labels={

@@ -32,7 +32,7 @@ SMODS.Joker {
     unlocked = true,
     blueprint_compat = false,
     rarity = 2,
-    cost = 4,
+    cost = 5,
     atlas = 'atlas_cod_jokers',
     pos = { x = 3, y = 0 },
     config = { extra = { from_suit = "Clubs", to_suit = "Hearts", from_color = G.C.SUITS.Clubs, to_color = G.C.SUITS.Hearts} },
@@ -46,7 +46,7 @@ SMODS.Joker {
     unlocked = true,
     blueprint_compat = false,
     rarity = 2,
-    cost = 4,
+    cost = 5,
     atlas = 'atlas_cod_jokers',
     pos = { x = 4, y = 0 },
     config = { extra = { from_suit = "Hearts", to_suit = "Spades", from_color = G.C.SUITS.Hearts, to_color = G.C.SUITS.Spades} },
@@ -60,7 +60,7 @@ SMODS.Joker {
     unlocked = true,
     blueprint_compat = false,
     rarity = 2,
-    cost = 4,
+    cost = 5,
     atlas = 'atlas_cod_jokers',
     pos = { x = 5, y = 0 },
     config = { extra = { from_suit = "Spades", to_suit = "Diamonds", from_color = G.C.SUITS.Spades, to_color = G.C.SUITS.Diamonds} },
@@ -74,67 +74,13 @@ SMODS.Joker {
     unlocked = true,
     blueprint_compat = false,
     rarity = 2,
-    cost = 4,
+    cost = 5,
     atlas = 'atlas_cod_jokers',
     pos = { x = 6, y = 0 },
     config = { extra = { from_suit = "Diamonds", to_suit = "Clubs", from_color = G.C.SUITS.Diamonds, to_color = G.C.SUITS.Clubs} },
     loc_vars = season_loc_vars,
     calculate = season_calculate,
 }
-
--- Four Seasons
-SMODS.Joker {
-    key = "four_seasons",
-    unlocked = false,
-    blueprint_compat = true,
-    rarity = 2,
-    cost = 6,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 7, y = 0 },
-    config = {},
-    calculate = function(self, card, context)
-        if context.before then
-            local convert = false
-            for _, scored_card in ipairs(context.scoring_hand) do
-                if not SMODS.has_no_suit(scored_card) and not scored_card.debuff then
-                    convert = true
-                    local suits = {"Hearts", "Spades", "Diamonds", "Clubs", "Hearts"}
-                    for i=1,4 do
-                        if scored_card.base.suit == suits[i] then
-                            assert(SMODS.change_base(scored_card, suits[i+1]))
-                            G.E_MANAGER:add_event(Event({
-                                func = function()
-                                    scored_card:juice_up()
-                                    return true
-                                end
-                                
-                            }))
-                            break
-                        end
-                    end
-                end
-            end
-            if convert then
-                return {
-                    message = localize('season_convert'),
-                }
-            end
-        end
-    end,
-
-    check_for_unlock = function(self, args)
-        if args.type == 'discover_amount' then
-
-            if G.P_CENTERS["j_cod_winter"].discovered and G.P_CENTERS["j_cod_spring"].discovered and G.P_CENTERS["j_cod_summer"].discovered and G.P_CENTERS["j_cod_fall"].discovered then
-
-                return true
-            end
-            return false
-        end
-    end
-}
-
--- Suit imbalance cycle
 
 -- Mitosis
 SMODS.Joker {
@@ -368,130 +314,17 @@ SMODS.Joker {
     end
 }
 
--- Harmony
-SMODS.Joker {
-    key = "harmony",
-    unlocked = true,
-    blueprint_compat = true,
-    perishable_compat = false,
-    rarity = 1,
-    cost = 5,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 7, y = 3 },
-    -- amount is unused
-    config = { extra = { amount = 1, mult_gain = 2, mult = 0 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult_gain, card.ability.extra.amount, card.ability.extra.mult } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main then
-            return {
-                mult = card.ability.extra.mult
-            }
-        end
-        if context.setting_blind then
-
-            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-
-            local spades = {}
-            local hearts = {}
-            local diamonds = {}
-            local clubs = {}
-
-            for _, playing_card in ipairs(G.playing_cards) do
-                if not SMODS.has_no_suit(playing_card) and not SMODS.has_any_suit(playing_card) then
-                    if playing_card:is_suit("Hearts") then hearts[#hearts + 1] = playing_card end
-                    if playing_card:is_suit("Clubs") then clubs[#clubs + 1] = playing_card end
-                    if playing_card:is_suit("Spades") then spades[#spades + 1] = playing_card end
-                    if playing_card:is_suit("Diamonds") then diamonds[#diamonds + 1] = playing_card end
-                end
-            end
-
-            if #spades == #hearts and #hearts == #diamonds and #diamonds == #clubs then
-                return {
-                    message = localize('harmony_balance'),
-                    colour = G.C.GOLD,
-                }
-            end
-
-            local majority = {}
-
-            if #spades >= #hearts and #spades >= #diamonds and #spades >= #clubs then
-                for _, v in ipairs(spades) do majority[#majority+1] = v end
-            end
-            if #hearts >= #spades and #hearts >= #diamonds and #hearts >= #clubs then
-                for _, v in ipairs(hearts) do majority[#majority+1] = v end
-            end
-            if #clubs >= #hearts and #clubs >= #diamonds and #clubs >= #spades then
-                for _, v in ipairs(clubs) do majority[#majority+1] = v end
-            end
-            if #diamonds >= #hearts and #diamonds >= #spades and #diamonds >= #clubs then
-                for _, v in ipairs(diamonds) do majority[#majority+1] = v end
-            end
-
-            local minority = {}
-
-            if #spades <= #hearts and #spades <= #diamonds and #spades <= #clubs then
-                minority[#minority+1] = "Spades"
-            end
-            if #hearts <= #spades and #hearts <= #diamonds and #hearts <= #clubs then
-                minority[#minority+1] = "Hearts"
-            end
-            if #clubs <= #hearts and #clubs <= #diamonds and #clubs <= #spades then
-                minority[#minority+1] = "Clubs"
-            end
-            if #diamonds <= #hearts and #diamonds <= #spades and #diamonds <= #clubs then
-                minority[#minority+1] = "Diamonds"
-            end
-
-            local majority_card = pseudorandom_element(majority, 'cod_harmony')
-            local minority_suit = pseudorandom_element(minority, 'cod_harmony')
-
-            if majority_card and minority_suit then
-                draw_card(G.deck, G.play, 90, 'up', nil, majority_card)
-
-                assert(SMODS.change_base(majority_card, minority_suit, nil, true))
-
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'after',
-                    delay = 1,
-                    func = function()
-                        majority_card:set_sprites(nil, majority_card.config.card)
-                        return true
-                    end
-                }))
-
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'after',
-                    delay = 1,
-                    func = function()
-                        return true
-                    end
-                }))
-
-                draw_card(G.play, G.deck, 90, 'up', nil, majority_card)
-                
-                return {
-                    message = localize('season_convert'),
-                    colour = G.C.GOLD,
-                }
-            end
-
-        end
-    end
-}
-
 -- Short Joker
 SMODS.Joker {
     key = "short",
     unlocked = true,
     blueprint_compat = true,
     rarity = 1,
-    cost = 4,
+    cost = 5,
     atlas = 'atlas_cod_jokers',
     pos = { x = 4, y = 2 },
     pixel_size = { h = 56 },
-    config = { extra = { chips = 75, max_sum = 25 } },
+    config = { extra = { chips = 100, max_sum = 25 } },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.chips, card.ability.extra.max_sum } }
     end,
@@ -825,12 +658,12 @@ SMODS.Joker {
 SMODS.Joker {
     key = "spam",
     blueprint_compat = true,
-    rarity = 1,
-    cost = 3,
+    rarity = 2,
+    cost = 6,
     atlas = 'atlas_cod_jokers',
     pos = { x = 0, y = 3 },
     soul_pos = { x = 1, y = 3 },
-    config = { extra = { spam_cards = 2 } },
+    config = { extra = { spam_cards = 1, spam_tags = 1 } },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.spam_cards } }
     end,
@@ -859,7 +692,20 @@ SMODS.Joker {
                         return true
                     end
                 }))
-                            
+            end
+
+            for i = 1, card.ability.extra.spam_tags do
+                return {
+                    message = localize('paperback_plus_tag'),
+                    func = function()
+                        G.E_MANAGER:add_event(Event({
+                        func = function()
+                            PB_UTIL.add_tag(PB_UTIL.poll_tag("spam"))
+                            return true
+                        end
+                        }))
+                    end
+                }
             end
 
             return {
@@ -1678,8 +1524,8 @@ SMODS.Joker {
     key = "printer",
     unlocked = true,
     blueprint_compat = true,
-    rarity = 1,
-    cost = 4,
+    rarity = 2,
+    cost = 8,
     atlas = 'atlas_cod_jokers',
     pos = { x = 1, y = 5 },
     config = { extra = { rank = "Ace", suit = "Hearts" } },
@@ -2167,43 +2013,6 @@ SMODS.Joker {
                 return {
                     message = localize('coloring_color_in'),
                     colour = pseudorandom_element({G.C.RED, G.C.BLUE, G.C.GREEN, G.C.GOLD, G.C.PURPLE, G.C.SUITS.Spades, G.C.EDITION}, 'coloring_text_color')
-                }
-            end
-        end
-    end,
-}
-
--- Rorschach Test
-SMODS.Joker {
-    key = "rorschach_test",
-    unlocked = true,
-    blueprint_compat = false,
-    rarity = 1,
-    cost = 4,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 1, y = 8 },
-    calculate = function(self, card, context)
-        if context.before and not context.blueprint then
-            local convert = false
-            for _, scored_card in ipairs(context.scoring_hand) do
-                if not scored_card.debuff then
-                    local rank_mod = pseudorandom('cod_rorschach_test', 0, 12)
-                    if rank_mod > 0 then
-                        convert = true
-                        assert(SMODS.modify_rank(scored_card, rank_mod))
-                        G.E_MANAGER:add_event(Event({
-                            func = function()
-                                scored_card:juice_up()
-                                return true
-                            end
-                        }))
-                    end
-                end
-            end
-            if convert then
-                return {
-                    message = localize('rorschach_test_modify'),
-                    colour = G.C.UI.TEXT_DARK
                 }
             end
         end
