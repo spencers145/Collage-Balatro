@@ -1295,9 +1295,8 @@ return {
 			['j_ortalab_watching_eye'] = {
 				["name"] = "Watching Eye",
 				["text"] = {
-					"Gives {C:red}#1#{} Mult minus {C:attention}#2#X{} the", 
-					"rank of the {C:attention}highest{} ranked card",
-					"{C:attention}held in hand"
+					"The highest ranked card {C:attention}held in hand",
+					"gives {C:mult}+#1#{} Mult minus {C:attention}#2#X{} its rank"
 				}
 			},
 			j_ortalab_other_half = {
