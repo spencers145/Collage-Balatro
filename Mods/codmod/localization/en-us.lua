@@ -181,7 +181,7 @@ return {
                 },
             },
             sleeve_cod_royal={
-                name="Royal Sleeve",
+                name="Population Sleeve",
                 text={
                     "Start run with",
                     "{C:attention}2{} copies of",
