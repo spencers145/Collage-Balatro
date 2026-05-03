@@ -1094,7 +1094,11 @@ SMODS.Blind({
     config = {extra = {chance = 2}},
     artist_credits = {'flare'},
     loc_vars = function(self, info_queue, card)
-        return {vars = {localize(G.GAME.ortalab.suits_in_deck[#G.GAME.ortalab.suits_in_deck].suit, 'suits_plural'), colours = {G.C.SUITS[G.GAME.ortalab.suits_in_deck[#G.GAME.ortalab.suits_in_deck].suit]}}}
+        if G.GAME.ortalab.suits_in_deck then
+            return {vars = {localize(G.GAME.ortalab.suits_in_deck[#G.GAME.ortalab.suits_in_deck].suit, 'suits_plural'), colours = {G.C.SUITS[G.GAME.ortalab.suits_in_deck[#G.GAME.ortalab.suits_in_deck].suit]}}}
+        else
+            return {vars = {"N/A"}}
+        end
     end,
     collection_loc_vars = function(self)
         return {vars = {localize('ortalab_saffron'), colours = {G.ARGS.LOC_COLOURS.attention}}}

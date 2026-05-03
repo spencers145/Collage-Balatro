@@ -32,7 +32,7 @@ table.insert(banned, { id = "p_arcana_normal_1", ids = {
   "p_arcana_mega_1", "p_arcana_mega_2"
 } })
 
-SMODS.Challenge {
+--[[SMODS.Challenge {
   key = "trial_of_cups",
   rules = {
     custom = {
@@ -93,3 +93,4 @@ SMODS.Challenge {
     end
   end
 }
+]]

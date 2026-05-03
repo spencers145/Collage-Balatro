@@ -107,7 +107,7 @@ if PB_UTIL.config.editions_enabled then
 end
 
 -- Load Paperclips if they are enabled
-if PB_UTIL.config.paperclips_enabled then
+if --[[PB_UTIL.config.paperclips_enabled]] true then -- not fucking around! always load clips pls
   PB_UTIL.register_items(PB_UTIL.ENABLED_PAPERCLIPS, "content/paperclip")
 end
 

@@ -61,6 +61,10 @@ SMODS.Consumable ({
 		end
 	  end
 
+	  if total == 3 then
+		unlock_card(G.P_CENTERS.b_femtoLabsCollection_hue)
+	  end
+
 	  if (PB_UTIL.has_paperclip(left) and not PB_UTIL.has_paperclip(right)) then
 		PB_UTIL.set_paperclip(right, PB_UTIL.has_paperclip(left))
 		for key, value in pairs(left.ability) do
@@ -77,10 +81,6 @@ SMODS.Consumable ({
 		end
 	  end
 	  return true end }))
-
-	  if total == 3 then
-		unlock_card(G.P_CENTERS.b_femtoLabsCollection_hue)
-	  end
 
 	   for i=1, #G.hand.highlighted do
             local percent = 0.85 + (i-0.999)/(#G.hand.highlighted-0.998)*0.3

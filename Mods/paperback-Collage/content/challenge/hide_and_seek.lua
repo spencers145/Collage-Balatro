@@ -1,4 +1,4 @@
-SMODS.Challenge {
+--[[SMODS.Challenge {
   key = "hide_and_seek",
   jokers = {
     {
@@ -18,3 +18,4 @@ SMODS.Challenge {
     }
   }
 }
+]]

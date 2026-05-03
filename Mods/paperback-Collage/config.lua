@@ -4,7 +4,7 @@ return {
   suits_enabled = false,
   enhancements_enabled = false,
   editions_enabled = true,
-  paperclips_enabled = false,
+  paperclips_enabled = true,
   vouchers_enabled = false,
   tags_enabled = true,
   ranks_enabled = false,

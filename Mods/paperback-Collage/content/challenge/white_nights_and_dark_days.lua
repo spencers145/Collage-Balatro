@@ -1,4 +1,4 @@
-SMODS.Challenge {
+--[[SMODS.Challenge {
   key = 'white_nights_and_dark_days',
   jokers = {
     {
@@ -29,3 +29,4 @@ SMODS.Challenge {
     type = 'Challenge Deck'
   }
 }
+]]
