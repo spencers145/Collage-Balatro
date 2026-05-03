@@ -1,0 +1,54 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Add visual parameter to allow copying negative playing cards to deck view
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''
+function copy_card(other, new_card, card_scale, playing_card, strip_edition)
+'''
+position = "at"
+payload = '''
+function copy_card(other, new_card, card_scale, playing_card, strip_edition, visual)
+'''
+match_indent = true
+
+# Remove negative from copied playing cards
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''
+return new_card
+'''
+position = "before"
+payload = '''
+if (not visual and other.ability.set == 'Default' and other.edition and other.edition.negative) then new_card:set_edition(nil, true, true) end
+'''
+match_indent = true
+
+# Deck view is visual only
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+local copy = copy_card(SUITS[suit_map[j]][i],nil, _scale)
+'''
+position = "at"
+payload = '''
+local copy = copy_card(SUITS[suit_map[j]][i],nil, _scale, nil, nil, true)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = '''
+local copy = copy_card(SUITS[visible_suit[j]][i], nil, _scale)
+'''
+position = "at"
+payload = '''
+local copy = copy_card(SUITS[visible_suit[j]][i], nil, _scale, nil, nil, true)
+'''
+match_indent = true

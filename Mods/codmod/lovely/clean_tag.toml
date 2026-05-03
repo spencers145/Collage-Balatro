@@ -1,0 +1,31 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Trigger tags on exit shop
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''
+SMODS.calculate_context({ending_shop = true})
+'''
+position = "after"
+payload = '''
+for i = 1, #G.GAME.tags do
+    G.GAME.tags[i]:apply_to_run({type = 'ending_shop'})
+end
+'''
+match_indent = true
+
+# Reset shop clean state
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''
+G.GAME.shop_d6ed = nil
+'''
+position = "after"
+payload = '''
+G.GAME.cod_shop_clean = nil
+'''
+match_indent = true

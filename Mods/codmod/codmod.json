@@ -1,0 +1,16 @@
+{
+  "id": "CodMod",
+  "name": "Cod's Mod",
+  "display_name": "Cod's Mod",
+  "author": ["Codzilla"],
+  "description": "A vanilla-like content mod that adds Jokers, Decks, Blinds and more. Supports Card Sleeves.",
+  "prefix": "cod",
+  "main_file": "codmod.lua",
+  "priority": 0,
+  "badge_colour": "3bd9c4",
+  "version": "3.3.0",
+  "dependencies": [
+    "Steamodded (>=1.0.0~BETA-1606b)",
+    "Lovely (>=0.9.0)"
+  ]
+}

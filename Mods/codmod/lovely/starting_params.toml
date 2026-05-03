@@ -1,0 +1,17 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Add game params
+[[patches]]
+[patches.pattern]
+target = 'functions/misc_functions.lua'
+pattern = '''
+no_faces = false,
+'''
+position = "before"
+payload = '''
+remove_random_suit = 0,
+cod_isometric = false,
+'''
+match_indent = true

@@ -1,0 +1,21 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Illusion can give seals and negative playing cards
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+if (v.type == 'Base' or v.type == 'Enhanced') and G.GAME.used_vouchers["v_illusion"] and pseudorandom(pseudoseed('illusion')) > 0.8 then 
+    card:set_edition(poll_edition('illusion', nil, true, true))
+end
+'''
+position = "at"
+payload = '''
+if (v.type == 'Base' or v.type == 'Enhanced') and G.GAME.used_vouchers["v_illusion"] then
+    if pseudorandom(pseudoseed('illusion')) > 0.8 then card:set_edition(poll_edition('illusion', nil, false, true)) end
+    if pseudorandom(pseudoseed('illusion')) > 0.8 then card:set_seal(SMODS.poll_seal({guaranteed = true}), true, true) end
+end
+'''
+match_indent = true

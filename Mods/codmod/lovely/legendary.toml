@@ -1,0 +1,46 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Legendaries appear outside soul
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/utils.lua"]'
+pattern = '''
+local vanilla_rarities = {["Common"] = 1, ["Uncommon"] = 2, ["Rare"] = 3, ["Legendary"] = 4}
+'''
+position = "after"
+payload = '''
+if _pool_key == "Joker" and not available_rarities[4] and next(SMODS.find_card('j_cod_orson')) then
+    available_rarities[4] = { key = "Legendary", weight = 0.02}
+end
+'''
+match_indent = true
+
+# Following patches based on All In Jest:
+
+# Unlock legendaries even if not obtained from soul
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "function Card:add_to_deck(from_debuff)"
+position = "after"
+match_indent = true
+payload = '''
+if not self.config.center.unlocked and self.config.center.rarity == 4 then
+    unlock_card(self.config.center)
+end
+'''
+
+# Make legendary jokers in the shop show their description
+[[patches]]
+[patches.regex]
+target = "card.lua"
+pattern = '''
+(?<indent>[\t ]*)if self\.config\.center\.unlocked == false and not self\.bypass_lock (?<post>.*)
+'''
+position = "at"
+line_prepend = '$indent'
+payload = '''
+if self.config.center.unlocked == false and not self.bypass_lock and not self.bypass_discovery_ui $post
+'''

@@ -1,0 +1,26 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# All sticker challenges for new stickers
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''
+if G.GAME.modifiers.all_eternal then
+    card:set_eternal(true)
+end
+'''
+position = "after"
+payload = '''
+if G.GAME.modifiers.all_confidential then
+    card:add_sticker("cod_confidential", true)
+end
+if G.GAME.modifiers.all_dormant then
+    card:add_sticker("cod_dormant", true)
+end
+if G.GAME.modifiers.all_imprisoned then
+    card:add_sticker("cod_imprisoned", true)
+end
+'''
+match_indent = true

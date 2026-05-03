@@ -1,0 +1,31 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Do now show reward in blind select screen
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+local _reward = true
+'''
+position = "after"
+payload = '''
+if blind_choice.config.key == 'bl_cod_ascetic' then
+    _reward = false
+end
+'''
+match_indent = true
+
+# Show "No reward" inside blind
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''
+if G.GAME.modifiers.no_blind_reward and (G.GAME.blind and G.GAME.modifiers.no_blind_reward[G.GAME.blind:get_type()]) then
+'''
+position = "at"
+payload = '''
+if G.GAME.blind.config.blind.key == 'bl_cod_ascetic' or (G.GAME.modifiers.no_blind_reward and (G.GAME.blind and G.GAME.modifiers.no_blind_reward[G.GAME.blind:get_type()])) then
+'''
+match_indent = true

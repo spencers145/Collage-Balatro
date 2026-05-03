@@ -1,0 +1,34 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Prevent card from being discarded twice
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+for i=1, highlighted_count do
+'''
+position = "after"
+payload = '''
+    if not G.hand.highlighted[i].ability.discarded then
+'''
+match_indent = true
+
+# Unhighlight discarded cards
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+end
+
+-- context.remove_playing_cards from discard
+'''
+position = "at"
+payload = '''
+    end
+end
+G.hand:unhighlight_all()
+-- context.remove_playing_cards from discard
+'''
+match_indent = true

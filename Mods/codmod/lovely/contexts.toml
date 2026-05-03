@@ -1,0 +1,35 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Add context after deck shuffles at start of round
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+G.E_MANAGER:add_event(Event({
+    trigger = 'immediate',
+    func = function()
+        G.STATE = G.STATES.DRAW_TO_HAND
+        G.deck:shuffle('nr'..G.GAME.round_resets.ante)
+        G.deck:hard_set_T()
+        G.STATE_COMPLETE = false
+        return true
+    end
+}))
+'''
+position = "at"
+payload = '''
+G.E_MANAGER:add_event(Event({
+    trigger = 'immediate',
+    func = function()
+        G.STATE = G.STATES.DRAW_TO_HAND
+        G.deck:shuffle('nr'..G.GAME.round_resets.ante)
+        SMODS.calculate_context({ round_shuffle = true })
+        G.deck:hard_set_T()
+        G.STATE_COMPLETE = false
+        return true
+    end
+}))
+'''
+match_indent = true

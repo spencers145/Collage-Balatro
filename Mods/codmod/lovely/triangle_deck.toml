@@ -1,0 +1,35 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''
+card_protos = {}
+'''
+position = "before"
+payload = '''
+local remaining_suits = {"H", "D", "C", "S"}
+local removed_suits = {}
+for i=1,self.GAME.starting_params.remove_random_suit do
+    if #remaining_suits > 0 then
+        local remove_suit = pseudorandom('cod_triangle', 1, #remaining_suits)
+        removed_suits[remaining_suits[remove_suit]] = true
+        remaining_suits[remove_suit] = nil
+    end
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''
+if self.GAME.starting_params.no_faces and SMODS.Ranks[v.value].face then keep = false end
+'''
+position = "before"
+payload = '''
+if removed_suits[_s] then keep = false end
+'''
+match_indent = true

@@ -1,0 +1,16 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Expensive sticker cost increase
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''
+if self.ability.rental then self.cost = 1 end
+'''
+position = "after"
+payload = '''
+if self.ability.cod_expensive then self.cost = self.cost * 3 end
+'''
+match_indent = true

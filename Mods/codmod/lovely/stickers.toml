@@ -1,0 +1,44 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Combine perishable and eternal allowed check with modded stickers
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/game_object.lua"]'
+pattern = '''
+(not self.needs_enable_flag or G.GAME.modifiers['enable_'..self.key])
+'''
+position = "at"
+payload = '''
+(not self.needs_enable_flag or (G.GAME.modifiers['enable_'..self.key] or G.GAME.modifiers['enable_'..self.key..'s_in_shop']))
+'''
+match_indent = true
+
+# Apply stickers in random order so later stickers don't appear less than they should
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''
+for k, v in ipairs(SMODS.Sticker.obj_buffer) do
+    local sticker = SMODS.Stickers[v]
+    if sticker.should_apply and type(sticker.should_apply) == 'function' and sticker:should_apply(card, center, area) then
+        sticker:apply(card, true)
+    end
+end
+'''
+position = "at"
+payload = '''
+local stickers = SMODS.Sticker.obj_buffer
+for i=1,#SMODS.Sticker.obj_buffer do
+    local s = pseudorandom_element(stickers, 'cod_sticker_order')
+    if s then
+        local sticker = SMODS.Stickers[s]
+        if sticker.should_apply and type(sticker.should_apply) == 'function' and sticker:should_apply(card, center, area) then
+            sticker:apply(card, true)
+        end
+    end
+    stickers[s] = nil
+end
+'''
+match_indent = true

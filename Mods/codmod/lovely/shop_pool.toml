@@ -1,0 +1,37 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Prevent planets in shop
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+for _,v in ipairs(SMODS.ConsumableType.obj_buffer) do
+    total_rate = total_rate + G.GAME[v:lower()..'_rate']
+end
+'''
+position = "after"
+payload = '''
+if (next(SMODS.find_card('j_cod_eldritch'))) then
+    total_rate = total_rate - G.GAME.planet_rate
+    total_rate = total_rate - G.GAME.tarot_rate
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+    {type = 'Spectral', val = G.GAME.spectral_rate},
+}
+'''
+position = "after"
+payload = '''
+if (next(SMODS.find_card('j_cod_eldritch'))) then
+    rates[2].val = 0
+    rates[3].val = 0
+end
+'''
+match_indent = true

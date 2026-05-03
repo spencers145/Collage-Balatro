@@ -1,0 +1,134 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''
+elseif self.debuff then
+'''
+position = "before"
+payload = '''
+elseif self.ability.cod_confidential then
+    loc_vars = { confidential = true, playing_card = not not self.base.colour, value = self.base.value, suit = self.base.suit, colour = self.base.colour }
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''
+elseif specific_vars and specific_vars.debuffed then
+'''
+position = "before"
+payload = '''
+elseif specific_vars and specific_vars.confidential and not card.area.config.collection then
+    localize{type = 'other', key = 'confidential_default', nodes = desc_nodes}
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''
+elseif specific_vars and (card_type == 'Default' or card_type == 'Enhanced') then
+'''
+position = "before"
+payload = '''
+elseif specific_vars and specific_vars.confidential and not card.area.config.collection then 
+    full_UI_table.name = localize{type = 'name', set = 'Other', key = 'confidential_default', name_nodes = {}}
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+if AUT.card_type ~= 'Locked' and AUT.card_type ~= 'Undiscovered' then
+'''
+position = "at"
+payload = '''
+if AUT.card_type ~= 'Locked' and AUT.card_type ~= 'Undiscovered' and not (card.ability and card.ability.cod_confidential) then
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''
+badges[#badges + 1] = create_badge(((card.ability.name == 'Pluto' or card.ability.name == 'Ceres' or card.ability.name == 'Eris') and localize('k_dwarf_planet')) or (card.ability.name == 'Planet X' and localize('k_planet_q') or card_type), card_type_colour, card_type_text_colour, 1.2)
+'''
+position = "at"
+payload = '''
+if not (card.ability and card.ability.cod_confidential) then badges[#badges + 1] = create_badge(((card.ability.name == 'Pluto' or card.ability.name == 'Ceres' or card.ability.name == 'Eris') and localize('k_dwarf_planet')) or (card.ability.name == 'Planet X' and localize('k_planet_q') or card_type), card_type_colour, card_type_text_colour, 1.2) end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/game_object.lua"]'
+pattern = '''
+if specific_vars and specific_vars.debuffed and not res.replace_debuff then
+'''
+position = "at"
+payload = '''
+if specific_vars and specific_vars.confidential and not res.replace_confidential then
+    target = { type = 'other', key = 'confidential_default', nodes = desc_nodes, AUT = full_UI_table, }
+elseif specific_vars and specific_vars.debuffed and not res.replace_debuff then
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''
+return new_card
+'''
+position = "before"
+payload = '''
+if new_card.ability.cod_confidential then
+    new_card:set_sprites(G.P_CENTERS["j_cod_redacted"])
+    if new_card.children then
+        new_card.children.floating_sprite = nil
+    end
+end
+'''
+match_indent = true
+
+# Reveal cards when sold / game is lost
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''
+G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2,func = function()
+    play_sound('coin2')
+    self:juice_up(0.3, 0.4)
+    return true
+end}))
+delay(0.2)
+'''
+position = "after"
+payload = '''
+if self.ability.cod_confidential then
+    self:set_sprites(G.P_CENTERS[self.config.center_key])
+    delay(1)
+end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = '''
+if game_over then
+'''
+position = "after"
+payload = '''
+for i = 1, #G.jokers.cards do
+    if G.jokers.cards[i].ability.cod_confidential then
+        G.jokers.cards[i]:set_sprites(G.P_CENTERS[G.jokers.cards[i].config.center_key])
+    end
+end
+'''
+match_indent = true

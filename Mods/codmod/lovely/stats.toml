@@ -1,0 +1,16 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Track blinds skipped
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''
+G.GAME.skips = (G.GAME.skips or 0) + 1
+'''
+position = "after"
+payload = '''
+inc_career_stat('c_blinds_skipped', 1)
+'''
+match_indent = true
