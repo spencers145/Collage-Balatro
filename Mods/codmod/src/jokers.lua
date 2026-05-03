@@ -31,7 +31,7 @@ SMODS.Joker {
     key = "summer",
     unlocked = true,
     blueprint_compat = false,
-    rarity = 1,
+    rarity = 2,
     cost = 4,
     atlas = 'atlas_cod_jokers',
     pos = { x = 3, y = 0 },
@@ -45,7 +45,7 @@ SMODS.Joker {
     key = "fall",
     unlocked = true,
     blueprint_compat = false,
-    rarity = 1,
+    rarity = 2,
     cost = 4,
     atlas = 'atlas_cod_jokers',
     pos = { x = 4, y = 0 },
@@ -59,7 +59,7 @@ SMODS.Joker {
     key = "winter",
     unlocked = true,
     blueprint_compat = false,
-    rarity = 1,
+    rarity = 2,
     cost = 4,
     atlas = 'atlas_cod_jokers',
     pos = { x = 5, y = 0 },
@@ -73,7 +73,7 @@ SMODS.Joker {
     key = "spring",
     unlocked = true,
     blueprint_compat = false,
-    rarity = 1,
+    rarity = 2,
     cost = 4,
     atlas = 'atlas_cod_jokers',
     pos = { x = 6, y = 0 },
@@ -141,8 +141,8 @@ SMODS.Joker {
     key = "mitosis",
     unlocked = true,
     blueprint_compat = true,
-    rarity = 1,
-    cost = 4,
+    rarity = 2,
+    cost = 5,
     atlas = 'atlas_cod_jokers',
     pos = { x = 4, y = 3 },
     -- amount is unused
@@ -204,8 +204,8 @@ SMODS.Joker {
     key = "invasion",
     unlocked = true,
     blueprint_compat = true,
-    rarity = 1,
-    cost = 4,
+    rarity = 2,
+    cost = 5,
     atlas = 'atlas_cod_jokers',
     pos = { x = 6, y = 3 },
     config = { extra = { amount = 2, suit = "Spades", color = G.C.SUITS.Spades} },
@@ -267,8 +267,8 @@ SMODS.Joker {
     key = "purification",
     unlocked = true,
     blueprint_compat = true,
-    rarity = 1,
-    cost = 4,
+    rarity = 2,
+    cost = 5,
     atlas = 'atlas_cod_jokers',
     pos = { x = 5, y = 3 },
     config = { extra = { amount = 1, suit = "Diamonds", color = G.C.SUITS.Diamonds} },
@@ -316,8 +316,8 @@ SMODS.Joker {
     key = "overgrowth",
     unlocked = true,
     blueprint_compat = true,
-    rarity = 1,
-    cost = 4,
+    rarity = 2,
+    cost = 5,
     atlas = 'atlas_cod_jokers',
     pos = { x = 2, y = 0 },
     -- amount is unused
@@ -481,111 +481,6 @@ SMODS.Joker {
     end
 }
 
--- Common Clone
-SMODS.Joker {
-    key = "common_clone",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 1,
-    cost = 4,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 3, y = 1 },
-    config = { extra = { chips = 35, cod_clone = true } },
-    in_pool = function(self, args)
-        return true, { allow_duplicates = true }
-    end,
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.chips } }
-    end,
-    calculate = function(self, card, context)
-        if context.other_joker and type(context.other_joker.ability.extra) == "table" and context.other_joker.ability.extra.cod_clone then
-            return {
-                chips = card.ability.extra.chips
-            }
-        end
-    end,
-}
-
--- Uncommon Clone
-SMODS.Joker {
-    key = "uncommon_clone",
-    unlocked = false,
-    blueprint_compat = true,
-    rarity = 2,
-    cost = 7,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 4, y = 1 },
-    config = { extra = { mult = 15, cod_clone = true } },
-    in_pool = function(self, args)
-        return true, { allow_duplicates = true }
-    end,
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult } }
-    end,
-    calculate = function(self, card, context)
-        if context.other_joker and type(context.other_joker.ability.extra) == "table" and context.other_joker.ability.extra.cod_clone then
-            return {
-                mult = card.ability.extra.mult
-            }
-        end
-    end,
-
-    check_for_unlock = function(self, args)
-        if args.type == 'modify_jokers' and G.jokers then
-            local count = 0
-            for _, joker in ipairs(G.jokers.cards) do
-                if joker.ability.set == 'Joker' and type(joker.ability.extra) == "table" and joker.ability.extra.cod_clone then
-                    count = count + 1
-                end
-                if count >= 2 then
-                    return true
-                end
-            end
-        end
-        return false
-    end
-}
-
--- Rare Clone
-SMODS.Joker {
-    key = "rare_clone",
-    unlocked = false,
-    blueprint_compat = true,
-    rarity = 3,
-    cost = 9,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 5, y = 1 },
-    config = { extra = { xmult = 1.5, cod_clone = true } },
-    in_pool = function(self, args)
-        return true, { allow_duplicates = true }
-    end,
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult } }
-    end,
-    calculate = function(self, card, context)
-        if context.other_joker and type(context.other_joker.ability.extra) == "table" and context.other_joker.ability.extra.cod_clone then
-            return {
-                xmult = card.ability.extra.xmult
-            }
-        end
-    end,
-
-    check_for_unlock = function(self, args)
-        if args.type == 'modify_jokers' and G.jokers then
-            local count = 0
-            for _, joker in ipairs(G.jokers.cards) do
-                if joker.ability.set == 'Joker' and type(joker.ability.extra) == "table" and joker.ability.extra.cod_clone then
-                    count = count + 1
-                end
-                if count >= 3 then
-                    return true
-                end
-            end
-        end
-        return false
-    end
-}
-
 -- Short Joker
 SMODS.Joker {
     key = "short",
@@ -701,158 +596,6 @@ SMODS.Joker {
 
         end
     end
-}
-
--- All-Seeing Joker
-SMODS.Joker {
-    key = "all_seeing",
-    unlocked = true,
-    blueprint_compat = false,
-    rarity = 1,
-    cost = 3,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 2, y = 1 },
-    config = { extra = { pack_h_size = 3, active = false } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.pack_h_size } }
-    end,
-    remove_from_deck = function(self, card, from_debuff)
-        if card.ability.extra.active then
-            card.ability.extra.active = false
-            G.hand:change_size(-card.ability.extra.pack_h_size)
-        end
-    end,
-    calculate = function(self, card, context)
-        if context.open_booster and not context.blueprint and not card.ability.extra.active then
-            G.hand:change_size(card.ability.extra.pack_h_size)
-            card.ability.extra.active = true
-
-            return {
-                message = localize('all_seeing_pack'),
-                colour = G.C.RED,
-            }
-        end
-        if context.ending_booster and not context.blueprint and card.ability.extra.active then
-            card.ability.extra.active = false
-            G.hand:change_size(-card.ability.extra.pack_h_size)
-        end
-    end
-}
-
--- Resourceful Joker
-SMODS.Joker {
-    key = "resourceful",
-    unlocked = true,
-    blueprint_compat = false,
-    rarity = 1,
-    cost = 4,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 7, y = 1 },
-    config = { extra = { pack_size = 1 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.pack_size } }
-    end,
-    add_to_deck = function(self, card, from_debuff)
-        if not G.GAME.modifiers.booster_size_mod then
-            G.GAME.modifiers.booster_size_mod = 0
-        end
-        G.GAME.modifiers.booster_size_mod = G.GAME.modifiers.booster_size_mod + card.ability.extra.pack_size
-    end,
-    remove_from_deck = function(self, card, from_debuff)
-        if not G.GAME.modifiers.booster_size_mod then
-            G.GAME.modifiers.booster_size_mod = 0
-        end
-        G.GAME.modifiers.booster_size_mod = G.GAME.modifiers.booster_size_mod - card.ability.extra.pack_size
-    end,
-    calculate = function(self, card, context)
-        if context.open_booster and not context.blueprint then
-            return {
-                message = localize('resourceful_pack'),
-                colour = G.C.GOLD,
-            }
-        end
-    end
-}
-
--- Scavenging Joker
-SMODS.Joker {
-    key = "scavenging",
-    unlocked = true,
-    blueprint_compat = false,
-    rarity = 2,
-    cost = 6,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 8, y = 1 },
-    config = { extra = { pack_choices = 1 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.pack_choices } }
-    end,
-    add_to_deck = function(self, card, from_debuff)
-        if not G.GAME.modifiers.booster_choice_mod then
-            G.GAME.modifiers.booster_choice_mod = 0
-        end
-        G.GAME.modifiers.booster_choice_mod = G.GAME.modifiers.booster_choice_mod + card.ability.extra.pack_choices
-    end,
-    remove_from_deck = function(self, card, from_debuff)
-        if not G.GAME.modifiers.booster_choice_mod then
-            G.GAME.modifiers.booster_choice_mod = 0
-        end
-        G.GAME.modifiers.booster_choice_mod = G.GAME.modifiers.booster_choice_mod - card.ability.extra.pack_choices
-    end,
-    calculate = function(self, card, context)
-        if context.open_booster and not context.blueprint then
-            return {
-                message = localize('resourceful_pack'),
-                colour = G.C.GOLD,
-            }
-        end
-    end
-}
-
--- Bully
-SMODS.Joker {
-    key = "bully",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 1,
-    cost = 3,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 6, y = 1 },
-    config = { extra = { xmult = 2 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main then
-			if G.GAME.blind.name == "Small Blind" then
-                return {
-                    xmult = card.ability.extra.xmult
-                }
-            end
-        end
-    end,
-}
-
--- Scam
-SMODS.Joker {
-    key = "scam",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 1,
-    cost = 21,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 0, y = 1 },
-    config = { extra = { xmult = 1.1 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main then
-            return {
-                xmult = card.ability.extra.xmult,
-            }
-        end
-    end,
 }
 
 -- Homework
@@ -1017,148 +760,6 @@ SMODS.Joker {
     end
 }
 
--- Anchor
-SMODS.Joker {
-    key = "anchor",
-    unlocked = true,
-    blueprint_compat = false,
-    rarity = 2,
-    cost = 5,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 9, y = 1 },
-    config = { extra = { suit = "Spades", color = G.C.SUITS.Spades } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { localize(card.ability.extra.suit, 'suits_singular'), colours = { card.ability.extra.color } } }
-    end,
-    calculate = function(self, card, context)
-        if context.round_shuffle and not context.blueprint then
-            local suit_cards = {}
-            local non_suit_cards = {}
-            for _, playing_card in ipairs(G.deck.cards) do
-                if playing_card:is_suit(card.ability.extra.suit) then
-                    suit_cards[#suit_cards + 1] = playing_card
-                else
-                    non_suit_cards[#non_suit_cards + 1] = playing_card
-                end
-            end
-            for _, non_suit_card in ipairs(non_suit_cards) do
-                suit_cards[#suit_cards + 1] = non_suit_card
-            end
-            G.deck.cards = suit_cards
-
-            return {
-                message = localize("anchor_sink"),
-                colour = card.ability.extra.color,
-            }
-        end
-    end
-}
-
--- Faster than light
-SMODS.Joker {
-    key = "faster_than_light",
-    unlocked = false,
-    blueprint_compat = false,
-    rarity = 3,
-    cost = 9,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 0, y = 2 },
-    config = { extra = { anti_ante = 1, skips = 3, skip_counter = 0 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.anti_ante, card.ability.extra.skips + (G.GAME.cod_faster_than_light_penalty or 0), card.ability.extra.skip_counter } }
-    end,
-    calculate = function(self, card, context)
-        if context.skip_blind and not context.blueprint then
-            card.ability.extra.skip_counter = card.ability.extra.skip_counter + 1
-            if card.ability.extra.skip_counter >= card.ability.extra.skips + (G.GAME.cod_faster_than_light_penalty or 0) then
-
-                ease_ante(-card.ability.extra.anti_ante)
-                G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante or G.GAME.round_resets.ante
-                G.GAME.round_resets.blind_ante = G.GAME.round_resets.blind_ante - card.ability.extra.anti_ante
-                
-                card.ability.extra.skip_counter = 0
-                G.GAME.cod_faster_than_light_penalty = G.GAME.cod_faster_than_light_penalty or 0
-                G.GAME.cod_faster_than_light_penalty = G.GAME.cod_faster_than_light_penalty + 1
-
-                -- Refresh big blind and boss blind to show correct chips requirements
-                -- no idea what this code does, got it from reroll tag logic
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'after',
-                    delay = 0.3,
-                    func = (function()
-
-                        local par_big = G.blind_select_opts.big.parent
-                        G.blind_select_opts.big:remove()
-                        G.blind_select_opts.big = UIBox{
-                        T = {par_big.T.x, 0, 0, 0, },
-                        definition =
-                            {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={
-                            UIBox_dyn_container({create_UIBox_blind_choice('Big')},false,get_blind_main_colour('Big'), mix_colours(G.C.BLACK, get_blind_main_colour('Big'), 0.8))
-                            }},
-                        config = {align="bmi",
-                                    offset = {x=0,y=G.ROOM.T.y + 9},
-                                    major = par_big,
-                                    xy_bond = 'Weak'
-                                }
-                        }
-                        par_big.config.object = G.blind_select_opts.big
-                        par_big.config.object:recalculate()
-                        G.blind_select_opts.big.parent = par_big
-                        G.blind_select_opts.big.alignment.offset.y = 0
-
-                        local par_boss = G.blind_select_opts.boss.parent
-                        G.blind_select_opts.boss:remove()
-                        G.blind_select_opts.boss = UIBox{
-                        T = {par_boss.T.x, 0, 0, 0, },
-                        definition =
-                            {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes={
-                            UIBox_dyn_container({create_UIBox_blind_choice('Boss')},false,get_blind_main_colour('Boss'), mix_colours(G.C.BLACK, get_blind_main_colour('Boss'), 0.8))
-                            }},
-                        config = {align="bmi",
-                                    offset = {x=0,y=G.ROOM.T.y + 9},
-                                    major = par_boss,
-                                    xy_bond = 'Weak'
-                                }
-                        }
-                        par_boss.config.object = G.blind_select_opts.boss
-                        par_boss.config.object:recalculate()
-                        G.blind_select_opts.boss.parent = par_boss
-                        G.blind_select_opts.boss.alignment.offset.y = 0
-
-                        return true
-                    end)
-                }))
-
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        save_run()
-                        return true
-                    end
-                }))
-
-                return {
-                    message = localize("faster_than_light_jump"),
-                    colour = G.C.GOLD,
-                }
-            else
-                return {
-                    message = localize("faster_than_light_charge"),
-                    colour = G.C.GOLD,
-                }
-            end
-        end
-    end,
-    locked_loc_vars = function(self, info_queue, card)
-        return { vars = { 10, G.PROFILES[G.SETTINGS.profile].career_stats.c_blinds_skipped or 0 } }
-    end,
-    check_for_unlock = function(self, args)
-        if args.type == 'career_stat' and args.statname == 'c_blinds_skipped' then
-            return G.PROFILES[G.SETTINGS.profile].career_stats[args.statname] >= 10
-        end
-        return false
-    end
-}
-
 -- Chosen One
 SMODS.Joker {
     key = "chosen_one",
@@ -1176,67 +777,6 @@ SMODS.Joker {
             }
         end
     end
-}
-
--- Paperclip
-SMODS.Joker {
-    key = "paperclip",
-    unlocked = true,
-    blueprint_compat = true,
-    cod_confidential_compat = false,
-    cod_envy_compat = false,
-    rarity = 1,
-    cost = 4,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 2, y = 2 },
-    config = { extra = { mult = 8, cod_paperclip = true, just_transformed = false } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult } }
-    end,
-    calculate = function(self, card, context)
-        if context.setting_blind and not context.blind.boss and not card.ability.extra.just_transformed and not context.blueprint then
-            local destructable_jokers = {}
-            for i = 1, #G.jokers.cards do
-                if not (type(G.jokers.cards[i].ability.extra) == "table" and G.jokers.cards[i].ability.extra.cod_paperclip) and not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
-                    destructable_jokers[#destructable_jokers + 1] = G.jokers.cards[i]
-                end
-            end
-            local joker_to_destroy = pseudorandom_element(destructable_jokers, 'cod_paperclip')
-
-            if joker_to_destroy then
-                joker_to_destroy.getting_sliced = true
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        (context.blueprint_card or card):juice_up(0.8, 0.8)
-                        joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-                        return true
-                    end
-                }))
-
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        local copied_joker = copy_card(card, nil, nil, nil, nil)
-                        copied_joker:start_materialize()
-                        copied_joker:add_to_deck()
-                        copied_joker.ability.extra.just_transformed = true
-                        G.jokers:emplace(copied_joker)
-                        return true
-                    end
-                }))
-
-                -- message idea: output the percentage of jokers that are paperclips, if all are: "Task Complete"
-                return { message = localize("paperclip_copy") }
-            end
-
-        end
-        card.ability.extra.just_transformed = false
-
-        if context.joker_main then
-			return {
-                mult = card.ability.extra.mult
-            }
-        end
-    end,
 }
 
 -- Hiding Joker
@@ -1279,53 +819,6 @@ SMODS.Joker {
             end
         end
     end,
-}
-
--- Elitist Joker
-SMODS.Joker {
-    key = "elitism",
-    unlocked = false,
-    blueprint_compat = false,
-    rarity = 3,
-    cost = 9,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 8, y = 2 },
-    locked_loc_vars = function(self, info_queue, back)
-        local other_name = localize('k_unknown')
-        if G.P_CENTERS['b_cod_average'].unlocked then
-            other_name = localize { type = 'name_text', set = 'Back', key = 'b_cod_average' }
-        end
-
-        return { vars = { other_name } }
-    end,
-    check_for_unlock = function(self, args)
-        return args.type == 'win_deck' and get_deck_win_stake('b_cod_average')>0 and true
-    end
-}
-
-
--- Clemens
-SMODS.Joker {
-    key = "clemens",
-    unlocked = false,
-    blueprint_compat = false,
-    rarity = 4,
-    cost = 20,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 8, y = 10 },
-    soul_pos = { x = 9, y = 10 },
-    calculate = function(self, card, context)
-        if context.selling_card and not context.blueprint and card ~= context.card then
-            local key_to_ban = context.card.config.center.key
-
-            G.GAME.banned_keys[key_to_ban] = true
-
-            return {
-                message = localize("clemens_ban"),
-                colour = G.C.RED,
-            }
-        end
-    end
 }
 
 -- Spam
@@ -1722,38 +1215,6 @@ SMODS.Joker {
     end
 }
 
--- Unlucky joker
-SMODS.Joker {
-    key = "unlucky",
-    blueprint_compat = true,
-    perishable_compat = false,
-    rarity = 2,
-    cost = 6,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 1, y = 4 },
-    config = { extra = { odds = 2, chips = 0, chips_mod = 3 } },
-    loc_vars = function(self, info_queue, card)
-        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'cod_unlucky')
-        return { vars = { numerator, denominator, card.ability.extra.chips, card.ability.extra.chips_mod, } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main then
-            if SMODS.pseudorandom_probability(card, 'cod_unlucky', 1, card.ability.extra.odds) then
-                return {
-                    chips = card.ability.extra.chips
-                }
-            end
-        end
-        if context.pseudorandom_result and not context.blueprint and not context.result then
-            card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chips_mod
-            return {
-                message = localize("k_upgrade_ex"),
-                colour = G.C.CHIPS,
-            }
-        end
-    end
-}
-
 -- Tapas
 SMODS.Joker {
     key = "tapas",
@@ -1921,39 +1382,6 @@ SMODS.Joker {
             card.ability.extra_value = card.ability.extra_value + card.ability.extra.current.sell_value
         end
     end
-}
-
--- Stargazer
-SMODS.Joker {
-    key = "stargazer",
-    blueprint_compat = true,
-    rarity = 1,
-    cost = 4,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 3, y = 4 },
-    calculate = function(self, card, context)
-        if context.setting_blind and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-            G.E_MANAGER:add_event(Event({
-                func = (function()
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            SMODS.add_card {
-                                set = 'Planet',
-                                key_append = 'cod_stargazer'
-                            }
-                            G.GAME.consumeable_buffer = 0
-                            return true
-                        end
-                    }))
-                    SMODS.calculate_effect({ message = localize('k_plus_planet'), colour = G.C.SECONDARY_SET.Planet },
-                        context.blueprint_card or card)
-                    return true
-                end)
-            }))
-            return nil, true
-        end
-    end,
 }
 
 -- Gear Stick
@@ -2298,63 +1726,6 @@ SMODS.Joker {
     end
 }
 
--- The Sun
-SMODS.Joker {
-    key = "the_sun",
-    unlocked = true,
-    blueprint_compat = false,
-    rarity = 2,
-    cost = 6,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 3, y = 5 },
-    calculate = function(self, card, context)
-        if context.end_of_round and context.game_over == false and context.main_eval and context.beat_boss and not context.blueprint then
-            update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.8, delay = 0.3 },
-                { handname = localize('k_all_hands'), chips = '...', mult = '...', level = '' })
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.2,
-                func = function()
-                    play_sound('tarot1')
-                    card:juice_up(0.8, 0.5)
-                    G.TAROT_INTERRUPT_PULSE = true
-                    return true
-                end
-            }))
-            update_hand_text({ delay = 0 }, { mult = '+', StatusText = true })
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.9,
-                func = function()
-                    play_sound('tarot1')
-                    card:juice_up(0.8, 0.5)
-                    return true
-                end
-            }))
-            update_hand_text({ delay = 0 }, { chips = '+', StatusText = true })
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.9,
-                func = function()
-                    play_sound('tarot1')
-                    card:juice_up(0.8, 0.5)
-                    G.TAROT_INTERRUPT_PULSE = nil
-                    return true
-                end
-            }))
-            update_hand_text({ sound = 'button', volume = 0.7, pitch = 0.9, delay = 0 }, { level = '+1' })
-            delay(1.3)
-            SMODS.upgrade_poker_hands({ instant = true })
-            update_hand_text({ sound = 'button', volume = 0.7, pitch = 1.1, delay = 0 },
-                { mult = 0, chips = 0, handname = '', level = '' })
-            return {
-                message = localize('sun_upgrade'),
-                colour = G.C.RED
-            }
-        end
-    end,
-}
-
 -- Dyson Sphere
 SMODS.Joker {
     key = "dyson_sphere",
@@ -2500,7 +1871,7 @@ SMODS.Joker {
     cost = 5,
     atlas = 'atlas_cod_jokers',
     pos = { x = 9, y = 5 },
-    config = { extra = { mult = 1, cap = 25 } },
+    config = { extra = { mult = 1, cap = 30 } },
     loc_vars = function(self, info_queue, card)
         local played = 0
         for _, hand in pairs(G.GAME.hands) do
@@ -2581,37 +1952,6 @@ SMODS.Joker {
     end
 }
 
--- Delivery
-SMODS.Joker {
-    key = "delivery",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 1,
-    cost = 4,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 1, y = 6 },
-    config = { extra = { dollars = 8 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.dollars } }
-    end,
-    calculate = function(self, card, context)
-        if context.skip_blind then
-            G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
-            return {
-                dollars = card.ability.extra.dollars,
-                func = function()
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            G.GAME.dollar_buffer = 0
-                            return true
-                        end
-                    }))
-                end
-            }
-        end
-    end
-}
-
 -- Gambler
 SMODS.Joker {
     key = "gambler",
@@ -2652,117 +1992,6 @@ SMODS.Joker {
             }
         end
     end
-}
-
--- Coin Toss
-SMODS.Joker {
-    key = "coin_toss",
-    unlocked = true,
-    blueprint_compat = false,
-    eternal_compat = false,
-    rarity = 1,
-    cost = 1,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 3, y = 6 },
-    config = { extra = { odds = 2 } },
-    loc_vars = function(self, info_queue, card)
-        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'cod_coin_toss')
-        return { vars = { numerator, denominator } }
-    end,
-    calculate = function(self, card, context)
-        if context.before and not context.blueprint then
-            if context.scoring_name == "High Card" then
-                card.ability.extra_value = card.ability.extra_value + card.sell_cost
-                card:set_cost()
-                if SMODS.pseudorandom_probability(card, 'cod_coin_toss', 1, card.ability.extra.odds) then
-                    SMODS.destroy_cards(card, nil, nil, true)
-                    return {
-                        colour = G.C.RED,
-                        message = localize('coin_toss_tails'),
-                    }
-                else
-                    return {
-                        colour = G.C.GOLD,
-                        message = localize('coin_toss_heads'),
-                    }
-                end
-            end
-        end
-    end
-}
-
--- Oops! All 1s
-SMODS.Joker {
-    key = "oops_all_1s",
-    unlocked = true,
-    blueprint_compat = true,
-    perishable_compat = false,
-    rarity = 2,
-    cost = 6,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 4, y = 6 },
-    config = { extra = { mult = 0, mult_gain = 1 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult_gain, card.ability.extra.mult} }
-    end,
-    calculate = function(self, card, context)
-        if context.mod_probability and not context.blueprint then
-            return {
-                denominator = context.denominator * 2
-            }
-        end
-        if context.pseudorandom_result and not context.blueprint and context.result then
-            card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
-            return {
-                message = localize("k_upgrade_ex"),
-                colour = G.C.MULT,
-            }
-        end
-        if context.joker_main then
-            return {
-                mult = card.ability.extra.mult
-            }
-        end
-    end,
-}
-
--- Call of the Void
-SMODS.Joker {
-    key = "call_of_the_void",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 3,
-    cost = 9,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 5, y = 6 },
-    calculate = function(self, card, context)
-        if context.setting_blind and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-            G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-            G.E_MANAGER:add_event(Event({
-                func = (function()
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            SMODS.add_card {
-                                set = 'Spectral',
-                                key_append = 'cod_call_of_the_void'
-                            }
-                            G.GAME.consumeable_buffer = 0
-                            return true
-                        end
-                    }))
-                    SMODS.calculate_effect({ message = localize('k_plus_spectral'), colour = G.C.SECONDARY_SET.Spectral },
-                        context.blueprint_card or card)
-                    return true
-                end)
-            }))
-            return nil, true
-        end
-        if context.check_eternal and context.trigger.from_sell and context.other_card.area == G.consumeables then
-            return {
-                no_destroy = { override_compat = true }
-            }
-        end
-    end,
 }
 
 -- Stone Tablet
@@ -3025,36 +2254,6 @@ SMODS.Joker {
     end
 }
 
--- Bonus Joker
-SMODS.Joker {
-    key = "bonus",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 2,
-    cost = 6,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 3, y = 7 },
-    config = { extra = { repetitions = 1 } },
-    loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue + 1] = G.P_CENTERS.m_bonus
-    end,
-    calculate = function(self, card, context)
-        if context.repetition and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, 'm_bonus') then
-            return {
-                repetitions = card.ability.extra.repetitions
-            }
-        end
-    end,
-    in_pool = function(self, args)
-        for _, playing_card in ipairs(G.playing_cards or {}) do
-            if SMODS.has_enhancement(playing_card, 'm_bonus') then
-                return true
-            end
-        end
-        return false
-    end
-}
-
 -- Mult Joker
 SMODS.Joker {
     key = "mult",
@@ -3257,81 +2456,6 @@ SMODS.Joker {
     end
 }
 
--- Cipher Wheel
-SMODS.Joker {
-    key = "cipher_wheel",
-    unlocked = true,
-    blueprint_compat = false,
-    rarity = 2,
-    cost = 7,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 8, y = 8 },
-    pixel_size = { h = 71 },
-    config = { extra = { hands = 3, active = false } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.hands } }
-    end,
-    add_to_deck = function(self, card, from_debuff)
-        G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.hands
-        ease_hands_played(card.ability.extra.hands)
-    end,
-    remove_from_deck = function(self, card, from_debuff)
-        G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.hands
-        ease_hands_played(-card.ability.extra.hands)
-    end,
-    calculate = function(self, card, context)
-        if context.press_play then
-            card.ability.extra.active = true
-        end
-        if context.end_of_round and context.game_over == false and context.main_eval then
-            card.ability.extra.active = false
-        end
-        if context.stay_flipped and context.to_area == G.hand and card.ability.extra.active and not context.blueprint then
-            return {
-                stay_flipped = true
-            }
-        end
-        if context.setting_blind or context.hand_drawn then
-            card.ability.extra.active = false
-        end
-    end
-}
-
--- Penrose Steps
-SMODS.Joker {
-    key = "penrose_steps",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 2,
-    cost = 6,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 9, y = 8 },
-    config = { extra = { steps = 1 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.steps } }
-    end,
-    calculate = function(self, card, context)
-        if context.setting_blind then
-            local stepped = false
-            for _, playing_card in ipairs(G.playing_cards) do
-                if not SMODS.has_no_rank(playing_card) and not playing_card.getting_sliced then
-                    assert(SMODS.modify_rank(playing_card, card.ability.extra.steps))
-                    stepped = true
-                end
-            end
-
-            if stepped then
-
-                return {
-                    message = localize('penrose_steps_step'),
-                    colour = G.C.BLACK;
-                }
-            end
-
-        end
-    end
-}
-
 -- Gold Bar
 SMODS.Joker {
     key = "gold_bar",
@@ -3387,7 +2511,7 @@ SMODS.Joker {
     cost = 8,
     atlas = 'atlas_cod_jokers',
     pos = { x = 0, y = 9 },
-    config = { extra = { xmult_mod = 0.3, base_xmult = 1 } },
+    config = { extra = { xmult_mod = 0.5, base_xmult = 1 } },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.xmult_mod, card.ability.extra.base_xmult + card.ability.extra.xmult_mod * (G.GAME.consumeable_usage_total and G.GAME.consumeable_usage_total.spectral or 0) } }
     end,
@@ -3402,117 +2526,6 @@ SMODS.Joker {
                 xmult = card.ability.extra.base_xmult + card.ability.extra.xmult_mod * (G.GAME.consumeable_usage_total and G.GAME.consumeable_usage_total.spectral or 0)
             }
         end
-    end
-}
-
--- Versatile
-SMODS.Joker {
-    key = "versatile",
-    blueprint_compat = true,
-    rarity = 1,
-    cost = 4,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 3, y = 9 },
-    config = { extra = { chips = 15, mult = 3 } },
-    loc_vars = function(self, info_queue, card)
-        local left = 0
-        local right = 0
-        local passed_self = false
-        if G.jokers then
-            for i = 1, #G.jokers.cards do
-                if G.jokers.cards[i].ability.set == 'Joker' then
-                    if G.jokers.cards[i] == card then
-                        passed_self = true
-                    else
-                        if passed_self then
-                            right = right + 1
-                        else
-                            left = left + 1
-                        end
-                    end
-                end
-            end
-        end
-        return { vars = { card.ability.extra.chips, card.ability.extra.mult, right*card.ability.extra.chips, left*card.ability.extra.mult } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main then
-            local left = 0
-            local right = 0
-            local passed_self = false
-            for i = 1, #G.jokers.cards do
-                if G.jokers.cards[i].ability.set == 'Joker' then
-                    if G.jokers.cards[i] == card then
-                        passed_self = true
-                    else
-                        if passed_self then
-                            right = right + 1
-                        else
-                            left = left + 1
-                        end
-                    end
-                end
-            end
-            return {
-                chips = right*card.ability.extra.chips,
-                mult = left*card.ability.extra.mult,
-            }
-        end
-    end,
-}
-
--- Book of the Dead
-SMODS.Joker {
-    key = "book_of_the_dead",
-    blueprint_compat = false,
-    cod_confidential_compat = false,
-    rarity = 2,
-    cost = 5,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 5, y = 9 },
-    config = { extra = { poker_hand = 'High Card' } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { localize(card.ability.extra.poker_hand, 'poker_hands') } }
-    end,
-    calculate = function(self, card, context)
-        if context.first_hand_drawn and not context.blueprint then
-            local eval = function() return G.GAME.current_round.hands_played == 0 and not G.RESET_JIGGLES end
-            juice_card_until(card, eval, true)
-        end
-        if context.destroy_card and context.cardarea == G.play and context.scoring_name == card.ability.extra.poker_hand and not context.blueprint and context.destroying_card and G.GAME.current_round.hands_played == 0 then
-            if context.destroying_card == context.scoring_hand[1] then
-                return {
-                    remove = true,
-                    message = localize('book_of_the_dead_judge'),
-                    colour = G.C.RED,
-                }
-            else
-                return {
-                    remove = true,
-                }
-            end
-        end
-        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-            local _poker_hands = {}
-            for handname, _ in pairs(G.GAME.hands) do
-                if SMODS.is_poker_hand_visible(handname) and handname ~= card.ability.extra.poker_hand then
-                    _poker_hands[#_poker_hands + 1] = handname
-                end
-            end
-            card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'cod_book_of_the_dead')
-            return {
-                message = localize('k_reset')
-            }
-        end
-    end,
-    set_ability = function(self, card, initial, delay_sprites)
-        local _poker_hands = {}
-        for handname, _ in pairs(G.GAME.hands) do
-            if SMODS.is_poker_hand_visible(handname) and handname ~= card.ability.extra.poker_hand then
-                _poker_hands[#_poker_hands + 1] = handname
-            end
-        end
-        card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'cod_book_of_the_dead')
     end
 }
 
@@ -3564,47 +2577,6 @@ SMODS.Joker {
     end
 }
 
--- Conveyor Belt
-SMODS.Joker {
-    key = "conveyor_belt",
-    blueprint_compat = false,
-    rarity = 2,
-    cost = 6,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 4, y = 9 },
-    config = { extra = { hands = 4, force_selects = 5 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.hands, card.ability.extra.force_selects } }
-    end,
-    calculate = function(self, card, context)
-        if context.hand_drawn and not context.blueprint then
-
-            G.hand:unhighlight_all()
-            for _, playing_card in ipairs(G.hand.cards) do
-                playing_card.ability.forced_selection = true
-                G.hand:add_to_highlighted(playing_card)
-            end
-        end
-        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-            for _, playing_card in ipairs(G.playing_cards) do
-                playing_card.ability.forced_selection = nil
-            end
-        end
-    end,
-    add_to_deck = function(self, card, from_debuff)
-        G.GAME.round_resets.hands = G.GAME.round_resets.hands + card.ability.extra.hands
-        ease_hands_played(card.ability.extra.hands)
-    end,
-    remove_from_deck = function(self, card, from_debuff)
-        G.GAME.round_resets.hands = G.GAME.round_resets.hands - card.ability.extra.hands
-        ease_hands_played(-card.ability.extra.hands)
-
-        for _, playing_card in ipairs(G.playing_cards) do
-            playing_card.ability.forced_selection = nil
-        end
-    end,
-}
-
 -- Marshmallow
 SMODS.Joker {
     key = "marshmallow",
@@ -3614,16 +2586,25 @@ SMODS.Joker {
     cost = 6,
     atlas = 'atlas_cod_jokers',
     pos = { x = 7, y = 9 },
-    config = { extra = { xmult = 3 } },
+    config = { extra = { xmult = 3, loses = 0.5 } },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult } }
+        return { vars = { card.ability.extra.xmult, card.ability.extra.loses } }
     end,
     calculate = function(self, card, context)
         if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint and SMODS.last_hand_oneshot then
-            SMODS.destroy_cards(card, nil, nil, true)
-            return {
-                message = localize('marshmallow_burnt')
-            }
+            card.ability.extra.xmult = card.ability.extra.xmult - card.ability.extra.loses
+
+            if card.ability.extra.xmult <= 1 then
+                SMODS.destroy_cards(card, nil, nil, true)
+                return {
+                    message = localize('marshmallow_burnt')
+                }
+            else
+                return {
+                    message = "-X0.5",
+                    colour = G.C.RED
+                }
+            end
         end
         if context.joker_main then
             return {
@@ -3724,65 +2705,6 @@ SMODS.Joker {
             return {
                 mult = rank_tally
             }
-        end
-    end
-}
-
--- Mirror
-SMODS.Joker {
-    key = "mirror",
-    unlocked = true,
-    blueprint_compat = false,
-    rarity = 1,
-    cost = 4,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 2, y = 10 },
-    calculate = function(self, card, context)
-        if context.discard and not context.blueprint and #context.full_hand == 2 and context.other_card == context.full_hand[1] then
-            local discard_hand = {}
-            discard_hand[1] = context.full_hand[1]
-            discard_hand[2] = context.full_hand[2]
-            for i = 1, #context.full_hand do
-                local percent = 1.15 - (i - 0.999) / (#context.full_hand - 0.998) * 0.3
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'after',
-                    delay = 0.15,
-                    func = function()
-                        discard_hand[i]:flip()
-                        play_sound('card1', percent)
-                        discard_hand[i]:juice_up(0.3, 0.3)
-                        return true
-                    end
-                }))
-            end
-            delay(0.2)
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    local rand = pseudorandom("cod_mirror")
-                    if rand > 0.5 then
-                        copy_card(discard_hand[1], discard_hand[2])
-                    else
-                        copy_card(discard_hand[2], discard_hand[1])
-                    end
-                    return true
-                end
-            }))
-            for i = 1, #context.full_hand do
-                local percent = 0.85 + (i - 0.999) / (#context.full_hand - 0.998) * 0.3
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'after',
-                    delay = 0.15,
-                    func = function()
-                        discard_hand[i]:flip()
-                        play_sound('tarot2', percent, 0.6)
-                        discard_hand[i]:juice_up(0.3, 0.3)
-                        return true
-                    end
-                }))
-            end
-            delay(0.5)
         end
     end
 }
@@ -4013,54 +2935,6 @@ SMODS.Joker {
     end
 }
 
--- The Rivals
-SMODS.Joker {
-    key = "the_rivals",
-    unlocked = false,
-    blueprint_compat = true,
-    rarity = 3,
-    cost = 8,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 1, y = 11 },
-    config = { extra = { Xmult = 3, type = 'Two Pair' } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.Xmult, localize(card.ability.extra.type, 'poker_hands') } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main and next(context.poker_hands[card.ability.extra.type]) then
-            return {
-                xmult = card.ability.extra.Xmult
-            }
-        end
-    end,
-    locked_loc_vars = function(self, info_queue, card)
-        return { vars = { localize('Two Pair', 'poker_hands') } }
-    end,
-    check_for_unlock = function(self, args)
-        return args.type == 'win_no_hand' and G.GAME.hands['Two Pair'].played == 0
-    end
-}
-
--- Reverse card
-SMODS.Joker {
-    key = "reverse_card",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 2,
-    cost = 6,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 2, y = 8 },
-    calculate = function(self, card, context)
-        if context.joker_main then
-            return {
-                swap = true,
-                message = localize("cod_reverse_card_swap"),
-                colour = G.C.PURPLE,
-            }
-        end
-    end,
-}
-
 -- Gold Ore
 SMODS.Joker {
     key = "gold_ore",
@@ -4153,106 +3027,6 @@ SMODS.Joker {
     end,
 }
 
--- Wooden Chest
-SMODS.Joker {
-    key = "wooden_chest",
-    unlocked = true,
-    blueprint_compat = false,
-    eternal_compat = false,
-    rarity = 1,
-    cost = 4,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 5, y = 11 },
-    config = { extra = { rounds = 0, total_rounds = 1 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.total_rounds, card.ability.extra.rounds } }
-    end,
-    calculate = function(self, card, context)
-        if context.selling_self and (card.ability.extra.rounds >= card.ability.extra.total_rounds) and not context.blueprint then
-            if #G.jokers.cards <= G.jokers.config.card_limit then
-                SMODS.add_card({ set = 'Joker', rarity = 'Uncommon' })
-                return { message = localize('cod_open_chest') }
-            else
-                return { message = localize('k_no_room_ex') }
-            end
-        end
-        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-            card.ability.extra.rounds = card.ability.extra.rounds + 1
-            if card.ability.extra.rounds == card.ability.extra.total_rounds then
-                local eval = function(card) return not card.REMOVED end
-                juice_card_until(card, eval, true)
-            end
-            return {
-                message = (card.ability.extra.rounds < card.ability.extra.total_rounds) and
-                    (card.ability.extra.rounds .. '/' .. card.ability.extra.total_rounds) or
-                    localize('k_active_ex'),
-                colour = G.C.FILTER
-            }
-        end
-    end,
-}
-
--- Gilded Chest
-SMODS.Joker {
-    key = "gilded_chest",
-    unlocked = true,
-    blueprint_compat = false,
-    eternal_compat = false,
-    rarity = 2,
-    cost = 6,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 6, y = 11 },
-    config = { extra = { rounds = 0, total_rounds = 2 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.total_rounds, card.ability.extra.rounds } }
-    end,
-    calculate = function(self, card, context)
-        if context.selling_self and (card.ability.extra.rounds >= card.ability.extra.total_rounds) and not context.blueprint then
-            if #G.jokers.cards <= G.jokers.config.card_limit then
-                SMODS.add_card({ set = 'Joker', rarity = 'Rare' })
-                return { message = localize('cod_open_chest') }
-            else
-                return { message = localize('k_no_room_ex') }
-            end
-        end
-        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-            card.ability.extra.rounds = card.ability.extra.rounds + 1
-            if card.ability.extra.rounds == card.ability.extra.total_rounds then
-                local eval = function(card) return not card.REMOVED end
-                juice_card_until(card, eval, true)
-            end
-            return {
-                message = (card.ability.extra.rounds < card.ability.extra.total_rounds) and
-                    (card.ability.extra.rounds .. '/' .. card.ability.extra.total_rounds) or
-                    localize('k_active_ex'),
-                colour = G.C.FILTER
-            }
-        end
-    end,
-}
-
--- Huge Joker
-SMODS.Joker {
-    key = "huge_joker",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 1,
-    cost = 5,
-    pos = { x = 0, y = 0 },
-    display_size = { w = 71 * 1.4, h = 95 * 1.4 },
-    config = { card_limit = -1, extra = { xmult = 2 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { 1, card.ability.extra.xmult } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main then
-            return {
-                xmult = card.ability.extra.xmult,
-            }
-        end
-    end,
-}
-
 -- 8-bit Joker
 SMODS.Joker {
     key = "8_bit_joker",
@@ -4280,28 +3054,6 @@ SMODS.Joker {
     end
 }
 
--- Enhanced Joker
-SMODS.Joker {
-    key = "enhanced_joker",
-    unlocked = true,
-    blueprint_compat = false,
-    rarity = 1,
-    cost = 4,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 9, y = 11 },
-    config = { extra = { mult = 5 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult } }
-    end,
-    calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play and next(SMODS.get_enhancements(context.other_card)) then
-            return {
-                mult = card.ability.extra.mult
-            }
-        end
-    end
-}
-
 -- Socialite
 SMODS.Joker {
     key = "socialite",
@@ -4311,7 +3063,7 @@ SMODS.Joker {
     cost = 9,
     atlas = 'atlas_cod_jokers',
     pos = { x = 0, y = 12 },
-    config = { extra = { xmult = 0.1 } },
+    config = { extra = { xmult = 0.05 } },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.xmult } }
     end,

@@ -1032,8 +1032,8 @@ return {
             j_cod_marshmallow = {
                 name = "Marshmallow",
                 text = {
-                    "{X:mult,C:white}X#1#{} Mult",
-                    "destroyed by {C:attention}Fire{}",
+                    {"{X:mult,C:white}X#1#{} Mult"},
+                    {"Loses {X:mult,C:white}-X#2#{} in {C:attention}Fire{}",}
                 },
             },
             j_cod_treasure_map = {

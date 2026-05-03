@@ -79,7 +79,7 @@ local itemsToLoad = {
         --'precious',
         --'step_by_step',
         'jimboy',
-        'spirit_box',
+        --'spirit_box',
         --'red_joker',
         --'bank',
         --'big_bang',

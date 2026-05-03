@@ -758,6 +758,19 @@ COLLAGE_MODIFIED_TABLE = {
     "j_bof_a_jelly_beans",
     "j_bof_n_eraser",
     "j_bof_n_passport",
+
+    "j_cod_marshmallow",
+    "j_cod_tapas",
+    "j_cod_jimboel",
+    "j_cod_socialite",
+    "j_cod_spring",
+    "j_cod_summer",
+    "j_cod_winter",
+    "j_cod_fall",
+    "j_cod_mitosis",
+    "j_cod_invasion",
+    "j_cod_purification",
+    "j_cod_overgrowth",
 }
 
 COLLAGE_ALWAYS_IN_POOL = {
