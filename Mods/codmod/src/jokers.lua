@@ -1867,7 +1867,7 @@ SMODS.Joker {
             }
         end
 
-        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+        if context.end_of_round and context.beat_boss and context.game_over == false and context.main_eval and not context.blueprint then
 
             card.ability.extra.dishes = card.ability.extra.dishes - 1
 

@@ -645,35 +645,35 @@ return {
             j_cod_tapas_1 = {
                 name = "Tapas",
                 text = {
-                    "{V:1,B:2}#1#{} #2#",
-                    "lose {C:red}1{} effect each round",
+                    {"{V:1,B:2}#1#{} #2#"},
+                    {"Lose {C:red}1{} effect each round",}
                 },
             },
             j_cod_tapas_2 = {
                 name = "Tapas",
                 text = {
-                    "{V:1,B:2}#1#{} #2#",
-                    "{V:3,B:4}#3#{} #4#",
-                    "lose {C:red}1{} effect each round",
+                    {"{V:1,B:2}#1#{} #2#",
+                    "{V:3,B:4}#3#{} #4#"},
+                    {"Lose {C:red}1{} effect each round",}
                 },
             },
             j_cod_tapas_3 = {
                 name = "Tapas",
                 text = {
-                    "{V:1,B:2}#1#{} #2#",
+                    {"{V:1,B:2}#1#{} #2#",
                     "{V:3,B:4}#3#{} #4#",
-                    "{V:5,B:6}#5#{} #6#",
-                    "lose {C:red}1{} effect each round",
+                    "{V:5,B:6}#5#{} #6#"},
+                    {"Lose {C:red}1{} effect each round",}
                 },
             },
             j_cod_tapas_4 = {
                 name = "Tapas",
                 text = {
-                    "{V:1,B:2}#1#{} #2#",
+                    {"{V:1,B:2}#1#{} #2#",
                     "{V:3,B:4}#3#{} #4#",
                     "{V:5,B:6}#5#{} #6#",
-                    "{V:7,B:8}#7#{} #8#",
-                    "lose {C:red}1{} effect each round",
+                    "{V:7,B:8}#7#{} #8#"},
+                    {"Lose {C:red}1{} effect each round",}
                 },
             },
             j_cod_stargazer = {
@@ -1336,11 +1336,11 @@ return {
             homework_c="C",
             homework_e="E",
             homework_f="F",
-            hungry_1="Munch",
-            hungry_2="Chomp",
-            hungry_3="Nom nom",
-            hungry_4="Burp",
-            hungry_5="Gulp",
+            hungry_1="Munch!",
+            hungry_2="Chomp!",
+            hungry_3="Nom nom!",
+            hungry_4="Burp!",
+            hungry_5="Gulp!",
             hungry_cant="Starves",
             resourceful_pack="Scrounge",
             all_seeing_pack="I see you",
@@ -1357,7 +1357,7 @@ return {
             cod_random_joker_change="ability changes at end of round",
             cod_random_joker_name="Unpredictable Joker",
             cod_random_big_joker_name="Possibility Space",
-            tapas_bite="Munch",
+            tapas_bite="Munch!",
             clemens_ban="Banned!",
             death_star_destroy="Obliterate!",
             infrastructure_build="Improve",
