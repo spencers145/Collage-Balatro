@@ -12,8 +12,8 @@ assert(SMODS.load_file("src/config_page.lua"))()
 assert(SMODS.load_file("src/draw.lua"))()
 assert(SMODS.load_file("src/tarots.lua"))()
 --assert(SMODS.load_file("src/decks.lua"))()
-assert(SMODS.load_file("src/stickers.lua"))()
-assert(SMODS.load_file("src/stakes.lua"))()
+--assert(SMODS.load_file("src/stickers.lua"))()
+--assert(SMODS.load_file("src/stakes.lua"))()
 
 if CardSleeves then
     assert(SMODS.load_file("src/sleeves.lua"))()
