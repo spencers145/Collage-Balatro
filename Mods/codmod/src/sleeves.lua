@@ -50,7 +50,7 @@ CardSleeves.Sleeve {
 }
 
 -- Flow
-CardSleeves.Sleeve {
+--[[CardSleeves.Sleeve {
     key = "flow",
     unlocked = true,
     atlas = "atlas_cod_sleeves",
@@ -59,7 +59,7 @@ CardSleeves.Sleeve {
     apply = function(self)
         SMODS.change_free_rerolls(self.config.rerolls)
     end,
-}
+}]]
 
 -- Gravity
 CardSleeves.Sleeve {
@@ -78,6 +78,7 @@ CardSleeves.Sleeve {
     end,
 }
 
+--[[
 -- Rainbow
 CardSleeves.Sleeve {
     key = "rainbow",
@@ -106,7 +107,7 @@ CardSleeves.Sleeve {
             end,
         }))
     end,
-}
+}]]
 
 -- Inverted
 local config = SMODS.current_mod.config
@@ -128,7 +129,7 @@ if config.cod_tags_enabled then
         end,
     }
 end
-
+--[[
 -- VIP
 CardSleeves.Sleeve {
     key = "vip",
@@ -162,7 +163,7 @@ CardSleeves.Sleeve {
         }))
     end,
 }
-
+]]
 -- Isometric
 -- todo: add different stack with self effect
 CardSleeves.Sleeve {
@@ -232,7 +233,7 @@ CardSleeves.Sleeve {
     unlocked = true,
     atlas = "atlas_cod_sleeves",
     pos = { x = 1, y = 0 },
-    config = {dollars = -24, credit_cards = 5},
+    config = {dollars = -14, credit_cards = 3},
 
     loc_vars = function(self, info_queue, back)
         return { vars = { self.config.credit_cards, localize { type = 'name_text', key = "j_credit_card", set = 'Joker'}, -self.config.dollars-4 } }
