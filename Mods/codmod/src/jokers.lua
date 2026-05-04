@@ -3,7 +3,7 @@ local season_loc_vars = function(self, info_queue, card)
     return { vars = { localize(card.ability.extra.from_suit, 'suits_singular'), localize(card.ability.extra.to_suit, 'suits_plural'), colours = { card.ability.extra.from_color, card.ability.extra.to_color } } }
 end
 local season_calculate = function(self, card, context)
-    if context.after and not context.blueprint then
+    if context.before and not context.blueprint then
         local convert = false
         for _, scored_card in ipairs(context.scoring_hand) do
             if scored_card:is_suit(card.ability.extra.from_suit) and not scored_card.debuff then
@@ -43,11 +43,14 @@ SMODS.Joker {
         return vars
     end,
     calculate = function (self, card, context)
-        season_calculate(self, card, context)
+        local season = season_calculate(self, card, context)
+        if season then
+            return season
+        end
         if context.individual and context.cardarea == G.play and context.other_card:is_suit(card.ability.extra.to_suit) then
             return {
                 xmult = card.ability.extra.xmult,
-                mult = card.ability.extra.mult,
+                mult = math.max(-mult, card.ability.extra.mult),
             }
         end
     end,
@@ -72,8 +75,11 @@ SMODS.Joker {
         return vars
     end,
     calculate = function (self, card, context)
-        season_calculate(self, card, context)
-        if SMODS.pseudorandom_probability(card, pseudoseed('j_cod_summer'), 1, card.ability.extra.odds) and context.individual and context.cardarea == G.play and context.other_card:is_suit(card.ability.extra.to_suit) then
+        local season = season_calculate(self, card, context)
+        if season then
+            return season
+        end
+            if context.individual and SMODS.pseudorandom_probability(card, pseudoseed('j_cod_summer'), 1, card.ability.extra.odds) and context.cardarea == G.play and context.other_card:is_suit(card.ability.extra.to_suit) then
             return {
                 chips = card.ability.extra.chips,
             }
@@ -98,10 +104,13 @@ SMODS.Joker {
         return vars
     end,
     calculate = function (self, card, context)
-        season_calculate(self, card, context)
+        local season = season_calculate(self, card, context)
+        if season then
+            return season
+        end
         if context.individual and context.cardarea == G.play and context.other_card:is_suit(card.ability.extra.to_suit) then
             return {
-                chips = card.ability.extra.chips,
+                chips = math.max(-chips, card.ability.extra.chips),
                 dollars = card.ability.extra.money
             }
         end
@@ -117,18 +126,21 @@ SMODS.Joker {
     cost = 8,
     atlas = 'atlas_cod_jokers',
     pos = { x = 6, y = 0 },
-    config = { extra = { money = -1, odds = 2, mult = 12, from_suit = "Diamonds", to_suit = "Clubs", from_color = G.C.SUITS.Diamonds, to_color = G.C.SUITS.Clubs} },
+    config = { extra = { money = -1, odds = 2, mult = 14, from_suit = "Diamonds", to_suit = "Clubs", from_color = G.C.SUITS.Diamonds, to_color = G.C.SUITS.Clubs} },
     loc_vars = function (self, info_queue, card)
         local vars = season_loc_vars(self, info_queue, card)
         local n,d = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
         table.insert(vars.vars, card.ability.extra.mult)
         table.insert(vars.vars, n)
         table.insert(vars.vars, d)
-        table.insert(vars.vars, card.ability.extra.money)
+        table.insert(vars.vars, -card.ability.extra.money)
         return vars
     end,
     calculate = function (self, card, context)
-        season_calculate(self, card, context)
+        local season = season_calculate(self, card, context)
+        if season then
+            return season
+        end
         if context.individual and context.cardarea == G.play and context.other_card:is_suit(card.ability.extra.to_suit) then
             return {
                 mult = card.ability.extra.mult,
@@ -144,13 +156,13 @@ SMODS.Joker {
     unlocked = true,
     blueprint_compat = true,
     rarity = 2,
-    cost = 5,
+    cost = 8,
     atlas = 'atlas_cod_jokers',
     pos = { x = 4, y = 3 },
     -- amount is unused
-    config = { extra = { amount = 1, suit = "Hearts", color = G.C.SUITS.Hearts} },
+    config = { extra = { amount = 1, suit = "Hearts", color = G.C.SUITS.Hearts, xmult = 0.1} },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.amount, localize(card.ability.extra.suit, 'suits_singular'), colours = { card.ability.extra.color } } }
+        return { vars = { card.ability.extra.amount, localize(card.ability.extra.suit, 'suits_singular'), card.ability.extra.xmult, colours = { card.ability.extra.color } } }
     end,
     calculate = function(self, card, context)
         if context.setting_blind then
@@ -170,6 +182,8 @@ SMODS.Joker {
                 G.playing_card = (G.playing_card and G.playing_card + 1) or 1
                 card_copied.playing_card = G.playing_card
                 table.insert(G.playing_cards, card_copied)
+
+                card_copied.ability.perma_x_mult = card_copied.ability.perma_x_mult + card.ability.extra.xmult
 
                 G.E_MANAGER:add_event(Event({
                     trigger = 'after',
@@ -207,12 +221,12 @@ SMODS.Joker {
     unlocked = true,
     blueprint_compat = true,
     rarity = 2,
-    cost = 5,
+    cost = 6,
     atlas = 'atlas_cod_jokers',
     pos = { x = 6, y = 3 },
-    config = { extra = { amount = 2, suit = "Spades", color = G.C.SUITS.Spades} },
+    config = { extra = { amount = 2, suit = "Spades", color = G.C.SUITS.Spades, chips = 20} },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.amount, localize(card.ability.extra.suit, 'suits_singular'), colours = { card.ability.extra.color } } }
+        return { vars = { card.ability.extra.amount, localize(card.ability.extra.suit, 'suits_singular'), card.ability.extra.chips, colours = { card.ability.extra.color } } }
     end,
     calculate = function(self, card, context)
         if context.setting_blind then
@@ -234,6 +248,9 @@ SMODS.Joker {
             G.playing_card = (G.playing_card and G.playing_card + 1) or 1
             spade_card2.playing_card = G.playing_card
             table.insert(G.playing_cards, spade_card2)
+
+            spade_card1.ability.perma_bonus = card.ability.extra.chips
+            spade_card2.ability.perma_bonus = card.ability.extra.chips
 
             G.E_MANAGER:add_event(Event({
                 func = function()
@@ -270,12 +287,12 @@ SMODS.Joker {
     unlocked = true,
     blueprint_compat = true,
     rarity = 2,
-    cost = 5,
+    cost = 6,
     atlas = 'atlas_cod_jokers',
     pos = { x = 5, y = 3 },
-    config = { extra = { amount = 1, suit = "Diamonds", color = G.C.SUITS.Diamonds} },
+    config = { extra = { amount = 1, suit = "Diamonds", color = G.C.SUITS.Diamonds, money = 3} },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.amount, localize(card.ability.extra.suit, 'suits_singular'), colours = { card.ability.extra.color } } }
+        return { vars = { card.ability.extra.amount, localize(card.ability.extra.suit, 'suits_singular'), card.ability.extra.money, colours = { card.ability.extra.color } } }
     end,
     calculate = function(self, card, context)
         if context.setting_blind then
@@ -307,6 +324,7 @@ SMODS.Joker {
                 return {
                     message = localize('purification_remove'),
                     colour = card.ability.extra.color,
+                    dollars = card.ability.extra.money,
                 }
             end
         end
@@ -319,13 +337,13 @@ SMODS.Joker {
     unlocked = true,
     blueprint_compat = true,
     rarity = 2,
-    cost = 5,
+    cost = 6,
     atlas = 'atlas_cod_jokers',
     pos = { x = 2, y = 0 },
     -- amount is unused
-    config = { extra = { amount = 1, suit = "Clubs", color = G.C.SUITS.Clubs} },
+    config = { extra = { amount = 1, suit = "Clubs", color = G.C.SUITS.Clubs, mult = 5} },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.amount, localize(card.ability.extra.suit, 'suits_plural'), colours = { card.ability.extra.color } } }
+        return { vars = { card.ability.extra.amount, localize(card.ability.extra.suit, 'suits_plural'), card.ability.extra.mult, colours = { card.ability.extra.color } } }
     end,
     calculate = function(self, card, context)
         if context.setting_blind then
@@ -338,6 +356,8 @@ SMODS.Joker {
             local overgrowth_card = pseudorandom_element(valid_overgrowth_cards, 'cod_overgrowth')
             if overgrowth_card then
                 draw_card(G.deck, G.play, 90, 'up', nil, overgrowth_card)
+
+                overgrowth_card.ability.perma_mult = overgrowth_card.ability.perma_mult + card.ability.extra.mult
 
                 assert(SMODS.change_base(overgrowth_card, card.ability.extra.suit, nil, true))
 

@@ -305,7 +305,8 @@ return {
                 text={
                     "When {C:attention}Blind{} is selected,",
                     "duplicate {C:attention}#1#{} {V:1}#2#{}",
-                    "card in deck",
+                    "card in deck and give",
+                    "it {C:white,X:mult}+X#3#{} Mult",
                 }
             },
             j_cod_invasion={
@@ -313,7 +314,8 @@ return {
                 text={
                     "When {C:attention}Blind{} is selected,",
                     "add {C:attention}#1#{} {V:1}#2#{}",
-                    "cards to deck",
+                    "cards to deck and give",
+                    "them {C:chips}+#3#{} Chips",
                 }
             },
             j_cod_purification={
@@ -321,15 +323,17 @@ return {
                 text={
                     "When {C:attention}Blind{} is selected,",
                     "destroy {C:attention}#1#{} non-{V:1}#2#{}",
-                    "card in deck",
+                    "card in deck and",
+                    "gain {C:money}$#3#{}",
                 }
             },
             j_cod_overgrowth={
                 name="Overgrowth",
                 text={
                     "When {C:attention}Blind{} is selected,",
-                    "convert {C:attention}#1#{} card",
-                    "in deck to {V:1}#2#{}",
+                    "convert {C:attention}#1#{} card in",
+                    "deck to {V:1}#2#{} and",
+                    "give it {C:mult}+#3#{} Mult",
                 }
             },
             j_cod_harmony={
@@ -381,7 +385,7 @@ return {
                     {"Scoring {C:clubs}Clubs{} give",
                     "{C:mult}+#3#{} Mult, but have",
                     "a {C:green}#4# in #5#{} chance to",
-                    "take {C:money}$#6#{}"}
+                    "take {C:money}-$#6#{}"}
                 }
             },
             j_cod_four_seasons={
