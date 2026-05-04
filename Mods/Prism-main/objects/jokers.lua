@@ -595,7 +595,7 @@ G.PRISM.Joker({
 	key = "minstrel",
 	atlas = "jokers",
 	pos = {x=1,y=0},
-	rarity = 2,
+	rarity = 3,
 	cost = 7,
 	unlocked = true,
 	discovered = false,

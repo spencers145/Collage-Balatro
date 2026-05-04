@@ -665,8 +665,9 @@ return {
 				["name"] = "Broken Masquerade",
 				["text"] = {
 					{"Earn {C:money}$#1#{} at end of round"},
-					{"Gains {C:money}$#2#{} per scored {C:attention,E:1}Cosmic Card{}"},
-					{"Scored {C:attention,E:1}Cosmic Cards{} are destroyed"},
+					{"Gains {C:money}$#2#{} per scored",
+					"{C:attention,E:1}Cosmic Card{}, but scored",
+					"{C:attention,E:1}Cosmic Cards{} are {C:red}destroyed"},
 				}
 			},
 			j_ortalab_biker = {
@@ -1521,10 +1522,10 @@ return {
 				["name"] = "Sandstone Joker",
 				["text"] = {
 					{"{C:attention}Sand Cards held in hand{}",
-					"do not lose Mult"},
+					"do not {C:red}self-destruct"},
 					{"Gains {X:mult,C:white}X#2#{} Mult when",
 					"a {C:attention}Sand Card{} is played",
-					"{C:inactive,s:0.9}(Currently {C:white,X:mult,s:0.9}X#1#{C:inactive,s:0.9})",}
+					"{C:inactive}(Currently {C:white,X:mult,s:0.9}X#1#{C:inactive,s:0.9})",}
 				}
 			},
 			['j_ortalab_sane'] = {
