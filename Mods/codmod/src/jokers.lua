@@ -797,10 +797,10 @@ SMODS.Joker {
     key = "cantrip",
     blueprint_compat = true,
     rarity = 1,
-    cost = 4,
+    cost = 6,
     atlas = 'atlas_cod_jokers',
     pos = { x = 2, y = 3 },
-    config = { extra = { hands = 1, poker_hand = "High Card"} },
+    config = { extra = { hands = 2, poker_hand = "High Card"} },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.hands } }
     end,
@@ -1683,28 +1683,6 @@ function level_up_hand(card, hand, instant, amount)
     end
     level_up_hand_ref(card, hand, instant, amount)
 end
-
--- Shackles
-SMODS.Joker {
-    key = "shackles",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 1,
-    cost = 1,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 5, y = 5 },
-    config = { card_limit = 1, extra = { xmult = 0.5 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { 1, card.ability.extra.xmult } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main then
-            return {
-                xmult = card.ability.extra.xmult,
-            }
-        end
-    end,
-}
 
 -- Stellar Void
 SMODS.Joker {
@@ -2850,33 +2828,6 @@ SMODS.Joker {
             }
         end
     end,
-}
-
--- 8-bit Joker
-SMODS.Joker {
-    key = "8_bit_joker",
-    unlocked = true,
-    blueprint_compat = true,
-    rarity = 2,
-    cost = 8,
-    atlas = 'atlas_cod_jokers',
-    pos = { x = 3, y = 11 },
-    pixel_size = { w = 24, h = 32 },
-    display_size = { w = 24 * 3, h = 32 * 3 },
-    config = { extra = { chips = 64 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.chips } }
-    end,
-    calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play then
-            local id = context.other_card:get_id()
-            if id == 2 or id == 4 or id == 8 then
-                return {
-                    chips = card.ability.extra.chips
-                }
-            end
-        end
-    end
 }
 
 -- Socialite

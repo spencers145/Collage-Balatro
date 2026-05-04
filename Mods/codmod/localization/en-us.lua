@@ -279,9 +279,9 @@ return {
             j_cod_homework={
                 name="Homework",
                 text={
-                    "{X:mult,C:white}X#1#{} Mult if sum",
-                    "of played ranks is {C:attention}#2#{}",
-                    "{s:0.8}Sum changes every hand",
+                    {"{X:mult,C:white}X#1#{} Mult if sum",
+                    "of played ranks is {C:attention}#2#{}"},
+                    {"Sum changes every hand"},
                 }
             },
             j_cod_tall={
@@ -519,9 +519,9 @@ return {
             j_cod_hiding = {
                 name = "Hidden Joker",
                 text = {
-                    "{C:red}+#1#{} discards each round,",
-                    "cards are drawn face",
-                    "down after discards",
+                    {"{C:red}+#1#{} discards each round"},
+                    {"Cards are drawn face",
+                    "down after discards"},
                 },
             },
             j_cod_elitism = {
@@ -568,7 +568,7 @@ return {
             j_cod_cantrip = {
                 name = "Cantrip",
                 text = {
-                    "{C:blue}+#1#{} Hand if played",
+                    "{C:blue}+#1#{} Hands if played",
                     "hand is the first",
                     "{C:attention}High Card{} of the round",
                 },
@@ -583,64 +583,64 @@ return {
             j_cod_random_xmult = {
                 name = "#3#",
                 text = {
-                    "{X:mult,C:white}X#1#{} Mult",
-                    "{s:0.8}#2#",
+                    {"{X:mult,C:white}X#1#{} Mult"},
+                    {"#2#"},
                 },
             },
             j_cod_random_mult = {
                 name = "#3#",
                 text = {
-                    "{C:mult}+#1#{} Mult",
-                    "{s:0.8}#2#",
+                    {"{C:mult}+#1#{} Mult"},
+                    {"#2#"},
                 },
             },
             j_cod_random_chips = {
                 name = "#3#",
                 text = {
-                    "{C:chips}+#1#{} Chips",
-                    "{s:0.8}#2#",
+                    {"{C:chips}+#1#{} Chips"},
+                    {"#2#"},
                 },
             },
             j_cod_random_h_size = {
                 name = "#3#",
                 text = {
-                    "{C:attention}+#1#{} hand size",
-                    "{s:0.8}#2#",
+                    {"{C:attention}+#1#{} hand size"},
+                    {"#2#"},
                 },
             },
             j_cod_random_discards = {
                 name = "#3#",
                 text = {
-                    "{C:red}+#1#{} discards",
-                    "{s:0.8}#2#",
+                    {"{C:red}+#1#{} discards"},
+                    {"#2#"},
                 },
             },
             j_cod_random_hands = {
                 name = "#3#",
                 text = {
-                    "{C:blue}+#1#{} Hands",
-                    "{s:0.8}#2#",
+                    {"{C:blue}+#1#{} Hands"},
+                    {"#2#"},
                 },
             },
             j_cod_random_sell_value = {
                 name = "#3#",
                 text = {
-                    "{C:money}+$#1#{} sell value",
-                    "{s:0.8}#2#",
+                    {"{C:money}+$#1#{} sell value"},
+                    {"#2#"},
                 },
             },
             j_cod_random_probability = {
                 name = "#3#",
                 text = {
-                    "{C:green}+#1#{} probability",
-                    "{s:0.8}#2#",
+                    {"{C:green}+#1#{} probability"},
+                    {"#2#"},
                 },
             },
             j_cod_random_retrigger = {
                 name = "#2#",
                 text = {
-                    "Retrigger played cards",
-                    "{s:0.8}#1#",
+                    {"Retrigger played cards"},
+                    {"#1#"},
                 },
             },
             j_cod_ricochet = {
@@ -939,9 +939,9 @@ return {
             j_cod_connect_the_dots = {
                 name = "Connect the Dots",
                 text = {
-                    "Each played {C:attention}#2#{} earns",
-                    "{C:money}$#1#{} when scored",
-                    "{s:0.8}Rank decreases when scored"
+                    {"Each played {C:attention}#2#{} earns",
+                    "{C:money}$#1#{} when scored"},
+                    {"Rank decreases when scored"}
                 },
             },
             j_cod_tornado = {
