@@ -344,33 +344,44 @@ return {
             j_cod_summer={
                 name="Summer",
                 text={
-                    "All played scoring",
+                    {"All played scoring",
                     "{V:1}#1#{} cards",
-                    "become {V:2}#2#{}",
+                    "become {V:2}#2#{}"},
+                    {"Scoring {C:hearts}Hearts{} give",
+                    "{C:mult}#3#{} Mult, then {C:white,X:mult}X#4#{} Mult"}
                 }
             },
             j_cod_fall={
                 name="Fall",
                 text={
-                    "All played scoring",
+                    {"All played scoring",
                     "{V:1}#1#{} cards",
-                    "become {V:2}#2#{}",
+                    "become {V:2}#2#{}"},
+                    {"Scoring {C:spades}Spades{} have",
+                    "a {C:green}#4# in #5#{} chance to",
+                    "give {C:chips}+#3#{} Chips"}
                 }
             },
             j_cod_winter={
                 name="Winter",
                 text={
-                    "All played scoring",
+                    {"All played scoring",
                     "{V:1}#1#{} cards",
-                    "become {V:2}#2#{}",
+                    "become {V:2}#2#{}"},
+                    {"Scoring {C:diamonds}Diamonds{} give",
+                    "{C:chips}#3#{} Chips and {C:money}$#4#{}"}
                 }
             },
             j_cod_spring={
                 name="Spring",
                 text={
-                    "All played scoring",
+                    {"All played scoring",
                     "{V:1}#1#{} cards",
-                    "become {V:2}#2#{}",
+                    "become {V:2}#2#{}"},
+                    {"Scoring {C:clubs}Clubs{} give",
+                    "{C:mult}+#3#{} Mult, but have",
+                    "a {C:green}#4# in #5#{} chance to",
+                    "take {C:money}$#6#{}"}
                 }
             },
             j_cod_four_seasons={
@@ -905,9 +916,12 @@ return {
             j_cod_coloring = {
                 name = "Coloring Joker",
                 text = {
-                    "All played scoring",
-                    "cards become",
-                    "{C:attention}random{} suits",
+                    "Copies the ability of",
+                    "{C:attention}Joker{} to the right",
+                    "if this ante, a hand",
+                    "containing {C:attention}Spectrum{}",
+                    "was played",
+                    "{C:inactive}(Currently #1#)"
                 },
             },
             j_cod_rorschach_test = {
@@ -1093,8 +1107,8 @@ return {
             j_cod_preserved_insect={
                 name="Preserved Insect",
                 text={
-                    "{X:mult,C:white}X#1#{} Mult against {C:attention}Big Blinds{}",
-                    "{X:mult,C:white}X#2#{} Mult against {C:attention}Boss Blinds{}"
+                    {"{X:mult,C:white}X#1#{} Mult against {C:attention}Big Blinds{}"},
+                    {"{X:mult,C:white}X#2#{} Mult against {C:attention}Boss Blinds{}"}
                 }
             },
             j_cod_armory={

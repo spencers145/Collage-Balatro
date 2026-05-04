@@ -773,6 +773,7 @@ COLLAGE_MODIFIED_TABLE = {
     "j_cod_overgrowth",
     "j_cod_printer",
     "j_cod_spam",
+    "j_cod_coloring",
 }
 
 COLLAGE_ALWAYS_IN_POOL = {
