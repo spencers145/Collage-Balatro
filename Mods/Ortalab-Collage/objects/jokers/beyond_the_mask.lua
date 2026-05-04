@@ -9,7 +9,7 @@ SMODS.Joker({
 	blueprint_compat = false,
 	eternal_compat = true,
 	perishable_compat = false,
-	config = {extra = {dollars = 1, dollars_add = 1}},
+	config = {extra = {dollars = 0, dollars_add = 2}},
     artist_credits = {'flare','gappie'},
     enhancement_gate = 'm_ortalab_iou',
 	calc_dollar_bonus = function(self, card)

@@ -590,7 +590,6 @@ G.PRISM.Joker({
 	
 })]]
 
---[[
 G.PRISM.Joker({
 	dependency = G.PRISM.config.myth_enabled,
 	key = "minstrel",
@@ -612,7 +611,8 @@ G.PRISM.Joker({
 			return {}
 		end
 	end
-})]]
+})
+
 G.PRISM.Joker({
 	key = "whale",
 	atlas = "jokers",

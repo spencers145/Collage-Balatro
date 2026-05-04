@@ -634,6 +634,7 @@ COLLAGE_MODIFIED_TABLE = {
 	"j_ortalab_triangle",
 	"j_ortalab_vinyl",
 	"j_ortalab_woo_all_1",
+    "j_ortalab_beyond_the_mask",
 
     "j_paperback_cherry_blossoms",
 	"j_paperback_crispy_taco",
