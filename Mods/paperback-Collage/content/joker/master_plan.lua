@@ -7,7 +7,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  unlocked = false,
+  unlocked = true,
   -- allows this card to be unlocked when G.GAME.challenge is set
   paperback_challenge_unlock = true,
 
