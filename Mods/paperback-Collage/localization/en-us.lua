@@ -13,9 +13,11 @@ return {
       b_paperback_proud = {
         name = "Proud Deck",
         text = {
-          "Start with a full set of",
-          "{C:hearts}Hearts{}, {C:diamonds}Diamonds{}, {C:spades}Spades",
-          "{C:clubs}Clubs{}, {C:paperback_crowns}Crowns{} and {C:paperback_stars}Stars"
+          "Start with {C:attention}2{} copies",
+          "of {C:attention,T:c_lovers}The Lovers{} and a",
+          "{C:attention,T:j_paperback_pride_flag}Pride Flag{} Joker",
+          "{s:0.6}In a future update to Collage,",
+          "{s:0.6}this effect will change..."
         },
         unlock = {
           "Play a {C:attention}Spectrum{}"
@@ -3951,9 +3953,7 @@ return {
       sleeve_paperback_paper = {
         name = "Paper Sleeve",
         text = {
-          "{C:legendary}Paperback{C:attention} Jokers{} are {C:attention}3X",
-          "more likely to appear,",
-          "start run with the",
+          "Start run with the",
           "{C:attention,T:j_paperback_shopping_center}#1#{} Joker"
         }
       },
@@ -3968,11 +3968,14 @@ return {
       sleeve_paperback_proud = {
         name = "Proud Sleeve",
         text = {
-          "All starting {C:attention}Aces",
-          "are {C:dark_edition}Polychrome",
-          "{s:0.2} {}",
-          "Start with 2 copies",
-          "of {C:attention}#1#"
+          "Start with {C:attention}2{} copies",
+          "of {C:attention,T:c_lovers}The Lovers{} and a",
+          "{C:attention,T:j_paperback_pride_flag}Pride Flag{} Joker",
+          "{s:0.6}In a future update to Collage,",
+          "{s:0.6}this effect will change..."
+          --[["Start with a full set of",
+          "{C:hearts}Hearts{}, {C:diamonds}Diamonds{}, {C:spades}Spades",
+          "{C:clubs}Clubs{}, {C:paperback_crowns}Crowns{} and {C:paperback_stars}Stars"]]
         }
       },
       sleeve_paperback_proud_buff = {
