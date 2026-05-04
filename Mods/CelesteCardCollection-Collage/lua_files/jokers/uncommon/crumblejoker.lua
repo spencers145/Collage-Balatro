@@ -23,7 +23,7 @@ local crumblejoker = {
 
 crumblejoker.calculate = function(self, card, context)
 	if context.individual and context.cardarea == G.play then
-		if SMODS.has_enhancement(context.other_card, 'm_stone') then
+		if SMODS.has_no_rank(context.other_card) then
 			return {
 				x_mult = card.ability.extra.xmult,
 				card = card
@@ -31,14 +31,13 @@ crumblejoker.calculate = function(self, card, context)
 		end
 	end
 	if context.cardarea == G.play and context.destroying_card then
-		if SMODS.has_enhancement(context.destroy_card, 'm_stone') then
+		if SMODS.has_no_rank(context.destroy_card) then
 			return {remove = true}
 		end
 	end
 end
 
 function crumblejoker.loc_vars(self, info_queue, card)
-	info_queue[#info_queue+1] = G.P_CENTERS.m_stone
 	return {vars = {card.ability.extra.xmult}}
 end
 

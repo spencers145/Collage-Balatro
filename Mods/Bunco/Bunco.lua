@@ -1417,14 +1417,14 @@ create_joker({ -- Mosaic
         local condition = false
         if G.playing_cards then
             for k, v in pairs(G.playing_cards) do
-                if v.config.center == G.P_CENTERS.m_stone then condition = true break end
+                if SMODS.has_no_rank(v) then condition = true break end
             end
         end
         return condition
     end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
-            if context.other_card.config.center == G.P_CENTERS.m_stone then
+            if SMODS.has_no_rank(context.other_card) then
                 return {
                     mult = card.ability.extra.mult,
                     card = card
@@ -2472,7 +2472,7 @@ create_joker({ -- Dwarven
         if args.type == 'hand_contents' then
             local stone, steel, gold = false, false, false
             for j = 1, #args.cards do
-                if args.cards[j].config.center == G.P_CENTERS.m_stone then
+                if SMODS.has_no_rank(args.cards[j]) then
                     stone = true
                 end
                 if args.cards[j].config.center == G.P_CENTERS.m_steel then

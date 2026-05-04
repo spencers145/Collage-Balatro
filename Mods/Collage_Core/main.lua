@@ -549,6 +549,7 @@ COLLAGE_MODIFIED_TABLE = {
     "j_bunc_envious",
     "j_bunc_proud",
     "j_bunc_unobtanium",
+    "j_bunc_mosaic",
 
 	"j_ccc_coreswitch",
 	"j_ccc_miniheart",
@@ -565,6 +566,7 @@ COLLAGE_MODIFIED_TABLE = {
 	"j_ccc_cassetteblock",
     "j_ccc_chests",
     "j_ccc_iceball",
+    "j_ccc_crumblejoker",
 
     "j_ExtraCredit_turtle",
     "j_ExtraCredit_pridefuljoker",
@@ -722,6 +724,7 @@ COLLAGE_MODIFIED_TABLE = {
 	"j_vis_stoner_joker",
     --unemployed
 	"j_vis_wholesale_card",
+    "j_vis_brick_up",
 
     "j_tma_Syringe",
 	"j_tma_PlagueDoctor",
@@ -775,6 +778,9 @@ COLLAGE_MODIFIED_TABLE = {
     "j_cod_printer",
     "j_cod_spam",
     "j_cod_coloring",
+    "j_cod_stone_tablet",
+    "j_cod_moai",
+    "j_cod_gold_ore"
 }
 
 COLLAGE_ALWAYS_IN_POOL = {

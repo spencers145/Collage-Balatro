@@ -302,7 +302,7 @@ return {
 			["j_tma_FallenTitan"] = {
 				["name"] = "Fallen Titan",
 				["text"] = {
-					"Each {C:attention}Stone{} card held",
+					"Each {C:attention}rankless{} card held",
 					"in hand give {C:chips}+#1#{} Chips"
 				},
 			},

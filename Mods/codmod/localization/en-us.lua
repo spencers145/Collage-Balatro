@@ -875,7 +875,7 @@ return {
                 name = "Stone Tablet",
                 text = {
                     "{C:green}#1# in #2#{} chance to apply a",
-                    "{C:attention}Seal{} to scored {C:attention}Stone Cards{}",
+                    "{C:attention}Seal{} to scored {C:attention}rankless cards{}",
                 },
             },
             j_cod_globe = {
@@ -960,7 +960,7 @@ return {
             j_cod_moai = {
                 name = "Moai",
                 text = {
-                    "{C:attention}Stone{} cards count as",
+                    "{C:attention}Rankless{} cards count as",
                     "{C:attention}#1#{} of {V:1}#2#{}",
                 },
             },
@@ -1087,9 +1087,10 @@ return {
             j_cod_piggy_bank = {
                 name = "Piggy Bank",
                 text = {
-                    "Earn {C:money}$#1#{} at end",
-                    "of round, destroyed",
-                    "if money is spent"
+                    {"Earn {C:money}$#1#{} at",
+                    "end of round"},
+                    {"Destroyed if",
+                    "money is spent"}
                 },
             },
             j_cod_pillars = {
@@ -1162,7 +1163,7 @@ return {
             j_cod_gold_ore={
                 name="Gold Ore",
                 text={
-                    "Played {C:attention}Stone{} and {C:attention}Gold{}",
+                    "Played {C:attention}rankless{} and {C:attention}Gold{}",
                     "cards give {C:chips}+#1#{} Chips",
                     "and {C:gold}$#2#{} when scored"
                 }

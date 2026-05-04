@@ -785,19 +785,29 @@
 
     -- Fallen Titan
     SMODS.Joker({
-        key = 'FallenTitan', discovered = false, atlas = 'tma_joker', pos = {x = 7, y = 0}, rarity = 2, cost = 7, blueprint_compat = true, enhancement_gate = 'm_stone',
+        key = 'FallenTitan', discovered = false, atlas = 'tma_joker', pos = {x = 7, y = 0}, rarity = 2, cost = 7, blueprint_compat = true,
         config = {
             extra = {
                 bonus_chips = 50
             }
         },
+        in_pool = function ()
+            if G.playing_cards then
+                for key, value in pairs(G.playing_cards) do
+                    if SMODS.has_no_rank(value) then
+                        return true
+                    end
+                end
+            end
+            return false
+        end,
         loc_vars = function(self,info_queue,card)
             return {
                 vars = {card.ability.extra.bonus_chips}
             }
         end,
         calculate = function(self,card,context)
-            if not context.end_of_round and context.individual and context.cardarea == G.hand and context.other_card.ability.name == "Stone Card" then
+            if not context.end_of_round and context.individual and context.cardarea == G.hand and SMODS.has_no_rank(context.other_card) then
                 if context.other_card.debuff then
                     return {
                         message = localize('k_debuffed'),

@@ -636,7 +636,7 @@ return {
             j_bunc_mosaic = {
                 ['name'] = 'Mosaic Joker',
                 ['text'] = {
-                    [1] = 'Played {C:attention}Stone Cards',
+                    [1] = 'Played {C:attention}rankless cards',
                     [2] = 'give {C:mult}+#1#{} Mult',
                     [3] = 'when scored'
                 },

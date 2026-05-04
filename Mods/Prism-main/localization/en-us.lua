@@ -110,10 +110,8 @@ return {
             },
             j_prism_sculptor  = {
                 name = "Sculptor",
-                text = {"Every played {C:attention}Stone Card{},",
-                    "{C:attention}Luminice Card{}, {C:attention}Brick Card{}, and",
-                    "{C:attention}Marble Card{} permanently gains",
-                    "{C:mult}+#1#{} Mult when scored"
+                text = {"Every played {C:attention}rankless card{} permanently",
+                    "gains {C:mult}+#1#{} Mult when scored"
                 },
             },
             j_prism_motherboard = {

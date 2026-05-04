@@ -251,8 +251,7 @@ return {
             j_vis_stoner = {
                 name = "Stoner Joker",
                 text = {
-                    "Each played {C:attention}Stone Card{},",
-                    "{C:attention}Luminice Card{}, and {C:attention}Brick Card",
+                    "Each played {C:attention}rankless card",
                     "gives {X:mult,C:white}X1.3{} Mult",
         
                 }
@@ -468,7 +467,7 @@ return {
             j_vis_cave_man = {
                 name = 'Cave Man',
                 text = {
-                    "Playing a {C:attention}Stone Card{} has a",
+                    "Playing a {C:attention}rankless card{} has a",
                     "{C:green}#1# in #2#{} chance to create",
                     "a {C:purple}Tarot Card",
                     "{C:inactive}(must have room)"

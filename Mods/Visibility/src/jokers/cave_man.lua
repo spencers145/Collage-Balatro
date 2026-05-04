@@ -15,7 +15,7 @@ SMODS.Joker {
         return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.odds } }
 	end,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and SMODS.has_enhancement(context.other_card, 'm_stone') then
+		if context.individual and context.cardarea == G.play and SMODS.has_no_rank(context.other_card) then
 			if #G.consumeables.cards >= G.consumeables.config.card_limit then
 				return
 			end
@@ -31,7 +31,7 @@ SMODS.Joker {
     end,
 	in_pool = function(self, card)
 		for _, playing_card in ipairs(G.playing_cards or {}) do
-            if SMODS.has_enhancement(playing_card, 'm_stone') then
+            if SMODS.has_no_rank(playing_card) then
                 return true
             end
         end

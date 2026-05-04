@@ -12,7 +12,7 @@ SMODS.Joker {
 	pos = { x = 0, y = 1 },
 	cost = 5,
 	calculate = function(self, card, context)
-		if context.individual and context.cardarea == G.play and (SMODS.has_enhancement(context.other_card, 'm_stone') or SMODS.has_enhancement(context.other_card, 'm_sarc_luminice') or SMODS.has_enhancement(context.other_card, 'm_vis_brick'))  then
+		if context.individual and context.cardarea == G.play and (SMODS.has_no_rank(context.other_card))  then
 			return {
 				message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.Xmult } },
 				Xmult_mod = card.ability.extra.Xmult
@@ -21,7 +21,7 @@ SMODS.Joker {
 	end,
 	in_pool = function(self, args)
         for _, playing_card in ipairs(G.playing_cards or {}) do
-            if SMODS.has_enhancement(playing_card, 'm_stone') or SMODS.has_enhancement(playing_card, 'm_vis_brick') or SMODS.has_enhancement(playing_card, 'm_sarc_luminice') then
+            if SMODS.has_no_rank(playing_card) then
 				return true
             end
         end

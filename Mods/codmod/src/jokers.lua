@@ -1900,20 +1900,20 @@ SMODS.Joker {
     unlocked = true,
     blueprint_compat = true,
     rarity = 2,
-    cost = 6,
+    cost = 7,
     atlas = 'atlas_cod_jokers',
     pos = { x = 6, y = 6 },
     pixel_size = { h = 82 },
-    config = { extra = { odds = 2 } },
+    config = { extra = { odds = 3 } },
     loc_vars = function(self, info_queue, card)
         local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'cod_stone_tablet')
         return { vars = { numerator, denominator } }
     end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
-            if SMODS.has_enhancement(context.other_card, 'm_stone') and not context.other_card.seal then
+            if SMODS.has_no_rank(context.other_card) and not context.other_card.seal then
                 if SMODS.pseudorandom_probability(card, 'cod_stone_tablet', 1, card.ability.extra.odds) then
-                    local random_seal = SMODS.poll_seal {key = "cod_stone_tablet", guaranteed = true}
+                    local random_seal = pseudorandom_element({'Red', 'Purple', 'Blue', 'Gold'}, pseudoseed('cod_stone_tablet_seal'))
                     context.other_card:set_seal(random_seal)
                     return {
                         message = localize("stone_tablet_upgrade"),
@@ -1925,7 +1925,7 @@ SMODS.Joker {
     end,
     in_pool = function(self, args)
         for _, playing_card in ipairs(G.playing_cards or {}) do
-            if SMODS.has_enhancement(playing_card, 'm_stone') then
+            if SMODS.has_no_rank(playing_card) then
                 return true
             end
         end
@@ -2753,7 +2753,7 @@ SMODS.Joker {
     end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
-            if SMODS.has_enhancement(context.other_card, 'm_stone') or SMODS.has_enhancement(context.other_card, 'm_gold') then
+            if SMODS.has_no_rank(context.other_card) or SMODS.has_enhancement(context.other_card, 'm_gold') then
                 G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
                 return {
                     chips = card.ability.extra.chips,
@@ -2772,7 +2772,7 @@ SMODS.Joker {
     end,
     in_pool = function(self, args)
         for _, playing_card in ipairs(G.playing_cards or {}) do
-            if SMODS.has_enhancement(playing_card, 'm_stone') or SMODS.has_enhancement(playing_card, 'm_gold') then
+            if SMODS.has_no_rank(playing_card) or SMODS.has_enhancement(playing_card, 'm_gold') then
                 return true
             end
         end

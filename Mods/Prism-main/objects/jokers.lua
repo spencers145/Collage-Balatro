@@ -133,13 +133,13 @@ G.PRISM.Joker({
 	end,
 	in_pool = function(self)
 		for k, v in pairs(G.playing_cards or {}) do
-			if SMODS.has_enhancement(v,'m_stone') or SMODS.has_enhancement(v,'m_sarc_luminice') or SMODS.has_enhancement(v,'m_vis_brick') or SMODS.has_enhancement(v,'m_artb_marble') then return true end
+			if SMODS.has_no_rank(v) then return true end
 		end
 		return false
 	end,
 	calculate = function(self, card, context)
         if context.cardarea == G.play and context.individual then
-			if SMODS.has_enhancement(context.other_card,'m_stone') or SMODS.has_enhancement(context.other_card,'m_sarc_luminice') or SMODS.has_enhancement(context.other_card,'m_vis_brick') or SMODS.has_enhancement(context.other_card,'m_artb_marble') then
+			if SMODS.has_no_rank(context.other_card) then
             	context.other_card.ability.perma_mult = context.other_card.ability.perma_mult or 0
                 context.other_card.ability.perma_mult = context.other_card.ability.perma_mult + card.ability.extra
                 return {

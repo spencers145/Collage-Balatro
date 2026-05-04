@@ -755,7 +755,7 @@ return {
 			["j_ccc_crumblejoker"] = {
 				["name"] = "Crumble Joker",
 				["text"] = {
-					"Played {C:attention}Stone Cards",
+					"Played {C:attention}rankless cards",
 					"each give {X:mult,C:white} X#1# {} Mult",
 					"and are {C:red}destroyed{}",
 				},
