@@ -3968,9 +3968,11 @@ return {
       sleeve_paperback_proud = {
         name = "Proud Sleeve",
         text = {
-          "Start with a full set of",
-          "{C:hearts}Hearts{}, {C:diamonds}Diamonds{}, {C:spades}Spades",
-          "{C:clubs}Clubs{}, {C:paperback_crowns}Crowns{} and {C:paperback_stars}Stars"
+          "All starting {C:attention}Aces",
+          "are {C:dark_edition}Polychrome",
+          "{s:0.2} {}",
+          "Start with 2 copies",
+          "of {C:attention}#1#"
         }
       },
       sleeve_paperback_proud_buff = {
@@ -3984,9 +3986,9 @@ return {
       sleeve_paperback_silver = {
         name = "Silver Sleeve",
         text = {
-          "Start run with the",
-          "{C:paperback_minor_arcana,T:v_paperback_celtic_cross}#1#{} voucher",
-          "and a {C:paperback_minor_arcana,T:c_paperback_nine_of_cups}#2#"
+          "Start with copies of",
+          "{C:paperback_minor_arcana,T:c_paperback_king_of_cups}#1#{}",
+          "and {C:paperback_minor_arcana,T:c_paperback_eight_of_swords}#2#"
         }
       },
       sleeve_paperback_silver_buff = {
