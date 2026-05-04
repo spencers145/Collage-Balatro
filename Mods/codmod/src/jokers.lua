@@ -2176,8 +2176,19 @@ SMODS.Joker {
     end,
     calculate = function(self, card, context)
         if context.press_play and not context.blueprint and #G.hand.cards > 0 then
+            -- we block all effects
+            for key, value in pairs(G.hand.cards) do
+                value.ability.discarded = true
+            end
             G.E_MANAGER:add_event(Event({
                 func = function()
+                    -- unblock all effects
+                    for key, value in pairs(G.hand.cards) do
+                        value.ability.discarded = false
+                    end
+                    -- unhighlight everything
+                    G.hand:unhighlight_all()
+                    
                     local prev_limit = G.hand.config.highlighted_limit
                     G.hand.config.highlighted_limit = #G.hand.cards
                     local any_selected = nil

@@ -28,7 +28,6 @@ position = "at"
 payload = '''
     end
 end
-G.hand:unhighlight_all()
 -- context.remove_playing_cards from discard
 '''
 match_indent = true
