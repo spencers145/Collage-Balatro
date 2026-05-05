@@ -41,13 +41,8 @@ SMODS.Joker{ --comykel
         y = 1
     },
     in_pool = function(self, args)
-          return (
-          not args 
-          or args.source ~= 'sho' and args.source ~= 'buf' and args.source ~= 'jud' and args.source ~= 'rif' 
-          or args.source == 'rta' or args.source == 'sou' or args.source == 'uta' or args.source == 'wra'
-          )
-          and true
-      end,
+        return false
+    end,
     calculate = function(self, card, context)
         if card.edition and card.edition.key == "e_negative" then
             card.children.center:set_sprite_pos({x = 7, y = 2})
