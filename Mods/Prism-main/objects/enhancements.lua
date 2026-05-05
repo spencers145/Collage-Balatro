@@ -9,7 +9,7 @@ SMODS.Enhancement({
     atlas = "prismenhanced",
     pos = {x = 0, y = 0},
     discovered = true,
-    config = {extra = {x_mult = 1,x_gain = 0.25}},
+    config = {extra = {x_mult = 1, x_gain = 0.1}},
     effect = "Glass Card",
     in_pool = function ()
         return false
@@ -17,18 +17,19 @@ SMODS.Enhancement({
     loc_vars = function(self, info_queue, card)
         local card_ability = card and card.ability or self.config
         return {
-            vars = { card_ability.extra.x_mult, card_ability.extra.x_gain}
+            vars = { card_ability.extra.x_mult, card_ability.extra.x_gain }
         }
     end,
     calculate = function(self, card, context)
         if context.cardarea == G.play and context.main_scoring then
+            card.ability.extra.x_mult = card.ability.extra.x_mult - card.ability.extra.x_gain
             return {
-                xmult = card.ability.extra.x_mult
+                xmult = card.ability.extra.x_mult + card.ability.extra.x_gain
             }
         end
-        if context.end_of_round and context.cardarea == G.hand and context.playing_card_end_of_round then
+        if context.main_scoring and not context.end_of_round and context.cardarea == G.hand then
             card.ability.extra.x_mult = card.ability.extra.x_mult + card.ability.extra.x_gain
-            return{
+            return {
 				colour = G.C.RED,
 				message = localize({ type = "variable", key = "a_xmult", vars = { card.ability.extra.x_mult } }),
 				card = card,

@@ -27,10 +27,10 @@ pattern = 'SMODS.localize_perma_bonuses(specific_vars, desc_nodes)'
 position = 'before'
 match_indent = true
 payload = '''
-if card and card.is_suit and card:is_suit('bunc_Fleurons') then
+if card and card.is_suit and card:is_suit('bunc_Fleurons') and not SMODS.has_enhancement(card, 'm_wild') then
     localize{type = 'other', key = 'bunc_fleurons_count_as', nodes = desc_nodes}
 end
-if card and card.is_suit and card:is_suit('bunc_Halberds') then
+if card and card.is_suit and card:is_suit('bunc_Halberds') and not SMODS.has_enhancement(card, 'm_wild') then
     localize{type = 'other', key = 'bunc_halberds_count_as', nodes = desc_nodes}
 end
 '''

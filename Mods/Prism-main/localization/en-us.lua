@@ -490,10 +490,13 @@ return {
         Enhanced = {
             m_prism_crystal = {
                 name = "Crystal Card",
-                text = {"{X:mult,C:white} X#1#{} Mult",
+                text = {"{X:mult,C:white}X#1#{} Mult",
                     "{s:0.2} {}",
-                    "Gains {X:mult,C:white} X#2#{} Mult if held in",
-                    "hand at end of round"
+                    "Gains {X:mult,C:white}X#2#{} Mult",
+                    "when {C:attention}held in hand",
+                    "{s:0.2} {}",
+                    "Loses {X:mult,C:white}X#2#{} Mult",
+                    "when {C:attention}scored"
                 }
             },
             m_prism_burnt = {
