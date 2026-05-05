@@ -248,23 +248,15 @@ end
 ---@param card table
 ---@return number
 function PB_UTIL.calculate_stick_xMult(card)
-  local xMult = card.ability.extra.xMult or 1
-  local other_sticks = 0
+  local xMult = 1
 
   -- Only calculate the xMult if the G.jokers cardarea exists
   if G.jokers and G.jokers.cards then
     for k, current_card in pairs(G.jokers.cards) do
       if current_card ~= card and string.match(string.lower(current_card.ability.name), "stick") then
-        xMult = xMult + card.ability.extra.xMult
+        xMult = xMult + card.ability.extra.xMult_if_stick
       end
     end
-  end
-
-  if card.ability.extra.xMult_if_stick and other_sticks >= 1 then
-    xMult = card.ability.extra.xMult_if_stick
-  end
-  if card.ability.extra.xMult then
-    xMult = xMult + card.ability.extra.xMult * other_sticks
   end
 
   return xMult
