@@ -4,7 +4,7 @@
 ---X B-Side^2 effect: double(partnered) boss blinds
 --- Heartside^2 effect: Add 11 meme jokers to the pool
 
---[[
+
 CardSleeves.Sleeve({
 	key = "virus",
 	name = "ccc_Virus Sleeve",
@@ -28,7 +28,7 @@ CardSleeves.Sleeve({
 	apply = function(self)
 		G.GAME.modifiers.ccc_virus = (G.GAME.modifiers.ccc_virus or 0) + 1
 	end,
-})]]
+})
 
 CardSleeves.Sleeve({
 	key = "summit",

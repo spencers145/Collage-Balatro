@@ -84,11 +84,8 @@ return {
 				["name"] = "Virus Sleeve",
 				["text"] = {
 					"Each played card is retriggered",
-					"then {C:red}debuffed{}",
+					"{C:dark_edition}twice{}, then {C:red}debuffed{}",
 					"until the end of the ante",
---					"Each played card is retriggered twice",
---					"All drawn cards are {C:red}debuffed{}",
---					"until the end of the ante",
 				},
 			},
 			["sleeve_ccc_summit"] = {
