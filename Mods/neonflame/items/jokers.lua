@@ -810,7 +810,7 @@ SMODS.Joker {
     atlas = "placeholders",
     pos = { x = 0, y = 0 },
 
-    config = { extra = { xmgain = 0.02, xm = 1 }, immutable = { rank = "Ace", retrigger = 3 } },
+    config = { extra = { xmgain = 0.03, xm = 1 }, immutable = { rank = "Ace", retrigger = 3 } },
     rarity = 3,
     cost = 8,
     blueprint_compat = true,
