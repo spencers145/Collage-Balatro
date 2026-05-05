@@ -846,9 +846,9 @@ return {
 			j_ortalab_dnd = {
 				name = 'Do Not Disturb',
 				text = {
-					'Earn {C:money}$#1#{} at end of round', 
-					'Payout increases by {C:money}$#2#', 
-					'when shop is left without {C:green}rerolling'
+					{'Earn {C:money}$#1#{} at end of round'}, 
+					{'Payout increases by {C:money}$#2#', 
+					'when shop is left without {C:green}rerolling'}
 				}
 			},
 			['j_ortalab_dripstone'] = {
