@@ -95,17 +95,17 @@ SMODS.Enhancement({
         return false
     end,
     effect = "Glass Card",
-    config = {extra = {chips = 10}},
+    config = {extra = {xchips = 0.02}},
     loc_vars = function(self, info_queue, card)
         local card_ability = card and card.ability or self.config
         return {
-            vars = { card_ability.extra.chips, card_ability.extra.chips*(G.GAME.prism_cards_played or 0)}
+            vars = { card_ability.extra.xchips, 1+card_ability.extra.xchips*(G.GAME.prism_cards_played or 0)}
         }
     end,
     calculate = function(self, card, context)
         if context.cardarea == G.play and context.main_scoring then
             return {
-                chips = card.ability.extra.chips*(G.GAME.prism_cards_played or 0)
+                xchips = 1+card.ability.extra.xchips*(G.GAME.prism_cards_played or 0)
             }
         end
     end

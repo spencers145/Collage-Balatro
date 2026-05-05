@@ -508,9 +508,9 @@ return {
             },
             m_prism_ice = {
                 name = "Ice Card",
-                text = {"{C:chips}+#1#{} Chips per card",
+                text = {"{C:white,X:chips}X#1#{} Chips per card",
                     "played this round",
-                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive})"
+                    "{C:inactive}(Currently {C:white,X:chips}X#2#{C:inactive})"
                 }
             },
             m_prism_double = {
