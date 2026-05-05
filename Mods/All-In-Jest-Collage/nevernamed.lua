@@ -235,6 +235,10 @@ local files = {}
 collect_item_files(mod_path.."Items", "Items", files)
 
 local function load_items(curr_obj)
+    -- force configs
+    All_in_Jest.config.moons_enabled = false
+    All_in_Jest.config.blue_stake_rework = false
+
     if curr_obj.init then curr_obj:init() end
     if not curr_obj.items then
         print("Warning: curr_obj has no items")
