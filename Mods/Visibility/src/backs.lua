@@ -112,7 +112,7 @@ SMODS.Back {
     end
 }
 
-SMODS.Back {
+--[[SMODS.Back {
     key = "heavenly",
     atlas = "TextureAtlasDecks",
     pos = { x = 2, y = 0 },
@@ -139,7 +139,7 @@ SMODS.Back {
 			end
 		}))
     end
-}
+}]]
 
 --[[SMODS.Back {
     key = "burnt",
