@@ -21,7 +21,7 @@ PB_UTIL.Sleeve {
     else
       G.E_MANAGER:add_event(Event({
         func = function ()
-          for i = 1, 2 do
+          for i = 1, 1 do
             SMODS.add_card({key = 'c_lovers'})
           end
 

@@ -13,7 +13,7 @@ return {
       b_paperback_proud = {
         name = "Proud Deck",
         text = {
-          "Start with {C:attention}2{} copies",
+          "Start with a copy",
           "of {C:attention,T:c_lovers}The Lovers{} and a",
           "{C:attention,T:j_paperback_pride_flag}Pride Flag{} Joker",
           "{s:0.6}In a future update to Collage,",
@@ -3968,7 +3968,7 @@ return {
       sleeve_paperback_proud = {
         name = "Proud Sleeve",
         text = {
-          "Start with {C:attention}2{} copies",
+          "Start with a copy",
           "of {C:attention,T:c_lovers}The Lovers{} and a",
           "{C:attention,T:j_paperback_pride_flag}Pride Flag{} Joker",
           "{s:0.6}In a future update to Collage,",
