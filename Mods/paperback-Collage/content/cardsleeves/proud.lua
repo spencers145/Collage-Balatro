@@ -1,4 +1,4 @@
-PB_UTIL.Sleeve {
+--[[PB_UTIL.Sleeve {
   key = 'proud',
   deck_buff = 'b_paperback_proud',
   atlas = 'card_sleeves_atlas',
@@ -32,3 +32,4 @@ PB_UTIL.Sleeve {
     end
   end
 }
+]]
