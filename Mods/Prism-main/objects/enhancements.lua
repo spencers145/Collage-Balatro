@@ -95,7 +95,7 @@ SMODS.Enhancement({
         return false
     end,
     effect = "Glass Card",
-    config = {extra = {xchips = 0.02}},
+    config = {extra = {xchips = 0.04}},
     loc_vars = function(self, info_queue, card)
         local card_ability = card and card.ability or self.config
         return {
