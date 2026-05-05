@@ -780,7 +780,9 @@ COLLAGE_MODIFIED_TABLE = {
     "j_cod_coloring",
     "j_cod_stone_tablet",
     "j_cod_moai",
-    "j_cod_gold_ore"
+    "j_cod_gold_ore",
+    "sleeve_cod_royal",
+    "sleeve_cod_ponzi",
 }
 
 COLLAGE_ALWAYS_IN_POOL = {
