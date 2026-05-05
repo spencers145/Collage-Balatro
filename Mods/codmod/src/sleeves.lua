@@ -109,6 +109,7 @@ CardSleeves.Sleeve {
     end,
 }]]
 
+--[[
 -- Inverted
 local config = SMODS.current_mod.config
 if config.cod_tags_enabled then
@@ -128,7 +129,7 @@ if config.cod_tags_enabled then
             }))
         end,
     }
-end
+end]]
 --[[
 -- VIP
 CardSleeves.Sleeve {

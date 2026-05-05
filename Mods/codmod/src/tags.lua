@@ -107,23 +107,3 @@ SMODS.Tag {
         end
     end
 }
-
--- Clean Tag
-SMODS.Tag {
-    key = "clean",
-    min_ante = 1,
-    atlas = 'atlas_cod_tags',
-    pos = { x = 3, y = 0 },
-    apply = function(self, tag, context)
-        if context.type == "ending_shop" and not G.GAME.cod_shop_clean then
-            G.GAME.cod_shop_clean = true
-            tag:yep(localize('cod_clean_tag_done'), G.C.RED, function()
-                return true
-            end)
-            tag.triggered = true
-        end
-    end,
-    in_pool = function(self, args)
-        return (G.P_CENTER_POOLS.Stake[G.GAME.stake].stake_level>=4)
-    end,
-}
