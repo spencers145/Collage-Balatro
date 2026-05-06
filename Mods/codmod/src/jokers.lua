@@ -619,15 +619,13 @@ SMODS.Joker {
     loc_vars = function(self, info_queue, card)
         local lowest_plays = nil
         for handname, hand in pairs(G.GAME.hands) do
-            if SMODS.is_poker_hand_visible(handname) then
-                if not lowest_plays then
-                    lowest_plays = hand.played
-                elseif lowest_plays > hand.played or lowest_plays == 0 then
+            if SMODS.is_poker_hand_visible(handname) and hand.played > 0 then
+                if not lowest_plays or hand.played < lowest_plays then
                     lowest_plays = hand.played
                 end
-                
             end
         end
+        lowest_plays = lowest_plays or 0
 
         return { vars = { card.ability.extra.xmult, 1 + card.ability.extra.xmult * lowest_plays } }
     end,
@@ -636,15 +634,13 @@ SMODS.Joker {
         if context.joker_main then
             local lowest_plays = nil
             for handname, hand in pairs(G.GAME.hands) do
-                if SMODS.is_poker_hand_visible(handname) then
-                    if not lowest_plays then
-                        lowest_plays = hand.played
-                    elseif lowest_plays > hand.played or lowest_plays == 0 then
+                if SMODS.is_poker_hand_visible(handname) and hand.played > 0 then
+                    if not lowest_plays or hand.played < lowest_plays then
                         lowest_plays = hand.played
                     end
-                    
                 end
             end
+            lowest_plays = lowest_plays or 0
             return {
                 xmult = 1 + card.ability.extra.xmult * lowest_plays
             }
@@ -655,15 +651,13 @@ SMODS.Joker {
         if args.type == 'hand_contents' then
             local lowest_plays = nil
             for handname, hand in pairs(G.GAME.hands) do
-                if SMODS.is_poker_hand_visible(handname) then
-                    if not lowest_plays then
-                        lowest_plays = hand.played
-                    elseif lowest_plays > hand.played or lowest_plays == 0 then
+                if SMODS.is_poker_hand_visible(handname) and hand.played > 0 then
+                    if not lowest_plays or hand.played < lowest_plays then
                         lowest_plays = hand.played
                     end
-                    
                 end
             end
+            lowest_plays = lowest_plays or 0
             return lowest_plays >= 3
         end
     end
