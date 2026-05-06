@@ -405,6 +405,7 @@ return {
                     "Gives {X:mult,C:white}X#1#{} Mult for each time",
                     "you have played your least",
                     "played {C:attention}poker hand{} this run",
+                    "{C:inactive}(Counts hands played at least once)",
                     "{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)",
                 },
                 unlock = {

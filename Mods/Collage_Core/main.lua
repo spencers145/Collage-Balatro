@@ -781,6 +781,7 @@ COLLAGE_MODIFIED_TABLE = {
     "j_cod_stone_tablet",
     "j_cod_moai",
     "j_cod_gold_ore",
+    "j_cod_singularity",
     "sleeve_cod_royal",
     "sleeve_cod_ponzi",
 }
