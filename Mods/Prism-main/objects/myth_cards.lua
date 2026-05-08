@@ -165,18 +165,20 @@ G.PRISM.Consumable({
     set = 'Myth',
     atlas = 'prismmyth',
     pos = {x=4, y=0},
-    config = {odds = 6},
+    config = {extra = {odds = 6}},
     cost = 4,
     discovered = false,
     loc_vars = function(self, info_queue)
 		info_queue[#info_queue + 1] = {key = 'e_negative_playing_card', set = 'Edition', config = {extra = 1}}
-        return { vars = {G.GAME.probabilities.normal,self.config.odds} }
+
+        local n,d = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
+        return { vars = {n, d} }
 	end,
     can_use = function(self,card)
         return G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.SMODS_BOOSTER_OPENED 
     end,
     use = function(self, card, area, copier)
-        if pseudorandom(pseudoseed('mirror_roll')) < (G.GAME.probabilities.normal / card.ability.odds) then
+        if SMODS.pseudorandom_probability(card, pseudoseed('mirror_roll'), 1, card.ability.extra.odds) then
                 G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
                     G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
                         local eligible_cards = {}
