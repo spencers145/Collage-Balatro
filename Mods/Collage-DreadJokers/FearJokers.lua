@@ -1229,6 +1229,7 @@
             return {vars = {self.config.tarots}}
         end, cost_mult = 1.0, effect = "Round Bonus",
         use = function(self, card, area,copier)
+            enable_exotics()
             for i, value in ipairs(G.hand.highlighted) do
                 local percent = 1.15 - (i-0.999)/(#G.hand.highlighted-0.998)*0.3
                 G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function() value:flip();play_sound('card1', percent);value:juice_up(0.3, 0.3);return true end }))

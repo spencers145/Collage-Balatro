@@ -36,6 +36,7 @@ SMODS.Consumable({
             --print('Deck suits')
         elseif #G.hand.highlighted > suits_size then
             selected_suit_array = suits
+            enable_exotics()
             local the_suit = pseudorandom_element({'bunc_Halberds', 'bunc_Fleurons'}, pseudoseed('chicory'))
             selected_suit_array[the_suit] = true
         else
