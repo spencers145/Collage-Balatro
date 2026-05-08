@@ -168,7 +168,7 @@ G.PRISM.Consumable({
     config = {extra = {odds = 6}},
     cost = 4,
     discovered = false,
-    loc_vars = function(self, info_queue)
+    loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = {key = 'e_negative_playing_card', set = 'Edition', config = {extra = 1}}
 
         local n,d = SMODS.get_probability_vars(card, 1, card.ability.extra.odds)
