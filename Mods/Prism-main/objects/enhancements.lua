@@ -4,7 +4,7 @@ SMODS.Atlas {
     px = 71,
     py = 95
 }
-SMODS.Enhancement({
+--[[SMODS.Enhancement({
     key = "crystal",
     atlas = "prismenhanced",
     pos = {x = 0, y = 0},
@@ -36,7 +36,7 @@ SMODS.Enhancement({
             }
         end
 	end
-})
+})]]
 
 SMODS.Enhancement({
     key = "burnt",
@@ -59,7 +59,7 @@ SMODS.Enhancement({
         end
     end
 })
-SMODS.Enhancement({
+--[[SMODS.Enhancement({
     key = "echo",
     atlas = "prismenhanced",
     pos = {x = 1, y = 2},
@@ -109,7 +109,7 @@ SMODS.Enhancement({
             }
         end
     end
-})
+})]]
 --[[ SMODS.Enhancement({
     key = "double",
     atlas = "prismenhanced",

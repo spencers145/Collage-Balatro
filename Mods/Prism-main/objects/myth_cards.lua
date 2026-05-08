@@ -29,6 +29,8 @@ function G.PRISM.Consumable(table)
 		SMODS.Consumable(table)
 	end
 end
+
+--[[
 G.PRISM.Consumable({
     dependency = G.PRISM.config.enhance_enabled,
     key = 'myth_dwarf',
@@ -45,7 +47,7 @@ G.PRISM.Consumable({
 		return { vars = { self.config.max_highlighted } }
 	end,
 
-})
+})]]
 G.PRISM.Consumable({
     dependency = G.PRISM.config.enhance_enabled,
     key = 'myth_dragon',
@@ -63,6 +65,7 @@ G.PRISM.Consumable({
 	end,
 
 })
+--[[
 G.PRISM.Consumable({
     dependency = G.PRISM.config.enhance_enabled,
     key = 'myth_siren',
@@ -96,7 +99,7 @@ G.PRISM.Consumable({
 		return { vars = { self.config.max_highlighted } }
 	end,
 
-})
+})]]
 --[[
 SMODS.Consumable({
     key = 'myth_egg',
