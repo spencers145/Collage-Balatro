@@ -9,6 +9,7 @@ PB_UTIL.config.suits_enabled = false
 PB_UTIL.config.ranks_enabled = false
 PB_UTIL.config.vouchers_enabled = false
 PB_UTIL.config.ego_gifts_enabled = false
+PB_UTIL.config.editions_enabled = true
 
 -- Enable optional features
 SMODS.current_mod.optional_features = {
