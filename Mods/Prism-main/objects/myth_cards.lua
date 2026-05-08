@@ -165,7 +165,7 @@ G.PRISM.Consumable({
     set = 'Myth',
     atlas = 'prismmyth',
     pos = {x=4, y=0},
-    config = {odds = 4},
+    config = {odds = 6},
     cost = 4,
     discovered = false,
     loc_vars = function(self, info_queue)
