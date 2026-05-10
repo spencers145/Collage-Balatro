@@ -297,6 +297,9 @@ ArtBox.Collectables = {
 
     ['mxms_black'] = { atlas = 'artb_collectable_atlas_2', pos = { x = 3, y = 6 }, soul_pos = { x = 3, y = 7 } },
 
+    ['prism_moon'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 3, y = 2 }, soul_pos = { x = 3, y = 3 } },
+    ['prism_green'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 2, y = 2 }, soul_pos = { x = 2, y = 3 } },
+
     --Enhancements
     ['m_bonus'] = { atlas = 'artb_collectable_atlas', pos = { x = 1, y = 0 }, soul_pos = { x = 1, y = 1 } },
     ['m_mult'] = { atlas = 'artb_collectable_atlas', pos = { x = 4, y = 0 }, soul_pos = { x = 4, y = 1 } },
@@ -370,7 +373,9 @@ ArtBox.Collectables = {
     ['m_akyrs_zap_card'] = { atlas = 'artb_collectable_atlas_2', pos = { x = 4, y = 4 }, soul_pos = { x = 4, y = 5 } },
 
     ['m_mxms_footprint'] = { atlas = 'artb_collectable_atlas_2', pos = { x = 2, y = 6 }, soul_pos = { x = 2, y = 7 } },
-
+    
+    ['m_prism_burnt'] = { atlas = 'artb_collectable_atlas_3', pos = { x = 1, y = 2 }, soul_pos = { x = 1, y = 3 } },
+    
     --Editions
     ['e_polychrome'] = { atlas = 'artb_collectable_atlas', pos = { x = 3, y = 2 }, soul_pos = { x = 3, y = 3 }, shader = 'polychrome', },
     ['e_foil'] = { atlas = 'artb_collectable_atlas', pos = { x = 6, y = 2 }, soul_pos = { x = 3, y = 3 }, shader = 'foil', },
