@@ -1304,11 +1304,11 @@ SMODS.Joker {
 SMODS.Joker {
     key = "gear_stick",
     blueprint_compat = true,
-    rarity = 2,
-    cost = 7,
+    rarity = 3,
+    cost = 8,
     atlas = 'atlas_cod_jokers',
     pos = { x = 4, y = 4 },
-    config = { extra = { xmult = 0.2 } },
+    config = { extra = { xmult = 0.5 } },
     loc_vars = function(self, info_queue, card)
         local gear = 0
         local passed_self = false
