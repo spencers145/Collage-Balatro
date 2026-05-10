@@ -9,7 +9,14 @@ SMODS.Joker({
 	blueprint_compat = true,
 	eternal_compat = true,
 	perishable_compat = true,
-    enhancement_gate = 'm_ortalab_sand',
+    in_pool = function ()
+        for key, value in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(value, 'm_ortalab_sand') then
+                return true
+            end
+        end
+        return false
+    end,
 	config = {extra = {xmult = 1, gain = 0.1}},
     artist_credits = {'gappie'},
 	loc_vars = function(self, info_queue, card)

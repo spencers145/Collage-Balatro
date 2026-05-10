@@ -12,7 +12,15 @@ SMODS.Joker({
     perishable_compat = true,
     config = {extra = {level = 1}},
     artist_credits = {'kosze'},
-    enhancement_gate = 'm_ortalab_iou',
+    --enhancement_gate = 'm_ortalab_iou',
+    in_pool = function ()
+        for key, value in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(value, 'm_ortalab_iou') then
+                return true
+            end
+        end
+        return false
+    end,
     calculate = function(self, card, context)
         if context.after and context.main_eval then
             card.ability.extra.cosmic_check = false

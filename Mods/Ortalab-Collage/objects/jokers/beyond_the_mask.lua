@@ -11,7 +11,14 @@ SMODS.Joker({
 	perishable_compat = false,
 	config = {extra = {dollars = 0, dollars_add = 2}},
     artist_credits = {'flare','gappie'},
-    enhancement_gate = 'm_ortalab_iou',
+    in_pool = function ()
+        for key, value in pairs(G.playing_cards) do
+            if SMODS.has_enhancement(value, 'm_ortalab_iou') then
+                return true
+            end
+        end
+        return false
+    end,
 	calc_dollar_bonus = function(self, card)
 		return card.ability.extra.dollars
 	end,
