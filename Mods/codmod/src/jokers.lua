@@ -110,7 +110,7 @@ SMODS.Joker {
         end
         if context.individual and context.cardarea == G.play and context.other_card:is_suit(card.ability.extra.to_suit) then
             return {
-                chips = math.max(-chips, card.ability.extra.chips),
+                chips = math.max(-hand_chips, card.ability.extra.chips),
                 dollars = card.ability.extra.money
             }
         end
