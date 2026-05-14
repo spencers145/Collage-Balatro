@@ -44,7 +44,7 @@ local fabled = {
     end,
     calculate = function(self, sleeve, context)
         if not sleeve.config.increase_legendary_pool_rate then
-            if context.end_of_round and not context.repetition and not context.individual and G.GAME.selected_back.effect.config.extra.should_increase then
+            if context.end_of_round and not context.repetition and not context.individual and G.GAME.selected_back.effect.config.extra and G.GAME.selected_back.effect.config.extra.should_increase then
                  G.GAME.jest_legendary_pool.rate =  G.GAME.jest_legendary_pool.rate - 0.002
                  G.GAME.selected_back.effect.config.extra.remove_amt = G.GAME.selected_back.effect.config.extra.remove_amt + 0.002
             end
