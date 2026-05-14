@@ -1497,7 +1497,7 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if context.before and not context.blueprint then
             local level_ups = G.GAME.hands[context.scoring_name].level - 1
-            if level_ups > 0 then
+            if to_big(level_ups) > to_big(0) then
 
                 -- update to work better with custom scaled hands? just check chips before vs chips after?
                 card.ability.extra.chips = card.ability.extra.chips + (G.GAME.hands[context.scoring_name].l_chips*level_ups)
