@@ -87,7 +87,7 @@ SMODS.Tag {
     atlas = 'atlas_cod_tags',
     pos = { x = 2, y = 0 },
     apply = function(self, tag, context)
-        if context.type == 'game_over' and G.GAME.chips / G.GAME.blind.chips >= 0.5 then
+        if context.type == 'game_over' and to_big(G.GAME.chips) / to_big(G.GAME.blind.chips) >= to_big(0.5) then
             G.E_MANAGER:add_event(Event({
                 func = function()
                     G.hand_text_area.blind_chips:juice_up()
