@@ -1503,7 +1503,7 @@ SMODS.Joker {
                 card.ability.extra.chips = card.ability.extra.chips + (G.GAME.hands[context.scoring_name].l_chips*level_ups)
                 card.ability.extra.mult = card.ability.extra.mult + (G.GAME.hands[context.scoring_name].l_mult*level_ups)
 
-                SMODS.upgrade_poker_hands({hands = context.scoring_name, level_up = -level_ups, from = card})
+                SMODS.upgrade_poker_hands({hands = context.scoring_name, level_up = -to_number(level_ups), from = card})
 
                 return {
                     message = localize("death_star_destroy"),
