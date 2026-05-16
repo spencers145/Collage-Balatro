@@ -931,7 +931,7 @@
         calculate = function(self, card, context)
             for i = 1, #G.jokers.cards do
                 if G.jokers.cards[i] == card then
-                    if context.retrigger_joker_check and not context.retrigger_joker and context.other_card.config.center.rarity == 1 and context.other_card ~= card and (context.other_card == G.jokers.cards[i+1] or context.other_card == G.jokers.cards[i-1]) then
+                    if context.retrigger_joker_check and not context.retrigger_joker and context.other_card.config.center and context.other_card.config.center.rarity == 1 and context.other_card ~= card and (context.other_card == G.jokers.cards[i+1] or context.other_card == G.jokers.cards[i-1]) then
                     return {
                       message = localize('k_again_ex'),
                       repetitions = 1,
