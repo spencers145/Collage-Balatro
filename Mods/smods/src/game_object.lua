@@ -74,7 +74,7 @@ Set `prefix_config.key = false` on your object instead.]]):format(obj.key), obj.
         local atlas_cfg = obj.prefix_config.atlas
         if atlas_cfg ~= false then
             if type(atlas_cfg) ~= 'table' then atlas_cfg = {} end
-            for _, v in ipairs({ 'atlas', 'hc_atlas', 'lc_atlas', 'hc_ui_atlas', 'lc_ui_atlas', 'sticker_atlas' }) do
+            for _, v in ipairs({ 'atlas', 'hc_atlas', 'lc_atlas', 'hc_ui_atlas', 'lc_ui_atlas', 'soul_atlas', 'hc_soul_atlas', 'lc_soul_atlas', 'sticker_atlas' }) do
                 if rawget(obj, v) then SMODS.modify_key(obj, mod and mod.prefix, atlas_cfg, v) end
             end
         end
@@ -1206,6 +1206,9 @@ Set `prefix_config.key = false` on your object instead.]]):format(obj.key), obj.
                     end
                 end
             end
+            if self.soul_atlas and not self.soul_pos then
+                self.soul_pos = { x = 0, y = 0 }
+            end
         end,
         delete = function(self)
             G.P_CENTERS[self.key] = nil
@@ -1257,7 +1260,7 @@ Set `prefix_config.key = false` on your object instead.]]):format(obj.key), obj.
                 full_UI_table.name = self.set == 'Enhanced' and 'temp_value' or localize { type = 'name', set = target.set, key = res.name_key or target.key, nodes = full_UI_table.name, vars = res.name_vars or target.vars or {} }
             elseif desc_nodes ~= full_UI_table.main and not desc_nodes.name then
                 desc_nodes.name = localize{type = 'name_text', key = res.name_key or target.key, set = target.set }
-                if (full_UI_table.from_detailed_tooltip and full_UI_table.info[1] == desc_nodes) 
+                if (not full_UI_table.from_detailed_tooltip or full_UI_table.info[1] == desc_nodes) 
                     and not full_UI_table.no_styled_name then
                     desc_nodes.name_styled = {}
     
@@ -1501,7 +1504,7 @@ Set `prefix_config.key = false` on your object instead.]]):format(obj.key), obj.
                 full_UI_table.name = localize{type = 'name', set = 'Other', key = res.name_key or target.key, nodes = full_UI_table.name, vars = res.name_vars or target.vars or {}}
             elseif desc_nodes ~= full_UI_table.main and not desc_nodes.name then
                 desc_nodes.name = localize { type = 'name_text', key = res.name_key or target.key, set = 'Other' }
-                if (full_UI_table.from_detailed_tooltip and full_UI_table.info[1] == desc_nodes) 
+                if (not full_UI_table.from_detailed_tooltip or full_UI_table.info[1] == desc_nodes) 
                     and not full_UI_table.no_styled_name then
                     desc_nodes.name_styled = {}
 
@@ -1918,7 +1921,7 @@ Set `prefix_config.key = false` on your object instead.]]):format(obj.key), obj.
                 full_UI_table.name = localize { type = 'name', set = target.set, key = res.name_key or target.key, nodes = full_UI_table.name, vars = res.name_vars or target.vars or {} }
             elseif desc_nodes ~= full_UI_table.main and not desc_nodes.name then
                 desc_nodes.name = localize{type = 'name_text', key = res.name_key or target.key, set = target.set }
-                if (full_UI_table.from_detailed_tooltip and full_UI_table.info[1] == desc_nodes) 
+                if (not full_UI_table.from_detailed_tooltip or full_UI_table.info[1] == desc_nodes) 
                     and not full_UI_table.no_styled_name then
                     desc_nodes.name_styled = {}
 
@@ -3069,7 +3072,7 @@ Set `prefix_config.key = false` on your object instead.]]):format(obj.key), obj.
                 full_UI_table.name = localize { type = 'name', set = target.set, key = res.name_key or target.key, nodes = full_UI_table.name, vars = res.name_vars or res.vars or {} }
             elseif desc_nodes ~= full_UI_table.main and not desc_nodes.name then
                 desc_nodes.name = localize{type = 'name_text', key = res.name_key or target.key, set = target.set }
-                if (full_UI_table.from_detailed_tooltip and full_UI_table.info[1] == desc_nodes) 
+                if (not full_UI_table.from_detailed_tooltip or full_UI_table.info[1] == desc_nodes) 
                     and not full_UI_table.no_styled_name then
                     desc_nodes.name_styled = {}
 
@@ -3433,6 +3436,10 @@ Set `prefix_config.key = false` on your object instead.]]):format(obj.key), obj.
                 self.shader = self.key
             end
         end,
+        draw = function(self, shader, canvas)
+            love.graphics.setShader(shader)
+            love.graphics.draw(canvas, 0, 0)
+        end,
         post_inject_class = function(self)
             table.sort(self.obj_buffer, function(_self, _other) return self.obj_table[_self].order < self.obj_table[_other].order end)
         end,
@@ -3449,7 +3456,7 @@ Set `prefix_config.key = false` on your object instead.]]):format(obj.key), obj.
                 ['feather_fac'] = 0.01,
                 ['bloom_fac'] = G.SETTINGS.GRAPHICS.bloom - 1,
                 ['time'] = 400 + G.TIMERS.REAL,
-                ['noise_fac'] = 0.001*crt/100,
+                -- ['noise_fac'] = 0.001*crt/100, -- removed for mobile compat
                 ['crt_intensity'] = 0.16*crt/100,
                 ['glitch_intensity'] = 0,
                 ['scanlines'] = G.CANVAS:getPixelHeight()*0.75/G.CANV_SCALE,
@@ -3459,6 +3466,7 @@ Set `prefix_config.key = false` on your object instead.]]):format(obj.key), obj.
             }
         end,
         order = 0, -- not necessary, but explicitly set in this example for clarity
+        should_apply = function(self) return not G.recording_mode or G.video_control end,
     }
 
     -------------------------------------------------------------------------------------------------
@@ -3827,7 +3835,6 @@ Set `prefix_config.key = false` on your object instead.]]):format(obj.key), obj.
         key = 'chips',
         default_value = 0,
         colour = G.C.UI_CHIPS,
-        juice_on_update = true,
         calculation_keys = {'chips', 'h_chips', 'chip_mod', 'x_chips', 'xchips', 'Xchip_mod',},
         calc_effect = function(self, effect, scored_card, key, amount, from_edition)
             if not SMODS.Calculation_Controls.chips then return end
