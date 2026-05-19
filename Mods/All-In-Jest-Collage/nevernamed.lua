@@ -318,6 +318,7 @@ SMODS.ConsumableType {
     collection_rows = { 4, 3 },
     cards = {},
     loc_txt = {
+        collection = "Thoth Tarots",
         undiscovered = {
             name = 'Unknown Thoth Tarot',
             text = {'Find this card in an unseeded', 'run to find out what it does'}

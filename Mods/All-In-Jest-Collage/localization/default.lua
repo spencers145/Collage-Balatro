@@ -4619,9 +4619,8 @@ return {
                 name = 'The Two Ways',
                 text = {
                     "Splits {C:attention}#1#{} selected card",
-                    "into {C:attention}2{} copies with",
-                    "{C:attention}half{} the original {C:attention}rank{}",
-                    "{C:inactive}(Odd cards split as evenly as possible){}",
+                    "into {C:attention}3{} copies with a",
+                    "{C:attention}third{} the original {C:attention}rank{}",
                     "{C:inactive}(A=14, K=13, Q=12, J=11)"
                 }
             },
