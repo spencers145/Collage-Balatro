@@ -1,4 +1,4 @@
-local charged = {
+--[[local charged = {
     object_type = "Enhancement",
     key = 'charged',
     atlas = 'enhancements_atlas',
@@ -74,4 +74,4 @@ function Card:update(dt)
   return ref
 end
 
-return {name = {"Enhancements"}, items = {charged}}
+return {name = {"Enhancements"}, items = {charged}}]]
