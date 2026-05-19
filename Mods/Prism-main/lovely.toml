@@ -12,8 +12,18 @@ position = "at"
 payload = '''
 local draw = hand_space + (G.GAME.prism_extra_draw or 0)
 G.GAME.prism_extra_draw = 0
-hand_space = draw
 for i=1, draw do
+'''
+match_indent = true
+
+# Burnt card hand pitch draw
+[[patches]]
+[patches.pattern]
+target = '''functions/state_events.lua'''
+pattern = "draw_card(G.deck,G.hand, i*100/hand_space,'up', true, cards_to_draw[i])"
+position = "at"
+payload = '''
+draw_card(G.deck,G.hand, i*100/(hand_space > 0 and hand_space or draw),'up', true, cards_to_draw[i])
 '''
 match_indent = true
 
