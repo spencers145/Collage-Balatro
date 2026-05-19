@@ -12,6 +12,7 @@ position = "at"
 payload = '''
 local draw = hand_space + (G.GAME.prism_extra_draw or 0)
 G.GAME.prism_extra_draw = 0
+hand_space = draw
 for i=1, draw do
 '''
 match_indent = true
