@@ -155,7 +155,7 @@ SMODS.Enhancement {
             end
 
             return {
-                aij_balance_percent = total_notebooks * 0.1
+                aij_balance_percent = total_notebooks * card.ability.extra.hand_balance / 100
             }
         end
     end,
