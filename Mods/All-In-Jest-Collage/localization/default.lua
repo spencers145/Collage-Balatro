@@ -4628,7 +4628,7 @@ return {
                 name = 'Osiris',
                 text = {
                     "{C:red}Destroy{} {C:attention}1{} selected",
-                    "Joker and earn {C:white,X:money}X8{}",
+                    "Joker and earn {C:white,X:money}X6{}",
                     "its {C:money}sell value",
                     "{C:inactive}(Currently{} {C:money}$#1#{}{C:inactive}){}"
                 }

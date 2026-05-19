@@ -17,7 +17,7 @@ local osiris = {
         if G.jokers.highlighted and (#G.jokers.highlighted == 1) and G.jokers.highlighted[1] and not G.jokers.highlighted[1].ability["eternal"] then
             local self_card = G.jokers.highlighted[1]
             card.ability.money = 0
-            card.ability.money = card.ability.money + (self_card.sell_cost * 8)
+            card.ability.money = card.ability.money + (self_card.sell_cost * 6)
             card.ability.money = card.ability.money
             return true  
         end
@@ -25,7 +25,7 @@ local osiris = {
     use = function(self, card)
         local self_card = G.jokers.highlighted[1]
         card.ability.money = 0
-        card.ability.money = card.ability.money + (self_card.sell_cost * 8)
+        card.ability.money = card.ability.money + (self_card.sell_cost * 6)
         card.ability.money = card.ability.money
         G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
             play_sound('timpani')
