@@ -810,7 +810,7 @@ return {
                 }
             },
             m_aij_wood = {
-                name = "Wood Card",
+                name = "Bark Card",
                 text = {
                     '{C:chips}+#1#{} chips when held in hand',
                     'Increases by {C:chips}+#2#{} for every',
