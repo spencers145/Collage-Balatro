@@ -315,7 +315,7 @@ end
 SMODS.ConsumableType {
     key = 'Thoth_Tarot',
     default = 'c_aij_osiris',
-    collection_rows = { 3, 3 },
+    collection_rows = { 4, 3 },
     cards = {},
     loc_txt = {
         undiscovered = {
