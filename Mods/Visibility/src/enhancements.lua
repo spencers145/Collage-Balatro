@@ -154,10 +154,6 @@ SMODS.Enhancement {
                 end
             end
 
-            if total_notebooks >= 5 then
-                unlock_card(G.P_CENTERS.b_vis_heavenly)
-            end
-
             return {
                 aij_balance_percent = total_notebooks * 0.1
             }
