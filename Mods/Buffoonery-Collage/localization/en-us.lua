@@ -613,19 +613,19 @@ return {
 		Enhanced = {
 			m_buf_porcelain = {
 				name = "Porcelain Card",
-				text = {"{X:chips,C:white}X1.75{} Chips,",
+				text = {"{X:chips,C:white}X#1#{} Chips,",
 						"is {C:red}Fragile",
 						"{s:0.2} {}",
-						"Earn {C:money}$3{} when",
+						"Earn {C:money}$#3#{} when",
 						"destroyed"
 				}
 			},
 			m_buf_porcelain_g = {
 				name = "Royal Porcelain Card",
-				text = {"{X:chips,C:white}X2{} Chips, is {C:red}Fragile{}",
+				text = {"{X:chips,C:white}X#1#{} Chips, is {C:red}Fragile{}",
 						"and a {C:attention}Face Card",
 						"{s:0.2} {}",
-						"Earn {C:money}$6{} when destroyed"
+						"Earn {C:money}$#3#{} when destroyed"
 				}
 			},
 		},
