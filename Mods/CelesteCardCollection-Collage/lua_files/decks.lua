@@ -189,7 +189,7 @@ function Card:set_ability(center, initial, delay_sprites)
 			self.ability.extra.increase = self.ability.extra.increase/2
 		elseif k == 'j_ccc_zipper' then
 			self.ability.extra.chips_scale = self.ability.extra.chips_scale*3
-		elseif k == 'j_ccc_goldenstrawberry' or k == 'j_ccc_wingedgoldenstrawberry' then
+		elseif k == 'j_ccc_goldenstrawberry' then
 			self.ability.extra.money = math.floor(self.ability.extra.money/2)
 		elseif k == 'j_ccc_checkpoint' then
 			self.ability.extra.xmult_scale = self.ability.extra.xmult_scale/2
