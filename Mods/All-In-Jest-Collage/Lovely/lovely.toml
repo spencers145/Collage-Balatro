@@ -167,59 +167,6 @@ match_indent = true
 
 [[patches]] 
 [patches.pattern]
-target = "cardarea.lua"
-pattern = '''
-if G.CONTROLLER.HID.controller then
-'''
-position = "before"
-payload = '''
-if self.config.type == 'hand' then
-    if SMODS.get_enhancements(card).m_aij_ice then
-        return true
-    end
-end
-'''
-match_indent = true
-
-[[patches]] 
-[patches.pattern]
-target = "cardarea.lua"
-pattern = '''
-if #self.highlighted >= self.config.highlighted_limit then
-    card:highlight(false)
-else
-    self.highlighted[#self.highlighted+1] = card
-    card:highlight(true)
-    if not silent then play_sound('cardSlide1') end
-end
-'''
-position = "after"
-payload = '''
-local ice = {}
-for k, v in pairs(self.highlighted) do
-    if SMODS.get_enhancements(self.highlighted[k]).m_aij_ice then
-        ice[#ice+1] = v
-    end
-end
-if not card.highlighted and #ice >= 1 then
-    if (#self.highlighted - #ice) >= self.config.highlighted_limit then
-        card:highlight(false)
-    else
-        self.highlighted[#self.highlighted+1] = card
-        card:highlight(true)
-        if not silent then play_sound('cardSlide1') end
-    end
-end
-if (SMODS.get_enhancements(card).m_aij_ice) and not card.highlighted then
-    self.highlighted[#self.highlighted+1] = card
-    card:highlight(true)
-    if not silent then play_sound('cardSlide1') end
-end
-'''
-match_indent = true
-
-[[patches]] 
-[patches.pattern]
 target = "functions/state_events.lua"
 pattern = '''
 local text,disp_text,poker_hands,scoring_hand,non_loc_disp_text = G.FUNCS.get_poker_hand_info(G.play.cards)
@@ -641,63 +588,6 @@ if G.GAME.all_in_jest.reset_score.blind_total then
       func = (function(t) return math.floor(t) end)
     }))
     G.GAME.all_in_jest.reset_score.blind_total = false
-end
-'''
-match_indent = true
-
-[[patches]] 
-[patches.pattern]
-target = "functions/button_callbacks.lua"
-pattern = "if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.highlighted > math.max(G.GAME.starting_params.play_limit, 1) then"
-position = "before"
-payload = '''
-local temp_var = nil
-for k, v in pairs(G.hand.highlighted) do
-    if v.ability.aij_marked then
-        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-        e.config.button = nil
-        return
-    end
-    if SMODS.get_enhancements(v).m_aij_ice then
-        if not temp_var then temp_var = 0 end
-        temp_var = temp_var + 1
-    end
-end
-if temp_var and temp_var >= (#G.hand.highlighted - math.max(G.GAME.starting_params.play_limit, 1)) then
-    e.config.colour = G.C.BLUE
-    e.config.button = 'play_cards_from_highlighted'
-    return
-end
-'''
-match_indent = true
-
-[[patches]] 
-[patches.pattern]
-target = '=[SMODS _ "src/overrides.lua"]'
-pattern = "for _, v in ipairs(SMODS.PokerHandPart.obj_buffer) do"
-position = "before"
-payload = '''
-local ice = {}
-local non_ice = {}
-for k, v in pairs(hand) do
-    if SMODS.get_enhancements(hand[k]).m_aij_ice then
-        ice[#ice+1] = v
-    end
-    if not SMODS.get_enhancements(hand[k]).m_aij_ice then
-        non_ice[#non_ice+1] = v
-    end
-end
-hand = {}
-local temp_jest_var = 0
-for k, v in pairs(non_ice) do
-    hand[temp_jest_var+1] = v
-    temp_jest_var = temp_jest_var + 1
-end
-for k, v in pairs(ice) do
-    if (math.max(G.GAME.starting_params.play_limit, 1) - temp_jest_var) > 0 then
-        hand[temp_jest_var+1] = v
-        temp_jest_var = temp_jest_var + 1
-    end
 end
 '''
 match_indent = true
@@ -2708,3 +2598,99 @@ payload = '''
 if target.vars.aij_visage then card = G.jest_visage_last_sold.cards[1]; target.vars.aij_visage = nil end -- All in Jest
 if target.vars.aij_clay then card = G.jest_clay_last_destroyed.cards[1]; target.vars.aij_clay = nil end -- All in Jest
 '''
+
+# Ice Cards (1/4)
+# Force Ice Cards to always be selectable
+# CardArea:can_highlight()
+[[patches]] 
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''
+if G.CONTROLLER.HID.controller then
+'''
+position = "before"
+payload = '''
+if self.config.type == 'hand' then
+    if SMODS.get_enhancements(card).m_aij_ice and not card.debuff then
+        return true
+    end
+end
+'''
+match_indent = true
+
+# Ice Cards (2/4)
+# Force Ice Cards to always be selectable
+# CardArea:can_highlight()
+[[patches]] 
+[patches.pattern]
+target = "cardarea.lua"
+pattern = '''
+if (#self.highlighted >= self.config.highlighted_limit) and (not card.ability.group) and (G.GAME and not G.GAME.THE_8_BYPASS) then
+    card:highlight(false)
+else
+    self.highlighted[#self.highlighted+1] = card
+    card:highlight(true)
+    if not silent then play_sound('cardSlide1') end
+end
+'''
+position = "after"
+payload = '''
+local ice = {}
+for k, v in pairs(self.highlighted) do
+    if SMODS.get_enhancements(self.highlighted[k]).m_aij_ice and not self.highlighted[k].debuff then
+        ice[#ice+1] = v
+    end
+end
+if not card.highlighted and #ice >= 1 then
+    if (#self.highlighted - #ice) >= self.config.highlighted_limit and (not card.ability.group) and (G.GAME and not G.GAME.THE_8_BYPASS) then
+        card:highlight(false)
+    else
+        self.highlighted[#self.highlighted+1] = card
+        card:highlight(true)
+        if not silent then play_sound('cardSlide1') end
+    end
+end
+if (SMODS.get_enhancements(card).m_aij_ice) and not card.debuff and not card.highlighted then
+    self.highlighted[#self.highlighted+1] = card
+    card:highlight(true)
+    if not silent then play_sound('cardSlide1') end
+end
+'''
+match_indent = true
+
+# Ice Cards (3/4)
+# Exclude ice cards that exceed hand limit from determining in hand type
+# evaluate_poker_hand()
+[[patches]] 
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = "for _, v in ipairs(SMODS.PokerHandPart.obj_buffer) do"
+position = "before"
+payload = '''
+do -- All in Jest, determining which ice cards count in the hand type
+    local ice = {}
+    local non_ice = {}
+    for k, v in pairs(hand) do
+        if SMODS.get_enhancements(hand[k]).m_aij_ice and not hand[k].debuff then
+            ice[#ice+1] = v
+        else
+            non_ice[#non_ice+1] = v
+        end
+    end
+    if #ice > 0 then
+        hand = {}
+        local temp_jest_var = 0
+        for k, v in pairs(non_ice) do
+            hand[temp_jest_var+1] = v
+            temp_jest_var = temp_jest_var + 1
+        end
+        for k, v in pairs(ice) do
+            if (math.max(G.GAME.starting_params.play_limit, 1) - temp_jest_var) > 0 then
+                hand[temp_jest_var+1] = v
+                temp_jest_var = temp_jest_var + 1
+            end
+        end
+    end
+end
+'''
+match_indent = true

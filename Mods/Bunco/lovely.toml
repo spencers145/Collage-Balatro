@@ -583,6 +583,25 @@ pattern = 'if #G.hand.highlighted <= 0 or G.GAME.blind.block_play or #G.hand.hig
 position = 'at'
 match_indent = true
 payload = '''
+-- aij code in bunco patches. a travesty of laziness to behold
+do
+    local aij_exceeds_hand_limit = 0
+    for k, v in pairs(G.hand.highlighted) do
+        if v.ability.aij_marked then
+            e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+            e.config.button = nil
+            return
+        end
+        if SMODS.get_enhancements(v).m_aij_ice and not v.debuff then
+            aij_exceeds_hand_limit = aij_exceeds_hand_limit + 1
+        end
+    end
+    if aij_exceeds_hand_limit > 0 and not ((#G.hand.highlighted - aij_exceeds_hand_limit) > math.max(G.GAME.starting_params.play_limit, 1) or G.GAME.blind.block_play or #G.hand.highlighted <= 0) then
+        e.config.colour = G.C.BLUE
+        e.config.button = 'play_cards_from_highlighted'
+        return
+    end
+end
 
 local group_size = 0
 
