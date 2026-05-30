@@ -23,7 +23,7 @@ target = '''functions/state_events.lua'''
 pattern = "draw_card(G.deck,G.hand, i*100/hand_space,'up', true, cards_to_draw[i])"
 position = "at"
 payload = '''
-draw_card(G.deck,G.hand, i*100/(hand_space > 0 and hand_space or draw),'up', true, cards_to_draw[i])
+draw_card(G.deck,G.hand, i*100/(draw > 0 and draw or 1),'up', true, cards_to_draw[i])
 '''
 match_indent = true
 
