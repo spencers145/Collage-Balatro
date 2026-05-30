@@ -18,8 +18,8 @@ local wood = {
     config = {
         h_chips = 20,
         extra = {
-            base_h_chips = 25,
-            h_chips_mod = 5,
+            base_h_chips = 20,
+            h_chips_mod = 10,
         }
     },
     loc_vars = function(self, info_queue, card)
