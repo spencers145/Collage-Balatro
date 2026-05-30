@@ -4578,16 +4578,16 @@ return {
                 name = 'The Magus',
                 text = {
                     "Enhances {C:attention}#1#{} selected",
-                    "card into a",
-                    "{C:attention}#2#{}"
+                    "cards into",
+                    "{C:attention}#2#s{}"
                 }
             },
             c_aij_sanctuary_gate = {
                 name = 'The Sanctuary Gate',
                 text = {
                     "Enhances {C:attention}#1#{} selected",
-                    "card into a",
-                    "{C:attention}#2#{}"
+                    "cards into",
+                    "{C:attention}#2#s{}"
                 }
             },
             c_aij_isis_urania = {
@@ -4644,8 +4644,8 @@ return {
                 name = 'The Veiled Lamp',
                 text = {
                     "Enhances {C:attention}#1#{} selected",
-                    "card into a",
-                    "{C:attention}#2#{}"
+                    "cards into",
+                    "{C:attention}#2#s{}"
                 }
             },
             c_aij_sphinx = {
@@ -4660,8 +4660,8 @@ return {
                 name = 'The Tamed Lion',
                 text = {
                     "Enhances {C:attention}#1#{} selected",
-                    "card into a",
-                    "{C:attention}#2#{}"
+                    "cards into",
+                    "{C:attention}#2#s{}"
                 }
             },
             c_aij_broken_fate = {
