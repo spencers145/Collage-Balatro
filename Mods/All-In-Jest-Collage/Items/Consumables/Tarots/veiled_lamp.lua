@@ -1,14 +1,14 @@
 local veiled_lamp = {
     object_type = "Consumable",
 	key = 'veiled_lamp',
-	set = 'Thoth_Tarot',
+	set = 'Jesftful_Tarot',
 	 
 	pos = { x = 7, y = 3 },
 	cost = 3,
 	unlocked = true,
 	discovered = false,
 	order = 8,
-	config = { mod_conv = 'm_aij_ice', max_highlighted = 2 },
+	config = { mod_conv = 'm_aij_ice', max_highlighted = 3 },
 	atlas = 'consumable_atlas',
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_aij_ice

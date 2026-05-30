@@ -313,14 +313,14 @@ function All_in_Jest.set_ability_reset_keys()
 end
 
 SMODS.ConsumableType {
-    key = 'Thoth_Tarot',
+    key = 'Jesftful_Tarot',
     default = 'c_aij_osiris',
     collection_rows = { 4, 3 },
     cards = {},
     loc_txt = {
-        collection = "Thoth Tarots",
+        collection = "Jestful Tarots",
         undiscovered = {
-            name = 'Unknown Thoth Tarot',
+            name = 'Unknown Jestful Tarot',
             text = {'Find this card in an unseeded', 'run to find out what it does'}
         }
     },

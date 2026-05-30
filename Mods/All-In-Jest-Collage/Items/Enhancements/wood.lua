@@ -39,6 +39,9 @@ local wood = {
         else
             card.ability.h_chips = card.ability.extra.base_h_chips
         end
-    end
+    end,
+    in_pool = function ()
+        return false
+    end,
 }
 return {name = {"Enhancements"}, items = {wood, wood_shader, semitrasparent_shader}}

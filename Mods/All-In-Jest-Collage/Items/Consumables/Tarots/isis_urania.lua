@@ -1,7 +1,7 @@
 --[[local isis_urania = {
     object_type = "Consumable",
 	key = 'isis_urania',
-	set = 'Thoth_Tarot',
+	set = 'Jesftful_Tarot',
 	 
 	pos = { x = 2, y = 6 },
 	cost = 3,

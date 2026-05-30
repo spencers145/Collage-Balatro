@@ -9,6 +9,9 @@ local canvas = {
             
         }
     },
+    in_pool = function ()
+        return false
+    end,
     loc_vars = function(self, info_queue, card)
         return {
             vars = {

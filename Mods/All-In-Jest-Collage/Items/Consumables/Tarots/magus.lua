@@ -1,7 +1,7 @@
 local magus_tarot = {
     object_type = "Consumable",
 	key = 'magus',
-	set = 'Thoth_Tarot',
+	set = 'Jesftful_Tarot',
 	pos = { x = 0, y = 4 },
 	cost = 3,
 	unlocked = true,

@@ -1,7 +1,7 @@
 local osiris = {
     object_type = "Consumable",
 	key = 'osiris',
-	set = 'Thoth_Tarot',
+	set = 'Jesftful_Tarot',
 	pos = { x = 6, y = 0 },
 	cost = 3,
    

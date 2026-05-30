@@ -10,6 +10,9 @@ local fervent_planet = {
             chips_extra = 10,
         }
     },
+    in_pool = function ()
+        return false
+    end,
     loc_vars = function(self, info_queue, card)
         return {
             vars = {

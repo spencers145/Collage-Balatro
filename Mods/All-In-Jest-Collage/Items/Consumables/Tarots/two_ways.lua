@@ -1,7 +1,7 @@
 local two_ways = {
     object_type = "Consumable",
     key = 'two_ways',
-    set = 'Thoth_Tarot',
+    set = 'Jesftful_Tarot',
     pos = { x = 5, y = 6 },
     cost = 3,
 

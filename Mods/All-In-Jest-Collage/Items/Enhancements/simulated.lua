@@ -21,6 +21,9 @@ local simulated = {
             }
         }
     end,
+    in_pool = function ()
+        return false
+    end,
     calculate = function(self, card, context)
         if context.aij_before_before then
             if not card.ability.extra.all_in_jest.to_hand.trigger then
