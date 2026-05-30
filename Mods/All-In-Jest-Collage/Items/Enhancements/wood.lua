@@ -18,7 +18,7 @@ local wood = {
     config = {
         h_chips = 20,
         extra = {
-            base_h_chips = 20,
+            base_h_chips = 25,
             h_chips_mod = 5,
         }
     },
@@ -29,7 +29,7 @@ local wood = {
         if G.hand and G.hand.cards then
             local cards = {}
             for k, v in pairs(G.hand.cards) do
-                if SMODS.get_enhancements(G.hand.cards[k]).m_aij_wood then
+                if SMODS.get_enhancements(G.hand.cards[k]).m_aij_wood or SMODS.get_enhancements(G.hand.cards[k]).m_artb_wood then
                     cards[#cards+1] = v
                 end
             end

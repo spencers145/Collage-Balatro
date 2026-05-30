@@ -1,7 +1,7 @@
 return {
     misc = {
         dictionary = {
-            k_Jesftful_Tarot = "Thoth Tarot",
+            k_jesftful_tarot = "Jestful Tarot",
             k_coder_badge = "Coder",
             k_artist_badge = "Artist",
             k_moon = "Moon",
@@ -812,8 +812,8 @@ return {
                 name = "Bark Card",
                 text = {
                     '{C:chips}+#1#{} chips when held in hand',
-                    'Increases by {C:chips}+#2#{} for every',
-                    'other {C:attention}Wood{} card held in hand'
+                    'Increases by {C:chips}+#2#{} for every other',
+                    '{C:attention}Bark{} or {C:attention}Wood{} card held in hand'
                 }
             },
             m_aij_simulated = {
