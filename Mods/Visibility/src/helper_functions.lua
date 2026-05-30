@@ -17,8 +17,8 @@ function get_all_illegal_consumable_sets()
         --"paperback_minor_arcana",
         "paperback_minor_arcana",
         "BlackMarket",
-        "Thoth_Tarot",
-        --"Thoth_Tarot"
+        "Jesftful_Tarot",
+        --"Jesftful_Tarot"
     }
 end
 
