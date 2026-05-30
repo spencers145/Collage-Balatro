@@ -802,11 +802,10 @@ return {
             m_aij_ice = {
                 name = "Ice Card",
                 text = {
-                    "{C:attention}Always{} scores",
-                    "{C:red}Ignores{} the selection limit",
-                    "Doesn't affect {C:attention}hand calculation",
-                    "if this card causes hand to",
-                    "exceed {C:attention}#1#{} cards"
+                    "{C:attention}Always scores{} and {C:red}ignores{}",
+                    "play selection limit",
+                    "{C:inactive}(Excess Ice Cards do not",
+                    "{C:inactive}affect hand type)"
                 }
             },
             m_aij_wood = {
