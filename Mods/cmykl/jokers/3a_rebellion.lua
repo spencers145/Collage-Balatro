@@ -6,13 +6,14 @@ SMODS.Joker{ --Rebellion
         }
     },
     loc_txt = {
-        ['name'] = 'Rebellion',
-        ['text'] = {
-            [1] = 'Gains {X:red,C:white}X0.07{} Mult for',
-            [2] = 'each {C:attention}face card{} discarded',
-            [3] = 'resets when a',
-            [4] = '{C:attention}face card{} scores',
-            [5] = '{C:inactive}(Currently{} {X:red,C:white}X#1#{} {C:inactive}Mult){}'
+        name = 'Rebellion',
+        text = {
+            {'Gains {X:red,C:white}X0.07{} Mult for',
+            'each {C:attention}face card{} discarded',
+            '{C:inactive}(Currently{} {X:red,C:white}X#1#{} {C:inactive}Mult){}'},
+            {'Resets when a',
+            '{C:attention}face card{} scores'},
+            
         },
         ['unlock'] = {
             [1] = ''

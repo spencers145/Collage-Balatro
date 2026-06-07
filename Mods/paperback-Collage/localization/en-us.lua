@@ -911,8 +911,8 @@ return {
           "{C:attention}poker hand{} contains a {C:attention}#2#{}",
           "{C:inactive}(Currently {X:mult,C:white}X#5#{C:inactive} Mult)",
           "{C:inactive}(Hand changes at end of round)"},
-          {"If this Joker has at least {X:mult,C:white}X#3#{} Mult,",
-          "disable {C:attention}Boss Blind{} and",
+          {"If this Joker has at least",
+          "{X:mult,C:white}X#3#{} Mult, disable {C:attention}Boss Blind{} and",
           "lose {X:mult,C:white}X#4#{} Mult"},
           
         }
@@ -1268,11 +1268,12 @@ return {
       j_paperback_jimbocards = {
         name = "Jimbocards",
         text = {
-          "When obtained, destroy all Jokers and",
-          "create {C:attention}#1#{} random {C:dark_edition}#5#{} Jokers.",
-          "All purchases cost {C:money}$#2#{} less.",
-          "Clear each {C:attention}Ante{} in {C:attention}#3#{} hands, or you {S:1.1,C:red,E:2}lose{}",
-          "{C:inactive}({C:attention}#4#{C:inactive} hands left)"
+          {"When obtained, destroy all Jokers and",
+          "create {C:attention}#1#{} random {C:dark_edition}#5#{} Jokers"},
+          {"All purchases cost {C:money}$#2#{} less"},
+          {"Clear each {C:attention}Ante{} in {C:attention}#3#{} hands,",
+          "or you {S:1.1,C:red,E:2}lose{}",
+          "{C:inactive}({C:attention}#4#{C:inactive} hands left)"},
         },
         unlock = {
           "Reach Ante",
@@ -1282,12 +1283,13 @@ return {
       j_paperback_jimbocards_collection = {
         name = "Jimbocards",
         text = {
-          "When obtained, destroy all Jokers and",
-          "create {C:attention}#1#{} random {C:dark_edition}Negative{} Jokers.",
-          "All purchases cost {C:money}$#2#{} less.",
-          "Clear each {C:attention}Ante{} in {C:attention}#3#{} hands, or you {S:1.1,C:red,E:2}lose{}",
-          "{C:inactive}({C:attention}#4#{C:inactive} hands left)",
-          "Always {C:paperback_eternal}Eternal",
+          {"When obtained, destroy all Jokers and",
+          "create {C:attention}#1#{} random {C:dark_edition}#5#{} Jokers"},
+          {"All purchases cost {C:money}$#2#{} less"},
+          {"Clear each {C:attention}Ante{} in {C:attention}#3#{} hands,",
+          "or you {S:1.1,C:red,E:2}lose{}",
+          "{C:inactive}({C:attention}#4#{C:inactive} hands left)"},
+          {"Always {C:paperback_eternal}Eternal"},
         },
         unlock = {
           "Reach Ante",
